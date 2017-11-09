@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.webgame.game.objects.Mage;
 import com.webgame.game.objects.Player;
 
 import static com.webgame.game.Configs.VIEW_WIDTH;
@@ -50,7 +51,7 @@ public class MainScreen implements Screen {
 		map = loader.load("map.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map);
 		
-		player = new Player("mage.png");
+		player = new Mage("mage.png");
 
 		Gdx.app.log(title, "Hi1!");
 	}

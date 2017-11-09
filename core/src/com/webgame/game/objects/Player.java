@@ -7,45 +7,139 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
+import com.webgame.game.state.PlayerState;
 
-public class Player implements GameObject {
-
+public abstract class Player implements GameObject {
 	protected Texture spriteTexture;
 	protected Sprite sprite;
-
 	protected Vector2 position;
 	protected Vector2 velosity;
+	protected float stateTimer;
 
-	float stateTimer;
+	protected PlayerState currState;
+	protected PlayerState prevState;
 
-	Animation<TextureRegion> walkAnimation;
-	Integer FRAME_COLS = 5;
-	Integer FRAME_ROWS = 11;
+	protected Double healthPoints;
+	protected Double manaPoints;
+
+	protected String playerName;
+	protected Integer level;
+
+	protected Animation<TextureRegion> walkAnimation;
 
 	public Player(String spritePath) {
 		spriteTexture = new Texture(Gdx.files.internal(spritePath));
 
-		Array<TextureRegion> frames = new Array<TextureRegion>();
-		int index = 0;
-		stateTimer = 0;
-		int h = 61;
-		int w = 72;
-		for (int i = 0; i < 11; i++)
-			frames.add(new TextureRegion(spriteTexture, 0, h * i, w, h));
+		prevState = PlayerState.STAND;
+		currState = PlayerState.STAND;
 
-		// Initialize the Animation with the frame interval and array of frames
-		walkAnimation = new Animation<TextureRegion>(0.2f, frames);
+		stateTimer = 0;
 
 		sprite = new Sprite(spriteTexture, 20, 20, 50, 50);
 		sprite.setPosition(10, 10);
 	}
 
-	@Override
-	public void draw(SpriteBatch batch, float dt) {
-		stateTimer += dt;
-		TextureRegion currentFrame = walkAnimation.getKeyFrame(stateTimer, true);
-		batch.draw(currentFrame, 50, 50);
-		sprite.draw(batch);
+	public Double getHealthPoints() {
+		return healthPoints;
 	}
+
+	public void setHealthPoints(Double healthPoints) {
+		this.healthPoints = healthPoints;
+	}
+
+	public Double getManaPoints() {
+		return manaPoints;
+	}
+
+	public void setManaPoints(Double manaPoints) {
+		this.manaPoints = manaPoints;
+	}
+
+	public String getPlayerName() {
+		return playerName;
+	}
+
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
+	}
+
+	public Integer getLevel() {
+		return level;
+	}
+
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
+
+	public Animation<TextureRegion> getWalkAnimation() {
+		return walkAnimation;
+	}
+
+	public void setWalkAnimation(Animation<TextureRegion> walkAnimation) {
+		this.walkAnimation = walkAnimation;
+	}
+
+	public Texture getSpriteTexture() {
+		return spriteTexture;
+	}
+
+	public void setSpriteTexture(Texture spriteTexture) {
+		this.spriteTexture = spriteTexture;
+	}
+
+	public Sprite getSprite() {
+		return sprite;
+	}
+
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
+
+	public Vector2 getPosition() {
+		return position;
+	}
+
+	public void setPosition(Vector2 position) {
+		this.position = position;
+	}
+
+	public Vector2 getVelosity() {
+		return velosity;
+	}
+
+	public void setVelosity(Vector2 velosity) {
+		this.velosity = velosity;
+	}
+
+	public float getStateTimer() {
+		return stateTimer;
+	}
+
+	public void setStateTimer(float stateTimer) {
+		this.stateTimer = stateTimer;
+	}
+
+	public PlayerState getCurrState() {
+		return currState;
+	}
+
+	public void setCurrState(PlayerState currState) {
+		this.currState = currState;
+	}
+
+	public PlayerState getPrevState() {
+		return prevState;
+	}
+
+	public void setPrevState(PlayerState prevState) {
+		this.prevState = prevState;
+	}
+
+	protected void updateStateTimer(float dt) {
+		stateTimer += dt;
+	}
+
+	
+	public abstract void draw(SpriteBatch batch, float dt);
+		
 }
