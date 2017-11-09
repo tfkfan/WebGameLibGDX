@@ -57,10 +57,11 @@ public class Mage extends Player {
 		
 		
 
-		for (int i = 0; i < dirs; i++) {
+		for (int i = 0; i < dirs; i++){
 			animations.add(new Animation<TextureRegion>(0.2f, frames[i]));
-		
+			frames[i] = null;
 		}
+	
 	}
 
 	@Override
