@@ -76,9 +76,11 @@ public class MainScreen implements Screen {
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) 
 			vec.y = d;
 
-		cam.translate(vec.x, vec.y, 0);
+	
 		
 		player.setVelocity(vec);
+		cam.position.x =  player.getPosition().x;
+		cam.position.y = player.getPosition().y;
 	//	cam.zoom = MathUtils.clamp(cam.zoom, 0.1f, 100 / cam.viewportWidth);
 	}
 

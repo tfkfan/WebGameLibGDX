@@ -1,6 +1,7 @@
 package com.webgame.game.objects;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
@@ -14,21 +15,35 @@ public class Mage extends Player {
 		super(spritePath);
 
 		final int dirs = 8;
-		
+
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		animations = new Array<Animation<TextureRegion>>();
 		standRegions = new TextureRegion[dirs];
 
-		
-		
 		int h = 61;
 		int w = 72;
 
-		for (int i = 0; i < dirs; i++)
+		for (int i = 0; i < 5; i++)
 			for (int j = 0; j < 5; j++)
 				frames[i][j] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
 
-		for(int i = 0; i < dirs; i++){
+		for (int j = 0; j < 5; j++) {
+
+			TextureRegion tr = new TextureRegion(spriteTexture, w, h * j, w, h);
+			tr.flip(true, false);
+			frames[7][j] = tr;
+
+			tr = new TextureRegion(spriteTexture, w * 2, h * j, w, h);
+			tr.flip(true, false);
+			frames[6][j] = tr;
+
+			tr = new TextureRegion(spriteTexture, w * 3, h * j, w, h);
+			tr.flip(true, false);
+			frames[5][j] = tr;
+
+		}
+
+		for (int i = 0; i < dirs; i++) {
 			animations.add(new Animation<TextureRegion>(0.2f, frames[i]));
 			standRegions[i] = new TextureRegion(spriteTexture, w * i, 0, w, h);
 		}
@@ -81,7 +96,7 @@ public class Mage extends Player {
 			index = 0;
 			break;
 		}
-		
+
 		animation = animations.get(index);
 		standRegion = standRegions[index];
 

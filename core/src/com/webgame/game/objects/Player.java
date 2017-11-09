@@ -2,10 +2,8 @@ package com.webgame.game.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.state.Direction;
 import com.webgame.game.state.PlayerState;
@@ -19,8 +17,10 @@ public abstract class Player implements GameObject, Movable, Animated {
 
 	protected PlayerState currState;
 	protected PlayerState prevState;
+	
 	protected Direction direction;
-
+	protected Direction oldDirection;
+	
 	protected Double healthPoints;
 	protected Double manaPoints;
 
@@ -37,6 +37,7 @@ public abstract class Player implements GameObject, Movable, Animated {
 		currState = PlayerState.STAND;
 		
 		direction = Direction.UP;
+		oldDirection = Direction.UP;
 
 		stateTimer = 0;
 
@@ -155,6 +156,8 @@ public abstract class Player implements GameObject, Movable, Animated {
 
 	@Override
 	public void move() {
+		oldDirection = direction;
+		
 		if(velocity.x > 0)
 			direction = Direction.RIGHT;
 		else if(velocity.x < 0)
@@ -174,6 +177,9 @@ public abstract class Player implements GameObject, Movable, Animated {
 		else if(velocity.x < 0 && velocity.y < 0)
 			direction = Direction.LEFTDOWN;
 		
+		if(oldDirection != direction || currState != prevState)
+			stateTimer = 0;
+
 		position.add(velocity);
 	}
 }
