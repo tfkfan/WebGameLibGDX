@@ -11,6 +11,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -58,25 +60,25 @@ public class MainScreen implements Screen {
 
 	private void handleInput() {
 		float d = 5f;
-		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.A)) 
 			cam.zoom += 0.1;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.Q)) 
 			cam.zoom -= 0.1;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			cam.translate(-d, 0, 0);
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			cam.translate(d, 0, 0);
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			cam.translate(0, -d, 0);
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			cam.translate(0, d, 0);
-		}
+		
+		
+		Vector2 vec = new Vector2(0,0);
+		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) 
+			vec.x = -d;
+		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) 
+			vec.x = d;
+		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) 
+			vec.y = -d;
+		if (Gdx.input.isKeyPressed(Input.Keys.UP)) 
+			vec.y = d;
 
+		cam.translate(vec.x, vec.y, 0);
+		
+		player.setVelocity(vec);
 	//	cam.zoom = MathUtils.clamp(cam.zoom, 0.1f, 100 / cam.viewportWidth);
 	}
 
@@ -84,6 +86,7 @@ public class MainScreen implements Screen {
 	public void render(float dt) {
 		handleInput();
 		cam.update();
+		player.move();
 		renderer.setView(cam);
 
 		batch.setProjectionMatrix(cam.combined);

@@ -7,17 +7,19 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.webgame.game.state.Direction;
 import com.webgame.game.state.PlayerState;
 
-public abstract class Player implements GameObject {
+public abstract class Player implements GameObject, Movable, Animated {
 	protected Texture spriteTexture;
 	protected Sprite sprite;
 	protected Vector2 position;
-	protected Vector2 velosity;
+	protected Vector2 velocity;
 	protected float stateTimer;
 
 	protected PlayerState currState;
 	protected PlayerState prevState;
+	protected Direction direction;
 
 	protected Double healthPoints;
 	protected Double manaPoints;
@@ -25,13 +27,16 @@ public abstract class Player implements GameObject {
 	protected String playerName;
 	protected Integer level;
 
-	protected Animation<TextureRegion> walkAnimation;
-
 	public Player(String spritePath) {
+		position = new Vector2();
+		velocity = new Vector2();
+
 		spriteTexture = new Texture(Gdx.files.internal(spritePath));
 
 		prevState = PlayerState.STAND;
 		currState = PlayerState.STAND;
+		
+		direction = Direction.UP;
 
 		stateTimer = 0;
 
@@ -39,6 +44,14 @@ public abstract class Player implements GameObject {
 		sprite.setPosition(10, 10);
 	}
 
+	public Direction getDirection() {
+		return direction;
+	}
+
+	public void setDirection(Direction direction) {
+		this.direction = direction;
+	}
+	
 	public Double getHealthPoints() {
 		return healthPoints;
 	}
@@ -71,14 +84,6 @@ public abstract class Player implements GameObject {
 		this.level = level;
 	}
 
-	public Animation<TextureRegion> getWalkAnimation() {
-		return walkAnimation;
-	}
-
-	public void setWalkAnimation(Animation<TextureRegion> walkAnimation) {
-		this.walkAnimation = walkAnimation;
-	}
-
 	public Texture getSpriteTexture() {
 		return spriteTexture;
 	}
@@ -103,12 +108,12 @@ public abstract class Player implements GameObject {
 		this.position = position;
 	}
 
-	public Vector2 getVelosity() {
-		return velosity;
+	public Vector2 getVelocity() {
+		return velocity;
 	}
 
-	public void setVelosity(Vector2 velosity) {
-		this.velosity = velosity;
+	public void setVelocity(Vector2 velocity) {
+		this.velocity = velocity;
 	}
 
 	public float getStateTimer() {
@@ -139,7 +144,36 @@ public abstract class Player implements GameObject {
 		stateTimer += dt;
 	}
 
-	
+	public PlayerState getState() {
+		if (velocity.x != 0 || velocity.y != 0)
+			return PlayerState.WALK;
+
+		return PlayerState.STAND;
+	}
+
 	public abstract void draw(SpriteBatch batch, float dt);
+
+	@Override
+	public void move() {
+		if(velocity.x > 0)
+			direction = Direction.RIGHT;
+		else if(velocity.x < 0)
+			direction = Direction.LEFT;
 		
+		if(velocity.y > 0)
+			direction = Direction.UP;
+		else if(velocity.y < 0)
+			direction = Direction.DOWN;
+		
+		if(velocity.x > 0 && velocity.y > 0)
+			direction = Direction.UPRIGHT;
+		else if(velocity.x > 0 && velocity.y < 0)
+			direction = Direction.RIGHTDOWN;
+		else if(velocity.x < 0 && velocity.y > 0)
+			direction = Direction.UPLEFT;
+		else if(velocity.x < 0 && velocity.y < 0)
+			direction = Direction.LEFTDOWN;
+		
+		position.add(velocity);
+	}
 }
