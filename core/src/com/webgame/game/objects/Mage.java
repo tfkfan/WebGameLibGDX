@@ -23,29 +23,43 @@ public class Mage extends Player {
 		int h = 61;
 		int w = 72;
 
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 5; i++){
 			for (int j = 0; j < 5; j++)
 				frames[i][j] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
+			standRegions[i] = new TextureRegion(spriteTexture, w * i, 0, w, h);
+		}
 
 		for (int j = 0; j < 5; j++) {
 
 			TextureRegion tr = new TextureRegion(spriteTexture, w, h * j, w, h);
 			tr.flip(true, false);
 			frames[7][j] = tr;
-
+			
+			if(j==0)
+				standRegions[7] = tr;
+			
 			tr = new TextureRegion(spriteTexture, w * 2, h * j, w, h);
 			tr.flip(true, false);
 			frames[6][j] = tr;
-
+			
+			if(j==0)
+				standRegions[6] = tr;
+			
+			
 			tr = new TextureRegion(spriteTexture, w * 3, h * j, w, h);
 			tr.flip(true, false);
 			frames[5][j] = tr;
+			
+			if(j==0)
+				standRegions[5] = tr;
 
 		}
+		
+		
 
 		for (int i = 0; i < dirs; i++) {
 			animations.add(new Animation<TextureRegion>(0.2f, frames[i]));
-			standRegions[i] = new TextureRegion(spriteTexture, w * i, 0, w, h);
+		
 		}
 	}
 
