@@ -15,14 +15,14 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.webgame.game.objects.Player;
+
 import static com.webgame.game.Configs.VIEW_WIDTH;
 import static com.webgame.game.Configs.VIEW_HEIGHT;
 
 public class MainScreen implements Screen {
 	SpriteBatch batch;
 	String title = "WebGame";
-
-	private Texture druidTexture;
 
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
@@ -33,7 +33,7 @@ public class MainScreen implements Screen {
 	private OrthogonalTiledMapRenderer renderer;
 	private TiledMap map;
 
-	// Player player;
+	Player player;
 
 	float dx = 0;
 
@@ -41,7 +41,7 @@ public class MainScreen implements Screen {
 	public void show() {
 		batch = new SpriteBatch();
 		// player = new Player();
-		druidTexture = new Texture(Gdx.files.internal("mage.png"));
+		
 		cam = new OrthographicCamera();
 		viewport = new StretchViewport(VIEW_WIDTH, VIEW_HEIGHT, cam);
 		cam.position.set(0, 0, 0);
@@ -49,17 +49,19 @@ public class MainScreen implements Screen {
 		loader = new TmxMapLoader();
 		map = loader.load("map.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map);
+		
+		player = new Player("mage.png");
 
 		Gdx.app.log(title, "Hi1!");
 	}
 
 	private void handleInput() {
-		float d = 1f;
+		float d = 5f;
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			cam.zoom += 0.02;
+			cam.zoom += 0.1;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
-			cam.zoom -= 0.02;
+			cam.zoom -= 0.1;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			cam.translate(-d, 0, 0);
@@ -78,7 +80,7 @@ public class MainScreen implements Screen {
 	}
 
 	@Override
-	public void render(float delta) {
+	public void render(float dt) {
 		handleInput();
 		cam.update();
 		renderer.setView(cam);
@@ -91,9 +93,8 @@ public class MainScreen implements Screen {
 		renderer.render();
 		batch.begin();
 		
-		batch.draw(druidTexture, 0, 0);
 		// DRAWING GAME OBJECTS
-		// player.draw(batch);
+		player.draw(batch, dt);
 
 		batch.end();
 
