@@ -34,10 +34,10 @@ public class MainScreen implements Screen {
 		viewport = new StretchViewport(VIEW_WIDTH, VIEW_HEIGHT, cam);
 		cam.position.set(0, 0, 0);
 
-		player = new Mage("mage.png");
+		player = new Mage(batch, "mage.png");
 
 		cMapRenderer = new CustomMapRenderer();
-		cMapRenderer.initWorld();
+		cMapRenderer.initWorld(cam);
 
 		Gdx.app.log(title, "Hi1!");
 	}
@@ -76,10 +76,13 @@ public class MainScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		cMapRenderer.render(cam);
+		cMapRenderer.render();
 		// DRAWING GAME OBJECTS
+		
 		batch.begin();
-		player.draw(batch, dt);
+		
+		player.draw( dt);
+		
 		batch.end();
 	}
 

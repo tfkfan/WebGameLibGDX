@@ -11,8 +11,8 @@ public class Mage extends Player {
 	protected Array<Animation<TextureRegion>> animations;
 	protected TextureRegion[] standRegions;
 
-	public Mage(String spritePath) {
-		super(spritePath);
+	public Mage(SpriteBatch batch, String spritePath) {
+		super(batch, spritePath);
 
 		final int dirs = 8;
 
@@ -45,14 +45,12 @@ public class Mage extends Player {
 			if(j==0)
 				standRegions[6] = tr;
 			
-			
 			tr = new TextureRegion(spriteTexture, w * 3, h * j, w, h);
 			tr.flip(true, false);
 			frames[5][j] = tr;
 			
 			if(j==0)
 				standRegions[5] = tr;
-
 		}
 		
 		
@@ -65,7 +63,7 @@ public class Mage extends Player {
 	}
 
 	@Override
-	public void draw(SpriteBatch batch, float dt) {
+	public void draw(float dt) {
 		// sprite.draw(batch);
 		updateStateTimer(dt);
 		TextureRegion currentFrame = getFrame();

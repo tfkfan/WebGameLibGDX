@@ -23,15 +23,20 @@ public class CustomMapRenderer {
 	private TmxMapLoader loader;
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private TiledMap map;
+	
+	private OrthographicCamera cam;
 
 	public CustomMapRenderer() {
 		
 	}
 
-	public void initWorld() {
+	public void initWorld(OrthographicCamera cam) {
+		this.cam = cam;
+		
 		loader = new TmxMapLoader();
 		map = loader.load("map.tmx");
 		mapRenderer = new OrthogonalTiledMapRenderer(map);
+	
 
 		world = new World(new Vector2(0, 0), true);
 		worldRenderer = new Box2DDebugRenderer();
@@ -57,7 +62,7 @@ public class CustomMapRenderer {
 		}
 	}
 
-	public void render(OrthographicCamera cam) {
+	public void render() {
 		mapRenderer.setView(cam);
 		mapRenderer.render();
 		worldRenderer.render(world, cam.combined);

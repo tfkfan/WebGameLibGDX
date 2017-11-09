@@ -17,32 +17,55 @@ public abstract class Player implements GameObject, Movable, Animated {
 
 	protected PlayerState currState;
 	protected PlayerState prevState;
-	
+
 	protected Direction direction;
 	protected Direction oldDirection;
-	
+
 	protected Double healthPoints;
 	protected Double manaPoints;
 
 	protected String playerName;
 	protected Integer level;
 
+	protected SpriteBatch batch;
+
 	public Player(String spritePath) {
+		init();
+		loadSprite(spritePath);
+	}
+
+	public Player(SpriteBatch batch) {
+		setSpriteBatch(batch);
+		init();
+	}
+
+	public Player(SpriteBatch batch, String spritePath) {
+		setSpriteBatch(batch);
+		init();
+		loadSprite(spritePath);
+	}
+
+	public void init() {
 		position = new Vector2();
 		velocity = new Vector2();
 
-		spriteTexture = new Texture(Gdx.files.internal(spritePath));
-
 		prevState = PlayerState.STAND;
 		currState = PlayerState.STAND;
-		
+
 		direction = Direction.UP;
 		oldDirection = Direction.UP;
 
 		stateTimer = 0;
+	}
 
+	public void loadSprite(String spritePath) {
+		spriteTexture = new Texture(Gdx.files.internal(spritePath));
 		sprite = new Sprite(spriteTexture, 20, 20, 50, 50);
 		sprite.setPosition(10, 10);
+	}
+
+	public void setSpriteBatch(SpriteBatch batch) {
+		this.batch = batch;
 	}
 
 	public Direction getDirection() {
@@ -52,7 +75,7 @@ public abstract class Player implements GameObject, Movable, Animated {
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
-	
+
 	public Double getHealthPoints() {
 		return healthPoints;
 	}
@@ -152,32 +175,30 @@ public abstract class Player implements GameObject, Movable, Animated {
 		return PlayerState.STAND;
 	}
 
-	public abstract void draw(SpriteBatch batch, float dt);
-
 	@Override
 	public void move() {
 		oldDirection = direction;
-		
-		if(velocity.x > 0)
+
+		if (velocity.x > 0)
 			direction = Direction.RIGHT;
-		else if(velocity.x < 0)
+		else if (velocity.x < 0)
 			direction = Direction.LEFT;
-		
-		if(velocity.y > 0)
+
+		if (velocity.y > 0)
 			direction = Direction.UP;
-		else if(velocity.y < 0)
+		else if (velocity.y < 0)
 			direction = Direction.DOWN;
-		
-		if(velocity.x > 0 && velocity.y > 0)
+
+		if (velocity.x > 0 && velocity.y > 0)
 			direction = Direction.UPRIGHT;
-		else if(velocity.x > 0 && velocity.y < 0)
+		else if (velocity.x > 0 && velocity.y < 0)
 			direction = Direction.RIGHTDOWN;
-		else if(velocity.x < 0 && velocity.y > 0)
+		else if (velocity.x < 0 && velocity.y > 0)
 			direction = Direction.UPLEFT;
-		else if(velocity.x < 0 && velocity.y < 0)
+		else if (velocity.x < 0 && velocity.y < 0)
 			direction = Direction.LEFTDOWN;
-		
-		if(oldDirection != direction || currState != prevState)
+
+		if (oldDirection != direction || currState != prevState)
 			stateTimer = 0;
 
 		position.add(velocity);
