@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.world.WorldRenderer;
 import com.webgame.game.world.objects.Mage;
-import com.webgame.game.world.objects.Player;
+import com.webgame.game.world.objects.GameObject;
 
 import static com.webgame.game.Configs.VIEW_WIDTH;
 import static com.webgame.game.Configs.VIEW_HEIGHT;
@@ -26,7 +26,7 @@ public class MainScreen implements Screen {
 
 	private WorldRenderer worldRenderer;
 
-	private Player player;
+	private GameObject player;
 
 	@Override
 	public void show() {
@@ -39,9 +39,9 @@ public class MainScreen implements Screen {
 		worldRenderer.initWorld(cam);
 		
 		player = new Mage(batch, "mage.png");
-		player.definePlayer(worldRenderer.world);
+		player.createObject(worldRenderer.world);
 
-		Gdx.app.log(title, "Hi1!");
+		Gdx.app.log(title, "Starting...");
 	}
 
 	private void handleInput() {

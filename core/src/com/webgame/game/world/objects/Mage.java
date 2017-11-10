@@ -14,9 +14,8 @@ public class Mage extends Player {
 	public Mage(SpriteBatch batch, String spritePath) {
 		super(batch, spritePath);
 
-		xOffset = 30 / PPM;
-		yOffset = 15 / PPM;
-		final int dirs = 8;
+		setXOffset(30 / PPM);
+		setYOffset(15 / PPM);
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		animations = new Array<Animation<TextureRegion>>();
@@ -72,37 +71,7 @@ public class Mage extends Player {
 		TextureRegion region;
 		Animation<TextureRegion> animation = null;
 		TextureRegion standRegion;
-		Integer index = 0;
-
-		switch (direction) {
-		case UP:
-			index = 0;
-			break;
-		case UPRIGHT:
-			index = 1;
-			break;
-		case RIGHT:
-			index = 2;
-			break;
-		case RIGHTDOWN:
-			index = 3;
-			break;
-		case DOWN:
-			index = 4;
-			break;
-		case LEFTDOWN:
-			index = 5;
-			break;
-		case LEFT:
-			index = 6;
-			break;
-		case UPLEFT:
-			index = 7;
-			break;
-		default:
-			index = 0;
-			break;
-		}
+		Integer index = getDirectionIndex();
 
 		animation = animations.get(index);
 		standRegion = standRegions[index];
