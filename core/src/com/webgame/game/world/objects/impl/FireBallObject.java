@@ -6,9 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.game.state.SingleSkillState;
 import com.webgame.game.state.State;
-import com.webgame.game.world.objects.GameObject;
 import com.webgame.game.world.objects.SkillObject;
 
 public class FireBallObject extends SkillObject {
@@ -57,10 +55,4 @@ public class FireBallObject extends SkillObject {
 		return region;
 	}
 	
-	
-	@Override
-	public void move(float dt){
-		this.setCurrPos(getCurrPos().add(getVelocity()));
-		super.move(dt);
-	}
 }

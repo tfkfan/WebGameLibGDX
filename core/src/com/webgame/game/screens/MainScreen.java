@@ -45,21 +45,23 @@ public class MainScreen implements Screen {
 
 	private void handleInput() {
 		float d = 5f;
-		if (Gdx.input.isKeyPressed(Input.Keys.A))
-			cam.zoom += 0.1;
-		if (Gdx.input.isKeyPressed(Input.Keys.Q))
-			cam.zoom -= 0.1;
+		//if (Gdx.input.isKeyPressed(Input.Keys.A))
+		//	cam.zoom += 0.1;
+		//if (Gdx.input.isKeyPressed(Input.Keys.Q))
+		//	cam.zoom -= 0.1;
 
 		Vector2 vec = new Vector2(0, 0);
-		if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+		if (Gdx.input.isKeyPressed(Input.Keys.A))
 			vec.x = -d;
-		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+		if (Gdx.input.isKeyPressed(Input.Keys.D))
 			vec.x = d;
-		if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+		if (Gdx.input.isKeyPressed(Input.Keys.S))
 			vec.y = -d;
-		if (Gdx.input.isKeyPressed(Input.Keys.UP))
+		if (Gdx.input.isKeyPressed(Input.Keys.W))
 			vec.y = d;
-
+		
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
+			player.attack();
 		// player.b2body.applyLinearImpulse(vec, player.b2body.getWorldCenter(),
 		// true);
 		player.setVelocity(vec);
@@ -74,6 +76,7 @@ public class MainScreen implements Screen {
 		handleInput();
 		cam.update();
 		player.move(dt);
+		((Mage)player).moveSkills(dt);
 
 		batch.setProjectionMatrix(cam.combined);
 
@@ -87,6 +90,7 @@ public class MainScreen implements Screen {
 		batch.begin();
 
 		player.draw(batch);
+		((Mage)player).drawSkills();
 
 		batch.end();
 	}

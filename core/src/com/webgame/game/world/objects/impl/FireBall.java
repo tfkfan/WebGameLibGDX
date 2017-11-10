@@ -18,7 +18,10 @@ public class FireBall extends Skill {
 			setSkillObjectsNum(num);
 			
 			SkillObject[] objs = new FireBallObject[1];
+			objs[0] = new FireBallObject();
 			objs[0].initSkill(batch, spritePath);
+			
+			this.setSkillObjects(objs);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

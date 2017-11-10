@@ -19,6 +19,8 @@ public abstract class Player extends WorldGameObject {
 		super(batch, spritePath);
 
 	}
+	
+	public abstract void attack();
 
 	@Override
 	public void createObject(World world) {

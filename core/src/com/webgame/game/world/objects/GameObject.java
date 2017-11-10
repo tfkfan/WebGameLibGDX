@@ -210,6 +210,7 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 		if (oldDirection != direction || currState != prevState)
 			stateTimer = 0;
 
+		
 		updateStateTimer(dt);
 		setRegion(getFrame());
 	}

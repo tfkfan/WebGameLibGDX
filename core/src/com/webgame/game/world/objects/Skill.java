@@ -27,20 +27,49 @@ public abstract class Skill implements Movable {
 
 		for (int i = 0; i < skillObjectsNum; i++) {
 			SkillObject obj = skillObjects[i];
-			
-			if(!obj.getIsActive())
+
+			if (!obj.isActive())
 				continue;
-			
+
 			obj.setVelocity(skillVelocity);
 			obj.move(dt);
 		}
+
+		handleCollision();
+	}
+
+	public void setInitialPosition(Vector2 pos){
+		for (int i = 0; i < skillObjectsNum; i++) {
+			skillObjects[i].setCurrPos(pos);
+			
+		}
+	}
+	
+	public void setActive(Vector2 vec) {
+		for (int i = 0; i < skillObjectsNum; i++) {
+			skillObjects[i].setSkillActive(true);
+			skillObjects[i].setPosition(vec.x, vec.y);
+		}
+	}
+
+	public void handleCollision() {
+		for (int i = 0; i < skillObjectsNum; i++) {
+			handleCollision(skillObjects[i]);
+		}
+	}
+
+	public void handleCollision(SkillObject obj) {
+		float x = obj.getX();
+		float y = obj.getY();
+		if (x < -10 || y < -10 || x > 200 || y > 200)
+			obj.setSkillActive(false);
 	}
 
 	public void drawSkills() {
 		if (skillObjects == null)
 			return;
-		for (int i = 0; i < skillObjectsNum; i++){
-			if(skillObjects[i].getIsActive())
+		for (int i = 0; i < skillObjectsNum; i++) {
+			if (skillObjects[i].isActive())
 				skillObjects[i].draw(batch);
 		}
 	}

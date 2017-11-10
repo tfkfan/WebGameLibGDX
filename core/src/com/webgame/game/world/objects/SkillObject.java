@@ -13,8 +13,14 @@ public abstract class SkillObject extends GameObject {
 		this.isActive = isActive;
 	}
 
-	public boolean getIsActive() {
+	public boolean isActive() {
 		return isActive;
+	}
+
+	@Override
+	public void move(float dt) {
+		setPosition(getX() + getVelocity().x - xOffset, getY() + getVelocity().y - yOffset);
+		super.move(dt);
 	}
 
 	public abstract void initSkill(SpriteBatch batch, String spritePath);
