@@ -62,13 +62,10 @@ public class MainScreen implements Screen {
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
 			player.attack();
-		// player.b2body.applyLinearImpulse(vec, player.b2body.getWorldCenter(),
-		// true);
+		
 		player.setVelocity(vec);
 		cam.position.x = player.getX();
 		cam.position.y = player.getY();
-
-		// cam.zoom = MathUtils.clamp(cam.zoom, 0.1f, 100 / cam.viewportWidth);
 	}
 
 	@Override

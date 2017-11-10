@@ -1,5 +1,6 @@
 package com.webgame.game.world.objects;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -10,7 +11,7 @@ import com.webgame.game.world.objects.impl.SpriteTextureLoader;
 import static com.webgame.game.Configs.PPM;
 
 public abstract class GameObject extends Sprite implements Movable, Animated {
-	protected Vector2 currVel;
+	protected Vector2 velocity;
 
 	protected float stateTimer;
 
@@ -24,32 +25,19 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 	protected float yOffset;
 
 	protected final int dirs = 8;
+	protected final float absVelocity = 5f;
 
-	protected SpriteTextureLoader sTextureLoader;
+	protected SpriteBatch batch;
+	protected Texture spriteTexture;
 
-	public GameObject(){
-		init();
-	}
-	
-	public GameObject(String spritePath) {
-		loadTexture(null, spritePath);
-		init();
-	}
-
-	public GameObject(SpriteBatch batch) {
-		loadTexture(batch, null);
-		init();
-	}
-
-	public GameObject(SpriteBatch batch, String spritePath) {
-		loadTexture(batch, spritePath);
+	public GameObject() {
 		init();
 	}
 
 	public void init() {
 		xOffset = yOffset = 0;
 
-		currVel = new Vector2();
+		velocity = new Vector2();
 
 		prevState = PlayerState.STAND;
 		currState = PlayerState.STAND;
@@ -62,16 +50,24 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 		this.setBounds(0, 0, 60 / PPM, 60 / PPM);
 	}
 
-	protected void loadTexture(SpriteBatch batch, String spritePath) {
-		sTextureLoader = new SpriteTextureLoader();
-		if (batch != null)
-			sTextureLoader.setSpriteBatch(batch);
-		if (spritePath != null)
-			sTextureLoader.loadSprite(spritePath);
+	public Texture getSpriteTexture() {
+		return spriteTexture;
 	}
 
-	public SpriteTextureLoader getSpriteTextureLoader() {
-		return sTextureLoader;
+	public void setSpriteTexture(Texture spriteTexture) {
+		this.spriteTexture = spriteTexture;
+	}
+
+	public void setSpriteTexture(String spritePath) {
+		this.spriteTexture = SpriteTextureLoader.loadSprite(spritePath);
+	}
+
+	public void setSpriteBatch(SpriteBatch batch) {
+		this.batch = batch;
+	}
+
+	public SpriteBatch getSpriteBatch() {
+		return batch;
 	}
 
 	public Direction getDirection() {
@@ -83,13 +79,13 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 	}
 
 	public Vector2 getVelocity() {
-		return currVel;
+		return velocity;
 	}
 
 	public void setVelocity(Vector2 velocity) {
-		this.currVel = velocity;
+		this.velocity = velocity;
 	}
-	
+
 	public float getXOffset() {
 		return xOffset;
 	}
@@ -135,7 +131,7 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 	}
 
 	public State getState() {
-		if (currVel.x != 0 || currVel.y != 0)
+		if (velocity.x != 0 || velocity.y != 0)
 			return PlayerState.WALK;
 
 		return PlayerState.STAND;
@@ -175,33 +171,35 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 		return index;
 	}
 
-	@Override
-	public void move(float dt) {
+	public void updateDirection() {
 		oldDirection = direction;
 
-		if (currVel.x > 0)
+		if (velocity.x > 0)
 			direction = Direction.RIGHT;
-		else if (currVel.x < 0)
+		else if (velocity.x < 0)
 			direction = Direction.LEFT;
 
-		if (currVel.y > 0)
+		if (velocity.y > 0)
 			direction = Direction.UP;
-		else if (currVel.y < 0)
+		else if (velocity.y < 0)
 			direction = Direction.DOWN;
 
-		if (currVel.x > 0 && currVel.y > 0)
+		if (velocity.x > 0 && velocity.y > 0)
 			direction = Direction.UPRIGHT;
-		else if (currVel.x > 0 && currVel.y < 0)
+		else if (velocity.x > 0 && velocity.y < 0)
 			direction = Direction.RIGHTDOWN;
-		else if (currVel.x < 0 && currVel.y > 0)
+		else if (velocity.x < 0 && velocity.y > 0)
 			direction = Direction.UPLEFT;
-		else if (currVel.x < 0 && currVel.y < 0)
+		else if (velocity.x < 0 && velocity.y < 0)
 			direction = Direction.LEFTDOWN;
 
 		if (oldDirection != direction || currState != prevState)
 			stateTimer = 0;
+	}
 
-		
+	@Override
+	public void move(float dt) {
+
 		updateStateTimer(dt);
 		setRegion(getFrame());
 	}

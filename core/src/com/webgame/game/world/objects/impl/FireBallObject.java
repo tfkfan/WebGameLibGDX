@@ -15,30 +15,32 @@ public class FireBallObject extends SkillObject {
 	
 	public FireBallObject() {
 		super();
-		init();
 	}
 
 	@Override
 	public void initSkill(SpriteBatch batch, String spritePath) {
-		loadTexture(batch, spritePath);
-		setXOffset(30 / PPM);
-		setYOffset(15 / PPM);
+		this.setSpriteBatch(batch);
+		this.setSpriteTexture(spritePath);
 
-		Texture spriteTexture = getSpriteTextureLoader().getSpriteTexture();
+		Texture spriteTexture = getSpriteTexture();
 
-		int h = 61;
-		int w = 72;
-		int l = 5;
+		int h = 50;
+		int w = 30;
+		int l = 1;
 		
 		TextureRegion[] frames =  new TextureRegion[l];
 		
+		//Доделать
 		for(int i = 0; i < l; i++)
-			frames[i] = new TextureRegion(spriteTexture, w , h, w, h);
+			frames[i] = new TextureRegion(spriteTexture, 200, 155, w, h);
 		
-		standTexture = new TextureRegion(spriteTexture, w , h, w, h);
+		standTexture = new TextureRegion(spriteTexture,810, 50, w, h);
 		
 		animation = new Animation<TextureRegion>(0.2f, frames);
 
+		int w2 = 30;
+		int h2 = 50;
+		this.setBounds(0,0, w2/PPM, h2/PPM);
 		setRegion(standTexture);
 	}
 
@@ -50,7 +52,7 @@ public class FireBallObject extends SkillObject {
 	@Override
 	public TextureRegion getFrame() {
 
-		TextureRegion region = isActive ? animation.getKeyFrame(stateTimer, true) : null;
+		TextureRegion region = isActive ? standTexture : null;
 			
 		return region;
 	}

@@ -1,6 +1,5 @@
 package com.webgame.game.world.objects;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -8,8 +7,7 @@ public abstract class WorldGameObject extends GameObject {
 	protected World world;
 	protected Body b2body;
 
-	public WorldGameObject(SpriteBatch batch, String spritePath) {
-		super(batch, spritePath);
+	public WorldGameObject() {
 	}
 
 	public Body getB2body() {
@@ -30,7 +28,7 @@ public abstract class WorldGameObject extends GameObject {
 
 	@Override
 	public void move(float dt) {
-		b2body.setLinearVelocity(currVel);
+		b2body.setLinearVelocity(velocity);
 		setPosition(b2body.getPosition().x - xOffset, b2body.getPosition().y - yOffset);
 		super.move(dt);
 	}

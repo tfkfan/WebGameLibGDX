@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.state.PlayerState;
 import com.webgame.game.world.objects.Player;
@@ -16,17 +15,19 @@ public class Mage extends Player {
 	protected Array<Animation<TextureRegion>> animations;
 	protected TextureRegion[] standRegions;
 	
-	protected FireBall fireBall;
-
 	public Mage(SpriteBatch batch, String spritePath) {
-		super(batch, spritePath);
+		super();
+		
+		this.setSpriteBatch(batch);
+		this.setSpriteTexture(spritePath);
 
-		fireBall = new FireBall(batch, "skills.png");
+		FireBall fireBall = new FireBall(batch, "skills.png");
+		this.setSkill(fireBall);
 		
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
 		
-		Texture spriteTexture = getSpriteTextureLoader().getSpriteTexture();
+		Texture spriteTexture = getSpriteTexture();
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		animations = new Array<Animation<TextureRegion>>();
@@ -98,23 +99,5 @@ public class Mage extends Player {
 		}
 
 		return region;
-	}
-
-	@Override
-	public void attack() {
-		if(!fireBall.isActive())
-			fireBall.cast(new Vector2(this.getX(), this.getY()));
-		Vector2 vel = new Vector2(new Vector2(1/PPM, 1/PPM));
-		vel = vel.scl(20);
-		
-		fireBall.setSkillVelocity(vel);
-	}
-	
-	public void drawSkills(){
-		fireBall.drawSkills();
-	}
-	
-	public void moveSkills(float dt){
-		fireBall.move(dt);
 	}
 }

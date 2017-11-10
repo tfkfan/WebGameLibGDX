@@ -4,9 +4,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class SkillObject extends GameObject {
 	protected boolean isActive;
+	protected boolean isStatic;
+	protected boolean isFalling;
 
 	public SkillObject() {
-
+		super();
 	}
 
 	public void setSkillActive(boolean isActive) {
@@ -15,6 +17,22 @@ public abstract class SkillObject extends GameObject {
 
 	public boolean isActive() {
 		return isActive;
+	}
+	
+	public boolean isStatic() {
+		return isStatic;
+	}
+
+	public void setStatic(boolean isStatic) {
+		this.isStatic = isStatic;
+	}
+	
+	public boolean isFalling() {
+		return isFalling;
+	}
+
+	public void setFalling(boolean isFalling) {
+		this.isFalling = isFalling;
 	}
 
 	@Override

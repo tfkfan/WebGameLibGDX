@@ -1,10 +1,11 @@
 package com.webgame.game.world.objects;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+
 import static com.webgame.game.Configs.PPM;
 
 public abstract class Player extends WorldGameObject {
@@ -14,13 +15,12 @@ public abstract class Player extends WorldGameObject {
 
 	protected String playerName;
 	protected Integer level;
-
-	public Player(SpriteBatch batch, String spritePath) {
-		super(batch, spritePath);
-
-	}
 	
-	public abstract void attack();
+	protected Skill skill;
+
+	public Player() {
+		super();
+	}
 
 	@Override
 	public void createObject(World world) {
@@ -38,6 +38,27 @@ public abstract class Player extends WorldGameObject {
 
 		fdef.shape = shape;
 		b2body.createFixture(fdef);
+	}
+	
+	public void attack() {
+		if(!skill.isActive())
+			skill.cast(new Vector2(this.getX(), this.getY()), getDirection());
+	}
+	
+	public void drawSkills(){
+		skill.drawSkill();
+	}
+
+	public void moveSkills(float dt){
+		skill.move(dt);
+	}
+	
+	public Skill getSkill() {
+		return skill;
+	}
+
+	public void setSkill(Skill skill) {
+		this.skill = skill;
 	}
 
 	public Double getHealthPoints() {
@@ -70,6 +91,12 @@ public abstract class Player extends WorldGameObject {
 
 	public void setLevel(Integer level) {
 		this.level = level;
+	}
+	
+	@Override
+	public void move(float dt){
+		this.updateDirection();
+		super.move(dt);
 	}
 
 }
