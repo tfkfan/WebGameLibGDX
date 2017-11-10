@@ -8,20 +8,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.webgame.game.state.Direction;
 import com.webgame.game.state.PlayerState;
 import static com.webgame.game.Configs.PPM;
 
-public abstract class Player extends Sprite implements GameObject, Movable, Animated {
+public abstract class Player extends Sprite implements Movable, Animated {
 	protected World world;
-	public Body b2body;
-	
-	
+	protected Body b2body;
+
 	protected Texture spriteTexture;
-	protected Sprite sprite;
 	protected Vector2 velocity;
 	protected float stateTimer;
 
@@ -37,6 +34,9 @@ public abstract class Player extends Sprite implements GameObject, Movable, Anim
 	protected String playerName;
 	protected Integer level;
 
+	protected float xOffset;
+	protected float yOffset;
+	
 	protected SpriteBatch batch;
 
 	public Player(String spritePath) {
@@ -56,6 +56,8 @@ public abstract class Player extends Sprite implements GameObject, Movable, Anim
 	}
 
 	public void init() {
+		xOffset = yOffset = 0;
+		
 		velocity = new Vector2();
 
 		prevState = PlayerState.STAND;
@@ -86,6 +88,14 @@ public abstract class Player extends Sprite implements GameObject, Movable, Anim
 		b2body.createFixture(fdef);	
 	}
 	
+	public Body getB2body() {
+		return b2body;
+	}
+
+	public void setB2body(Body b2body) {
+		this.b2body = b2body;
+	}
+	
 	public World getWorld() {
 		return world;
 	}
@@ -96,8 +106,6 @@ public abstract class Player extends Sprite implements GameObject, Movable, Anim
 
 	public void loadSprite(String spritePath) {
 		spriteTexture = new Texture(Gdx.files.internal(spritePath));
-		sprite = new Sprite(spriteTexture, 20, 20, 50, 50);
-		sprite.setPosition(10, 10);
 	}
 
 	public void setSpriteBatch(SpriteBatch batch) {
@@ -152,14 +160,6 @@ public abstract class Player extends Sprite implements GameObject, Movable, Anim
 		this.spriteTexture = spriteTexture;
 	}
 
-	public Sprite getSprite() {
-		return sprite;
-	}
-
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
-
 	public Vector2 getVelocity() {
 		return velocity;
 	}
@@ -204,7 +204,7 @@ public abstract class Player extends Sprite implements GameObject, Movable, Anim
 	}
 
 	@Override
-	public void move() {
+	public void move(float dt) {
 		oldDirection = direction;
 
 		if (velocity.x > 0)
@@ -230,6 +230,9 @@ public abstract class Player extends Sprite implements GameObject, Movable, Anim
 			stateTimer = 0;
 
 		b2body.setLinearVelocity(velocity);
-		setPosition(b2body.getPosition().x, b2body.getPosition().y);
+		setPosition(b2body.getPosition().x - xOffset, b2body.getPosition().y - yOffset);
+		
+		updateStateTimer(dt);
+		setRegion(getFrame());
 	}
 }

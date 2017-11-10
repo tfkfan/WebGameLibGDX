@@ -1,11 +1,11 @@
 package com.webgame.game.world.objects;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import static com.webgame.game.Configs.PPM;
+
 public class Mage extends Player {
 
 	protected Array<Animation<TextureRegion>> animations;
@@ -14,6 +14,8 @@ public class Mage extends Player {
 	public Mage(SpriteBatch batch, String spritePath) {
 		super(batch, spritePath);
 
+		xOffset = 30 / PPM;
+		yOffset = 15 / PPM;
 		final int dirs = 8;
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
@@ -23,7 +25,7 @@ public class Mage extends Player {
 		int h = 61;
 		int w = 72;
 
-		for (int i = 0; i < 5; i++){
+		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++)
 				frames[i][j] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
 			standRegions[i] = new TextureRegion(spriteTexture, w * i, 0, w, h);
@@ -34,46 +36,32 @@ public class Mage extends Player {
 			TextureRegion tr = new TextureRegion(spriteTexture, w, h * j, w, h);
 			tr.flip(true, false);
 			frames[7][j] = tr;
-			
-			if(j==0)
+
+			if (j == 0)
 				standRegions[7] = tr;
-			
+
 			tr = new TextureRegion(spriteTexture, w * 2, h * j, w, h);
 			tr.flip(true, false);
 			frames[6][j] = tr;
-			
-			if(j==0)
+
+			if (j == 0)
 				standRegions[6] = tr;
-			
+
 			tr = new TextureRegion(spriteTexture, w * 3, h * j, w, h);
 			tr.flip(true, false);
 			frames[5][j] = tr;
-			
-			if(j==0)
+
+			if (j == 0)
 				standRegions[5] = tr;
 		}
-		
-		
 
-		for (int i = 0; i < dirs; i++){
+		for (int i = 0; i < dirs; i++) {
 			Animation<TextureRegion> anim = new Animation<TextureRegion>(0.2f, frames[i]);
 			animations.add(anim);
 			frames[i] = null;
 		}
-	
-		setRegion(standRegions[0]);
-	}
-	
 
-	@Override
-	public void draw(float dt) {
-		
-		updateStateTimer(dt);
-		setRegion(getFrame());
-		
-		
-		super.draw(batch);
-		//batch.draw(currentFrame, position.x, position.y);
+		setRegion(standRegions[0]);
 	}
 
 	@Override

@@ -73,7 +73,7 @@ public class MainScreen implements Screen {
 	public void render(float dt) {
 		handleInput();
 		cam.update();
-		player.move();
+		player.move(dt);
 		
 		batch.setProjectionMatrix(cam.combined);
 
@@ -86,7 +86,7 @@ public class MainScreen implements Screen {
 		
 		batch.begin();
 		
-		player.draw( dt);
+		player.draw(batch);
 		
 		batch.end();
 	}
