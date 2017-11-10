@@ -9,9 +9,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.webgame.game.map.CustomMapRenderer;
-import com.webgame.game.objects.Mage;
-import com.webgame.game.objects.Player;
+import com.webgame.game.world.WorldRenderer;
+import com.webgame.game.world.objects.Mage;
+import com.webgame.game.world.objects.Player;
 
 import static com.webgame.game.Configs.VIEW_WIDTH;
 import static com.webgame.game.Configs.VIEW_HEIGHT;
@@ -23,7 +23,7 @@ public class MainScreen implements Screen {
 	private OrthographicCamera cam;
 	private Viewport viewport;
 
-	private CustomMapRenderer cMapRenderer;
+	private WorldRenderer worldRenderer;
 
 	private Player player;
 
@@ -34,16 +34,17 @@ public class MainScreen implements Screen {
 		viewport = new StretchViewport(VIEW_WIDTH, VIEW_HEIGHT, cam);
 		cam.position.set(0, 0, 0);
 
+		worldRenderer = new WorldRenderer();
+		worldRenderer.initWorld(cam);
+		
 		player = new Mage(batch, "mage.png");
-
-		cMapRenderer = new CustomMapRenderer();
-		cMapRenderer.initWorld(cam);
+		player.definePlayer(worldRenderer.world);
 
 		Gdx.app.log(title, "Hi1!");
 	}
 
 	private void handleInput() {
-		float d = 5f;
+		float d = 15f;
 		if (Gdx.input.isKeyPressed(Input.Keys.A))
 			cam.zoom += 0.1;
 		if (Gdx.input.isKeyPressed(Input.Keys.Q))
@@ -59,9 +60,11 @@ public class MainScreen implements Screen {
 		if (Gdx.input.isKeyPressed(Input.Keys.UP))
 			vec.y = d;
 
+		//player.b2body.applyLinearImpulse(vec, player.b2body.getWorldCenter(), true);
 		player.setVelocity(vec);
 		cam.position.x = player.getPosition().x;
 		cam.position.y = player.getPosition().y;
+		
 		// cam.zoom = MathUtils.clamp(cam.zoom, 0.1f, 100 / cam.viewportWidth);
 	}
 
@@ -76,7 +79,8 @@ public class MainScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		cMapRenderer.render();
+		worldRenderer.world.step(0.5f, 5, 2);
+		worldRenderer.render();
 		// DRAWING GAME OBJECTS
 		
 		batch.begin();

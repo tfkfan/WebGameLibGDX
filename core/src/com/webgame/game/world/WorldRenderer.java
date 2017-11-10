@@ -1,4 +1,4 @@
-package com.webgame.game.map;
+package com.webgame.game.world;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapObject;
@@ -15,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class CustomMapRenderer {
+public class WorldRenderer {
 
 	public World world;
 	public Box2DDebugRenderer worldRenderer;
@@ -26,7 +26,7 @@ public class CustomMapRenderer {
 	
 	private OrthographicCamera cam;
 
-	public CustomMapRenderer() {
+	public WorldRenderer() {
 		
 	}
 

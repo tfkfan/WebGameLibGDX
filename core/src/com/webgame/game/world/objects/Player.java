@@ -1,14 +1,24 @@
-package com.webgame.game.objects;
+package com.webgame.game.world.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 import com.webgame.game.state.Direction;
 import com.webgame.game.state.PlayerState;
 
 public abstract class Player implements GameObject, Movable, Animated {
+	protected World world;
+	public Body b2body;
+	
+	
 	protected Texture spriteTexture;
 	protected Sprite sprite;
 	protected Vector2 position;
@@ -56,6 +66,31 @@ public abstract class Player implements GameObject, Movable, Animated {
 		oldDirection = Direction.UP;
 
 		stateTimer = 0;
+	}
+	
+	public void definePlayer(World world) {
+		this.world = world;
+		
+		BodyDef bdef = new BodyDef();
+		bdef.position.set(position);
+		bdef.type = BodyDef.BodyType.DynamicBody;
+		b2body = world.createBody(bdef);
+		
+		FixtureDef fdef = new FixtureDef();
+		CircleShape shape = new CircleShape();
+		
+		shape.setRadius(20);
+		
+		fdef.shape = shape;
+		b2body.createFixture(fdef);	
+	}
+	
+	public World getWorld() {
+		return world;
+	}
+
+	public void setWorld(World world) {
+		this.world = world;
 	}
 
 	public void loadSprite(String spritePath) {
@@ -201,6 +236,7 @@ public abstract class Player implements GameObject, Movable, Animated {
 		if (oldDirection != direction || currState != prevState)
 			stateTimer = 0;
 
-		position.add(velocity);
+		b2body.setLinearVelocity(velocity);
+		position.set(b2body.getPosition());
 	}
 }
