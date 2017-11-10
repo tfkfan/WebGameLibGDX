@@ -102,7 +102,8 @@ public class Mage extends Player {
 
 	@Override
 	public void attack() {
-		fireBall.setActive(new Vector2(this.getX(), this.getY()));
+		if(!fireBall.isActive())
+			fireBall.cast(new Vector2(this.getX(), this.getY()));
 		Vector2 vel = new Vector2(new Vector2(1/PPM, 1/PPM));
 		vel = vel.scl(20);
 		

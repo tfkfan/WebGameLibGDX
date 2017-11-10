@@ -14,11 +14,8 @@ public abstract class Skill implements Movable {
 
 	protected SpriteBatch batch;
 	protected String spritePath;
-
-	public Skill(SpriteBatch batch, String spritePath) {
-		setBatch(batch);
-		setSpritePath(spritePath);
-	}
+	
+	protected boolean isActive;
 
 	@Override
 	public void move(float dt) {
@@ -38,14 +35,8 @@ public abstract class Skill implements Movable {
 		handleCollision();
 	}
 
-	public void setInitialPosition(Vector2 pos){
-		for (int i = 0; i < skillObjectsNum; i++) {
-			skillObjects[i].setCurrPos(pos);
-			
-		}
-	}
-	
-	public void setActive(Vector2 vec) {
+	public void cast(Vector2 vec) {
+		setActive(true);
 		for (int i = 0; i < skillObjectsNum; i++) {
 			skillObjects[i].setSkillActive(true);
 			skillObjects[i].setPosition(vec.x, vec.y);
@@ -55,6 +46,7 @@ public abstract class Skill implements Movable {
 	public void handleCollision() {
 		for (int i = 0; i < skillObjectsNum; i++) {
 			handleCollision(skillObjects[i]);
+			setActive(skillObjects[i].isActive());
 		}
 	}
 
@@ -74,6 +66,19 @@ public abstract class Skill implements Movable {
 		}
 	}
 
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public Skill(SpriteBatch batch, String spritePath) {
+		setBatch(batch);
+		setSpritePath(spritePath);
+	}
+	
 	public SpriteBatch getBatch() {
 		return batch;
 	}

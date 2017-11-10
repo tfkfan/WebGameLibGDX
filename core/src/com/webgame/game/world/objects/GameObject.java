@@ -11,7 +11,6 @@ import static com.webgame.game.Configs.PPM;
 
 public abstract class GameObject extends Sprite implements Movable, Animated {
 	protected Vector2 currVel;
-	protected Vector2 currPos;
 
 	protected float stateTimer;
 
@@ -89,14 +88,6 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 
 	public void setVelocity(Vector2 velocity) {
 		this.currVel = velocity;
-	}
-
-	public Vector2 getCurrPos() {
-		return currPos;
-	}
-
-	public void setCurrPos(Vector2 currPos) {
-		this.currPos = currPos;
 	}
 	
 	public float getXOffset() {
