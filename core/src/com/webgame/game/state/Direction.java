@@ -1,5 +1,5 @@
 package com.webgame.game.state;
 
-public enum Direction {
+public enum Direction implements State{
 	UP, DOWN, RIGHT, LEFT, UPRIGHT, RIGHTDOWN, LEFTDOWN, UPLEFT
 }

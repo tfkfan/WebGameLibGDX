@@ -1,5 +1,5 @@
 package com.webgame.game.state;
 
-public enum PlayerState {
+public enum PlayerState implements State {
 	WALK, STAND, ATTACK, DIE
 }

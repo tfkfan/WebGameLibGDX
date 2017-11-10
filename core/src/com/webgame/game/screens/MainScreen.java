@@ -10,9 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.world.WorldRenderer;
-import com.webgame.game.world.objects.Mage;
-import com.webgame.game.world.objects.GameObject;
-
+import com.webgame.game.world.objects.Player;
+import com.webgame.game.world.objects.impl.Mage;
 import static com.webgame.game.Configs.VIEW_WIDTH;
 import static com.webgame.game.Configs.VIEW_HEIGHT;
 import static com.webgame.game.Configs.PPM;
@@ -26,18 +25,18 @@ public class MainScreen implements Screen {
 
 	private WorldRenderer worldRenderer;
 
-	private GameObject player;
+	private Player player;
 
 	@Override
 	public void show() {
 		batch = new SpriteBatch();
 		cam = new OrthographicCamera();
-		viewport = new StretchViewport(VIEW_WIDTH/PPM, VIEW_HEIGHT/PPM, cam);
+		viewport = new StretchViewport(VIEW_WIDTH / PPM, VIEW_HEIGHT / PPM, cam);
 		cam.position.set(0, 0, 0);
 
 		worldRenderer = new WorldRenderer();
 		worldRenderer.initWorld(cam);
-		
+
 		player = new Mage(batch, "mage.png");
 		player.createObject(worldRenderer.world);
 
@@ -61,11 +60,12 @@ public class MainScreen implements Screen {
 		if (Gdx.input.isKeyPressed(Input.Keys.UP))
 			vec.y = d;
 
-		//player.b2body.applyLinearImpulse(vec, player.b2body.getWorldCenter(), true);
+		// player.b2body.applyLinearImpulse(vec, player.b2body.getWorldCenter(),
+		// true);
 		player.setVelocity(vec);
 		cam.position.x = player.getX();
 		cam.position.y = player.getY();
-		
+
 		// cam.zoom = MathUtils.clamp(cam.zoom, 0.1f, 100 / cam.viewportWidth);
 	}
 
@@ -74,7 +74,7 @@ public class MainScreen implements Screen {
 		handleInput();
 		cam.update();
 		player.move(dt);
-		
+
 		batch.setProjectionMatrix(cam.combined);
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -83,11 +83,11 @@ public class MainScreen implements Screen {
 		worldRenderer.world.step(0.01f, 6, 2);
 		worldRenderer.render();
 		// DRAWING GAME OBJECTS
-		
+
 		batch.begin();
-		
+
 		player.draw(batch);
-		
+
 		batch.end();
 	}
 
@@ -104,19 +104,19 @@ public class MainScreen implements Screen {
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

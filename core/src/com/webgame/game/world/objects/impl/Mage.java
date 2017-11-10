@@ -1,9 +1,13 @@
-package com.webgame.game.world.objects;
+package com.webgame.game.world.objects.impl;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.webgame.game.state.PlayerState;
+import com.webgame.game.world.objects.Player;
+
 import static com.webgame.game.Configs.PPM;
 
 public class Mage extends Player {
@@ -16,6 +20,8 @@ public class Mage extends Player {
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
+		
+		Texture spriteTexture = getSpriteTextureLoader().getSpriteTexture();
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		animations = new Array<Animation<TextureRegion>>();
@@ -76,7 +82,7 @@ public class Mage extends Player {
 		animation = animations.get(index);
 		standRegion = standRegions[index];
 
-		switch (currState) {
+		switch ((PlayerState)currState) {
 		case WALK:
 			region = animation.getKeyFrame(stateTimer, true);
 			break;

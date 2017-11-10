@@ -1,27 +1,22 @@
 package com.webgame.game.world.objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
 import com.webgame.game.state.Direction;
 import com.webgame.game.state.PlayerState;
+import com.webgame.game.state.State;
+import com.webgame.game.world.objects.impl.SpriteTextureLoader;
 import static com.webgame.game.Configs.PPM;
 
 public abstract class GameObject extends Sprite implements Movable, Animated {
-	protected World world;
-	protected Body b2body;
-
-	protected Texture spriteTexture;
 	protected Vector2 currVel;
+	protected Vector2 currPos;
 
 	protected float stateTimer;
 
-	protected PlayerState currState;
-	protected PlayerState prevState;
+	protected State currState;
+	protected State prevState;
 
 	protected Direction direction;
 	protected Direction oldDirection;
@@ -29,24 +24,27 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 	protected float xOffset;
 	protected float yOffset;
 
-	protected SpriteBatch batch;
-	
 	protected final int dirs = 8;
 
-	public GameObject(String spritePath) {
+	protected SpriteTextureLoader sTextureLoader;
+
+	public GameObject(){
 		init();
-		loadSprite(spritePath);
+	}
+	
+	public GameObject(String spritePath) {
+		loadTexture(null, spritePath);
+		init();
 	}
 
 	public GameObject(SpriteBatch batch) {
-		setSpriteBatch(batch);
+		loadTexture(batch, null);
 		init();
 	}
 
 	public GameObject(SpriteBatch batch, String spritePath) {
-		setSpriteBatch(batch);
+		loadTexture(batch, spritePath);
 		init();
-		loadSprite(spritePath);
 	}
 
 	public void init() {
@@ -65,28 +63,16 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 		this.setBounds(0, 0, 60 / PPM, 60 / PPM);
 	}
 
-	public Body getB2body() {
-		return b2body;
+	protected void loadTexture(SpriteBatch batch, String spritePath) {
+		sTextureLoader = new SpriteTextureLoader();
+		if (batch != null)
+			sTextureLoader.setSpriteBatch(batch);
+		if (spritePath != null)
+			sTextureLoader.loadSprite(spritePath);
 	}
 
-	public void setB2body(Body b2body) {
-		this.b2body = b2body;
-	}
-
-	public World getWorld() {
-		return world;
-	}
-
-	public void setWorld(World world) {
-		this.world = world;
-	}
-
-	public void loadSprite(String spritePath) {
-		spriteTexture = new Texture(Gdx.files.internal(spritePath));
-	}
-
-	public void setSpriteBatch(SpriteBatch batch) {
-		this.batch = batch;
+	public SpriteTextureLoader getSpriteTextureLoader() {
+		return sTextureLoader;
 	}
 
 	public Direction getDirection() {
@@ -97,14 +83,6 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 		this.direction = direction;
 	}
 
-	public Texture getSpriteTexture() {
-		return spriteTexture;
-	}
-
-	public void setSpriteTexture(Texture spriteTexture) {
-		this.spriteTexture = spriteTexture;
-	}
-
 	public Vector2 getVelocity() {
 		return currVel;
 	}
@@ -113,6 +91,14 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 		this.currVel = velocity;
 	}
 
+	public Vector2 getCurrPos() {
+		return currPos;
+	}
+
+	public void setCurrPos(Vector2 currPos) {
+		this.currPos = currPos;
+	}
+	
 	public float getXOffset() {
 		return xOffset;
 	}
@@ -137,19 +123,19 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 		this.stateTimer = stateTimer;
 	}
 
-	public PlayerState getCurrState() {
+	public State getCurrState() {
 		return currState;
 	}
 
-	public void setCurrState(PlayerState currState) {
+	public void setCurrState(State currState) {
 		this.currState = currState;
 	}
 
-	public PlayerState getPrevState() {
+	public State getPrevState() {
 		return prevState;
 	}
 
-	public void setPrevState(PlayerState prevState) {
+	public void setPrevState(State prevState) {
 		this.prevState = prevState;
 	}
 
@@ -157,14 +143,46 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 		stateTimer += dt;
 	}
 
-	public PlayerState getState() {
+	public State getState() {
 		if (currVel.x != 0 || currVel.y != 0)
 			return PlayerState.WALK;
 
 		return PlayerState.STAND;
 	}
 
-	public abstract void createObject(World world);
+	public Integer getDirectionIndex() {
+		Integer index = 0;
+		switch (direction) {
+		case UP:
+			index = 0;
+			break;
+		case UPRIGHT:
+			index = 1;
+			break;
+		case RIGHT:
+			index = 2;
+			break;
+		case RIGHTDOWN:
+			index = 3;
+			break;
+		case DOWN:
+			index = 4;
+			break;
+		case LEFTDOWN:
+			index = 5;
+			break;
+		case LEFT:
+			index = 6;
+			break;
+		case UPLEFT:
+			index = 7;
+			break;
+		default:
+			index = 0;
+			break;
+		}
+		return index;
+	}
 
 	@Override
 	public void move(float dt) {
@@ -191,9 +209,6 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 
 		if (oldDirection != direction || currState != prevState)
 			stateTimer = 0;
-
-		b2body.setLinearVelocity(currVel);
-		setPosition(b2body.getPosition().x - xOffset, b2body.getPosition().y - yOffset);
 
 		updateStateTimer(dt);
 		setRegion(getFrame());
