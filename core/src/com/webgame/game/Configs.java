@@ -14,5 +14,7 @@ public class Configs {
 	public static final Integer VIEW_WIDTH = 800;
 	public static final Integer VIEW_HEIGHT = 600;
 	
+	public static final float PPM = 100;
+	
 	public static final String PLAYER_SPRITE_PATH = "sprites.jpg";
 }

@@ -13,15 +13,15 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.webgame.game.state.Direction;
 import com.webgame.game.state.PlayerState;
+import static com.webgame.game.Configs.PPM;
 
-public abstract class Player implements GameObject, Movable, Animated {
+public abstract class Player extends Sprite implements GameObject, Movable, Animated {
 	protected World world;
 	public Body b2body;
 	
 	
 	protected Texture spriteTexture;
 	protected Sprite sprite;
-	protected Vector2 position;
 	protected Vector2 velocity;
 	protected float stateTimer;
 
@@ -56,7 +56,6 @@ public abstract class Player implements GameObject, Movable, Animated {
 	}
 
 	public void init() {
-		position = new Vector2();
 		velocity = new Vector2();
 
 		prevState = PlayerState.STAND;
@@ -66,20 +65,22 @@ public abstract class Player implements GameObject, Movable, Animated {
 		oldDirection = Direction.UP;
 
 		stateTimer = 0;
+		
+		this.setBounds(0, 0, 60/PPM, 60/PPM);
 	}
 	
 	public void definePlayer(World world) {
 		this.world = world;
 		
 		BodyDef bdef = new BodyDef();
-		bdef.position.set(position);
+		bdef.position.set(0, 0);
 		bdef.type = BodyDef.BodyType.DynamicBody;
 		b2body = world.createBody(bdef);
 		
 		FixtureDef fdef = new FixtureDef();
 		CircleShape shape = new CircleShape();
 		
-		shape.setRadius(20);
+		shape.setRadius(20/PPM);
 		
 		fdef.shape = shape;
 		b2body.createFixture(fdef);	
@@ -159,14 +160,6 @@ public abstract class Player implements GameObject, Movable, Animated {
 		this.sprite = sprite;
 	}
 
-	public Vector2 getPosition() {
-		return position;
-	}
-
-	public void setPosition(Vector2 position) {
-		this.position = position;
-	}
-
 	public Vector2 getVelocity() {
 		return velocity;
 	}
@@ -237,6 +230,6 @@ public abstract class Player implements GameObject, Movable, Animated {
 			stateTimer = 0;
 
 		b2body.setLinearVelocity(velocity);
-		position.set(b2body.getPosition());
+		setPosition(b2body.getPosition().x, b2body.getPosition().y);
 	}
 }

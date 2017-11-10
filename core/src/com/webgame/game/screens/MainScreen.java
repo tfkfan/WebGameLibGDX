@@ -15,6 +15,7 @@ import com.webgame.game.world.objects.Player;
 
 import static com.webgame.game.Configs.VIEW_WIDTH;
 import static com.webgame.game.Configs.VIEW_HEIGHT;
+import static com.webgame.game.Configs.PPM;
 
 public class MainScreen implements Screen {
 	private SpriteBatch batch;
@@ -31,7 +32,7 @@ public class MainScreen implements Screen {
 	public void show() {
 		batch = new SpriteBatch();
 		cam = new OrthographicCamera();
-		viewport = new StretchViewport(VIEW_WIDTH, VIEW_HEIGHT, cam);
+		viewport = new StretchViewport(VIEW_WIDTH/PPM, VIEW_HEIGHT/PPM, cam);
 		cam.position.set(0, 0, 0);
 
 		worldRenderer = new WorldRenderer();
@@ -44,7 +45,7 @@ public class MainScreen implements Screen {
 	}
 
 	private void handleInput() {
-		float d = 15f;
+		float d = 5f;
 		if (Gdx.input.isKeyPressed(Input.Keys.A))
 			cam.zoom += 0.1;
 		if (Gdx.input.isKeyPressed(Input.Keys.Q))
@@ -62,8 +63,8 @@ public class MainScreen implements Screen {
 
 		//player.b2body.applyLinearImpulse(vec, player.b2body.getWorldCenter(), true);
 		player.setVelocity(vec);
-		cam.position.x = player.getPosition().x;
-		cam.position.y = player.getPosition().y;
+		cam.position.x = player.getX();
+		cam.position.y = player.getY();
 		
 		// cam.zoom = MathUtils.clamp(cam.zoom, 0.1f, 100 / cam.viewportWidth);
 	}
@@ -73,13 +74,13 @@ public class MainScreen implements Screen {
 		handleInput();
 		cam.update();
 		player.move();
-
+		
 		batch.setProjectionMatrix(cam.combined);
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		worldRenderer.world.step(0.5f, 5, 2);
+		worldRenderer.world.step(0.01f, 6, 2);
 		worldRenderer.render();
 		// DRAWING GAME OBJECTS
 		

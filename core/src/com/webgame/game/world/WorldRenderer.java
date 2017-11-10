@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import static com.webgame.game.Configs.PPM;
 
 public class WorldRenderer {
 
@@ -35,7 +36,7 @@ public class WorldRenderer {
 		
 		loader = new TmxMapLoader();
 		map = loader.load("map.tmx");
-		mapRenderer = new OrthogonalTiledMapRenderer(map);
+		mapRenderer = new OrthogonalTiledMapRenderer(map, 1/PPM);
 	
 
 		world = new World(new Vector2(0, 0), true);
@@ -51,11 +52,11 @@ public class WorldRenderer {
 			Rectangle rect = ((RectangleMapObject) mObject).getRectangle();
 
 			bdef.type = BodyDef.BodyType.StaticBody;
-			bdef.position.set(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
+			bdef.position.set((rect.getX() + rect.getWidth() / 2)/PPM, (rect.getY() + rect.getHeight() / 2)/PPM);
 
 			body = world.createBody(bdef);
 
-			ps.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
+			ps.setAsBox((rect.getWidth() / 2)/PPM, (rect.getHeight() / 2)/PPM);
 			fdef.shape = ps;
 
 			body.createFixture(fdef);

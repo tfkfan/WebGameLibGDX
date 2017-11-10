@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-
+import static com.webgame.game.Configs.PPM;
 public class Mage extends Player {
 
 	protected Array<Animation<TextureRegion>> animations;
@@ -56,18 +56,24 @@ public class Mage extends Player {
 		
 
 		for (int i = 0; i < dirs; i++){
-			animations.add(new Animation<TextureRegion>(0.2f, frames[i]));
+			Animation<TextureRegion> anim = new Animation<TextureRegion>(0.2f, frames[i]);
+			animations.add(anim);
 			frames[i] = null;
 		}
 	
+		setRegion(standRegions[0]);
 	}
+	
 
 	@Override
 	public void draw(float dt) {
-		// sprite.draw(batch);
+		
 		updateStateTimer(dt);
-		TextureRegion currentFrame = getFrame();
-		batch.draw(currentFrame, position.x, position.y);
+		setRegion(getFrame());
+		
+		
+		super.draw(batch);
+		//batch.draw(currentFrame, position.x, position.y);
 	}
 
 	@Override
