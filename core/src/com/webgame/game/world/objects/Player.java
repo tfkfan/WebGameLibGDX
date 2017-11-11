@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.webgame.game.state.PlayerState;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -16,7 +17,7 @@ public abstract class Player extends WorldGameObject {
 
 	protected String playerName;
 	protected Integer level;
-	
+
 	protected Skill<?> skill;
 
 	public Player() {
@@ -40,12 +41,16 @@ public abstract class Player extends WorldGameObject {
 		fdef.shape = shape;
 		b2body.createFixture(fdef);
 	}
-	
+
 	public void attack(float targetX, float targetY) {
-		if(!skill.isActive())
+		if (!skill.isActive()){
+			this.prevState = this.currState;
+			this.currState = PlayerState.ATTACK;
+			
 			skill.cast(new Vector2(getX(), getY()), new Vector2(targetX, targetY));
+		}
 	}
-	
+
 	public Skill<?> getSkill() {
 		return skill;
 	}
@@ -85,19 +90,19 @@ public abstract class Player extends WorldGameObject {
 	public void setLevel(Integer level) {
 		this.level = level;
 	}
-	
+
 	@Override
-	public void move(float dt){
+	public void move(float dt) {
 		this.updateDirection();
 		super.move(dt);
 	}
-	
-	public void animateSkills(float dt){
+
+	public void animateSkills(float dt) {
 		skill.animateSkill(dt);
 	}
-	
+
 	@Override
-	public void drawShape(ShapeRenderer sr){
+	public void drawShape(ShapeRenderer sr) {
 		super.drawShape(sr);
 		skill.drawShape(sr);
 	}

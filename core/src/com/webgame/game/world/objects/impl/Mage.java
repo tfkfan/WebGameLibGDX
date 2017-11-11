@@ -1,6 +1,5 @@
 package com.webgame.game.world.objects.impl;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,16 +11,16 @@ import static com.webgame.game.Configs.PPM;
 
 public class Mage extends Player {
 	protected Array<Animation<TextureRegion>> animations;
+	protected Array<Animation<TextureRegion>> attackAnimations;
 	protected TextureRegion[] standRegions;
 
 	public Mage(SpriteBatch batch, String spritePath) {
 		super();
 
-
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spritePath);
 
-		this.setSkill(new IceRain(batch, "skills.png"));
+		this.setSkill(new StoneRain(batch, "skills.png"));
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
@@ -29,20 +28,25 @@ public class Mage extends Player {
 		Texture spriteTexture = getSpriteTexture();
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
+		TextureRegion[][] attackFrames = new TextureRegion[dirs][5];
 		animations = new Array<Animation<TextureRegion>>();
+		attackAnimations = new Array<Animation<TextureRegion>>();
 		standRegions = new TextureRegion[dirs];
 
 		int h = 61;
-		int w = 72;
+		int w = 75;
 
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++)
 				frames[i][j] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
+			for (int j = 5; j < 9; j++)
+				attackFrames[i][j - 5] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
+			
 			standRegions[i] = new TextureRegion(spriteTexture, w * i, 0, w, h);
+			attackFrames[i][4] = standRegions[i];
 		}
 
 		for (int j = 0; j < 5; j++) {
-
 			TextureRegion tr = new TextureRegion(spriteTexture, w, h * j, w, h);
 			tr.flip(true, false);
 			frames[7][j] = tr;
@@ -65,10 +69,28 @@ public class Mage extends Player {
 				standRegions[5] = tr;
 		}
 
+		for (int j = 5; j < 9; j++) {
+
+			TextureRegion tr = new TextureRegion(spriteTexture, w, h * j, w, h);
+			tr.flip(true, false);
+			attackFrames[7][j - 5] = tr;
+
+			tr = new TextureRegion(spriteTexture, w * 2, h * j, w, h);
+			tr.flip(true, false);
+			attackFrames[6][j - 5] = tr;
+
+			tr = new TextureRegion(spriteTexture, w * 3, h * j, w, h);
+			tr.flip(true, false);
+			attackFrames[5][j - 5] = tr;
+		}
+
 		for (int i = 0; i < dirs; i++) {
 			Animation<TextureRegion> anim = new Animation<TextureRegion>(0.2f, frames[i]);
+			Animation<TextureRegion> attackAnim = new Animation<TextureRegion>(0.2f, attackFrames[i]);
 			animations.add(anim);
+			attackAnimations.add(attackAnim);
 			frames[i] = null;
+			attackFrames[i] = null;
 		}
 
 		setRegion(standRegions[0]);
@@ -79,17 +101,21 @@ public class Mage extends Player {
 		prevState = currState;
 		currState = getState();
 
-		TextureRegion region;
-		Animation<TextureRegion> animation = null;
-		TextureRegion standRegion;
+		TextureRegion standRegion, region;
 		Integer index = getDirectionIndex();
-
-		animation = animations.get(index);
+	
+		Animation<TextureRegion> animation = animations.get(index);
+		Animation<TextureRegion> attackAnimation = attackAnimations.get(index);
+	
 		standRegion = standRegions[index];
 
 		switch ((PlayerState) currState) {
 		case WALK:
 			region = animation.getKeyFrame(stateTimer, true);
+			break;
+		case ATTACK:
+			System.out.println("ok");
+			region = attackAnimation.getKeyFrame(stateTimer, false);
 			break;
 		case STAND:
 		default:
