@@ -23,6 +23,7 @@ public abstract class Skill<T extends SkillObject> {
 	protected final float absVelocity = 10f / PPM;
 
 	protected Rectangle area;
+	protected float skillTimer;
 
 	public Skill() {
 
@@ -35,6 +36,7 @@ public abstract class Skill<T extends SkillObject> {
 
 	public void cast(Vector2 playerPosition, Vector2 targetPosition, Direction direction) {
 		setActive(true);
+		skillTimer = 0;
 		skillVelocity = getVelocityByDirection(direction);
 
 		for (int i = 0; i < skillObjectsNum; i++) {
@@ -95,6 +97,7 @@ public abstract class Skill<T extends SkillObject> {
 	public void animateSkill(float dt) {
 		if (skillObjects == null || !isActive)
 			return;
+	
 	}
 
 	public boolean isActive() {
@@ -165,7 +168,6 @@ public abstract class Skill<T extends SkillObject> {
 	}
 
 	public void initSkill(Integer objNum) {
-
 		try {
 			setSkillObjectsNum(objNum);
 

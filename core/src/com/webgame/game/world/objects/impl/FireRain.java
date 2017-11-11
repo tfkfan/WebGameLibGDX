@@ -7,6 +7,7 @@ import com.webgame.game.world.objects.SkillObject;
 public class FireRain extends Skill<FireRainObject> {
 
 	float stateTimer;
+	
 	int index;
 
 	public FireRain(SpriteBatch batch, String spritePath) {
@@ -20,6 +21,7 @@ public class FireRain extends Skill<FireRainObject> {
 	public FireRainObject createObject() {
 		FireRainObject obj = new FireRainObject();
 		obj.setFalling(true);
+		obj.rotate(-150);
 		return obj;
 	}
 
@@ -35,10 +37,23 @@ public class FireRain extends Skill<FireRainObject> {
 		if (!isActive)
 			return;
 		
+		if(skillTimer >= 10){
+			isActive = false;
+			for (int i = 0; i < skillObjectsNum; i++) {
+				SkillObject obj = skillObjects[i];
+				obj.setActive(false);
+				index = 0;
+			}
+			return;
+		}
+		
+		skillTimer += dt;
+		
 		if (index != -1) {
 			stateTimer += dt;
 			if (stateTimer >= dt *30) {
 				SkillObject obj = skillObjects[index];
+				
 				obj.updateDistance();
 				obj.setActive(true);
 				
@@ -49,6 +64,9 @@ public class FireRain extends Skill<FireRainObject> {
 				stateTimer = 0;
 			}
 		}
+		
+		if(stateTimer >= dt*30)
+			stateTimer = 0;
 
 		for (int i = 0; i < skillObjectsNum; i++) {
 			SkillObject obj = skillObjects[i];

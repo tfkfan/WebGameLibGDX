@@ -34,12 +34,12 @@ public class FireRainObject extends SkillObject {
 		for(int i = 0; i < l; i++)
 			frames[i] = new TextureRegion(spriteTexture, 200, 155, w, h);
 		
-		standTexture = new TextureRegion(spriteTexture,810, 50, w, h);
+		standTexture = new TextureRegion(spriteTexture,810, 55, w, h);
 		
 		animation = new Animation<TextureRegion>(0.2f, frames);
 
-		int w2 = 30;
-		int h2 = 50;
+		int w2 = 20;
+		int h2 = 40;
 		this.setBounds(0,0, w2/PPM, h2/PPM);
 		setRegion(standTexture);
 	}

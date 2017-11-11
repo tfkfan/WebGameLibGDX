@@ -21,8 +21,8 @@ public abstract class SkillObject extends GameObject {
 		super();
 		distance = new Vector2(0, 0);
 		fallOffset = 1f / PPM;
-		fallVelocity = new Vector2(1 / PPM, 2/PPM);
-		fallOffsetVec = new Vector2(fallVelocity.x * 50, fallVelocity.y * 50);
+		fallVelocity = new Vector2(2 / PPM, 4/PPM);
+		fallOffsetVec = new Vector2(fallVelocity.x * 25, fallVelocity.y * 25);
 	}
 
 	public void setActive(boolean isActive) {
