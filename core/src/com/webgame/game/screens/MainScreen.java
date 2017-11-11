@@ -29,8 +29,6 @@ public class MainScreen implements Screen, InputProcessor {
 
 	private Player player;
 
-	private Vector3 screenCoords;
-
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(this);
@@ -46,8 +44,6 @@ public class MainScreen implements Screen, InputProcessor {
 		player = new Mage(batch, "mage.png");
 		player.createObject(worldRenderer.world);
 
-		screenCoords = new Vector3(0, 0, 0);
-
 		Gdx.app.log(title, "Starting...");
 	}
 
@@ -56,7 +52,7 @@ public class MainScreen implements Screen, InputProcessor {
 		handleInput();
 		cam.update();
 		player.move(dt);
-		
+
 		batch.setProjectionMatrix(cam.combined);
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -90,14 +86,6 @@ public class MainScreen implements Screen, InputProcessor {
 			vec.y = -d;
 		if (Gdx.input.isKeyPressed(Input.Keys.W))
 			vec.y = d;
-
-		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-			Vector3 target = cam.unproject(screenCoords, viewport.getScreenX(), viewport.getScreenY(),
-					viewport.getScreenWidth(), viewport.getScreenHeight());
-
-			player.attack(target.x, target.y);
-		}
-		
 
 		player.setVelocity(vec);
 		cam.position.x = player.getX();
@@ -150,8 +138,16 @@ public class MainScreen implements Screen, InputProcessor {
 	}
 
 	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
+	public boolean touchDown(int x, int y, int pointer, int button) {
+		if (button == Input.Buttons.LEFT) {
+
+			Vector3 target = cam.unproject(new Vector3(x, y, 0), viewport.getScreenX(), viewport.getScreenY(),
+					viewport.getScreenWidth(), viewport.getScreenHeight());
+
+			player.attack(target.x, target.y);
+
+			return true;
+		}
 		return false;
 	}
 
@@ -169,8 +165,7 @@ public class MainScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		screenCoords.x = screenX;
-		screenCoords.y = screenY;
+	
 		return false;
 	}
 

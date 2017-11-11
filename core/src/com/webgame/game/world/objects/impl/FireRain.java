@@ -37,7 +37,7 @@ public class FireRain extends Skill<FireRainObject> {
 		
 		if (index != -1) {
 			stateTimer += dt;
-			if (stateTimer >= dt *20) {
+			if (stateTimer >= dt *30) {
 				SkillObject obj = skillObjects[index];
 				obj.updateDistance();
 				obj.setActive(true);
