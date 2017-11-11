@@ -10,7 +10,6 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 
 	public FallingAOESkill(SpriteBatch batch, String spritePath) {
 		super(batch, spritePath);
-		createSkill(10);
 		fallTimer = 0;
 		index = 0;
 	}
@@ -19,18 +18,14 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 	public void updateTimers() {
 		super.updateTimers();
 		fallTimer = 0;
-		skillTimer = 0;
 	}
 
 	@Override
 	public void customAnimation(float dt) {
-		if (!isActive)
-			return;
-
 		if (skillTimer >= fallDuration) {
 			isActive = false;
 			for (int i = 0; i < skillObjectsNum; i++) {
-				SkillObject obj = skillObjects[i];
+				SkillObject obj = skillObjects.get(i);
 				obj.setActive(false);
 				obj.setStatic(false);
 				obj.setFinalAnimated(false);
@@ -47,7 +42,7 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 		if (index != -1) {
 			fallTimer += dt;
 			if (fallTimer >= tmp) {
-				SkillObject obj = skillObjects[index];
+				SkillObject obj = skillObjects.get(index);
 
 				obj.updateDistance();
 				obj.setActive(true);
@@ -64,7 +59,7 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 			fallTimer = 0;
 
 		for (int i = 0; i < skillObjectsNum; i++) {
-			SkillObject obj = skillObjects[i];
+			SkillObject obj = skillObjects.get(i);
 			if (obj.isActive()) {
 				obj.move(dt);
 				obj.draw(batch);

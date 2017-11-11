@@ -3,8 +3,9 @@ package com.webgame.game.world.objects;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.state.Direction;
 import static com.webgame.game.Configs.PPM;
+
+import java.util.ArrayList;
 
 public abstract class Skill<T extends SkillObject> {
 	protected Double damage;
@@ -12,7 +13,7 @@ public abstract class Skill<T extends SkillObject> {
 
 	protected Vector2 skillVelocity;
 
-	protected SkillObject[] skillObjects;
+	protected ArrayList<T> skillObjects;
 	protected Integer skillObjectsNum;
 
 	protected SpriteBatch batch;
@@ -34,25 +35,30 @@ public abstract class Skill<T extends SkillObject> {
 		setSpritePath(spritePath);
 	}
 
-	public void cast(Vector2 playerPosition, Vector2 targetPosition, Direction direction) {
+	public void cast(Vector2 playerPosition, Vector2 targetPosition) {
 		setActive(true);
 		updateTimers();
-		skillVelocity = getVelocityByDirection(direction);
-		
+		skillVelocity = calculateVelocity(playerPosition, targetPosition);
 
 		for (int i = 0; i < skillObjectsNum; i++) {
-			SkillObject obj = skillObjects[i];
+			SkillObject obj = skillObjects.get(i);
 			obj.setTargetPosition(targetPosition);
 			obj.setPlayerPosition(playerPosition);
 			obj.initPositions();
 			obj.setVelocity(skillVelocity);
 		}
+
+		afterCast();
 	}
 
-	public void updateTimers(){
+	public void afterCast() {
+
+	}
+
+	public void updateTimers() {
 		skillTimer = 0;
 	}
-	
+
 	public Rectangle getArea() {
 		return area;
 	}
@@ -61,40 +67,11 @@ public abstract class Skill<T extends SkillObject> {
 		this.area = area;
 	}
 
-	public Vector2 getVelocityByDirection(Direction direction) {
-		Vector2 vec = new Vector2(0, 0);
-		switch (direction) {
-		case UP:
-			vec.y = absVelocity;
-			break;
-		case UPRIGHT:
-			vec.y = absVelocity;
-			vec.x = absVelocity;
-			break;
-		case RIGHT:
-			vec.x = absVelocity;
-			break;
-		case RIGHTDOWN:
-			vec.y = -absVelocity;
-			vec.x = absVelocity;
-			break;
-		case DOWN:
-			vec.y = -absVelocity;
-			break;
-		case LEFTDOWN:
-			vec.y = -absVelocity;
-			vec.x = -absVelocity;
-			break;
-		case LEFT:
-			vec.x = -absVelocity;
-			break;
-		case UPLEFT:
-			vec.y = absVelocity;
-			vec.x = -absVelocity;
-			break;
-		default:
-			break;
-		}
+	public Vector2 calculateVelocity(Vector2 playerPosition, Vector2 targetPosition) {
+		Vector2 vec = new Vector2(targetPosition.x - playerPosition.x, targetPosition.y - playerPosition.y);
+		float len = vec.len();
+		vec.x = absVelocity * vec.x / len;
+		vec.y = absVelocity * vec.y / len;
 
 		return vec;
 	}
@@ -103,10 +80,15 @@ public abstract class Skill<T extends SkillObject> {
 		if (skillObjects == null || !isActive)
 			return;
 		customAnimation(dt);
+		afterAnimation();
 	}
 
 	public abstract void customAnimation(float dt);
-	
+
+	public void afterAnimation() {
+
+	}
+
 	public boolean isActive() {
 		return isActive;
 	}
@@ -155,11 +137,11 @@ public abstract class Skill<T extends SkillObject> {
 		this.spritePath = spritePath;
 	}
 
-	public SkillObject[] getSkillObjects() {
+	public ArrayList<T> getSkillObjects() {
 		return skillObjects;
 	}
 
-	public void setSkillObjects(SkillObject[] skillObjects) {
+	public void setSkillObjects(ArrayList<T> skillObjects) {
 		this.skillObjects = skillObjects;
 	}
 
@@ -178,10 +160,11 @@ public abstract class Skill<T extends SkillObject> {
 		try {
 			setSkillObjectsNum(objNum);
 
-			SkillObject[] objs = createObjectsArray(objNum);
+			ArrayList<T> objs = new ArrayList<T>();
 			for (int i = 0; i < objNum; i++) {
-				objs[i] = createObject();
-				objs[i].initSkill(batch, spritePath);
+				T obj = createObject();
+				obj.initSkill(batch, spritePath);
+				objs.add(obj);
 			}
 
 			setSkillObjects(objs);
@@ -194,5 +177,4 @@ public abstract class Skill<T extends SkillObject> {
 
 	public abstract T createObject();
 
-	public abstract T[] createObjectsArray(Integer num);
 }

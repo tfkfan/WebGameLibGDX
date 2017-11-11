@@ -39,7 +39,7 @@ public class IceRainObject extends SkillObject {
 		animation = new Animation<TextureRegion>(animationDuration, frames);
 
 		int w2 = 20;
-		int h2 = 40;
+		int h2 = 25;
 		this.setBounds(0,0, w2/PPM, h2/PPM);
 		setRegion(standTexture);
 	}

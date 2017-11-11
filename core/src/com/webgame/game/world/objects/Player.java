@@ -42,7 +42,7 @@ public abstract class Player extends WorldGameObject {
 	
 	public void attack(float targetX, float targetY) {
 		if(!skill.isActive())
-			skill.cast(new Vector2(getX(), getY()), new Vector2(targetX, targetY), getDirection());
+			skill.cast(new Vector2(getX(), getY()), new Vector2(targetX, targetY));
 	}
 	
 	public Skill<?> getSkill() {

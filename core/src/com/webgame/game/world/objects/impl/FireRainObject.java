@@ -12,7 +12,7 @@ import com.webgame.game.world.objects.SkillObject;
 public class FireRainObject extends SkillObject {
 	protected Animation<TextureRegion> animation;
 	protected TextureRegion standTexture;
-	
+
 	public FireRainObject() {
 		super();
 	}
@@ -26,33 +26,44 @@ public class FireRainObject extends SkillObject {
 
 		int h = 50;
 		int w = 30;
-		int l = 1;
-		
-		TextureRegion[] frames =  new TextureRegion[l];
-		
-		//Доделать
-		for(int i = 0; i < l; i++)
-			frames[i] = new TextureRegion(spriteTexture, 200, 155, w, h);
-		
-		standTexture = new TextureRegion(spriteTexture,810, 55, w, h);
-		
+		int l = 6;
+
+		int h2 = 50;
+		int w2 = 60;
+
+		TextureRegion[] frames = new TextureRegion[l];
+
+		// Доделать
+		for (int i = 0; i < l; i++)
+			frames[i] = new TextureRegion(spriteTexture, 190 + w2 * (i + 1), 110, w2, h2);
+
+		standTexture = new TextureRegion(spriteTexture, 810, 55, w, h);
+
 		animation = new Animation<TextureRegion>(0.2f, frames);
 
-		int w2 = 20;
-		int h2 = 40;
-		this.setBounds(0,0, w2/PPM, h2/PPM);
+		int w3 = 20;
+		int h3 = 20;
+		this.setBounds(0, 0, w3 / PPM, h3 / PPM);
 		setRegion(standTexture);
 	}
 
 	@Override
-	public State getState(){
+	public State getState() {
 		return currState;
 	}
-	
+
 	@Override
 	public TextureRegion getFrame() {
-		TextureRegion region = isActive ? standTexture : null;
-			
+		TextureRegion region = null;
+		if(isActive){
+			if(isStatic && !isFinalAnimated){
+				region =  animation.getKeyFrame(animateTimer, false);
+				
+			}else{
+				
+			region = standTexture;	
+			}
+		}
 		return region;
 	}
 
@@ -60,5 +71,5 @@ public class FireRainObject extends SkillObject {
 	public void afterMove() {
 		super.afterMove();
 	}
-	
+
 }

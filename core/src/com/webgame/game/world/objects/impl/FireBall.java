@@ -1,9 +1,11 @@
 package com.webgame.game.world.objects.impl;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.webgame.game.world.objects.Skill;
+import com.webgame.game.world.objects.SingleSkill;
 
-public class FireBall extends Skill<FireBallObject> {
+public class FireBall extends SingleSkill<FireBallObject> {
+
+	boolean isRotated;
 
 	public FireBall(SpriteBatch batch, String spritePath) {
 		super(batch, spritePath);
@@ -12,19 +14,21 @@ public class FireBall extends Skill<FireBallObject> {
 
 	@Override
 	public FireBallObject createObject() {
-		return new FireBallObject();
+		FireBallObject obj = new FireBallObject();
+		return obj;
 	}
 
 	@Override
-	public FireBallObject[] createObjectsArray(Integer num) {
-		return new FireBallObject[num];
+	public void afterCast() {
+		FireBallObject obj = (FireBallObject) this.getSkillObjects().get(0);
+		obj.setActive(true);
 	}
 
 	@Override
-	public void customAnimation(float dt) {
-		// TODO Auto-generated method stub
-		
+	public void afterAnimation() {
+		FireBallObject obj = (FireBallObject) this.getSkillObjects().get(0);
+		if (!obj.isActive())
+			setActive(false);
 	}
 
-	
 }

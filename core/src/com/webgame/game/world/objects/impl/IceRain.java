@@ -14,13 +14,8 @@ public class IceRain extends FallingAOESkill<IceRainObject> {
 	public IceRainObject createObject() {
 		IceRainObject obj = new IceRainObject();
 		obj.setFalling(true);
-		//obj.rotate(-150);
+		// obj.rotate(-150);
 		return obj;
-	}
-
-	@Override
-	public IceRainObject[] createObjectsArray(Integer num) {
-		return new IceRainObject[num];
 	}
 
 }

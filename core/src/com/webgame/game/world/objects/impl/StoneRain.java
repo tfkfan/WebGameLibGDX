@@ -14,13 +14,8 @@ public class StoneRain extends FallingAOESkill<StoneRainObject> {
 	public StoneRainObject createObject() {
 		StoneRainObject obj = new StoneRainObject();
 		obj.setFalling(true);
-		//obj.rotate(-150);
+		// obj.rotate(-150);
 		return obj;
-	}
-
-	@Override
-	public StoneRainObject[] createObjectsArray(Integer num) {
-		return new StoneRainObject[num];
 	}
 
 }

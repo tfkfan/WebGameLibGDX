@@ -7,28 +7,23 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.state.PlayerState;
 import com.webgame.game.world.objects.Player;
-import com.webgame.game.world.objects.Skill;
-
 import static com.webgame.game.Configs.PPM;
 
 public class Mage extends Player {
-
 	protected Array<Animation<TextureRegion>> animations;
 	protected TextureRegion[] standRegions;
-	
+
 	public Mage(SpriteBatch batch, String spritePath) {
 		super();
-		
+
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spritePath);
 
-		//FireBall fireBall = new FireBall(batch, "skills.png");
-		Skill<?> fireBall = new StoneRain(batch, "skills.png");
-		this.setSkill(fireBall);
-		
+		this.setSkill(new IceRain(batch, "skills.png"));
+
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
-		
+
 		Texture spriteTexture = getSpriteTexture();
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
@@ -90,7 +85,7 @@ public class Mage extends Player {
 		animation = animations.get(index);
 		standRegion = standRegions[index];
 
-		switch ((PlayerState)currState) {
+		switch ((PlayerState) currState) {
 		case WALK:
 			region = animation.getKeyFrame(stateTimer, true);
 			break;
