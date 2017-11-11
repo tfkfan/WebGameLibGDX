@@ -16,7 +16,11 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.world.WorldRenderer;
 import com.webgame.game.world.objects.Player;
+import com.webgame.game.world.objects.impl.Archer;
+import com.webgame.game.world.objects.impl.DeathKnight;
 import com.webgame.game.world.objects.impl.Mage;
+import com.webgame.game.world.objects.impl.Soldier;
+
 import static com.webgame.game.Configs.VIEW_WIDTH;
 import static com.webgame.game.Configs.VIEW_HEIGHT;
 import static com.webgame.game.Configs.PPM;
@@ -44,7 +48,7 @@ public class MainScreen implements Screen, InputProcessor {
 		worldRenderer = new WorldRenderer();
 		worldRenderer.initWorld(cam);
 
-		player = new Mage(batch, "mage.png");
+		player = new Soldier(batch, "soldier.png");
 		player.createObject(worldRenderer.world);
 		sr = new ShapeRenderer();
 
