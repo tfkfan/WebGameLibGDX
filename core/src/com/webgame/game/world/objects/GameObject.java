@@ -1,8 +1,13 @@
 package com.webgame.game.world.objects;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.state.Direction;
 import com.webgame.game.state.PlayerState;
@@ -29,7 +34,6 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 
 	protected SpriteBatch batch;
 	protected Texture spriteTexture;
-
 	public GameObject() {
 		init();
 	}
@@ -49,7 +53,7 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 
 		this.setBounds(0, 0, 60 / PPM, 60 / PPM);
 	}
-
+	
 	public Texture getSpriteTexture() {
 		return spriteTexture;
 	}
@@ -202,5 +206,9 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 
 		updateStateTimer(dt);
 		setRegion(getFrame());
+	}
+	
+	public void drawShape(ShapeRenderer sr){
+		sr.rect(getX(), getY(), getWidth(), getHeight());
 	}
 }

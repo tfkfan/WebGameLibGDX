@@ -1,5 +1,6 @@
 package com.webgame.game.world.objects;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -91,9 +92,14 @@ public abstract class Player extends WorldGameObject {
 		super.move(dt);
 	}
 	
-	
 	public void animateSkills(float dt){
 		skill.animateSkill(dt);
+	}
+	
+	@Override
+	public void drawShape(ShapeRenderer sr){
+		super.drawShape(sr);
+		skill.drawShape(sr);
 	}
 
 }

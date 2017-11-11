@@ -163,8 +163,10 @@ public abstract class SkillObject extends GameObject {
 		}
 		float x = getX();
 		float y = getY();
-		if (x < -10 || y < -10 || x > 10 || y > 10)
+		if (x < -10 || y < -10 || x > 10 || y > 10){
+			setPosition(0,0);
 			setActive(false);
+		}
 	}
 
 	public float getRandomPos(float min, float max) {

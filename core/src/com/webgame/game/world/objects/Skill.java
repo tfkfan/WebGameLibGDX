@@ -1,6 +1,7 @@
 package com.webgame.game.world.objects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import static com.webgame.game.Configs.PPM;
@@ -55,6 +56,13 @@ public abstract class Skill<T extends SkillObject> {
 
 	}
 
+	public void drawShape(ShapeRenderer sr){
+		for (int i = 0; i < skillObjectsNum; i++) {
+			SkillObject obj = skillObjects.get(i);
+			obj.drawShape(sr);
+		}
+	}
+	
 	public void updateTimers() {
 		skillTimer = 0;
 	}

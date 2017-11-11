@@ -28,8 +28,9 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 				SkillObject obj = skillObjects.get(i);
 				obj.setActive(false);
 				obj.setStatic(false);
+				obj.setPosition(0, 0);
 				obj.setFinalAnimated(false);
-				obj.initPositions();
+				
 			}
 			index = 0;
 			updateTimers();

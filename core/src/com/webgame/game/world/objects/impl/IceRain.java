@@ -7,7 +7,7 @@ public class IceRain extends FallingAOESkill<IceRainObject> {
 
 	public IceRain(SpriteBatch batch, String spritePath) {
 		super(batch, spritePath);
-		createSkill(10);
+		createSkill(50);
 	}
 
 	@Override

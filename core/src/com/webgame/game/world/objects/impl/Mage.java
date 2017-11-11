@@ -1,5 +1,6 @@
 package com.webgame.game.world.objects.impl;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,6 +16,7 @@ public class Mage extends Player {
 
 	public Mage(SpriteBatch batch, String spritePath) {
 		super();
+
 
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spritePath);

@@ -4,9 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -26,7 +29,7 @@ public class MainScreen implements Screen, InputProcessor {
 	private Viewport viewport;
 
 	private WorldRenderer worldRenderer;
-
+	protected ShapeRenderer sr;
 	private Player player;
 
 	@Override
@@ -43,6 +46,7 @@ public class MainScreen implements Screen, InputProcessor {
 
 		player = new Mage(batch, "mage.png");
 		player.createObject(worldRenderer.world);
+		sr = new ShapeRenderer();
 
 		Gdx.app.log(title, "Starting...");
 	}
@@ -68,6 +72,12 @@ public class MainScreen implements Screen, InputProcessor {
 		player.animateSkills(dt);
 
 		batch.end();
+		
+		sr.setProjectionMatrix(cam.combined);
+		sr.begin(ShapeType.Line);
+		sr.setColor(Color.BLUE);
+		player.drawShape(sr);
+		sr.end();
 	}
 
 	private void handleInput() {
