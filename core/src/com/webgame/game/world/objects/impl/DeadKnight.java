@@ -9,12 +9,12 @@ import com.webgame.game.state.PlayerState;
 import com.webgame.game.world.objects.Player;
 import static com.webgame.game.Configs.PPM;
 
-public class DeathKnight extends Player {
+public class DeadKnight extends Player {
 	protected Array<Animation<TextureRegion>> animations;
 	protected Array<Animation<TextureRegion>> attackAnimations;
 	protected TextureRegion[] standRegions;
 
-	public DeathKnight(SpriteBatch batch, String spritePath) {
+	public DeadKnight(SpriteBatch batch, String spritePath) {
 		super();
 
 		this.setSpriteBatch(batch);
