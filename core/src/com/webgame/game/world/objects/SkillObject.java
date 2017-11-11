@@ -8,6 +8,8 @@ public abstract class SkillObject extends GameObject {
 	protected boolean isActive;
 	protected boolean isStatic;
 	protected boolean isFalling;
+	protected boolean isFinalAnimated;
+	protected boolean isAOE;
 
 	protected final Vector2 distance;
 	protected Vector2 targetPosition;
@@ -16,13 +18,24 @@ public abstract class SkillObject extends GameObject {
 	protected final Vector2 fallVelocity;
 	protected final Vector2 fallOffsetVec;
 	protected final float fallOffset;
+	
+	protected final float animationDuration = 0.2f;
+	protected float animateTimer = 0;
 
 	public SkillObject() {
 		super();
 		distance = new Vector2(0, 0);
 		fallOffset = 1f / PPM;
-		fallVelocity = new Vector2(2 / PPM, 4/PPM);
+		fallVelocity = new Vector2(2 / PPM, 4 / PPM);
 		fallOffsetVec = new Vector2(fallVelocity.x * 25, fallVelocity.y * 25);
+	}
+
+	public boolean isFinalAnimated() {
+		return isFinalAnimated;
+	}
+
+	public void setFinalAnimated(boolean isFinalAnimated) {
+		this.isFinalAnimated = isFinalAnimated;
 	}
 
 	public void setActive(boolean isActive) {
@@ -81,15 +94,25 @@ public abstract class SkillObject extends GameObject {
 
 		preMove(dt);
 
-		if (!isFalling && !isStatic) {
-			setPosition(getX() + getVelocity().x - xOffset, getY() + getVelocity().y - yOffset);
-			distance.x += getVelocity().x;
-			distance.y += getVelocity().y;
-		} else if (isFalling) {
-			setPosition(getX() + fallVelocity.x - xOffset, getY() - fallVelocity.y - yOffset);
-			distance.x += fallVelocity.x;
-			distance.y += fallVelocity.y;
+		if (!isStatic) {
+			if (!isFalling) {
+				setPosition(getX() + getVelocity().x - xOffset, getY() + getVelocity().y - yOffset);
+				distance.x += getVelocity().x;
+				distance.y += getVelocity().y;
+			} else {
+				setPosition(getX() + fallVelocity.x - xOffset, getY() - fallVelocity.y - yOffset);
+				distance.x += fallVelocity.x;
+				distance.y += fallVelocity.y;
+			}
 		}
+		
+		if(animateTimer > animationDuration* 3){
+			animateTimer = 0;
+			isFinalAnimated = true;
+		}
+		if(isStatic && !isFinalAnimated)
+			animateTimer += dt;
+		
 		super.move(dt);
 
 		afterMove();
@@ -100,14 +123,22 @@ public abstract class SkillObject extends GameObject {
 		setSpriteTexture(spritePath);
 	}
 
+	public boolean isAOE() {
+		return isAOE;
+	}
+
+	public void setAOE(boolean isAOE) {
+		this.isAOE = isAOE;
+	}
+
 	public void initPositions() {
 		updateDistance();
 		if (isFalling || isStatic) {
-			if (isFalling){
-				float x = getRandomPos(targetPosition.x - 50/PPM, targetPosition.x +50/PPM);
-				float y = getRandomPos(targetPosition.y - 50/PPM, targetPosition.y + 50/PPM);
-				
-				setPosition(x - fallOffsetVec.x - xOffset, y + fallOffsetVec.y - yOffset);
+			if (isFalling) {
+				float x = getRandomPos(targetPosition.x - 50 / PPM, targetPosition.x + 50 / PPM);
+				float y = getRandomPos(targetPosition.y - 50 / PPM, targetPosition.y + 50 / PPM);
+				if (!isStatic)
+					setPosition(x - fallOffsetVec.x - xOffset, y + fallOffsetVec.y - yOffset);
 			}
 		} else
 			setPosition(playerPosition.x - xOffset, playerPosition.y - yOffset);
@@ -119,8 +150,16 @@ public abstract class SkillObject extends GameObject {
 
 	public void afterMove() {
 		if (isFalling) {
-			if (distance.y > fallOffsetVec.y)
-				initPositions();
+			if (distance.y > fallOffsetVec.y) {
+				if (!isFinalAnimated) {
+					isStatic = true;
+				} else {
+					isStatic = false;
+					isFinalAnimated = false;
+					initPositions();
+				}
+
+			}
 		}
 		float x = getX();
 		float y = getY();

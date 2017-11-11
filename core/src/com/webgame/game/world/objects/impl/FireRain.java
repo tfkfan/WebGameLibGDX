@@ -12,7 +12,7 @@ public class FireRain extends Skill<FireRainObject> {
 
 	public FireRain(SpriteBatch batch, String spritePath) {
 		super(batch, spritePath);
-		initSkill(10);
+		createSkill(10);
 		stateTimer = 0;
 		index = 0;
 	}
@@ -31,9 +31,7 @@ public class FireRain extends Skill<FireRainObject> {
 	}
 
 	@Override
-	public void animateSkill(float dt) {
-		super.animateSkill(dt);
-
+	public void customAnimation(float dt) {
 		if (!isActive)
 			return;
 		

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.state.PlayerState;
 import com.webgame.game.world.objects.Player;
+import com.webgame.game.world.objects.Skill;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -22,7 +23,7 @@ public class Mage extends Player {
 		this.setSpriteTexture(spritePath);
 
 		//FireBall fireBall = new FireBall(batch, "skills.png");
-		FireRain fireBall = new FireRain(batch, "skills.png");
+		Skill<?> fireBall = new IceRain(batch, "skills.png");
 		this.setSkill(fireBall);
 		
 		setXOffset(30 / PPM);

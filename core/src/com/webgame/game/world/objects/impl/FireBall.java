@@ -7,7 +7,7 @@ public class FireBall extends Skill<FireBallObject> {
 
 	public FireBall(SpriteBatch batch, String spritePath) {
 		super(batch, spritePath);
-		initSkill(1);
+		createSkill(1);
 	}
 
 	@Override
@@ -18,6 +18,12 @@ public class FireBall extends Skill<FireBallObject> {
 	@Override
 	public FireBallObject[] createObjectsArray(Integer num) {
 		return new FireBallObject[num];
+	}
+
+	@Override
+	public void customAnimation(float dt) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	
