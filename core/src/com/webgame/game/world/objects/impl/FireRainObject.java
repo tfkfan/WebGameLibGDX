@@ -9,17 +9,18 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.state.State;
 import com.webgame.game.world.objects.SkillObject;
 
-public class FireBallObject extends SkillObject {
+public class FireRainObject extends SkillObject {
 	protected Animation<TextureRegion> animation;
 	protected TextureRegion standTexture;
 	
-	public FireBallObject() {
+	public FireRainObject() {
 		super();
 	}
 
 	@Override
 	public void initSkill(SpriteBatch batch, String spritePath) {
-		super.initSkill(batch, spritePath);
+		this.setSpriteBatch(batch);
+		this.setSpriteTexture(spritePath);
 
 		Texture spriteTexture = getSpriteTexture();
 

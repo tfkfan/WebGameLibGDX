@@ -2,11 +2,13 @@ package com.webgame.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.world.WorldRenderer;
@@ -16,7 +18,7 @@ import static com.webgame.game.Configs.VIEW_WIDTH;
 import static com.webgame.game.Configs.VIEW_HEIGHT;
 import static com.webgame.game.Configs.PPM;
 
-public class MainScreen implements Screen {
+public class MainScreen implements Screen, InputProcessor {
 	private SpriteBatch batch;
 	private String title = "WebGame";
 
@@ -27,8 +29,12 @@ public class MainScreen implements Screen {
 
 	private Player player;
 
+	private Vector3 screenCoords;
+
 	@Override
 	public void show() {
+		Gdx.input.setInputProcessor(this);
+
 		batch = new SpriteBatch();
 		cam = new OrthographicCamera();
 		viewport = new StretchViewport(VIEW_WIDTH / PPM, VIEW_HEIGHT / PPM, cam);
@@ -40,32 +46,9 @@ public class MainScreen implements Screen {
 		player = new Mage(batch, "mage.png");
 		player.createObject(worldRenderer.world);
 
+		screenCoords = new Vector3(0, 0, 0);
+
 		Gdx.app.log(title, "Starting...");
-	}
-
-	private void handleInput() {
-		float d = 5f;
-		//if (Gdx.input.isKeyPressed(Input.Keys.A))
-		//	cam.zoom += 0.1;
-		//if (Gdx.input.isKeyPressed(Input.Keys.Q))
-		//	cam.zoom -= 0.1;
-
-		Vector2 vec = new Vector2(0, 0);
-		if (Gdx.input.isKeyPressed(Input.Keys.A))
-			vec.x = -d;
-		if (Gdx.input.isKeyPressed(Input.Keys.D))
-			vec.x = d;
-		if (Gdx.input.isKeyPressed(Input.Keys.S))
-			vec.y = -d;
-		if (Gdx.input.isKeyPressed(Input.Keys.W))
-			vec.y = d;
-		
-		if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
-			player.attack();
-		
-		player.setVelocity(vec);
-		cam.position.x = player.getX();
-		cam.position.y = player.getY();
 	}
 
 	@Override
@@ -73,8 +56,7 @@ public class MainScreen implements Screen {
 		handleInput();
 		cam.update();
 		player.move(dt);
-		((Mage)player).moveSkills(dt);
-
+		
 		batch.setProjectionMatrix(cam.combined);
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -87,9 +69,39 @@ public class MainScreen implements Screen {
 		batch.begin();
 
 		player.draw(batch);
-		((Mage)player).drawSkills();
+		player.animateSkills(dt);
 
 		batch.end();
+	}
+
+	private void handleInput() {
+		float d = 5f;
+		// if (Gdx.input.isKeyPressed(Input.Keys.A))
+		// cam.zoom += 0.1;
+		// if (Gdx.input.isKeyPressed(Input.Keys.Q))
+		// cam.zoom -= 0.1;
+
+		Vector2 vec = new Vector2(0, 0);
+		if (Gdx.input.isKeyPressed(Input.Keys.A))
+			vec.x = -d;
+		if (Gdx.input.isKeyPressed(Input.Keys.D))
+			vec.x = d;
+		if (Gdx.input.isKeyPressed(Input.Keys.S))
+			vec.y = -d;
+		if (Gdx.input.isKeyPressed(Input.Keys.W))
+			vec.y = d;
+
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+			Vector3 target = cam.unproject(screenCoords, viewport.getScreenX(), viewport.getScreenY(),
+					viewport.getScreenWidth(), viewport.getScreenHeight());
+
+			player.attack(target.x, target.y);
+		}
+		
+
+		player.setVelocity(vec);
+		cam.position.x = player.getX();
+		cam.position.y = player.getY();
 	}
 
 	@Override
@@ -118,6 +130,54 @@ public class MainScreen implements Screen {
 	public void hide() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public boolean keyDown(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		screenCoords.x = screenX;
+		screenCoords.y = screenY;
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(int amount) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

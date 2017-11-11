@@ -1,11 +1,12 @@
 package com.webgame.game.world.objects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.state.Direction;
 import static com.webgame.game.Configs.PPM;
 
-public abstract class Skill implements Movable {
+public abstract class Skill<T extends SkillObject> {
 	protected Double damage;
 	protected String title;
 
@@ -16,50 +17,44 @@ public abstract class Skill implements Movable {
 
 	protected SpriteBatch batch;
 	protected String spritePath;
-	
+
 	protected boolean isActive;
-	
-	protected final float absVelocity = 10f/PPM;
-	
-	public Skill(){
-		
+
+	protected final float absVelocity = 10f / PPM;
+
+	protected Rectangle area;
+
+	public Skill() {
+
 	}
-	
+
 	public Skill(SpriteBatch batch, String spritePath) {
 		setBatch(batch);
 		setSpritePath(spritePath);
 	}
 
-	@Override
-	public void move(float dt) {
-		if (skillObjects == null)
-			return;
-
-		for (int i = 0; i < skillObjectsNum; i++) {
-			SkillObject obj = skillObjects[i];
-
-			if (!obj.isActive())
-				continue;
-
-			obj.move(dt);
-		}
-
-		handleCollision();
-	}
-
-	public void cast(Vector2 pos, Direction direction) {
+	public void cast(Vector2 playerPosition, Vector2 targetPosition, Direction direction) {
 		setActive(true);
 		skillVelocity = getVelocityByDirection(direction);
-		
+
 		for (int i = 0; i < skillObjectsNum; i++) {
 			SkillObject obj = skillObjects[i];
-			obj.setSkillActive(true);
-			obj.setPosition(pos.x, pos.y);
+			obj.setTargetPosition(targetPosition);
+			obj.setPlayerPosition(playerPosition);
+			obj.initPositions();
 			obj.setVelocity(skillVelocity);
 		}
 	}
-	
-	public Vector2 getVelocityByDirection(Direction direction){
+
+	public Rectangle getArea() {
+		return area;
+	}
+
+	public void setArea(Rectangle area) {
+		this.area = area;
+	}
+
+	public Vector2 getVelocityByDirection(Direction direction) {
 		Vector2 vec = new Vector2(0, 0);
 		switch (direction) {
 		case UP:
@@ -93,17 +88,13 @@ public abstract class Skill implements Movable {
 		default:
 			break;
 		}
-		
+
 		return vec;
 	}
 
-	public void drawSkill() {
-		if (skillObjects == null)
+	public void animateSkill(float dt) {
+		if (skillObjects == null || !isActive)
 			return;
-		for (int i = 0; i < skillObjectsNum; i++) {
-			if (skillObjects[i].isActive())
-				skillObjects[i].draw(batch);
-		}
 	}
 
 	public boolean isActive() {
@@ -113,7 +104,7 @@ public abstract class Skill implements Movable {
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
-	
+
 	public SpriteBatch getBatch() {
 		return batch;
 	}
@@ -172,20 +163,27 @@ public abstract class Skill implements Movable {
 
 		this.skillObjectsNum = skillObjectsNum;
 	}
-	
-	public void handleCollision() {
-		for (int i = 0; i < skillObjectsNum; i++) {
-			handleCollision(skillObjects[i]);
-			setActive(skillObjects[i].isActive());
+
+	public void initSkill(Integer objNum) {
+
+		try {
+			setSkillObjectsNum(objNum);
+
+			SkillObject[] objs = createObjectsArray(objNum);
+			for (int i = 0; i < objNum; i++) {
+				objs[i] = createObject();
+				objs[i].initSkill(batch, spritePath);
+			}
+
+			setSkillObjects(objs);
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 	}
 
-	public void handleCollision(SkillObject obj) {
-		float x = obj.getX();
-		float y = obj.getY();
-		if (x < -10 || y < -10 || x > 10 || y > 10)
-			obj.setSkillActive(false);
-	}
+	public abstract T createObject();
 
-	public abstract void initSkill();
+	public abstract T[] createObjectsArray(Integer num);
 }

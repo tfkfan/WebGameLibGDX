@@ -2,30 +2,23 @@ package com.webgame.game.world.objects.impl;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.webgame.game.world.objects.Skill;
-import com.webgame.game.world.objects.SkillObject;
 
-public class FireBall extends Skill {
+public class FireBall extends Skill<FireBallObject> {
 
 	public FireBall(SpriteBatch batch, String spritePath) {
 		super(batch, spritePath);
-		initSkill();
+		initSkill(1);
 	}
 
 	@Override
-	public void initSkill() {
-		Integer num = 1;
-		try {
-			setSkillObjectsNum(num);
-			
-			SkillObject[] objs = new FireBallObject[1];
-			objs[0] = new FireBallObject();
-			objs[0].initSkill(batch, spritePath);
-			
-			this.setSkillObjects(objs);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	public FireBallObject createObject() {
+		return new FireBallObject();
 	}
+
+	@Override
+	public FireBallObject[] createObjectsArray(Integer num) {
+		return new FireBallObject[num];
+	}
+
+	
 }

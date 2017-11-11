@@ -16,7 +16,7 @@ public abstract class Player extends WorldGameObject {
 	protected String playerName;
 	protected Integer level;
 	
-	protected Skill skill;
+	protected Skill<?> skill;
 
 	public Player() {
 		super();
@@ -40,24 +40,16 @@ public abstract class Player extends WorldGameObject {
 		b2body.createFixture(fdef);
 	}
 	
-	public void attack() {
+	public void attack(float targetX, float targetY) {
 		if(!skill.isActive())
-			skill.cast(new Vector2(this.getX(), this.getY()), getDirection());
+			skill.cast(new Vector2(getX(), getY()), new Vector2(targetX, targetY), getDirection());
 	}
 	
-	public void drawSkills(){
-		skill.drawSkill();
-	}
-
-	public void moveSkills(float dt){
-		skill.move(dt);
-	}
-	
-	public Skill getSkill() {
+	public Skill<?> getSkill() {
 		return skill;
 	}
 
-	public void setSkill(Skill skill) {
+	public void setSkill(Skill<?> skill) {
 		this.skill = skill;
 	}
 
@@ -97,6 +89,11 @@ public abstract class Player extends WorldGameObject {
 	public void move(float dt){
 		this.updateDirection();
 		super.move(dt);
+	}
+	
+	
+	public void animateSkills(float dt){
+		skill.animateSkill(dt);
 	}
 
 }
