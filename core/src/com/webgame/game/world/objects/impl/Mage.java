@@ -23,7 +23,7 @@ public class Mage extends Player {
 		this.setSpriteTexture(spritePath);
 
 		//FireBall fireBall = new FireBall(batch, "skills.png");
-		Skill<?> fireBall = new IceRain(batch, "skills.png");
+		Skill<?> fireBall = new StoneRain(batch, "skills.png");
 		this.setSkill(fireBall);
 		
 		setXOffset(30 / PPM);

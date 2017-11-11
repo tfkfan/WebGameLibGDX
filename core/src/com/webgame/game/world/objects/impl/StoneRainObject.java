@@ -9,11 +9,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.state.State;
 import com.webgame.game.world.objects.SkillObject;
 
-public class IceRainObject extends SkillObject {
+public class StoneRainObject extends SkillObject {
 	protected Animation<TextureRegion> animation;
 	protected TextureRegion standTexture;
 	
-	public IceRainObject() {
+	public StoneRainObject() {
 		super();
 	}
 
@@ -25,21 +25,21 @@ public class IceRainObject extends SkillObject {
 		Texture spriteTexture = getSpriteTexture();
 
 		int h = 30;
-		int w = 30;
+		int w = 40;
 		int l = 3;
 		
 		TextureRegion[] frames =  new TextureRegion[l];
 		
 		//Доделать
 		for(int i = 0; i < l; i++)
-			frames[i] = new TextureRegion(spriteTexture,5 + w*(i+1),245, w, h);
+			frames[i] = new TextureRegion(spriteTexture, -5 + w*(i+1),80, w, h);
 		
-		standTexture = new TextureRegion(spriteTexture,5,245, w, h);
+		standTexture = new TextureRegion(spriteTexture,5, 80, w, h);
 		
 		animation = new Animation<TextureRegion>(animationDuration, frames);
 
 		int w2 = 20;
-		int h2 = 40;
+		int h2 = 20;
 		this.setBounds(0,0, w2/PPM, h2/PPM);
 		setRegion(standTexture);
 	}
