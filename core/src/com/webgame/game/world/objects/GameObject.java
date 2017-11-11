@@ -132,12 +132,7 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 	}
 
 	public State getState() {
-		if (velocity.x != 0 || velocity.y != 0)
-			return PlayerState.WALK;
-		if(currState == PlayerState.ATTACK)
-			return PlayerState.ATTACK;
-
-		return PlayerState.STAND;
+		return currState;
 	}
 
 	public Integer getDirectionIndex() {
@@ -202,7 +197,6 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 
 	@Override
 	public void move(float dt) {
-
 		updateStateTimer(dt);
 		setRegion(getFrame());
 	}

@@ -20,8 +20,10 @@ public abstract class Player extends WorldGameObject {
 
 	protected Skill<?> skill;
 
+	protected boolean isAnimated;
 	public Player() {
 		super();
+		isAnimated = false;
 	}
 
 	@Override
@@ -43,10 +45,9 @@ public abstract class Player extends WorldGameObject {
 	}
 
 	public void attack(float targetX, float targetY) {
-		if (!skill.isActive()){
+		if (!skill.isActive()) {
 			this.prevState = this.currState;
 			this.currState = PlayerState.ATTACK;
-			
 			skill.cast(new Vector2(getX(), getY()), new Vector2(targetX, targetY));
 		}
 	}
@@ -105,6 +106,20 @@ public abstract class Player extends WorldGameObject {
 	public void drawShape(ShapeRenderer sr) {
 		super.drawShape(sr);
 		skill.drawShape(sr);
+	}
+
+	@Override
+	public PlayerState getState() {
+		prevState = currState;
+		if (velocity.x != 0 || velocity.y != 0)
+			currState = PlayerState.WALK;
+		else 
+			currState = PlayerState.STAND;
+		if (skill.isActive && skill.skillTimer < 1)
+			currState = PlayerState.ATTACK;
+
+		return (PlayerState) currState;
+		
 	}
 
 }

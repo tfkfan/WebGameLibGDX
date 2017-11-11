@@ -20,7 +20,7 @@ public class Mage extends Player {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spritePath);
 
-		this.setSkill(new StoneRain(batch, "skills.png"));
+		this.setSkill(new IceRain(batch, "skills.png"));
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
@@ -84,6 +84,18 @@ public class Mage extends Player {
 			attackFrames[5][j - 5] = tr;
 		}
 
+		TextureRegion tr = new TextureRegion(spriteTexture, w, 0, w, h);
+		tr.flip(true, false);
+		attackFrames[7][4] = tr;
+
+		tr = new TextureRegion(spriteTexture, w * 2, 0, w, h);
+		tr.flip(true, false);
+		attackFrames[6][4] = tr;
+
+		tr = new TextureRegion(spriteTexture, w * 3, 0, w, h);
+		tr.flip(true, false);
+		attackFrames[5][4] = tr;
+		
 		for (int i = 0; i < dirs; i++) {
 			Animation<TextureRegion> anim = new Animation<TextureRegion>(0.2f, frames[i]);
 			Animation<TextureRegion> attackAnim = new Animation<TextureRegion>(0.2f, attackFrames[i]);
@@ -114,7 +126,6 @@ public class Mage extends Player {
 			region = animation.getKeyFrame(stateTimer, true);
 			break;
 		case ATTACK:
-			System.out.println("ok");
 			region = attackAnimation.getKeyFrame(stateTimer, false);
 			break;
 		case STAND:

@@ -11,7 +11,7 @@ public class FireRain extends FallingAOESkill<FireRainObject> {
 
 	public FireRain(SpriteBatch batch, String spritePath) {
 		super(batch, spritePath);
-		createSkill(10);
+		createSkill(50);
 		stateTimer = 0;
 		index = 0;
 	}
@@ -20,7 +20,7 @@ public class FireRain extends FallingAOESkill<FireRainObject> {
 	public FireRainObject createObject() {
 		FireRainObject obj = new FireRainObject();
 		obj.setFalling(true);
-		obj.rotate(-150);
+		// obj.rotate(-150);
 		return obj;
 	}
 

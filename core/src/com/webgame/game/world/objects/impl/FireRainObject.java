@@ -24,6 +24,7 @@ public class FireRainObject extends SkillObject {
 
 		Texture spriteTexture = getSpriteTexture();
 
+		xOffset = yOffset = 0;
 		int h = 50;
 		int w = 30;
 		int l = 6;
@@ -55,14 +56,11 @@ public class FireRainObject extends SkillObject {
 	@Override
 	public TextureRegion getFrame() {
 		TextureRegion region = null;
-		if(isActive){
-			if(isStatic && !isFinalAnimated){
-				region =  animation.getKeyFrame(animateTimer, false);
-				
-			}else{
-				
-			region = standTexture;	
-			}
+		if (isActive) {
+			if (isStatic && !isFinalAnimated)
+				region = animation.getKeyFrame(animateTimer, false);
+			else
+				region = standTexture;
 		}
 		return region;
 	}
