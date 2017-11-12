@@ -28,7 +28,7 @@ public class IceRainObject extends SkillObject {
 
 		TextureRegion[] frames = new TextureRegion[l];
 
-		// Доделать
+		
 		for (int i = 0; i < l; i++)
 			frames[i] = new TextureRegion(this.spriteTexture, 5 + w * (i + 1), 245, w, h);
 

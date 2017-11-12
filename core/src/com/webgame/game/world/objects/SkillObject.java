@@ -23,12 +23,14 @@ public abstract class SkillObject extends GameObject {
 	protected final Vector2 fallOffsetVec;
 	protected final float fallOffset;
 	
-	protected final float animationDuration = 0.2f;
+	protected float animationDuration = 0.2f;
+	protected float animationMaxDuration;
 	protected float animateTimer = 0;
 
 	public SkillObject() {
 		super();
 		distance = new Vector2(0, 0);
+		animationMaxDuration = animationDuration * 3;
 		fallOffset = 1f / PPM;
 		fallVelocity = new Vector2(2 / PPM, 4 / PPM);
 		fallOffsetVec = new Vector2(fallVelocity.x * 25, fallVelocity.y * 25);
@@ -101,10 +103,9 @@ public abstract class SkillObject extends GameObject {
 
 	@Override
 	public void update(float dt) {
+		preMove(dt);
 		if (!isActive)
 			return;
-
-		preMove(dt);
 
 		if (!isStatic) {
 			if (!isFalling) {
@@ -118,11 +119,11 @@ public abstract class SkillObject extends GameObject {
 			}
 		}
 		
-		if(animateTimer > animationDuration* 3){
+		if(animateTimer > animationMaxDuration){
 			animateTimer = 0;
 			isFinalAnimated = true;
 		}
-		if(isStatic && !isFinalAnimated)
+		if(isStatic && !isFinalAnimated || isStatic && isAOE)
 			animateTimer += dt;
 		
 		super.update(dt);
@@ -151,7 +152,10 @@ public abstract class SkillObject extends GameObject {
 				float y = getRandomPos(area.getY(), area.getY() + area.getHeight());
 				if (!isStatic)
 					setPosition(x - fallOffsetVec.x - xOffset, y + fallOffsetVec.y - yOffset);
+			}else if(isStatic && isAOE){
+				setPosition(targetPosition.x - getWidth()/2, targetPosition.y - getHeight()/2);
 			}
+		
 		} else
 			setPosition(playerPosition.x - xOffset, playerPosition.y - yOffset);
 	}

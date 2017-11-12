@@ -9,11 +9,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.state.State;
 import com.webgame.game.world.objects.SkillObject;
 
-public class FireRainObject extends SkillObject {
+public class TornadoObject extends SkillObject {
 	protected Animation<TextureRegion> animation;
-	protected TextureRegion standTexture;
 
-	public FireRainObject() {
+	public TornadoObject() {
 		super();
 	}
 
@@ -22,28 +21,22 @@ public class FireRainObject extends SkillObject {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spriteTexture);
 
-		xOffset = yOffset = 0;
-		int h = 50;
-		int w = 30;
-		int l = 6;
-
-		int h2 = 50;
-		int w2 = 60;
+		int h = 60;
+		int w = 60;
+		int l = 4;
 
 		TextureRegion[] frames = new TextureRegion[l];
 
-		
 		for (int i = 0; i < l; i++)
-			frames[i] = new TextureRegion(this.spriteTexture, 190 + w2 * (i + 1), 110, w2, h2);
+			frames[i] = new TextureRegion(spriteTexture,600 + w * (i + 1), 295, w, h);
 
-		standTexture = new TextureRegion(this.spriteTexture, 810, 55, w, h);
 
-		animation = new Animation<TextureRegion>(0.2f, frames);
+		animation = new Animation<TextureRegion>(animationDuration, frames);
 
-		int w3 = 20;
-		int h3 = 20;
-		this.setBounds(0, 0, w3 / PPM, h3 / PPM);
-		setRegion(standTexture);
+		int w2 = 100;
+		int h2 = 100;
+		this.setBounds(0, 0, w2 / PPM, h2 / PPM);
+		setRegion(animation.getKeyFrame(0));
 	}
 
 	@Override
@@ -54,18 +47,12 @@ public class FireRainObject extends SkillObject {
 	@Override
 	public TextureRegion getFrame() {
 		TextureRegion region = null;
-		if (isActive) {
-			if (isStatic && !isFinalAnimated)
-				region = animation.getKeyFrame(animateTimer, false);
-			else
-				region = standTexture;
+
+		if (isActive){
+			System.out.println(animateTimer);
+			region = animation.getKeyFrame(animateTimer, true);
 		}
 		return region;
-	}
-
-	@Override
-	public void afterMove() {
-		super.afterMove();
 	}
 
 }
