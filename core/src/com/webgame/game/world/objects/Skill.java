@@ -1,5 +1,6 @@
 package com.webgame.game.world.objects;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -42,8 +43,9 @@ public abstract class Skill<T extends SkillObject> {
 		setActive(true);
 		updateTimers();
 		skillVelocity = calculateVelocity(playerPosition, targetPosition);
-		area.setPosition(targetPosition.x - area.getWidth() / 2, targetPosition.y - area.getHeight() / 2);
-		
+		if (area != null)
+			area.setPosition(targetPosition.x - area.getWidth() / 2, targetPosition.y - area.getHeight() / 2);
+
 		for (int i = 0; i < skillObjectsNum; i++) {
 			SkillObject obj = skillObjects.get(i);
 			obj.setTargetPosition(targetPosition);
@@ -61,11 +63,13 @@ public abstract class Skill<T extends SkillObject> {
 	}
 
 	public void drawShape(ShapeRenderer sr) {
+		sr.setColor(Color.BLUE);
 		for (int i = 0; i < skillObjectsNum; i++) {
 			SkillObject obj = skillObjects.get(i);
 			obj.drawShape(sr);
 		}
-		sr.rect(area.getX(), area.getY(), area.getWidth(), area.getHeight());
+		if (area != null)
+			sr.rect(area.getX(), area.getY(), area.getWidth(), area.getHeight());
 	}
 
 	public void updateTimers() {

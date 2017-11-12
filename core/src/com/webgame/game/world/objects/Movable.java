@@ -1,5 +1,5 @@
 package com.webgame.game.world.objects;
 
 public interface Movable {
-	void move(float dt);
+	void update(float dt);
 }

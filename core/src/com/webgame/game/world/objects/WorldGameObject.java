@@ -27,10 +27,10 @@ public abstract class WorldGameObject extends GameObject {
 	}
 
 	@Override
-	public void move(float dt) {
+	public void update(float dt) {
 		b2body.setLinearVelocity(velocity);
 		setPosition(b2body.getPosition().x - xOffset, b2body.getPosition().y - yOffset);
-		super.move(dt);
+		super.update(dt);
 	}
 
 	public abstract void createObject(World world);

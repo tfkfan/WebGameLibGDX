@@ -49,9 +49,10 @@ public class MainScreen implements Screen, InputProcessor {
 		worldRenderer = new WorldRenderer();
 		worldRenderer.initWorld(cam);
 
-		player = new Knight(batch, "knight.png");
+		player = new Mage(batch, "mage.png");
 		player.createObject(worldRenderer.world);
 		sr = new ShapeRenderer();
+		sr.setAutoShapeType(true);
 
 		Gdx.app.log(title, "Starting...");
 	}
@@ -60,7 +61,7 @@ public class MainScreen implements Screen, InputProcessor {
 	public void render(float dt) {
 		handleInput();
 		cam.update();
-		player.move(dt);
+		player.update(dt);
 
 		batch.setProjectionMatrix(cam.combined);
 
@@ -79,8 +80,8 @@ public class MainScreen implements Screen, InputProcessor {
 		batch.end();
 		
 		sr.setProjectionMatrix(cam.combined);
-		sr.begin(ShapeType.Line);
-		sr.setColor(Color.BLUE);
+		
+		sr.begin();
 		player.drawShape(sr);
 		sr.end();
 	}

@@ -19,7 +19,7 @@ public abstract class SingleSkill<T extends SkillObject> extends Skill<T> {
 		for (int i = 0; i < skillObjectsNum; i++) {
 			SkillObject obj = skillObjects.get(i);
 			if (obj.isActive()) {
-				obj.move(dt);
+				obj.update(dt);
 				obj.draw(batch);
 			}
 		}

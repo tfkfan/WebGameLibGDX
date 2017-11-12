@@ -100,7 +100,7 @@ public abstract class SkillObject extends GameObject {
 	}
 
 	@Override
-	public void move(float dt) {
+	public void update(float dt) {
 		if (!isActive)
 			return;
 
@@ -125,7 +125,7 @@ public abstract class SkillObject extends GameObject {
 		if(isStatic && !isFinalAnimated)
 			animateTimer += dt;
 		
-		super.move(dt);
+		super.update(dt);
 
 		afterMove();
 	}
@@ -176,7 +176,6 @@ public abstract class SkillObject extends GameObject {
 		float x = getX();
 		float y = getY();
 		if (x < -10 || y < -10 || x > 10 || y > 10){
-			setPosition(0,0);
 			setActive(false);
 		}
 	}

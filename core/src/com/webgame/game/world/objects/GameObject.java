@@ -5,11 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.state.Direction;
-import com.webgame.game.state.PlayerState;
 import com.webgame.game.state.State;
 import com.webgame.game.world.objects.impl.SpriteTextureLoader;
-import static com.webgame.game.Configs.PPM;
 
 public abstract class GameObject extends Sprite implements Movable, Animated {
 	protected Vector2 velocity;
@@ -18,9 +15,6 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 
 	protected State currState;
 	protected State prevState;
-
-	protected Direction direction;
-	protected Direction oldDirection;
 
 	protected float xOffset;
 	protected float yOffset;
@@ -37,18 +31,8 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 
 	public void init() {
 		xOffset = yOffset = 0;
-
 		velocity = new Vector2();
-
-		prevState = PlayerState.STAND;
-		currState = PlayerState.STAND;
-
-		direction = Direction.UP;
-		oldDirection = Direction.UP;
-
 		stateTimer = 0;
-
-		this.setBounds(0, 0, 60 / PPM, 60 / PPM);
 	}
 
 	public Texture getSpriteTexture() {
@@ -69,14 +53,6 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 
 	public SpriteBatch getSpriteBatch() {
 		return batch;
-	}
-
-	public Direction getDirection() {
-		return direction;
-	}
-
-	public void setDirection(Direction direction) {
-		this.direction = direction;
 	}
 
 	public Vector2 getVelocity() {
@@ -135,68 +111,8 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 		return currState;
 	}
 
-	public Integer getDirectionIndex() {
-		Integer index = 0;
-		switch (direction) {
-		case UP:
-			index = 0;
-			break;
-		case UPRIGHT:
-			index = 1;
-			break;
-		case RIGHT:
-			index = 2;
-			break;
-		case RIGHTDOWN:
-			index = 3;
-			break;
-		case DOWN:
-			index = 4;
-			break;
-		case LEFTDOWN:
-			index = 5;
-			break;
-		case LEFT:
-			index = 6;
-			break;
-		case UPLEFT:
-			index = 7;
-			break;
-		default:
-			index = 0;
-			break;
-		}
-		return index;
-	}
-
-	public void updateDirection() {
-		oldDirection = direction;
-
-		if (velocity.x > 0)
-			direction = Direction.RIGHT;
-		else if (velocity.x < 0)
-			direction = Direction.LEFT;
-
-		if (velocity.y > 0)
-			direction = Direction.UP;
-		else if (velocity.y < 0)
-			direction = Direction.DOWN;
-
-		if (velocity.x > 0 && velocity.y > 0)
-			direction = Direction.UPRIGHT;
-		else if (velocity.x > 0 && velocity.y < 0)
-			direction = Direction.RIGHTDOWN;
-		else if (velocity.x < 0 && velocity.y > 0)
-			direction = Direction.UPLEFT;
-		else if (velocity.x < 0 && velocity.y < 0)
-			direction = Direction.LEFTDOWN;
-
-		if (oldDirection != direction || currState != prevState)
-			stateTimer = 0;
-	}
-
 	@Override
-	public void move(float dt) {
+	public void update(float dt) {
 		updateStateTimer(dt);
 		setRegion(getFrame());
 	}

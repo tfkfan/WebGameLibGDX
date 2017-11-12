@@ -9,6 +9,7 @@ import com.webgame.game.state.PlayerState;
 import com.webgame.game.world.objects.Player;
 import static com.webgame.game.Configs.PPM;
 
+@Deprecated
 public class Archer extends Player {
 	protected Array<Animation<TextureRegion>> animations;
 	protected Array<Animation<TextureRegion>> attackAnimations;
