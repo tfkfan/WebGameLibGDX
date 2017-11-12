@@ -56,10 +56,12 @@ public class ExplosionObject extends SkillObject {
 	}
 	
 	@Override
-	public void preMove(float dt) {
-		super.preMove(dt);
-		if(isFinalAnimated)
+	public void afterMove() {
+		super.afterMove();
+		if(isFinalAnimated){
 			isActive = false;
+			animateTimer = 0;	
+		}
 	}
 
 }

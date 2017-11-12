@@ -20,7 +20,7 @@ public class Mage extends Player {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spritePath);
 
-		this.setSkill(new Explosion(batch, "skills.png"));
+		this.setSkill(new Tornado(batch, "skills.png"));
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);

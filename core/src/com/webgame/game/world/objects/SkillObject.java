@@ -103,9 +103,9 @@ public abstract class SkillObject extends GameObject {
 
 	@Override
 	public void update(float dt) {
-		preMove(dt);
 		if (!isActive)
 			return;
+		preMove(dt);
 
 		if (!isStatic) {
 			if (!isFalling) {
@@ -120,7 +120,7 @@ public abstract class SkillObject extends GameObject {
 		}
 		
 		if(animateTimer > animationMaxDuration){
-			animateTimer = 0;
+		
 			isFinalAnimated = true;
 		}
 		if(isStatic && !isFinalAnimated || isStatic && isAOE)

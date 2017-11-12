@@ -40,7 +40,8 @@ public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
 			for (int i = 0; i < skillObjectsNum; i++) {
 				SkillObject obj = skillObjects.get(i);
 				obj.setActive(false);
-				obj.setStatic(false);
+				obj.setStatic(true);
+				obj.setAOE(true);
 				obj.setPosition(0, 0);
 				obj.setFinalAnimated(false);
 
@@ -49,6 +50,8 @@ public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
 			updateTimers();
 			return;
 		}
+		if(isActive)
+			skillTimer += dt;
 		for (int i = 0; i < skillObjectsNum; i++) {
 			SkillObject obj = skillObjects.get(i);
 			if (obj.isActive()) {
