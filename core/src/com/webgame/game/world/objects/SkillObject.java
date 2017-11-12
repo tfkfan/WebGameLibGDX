@@ -1,6 +1,8 @@
 package com.webgame.game.world.objects;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import static com.webgame.game.Configs.PPM;
 
@@ -14,6 +16,8 @@ public abstract class SkillObject extends GameObject {
 	protected final Vector2 distance;
 	protected Vector2 targetPosition;
 	protected Vector2 playerPosition;
+	
+	protected Rectangle area;
 
 	protected final Vector2 fallVelocity;
 	protected final Vector2 fallOffsetVec;
@@ -30,6 +34,14 @@ public abstract class SkillObject extends GameObject {
 		fallOffsetVec = new Vector2(fallVelocity.x * 25, fallVelocity.y * 25);
 	}
 
+	public Rectangle getArea() {
+		return area;
+	}
+
+	public void setArea(Rectangle area) {
+		this.area = area;
+	}
+	
 	public boolean isFinalAnimated() {
 		return isFinalAnimated;
 	}
@@ -118,9 +130,9 @@ public abstract class SkillObject extends GameObject {
 		afterMove();
 	}
 
-	public void initSkill(SpriteBatch batch, String spritePath) {
+	public void initSkill(SpriteBatch batch, Texture spriteTexture) {
 		setSpriteBatch(batch);
-		setSpriteTexture(spritePath);
+		setSpriteTexture(spriteTexture);
 	}
 
 	public boolean isAOE() {
@@ -135,8 +147,8 @@ public abstract class SkillObject extends GameObject {
 		updateDistance();
 		if (isFalling || isStatic) {
 			if (isFalling) {
-				float x = getRandomPos(targetPosition.x - 50 / PPM, targetPosition.x + 50 / PPM);
-				float y = getRandomPos(targetPosition.y - 50 / PPM, targetPosition.y + 50 / PPM);
+				float x = getRandomPos(area.getX(), area.getX() + area.getWidth());
+				float y = getRandomPos(area.getY(), area.getY() + area.getHeight());
 				if (!isStatic)
 					setPosition(x - fallOffsetVec.x - xOffset, y + fallOffsetVec.y - yOffset);
 			}

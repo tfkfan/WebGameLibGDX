@@ -1,5 +1,6 @@
 package com.webgame.game.world.objects;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -19,6 +20,7 @@ public abstract class Skill<T extends SkillObject> {
 
 	protected SpriteBatch batch;
 	protected String spritePath;
+	protected Texture spriteTexture;
 
 	protected boolean isActive;
 
@@ -31,20 +33,22 @@ public abstract class Skill<T extends SkillObject> {
 
 	}
 
-	public Skill(SpriteBatch batch, String spritePath) {
+	public Skill(SpriteBatch batch, Texture spriteTexture) {
 		setBatch(batch);
-		setSpritePath(spritePath);
+		setSpriteTexture(spriteTexture);
 	}
 
 	public void cast(Vector2 playerPosition, Vector2 targetPosition) {
 		setActive(true);
 		updateTimers();
 		skillVelocity = calculateVelocity(playerPosition, targetPosition);
-
+		area.setPosition(targetPosition.x - area.getWidth() / 2, targetPosition.y - area.getHeight() / 2);
+		
 		for (int i = 0; i < skillObjectsNum; i++) {
 			SkillObject obj = skillObjects.get(i);
 			obj.setTargetPosition(targetPosition);
 			obj.setPlayerPosition(playerPosition);
+			obj.setArea(area);
 			obj.initPositions();
 			obj.setVelocity(skillVelocity);
 		}
@@ -56,15 +60,24 @@ public abstract class Skill<T extends SkillObject> {
 
 	}
 
-	public void drawShape(ShapeRenderer sr){
+	public void drawShape(ShapeRenderer sr) {
 		for (int i = 0; i < skillObjectsNum; i++) {
 			SkillObject obj = skillObjects.get(i);
 			obj.drawShape(sr);
 		}
+		sr.rect(area.getX(), area.getY(), area.getWidth(), area.getHeight());
 	}
-	
+
 	public void updateTimers() {
 		skillTimer = 0;
+	}
+
+	public void setSpriteTexture(Texture spriteTexture) {
+		this.spriteTexture = spriteTexture;
+	}
+
+	public Texture getSpriteTexture() {
+		return spriteTexture;
 	}
 
 	public Rectangle getArea() {
@@ -171,7 +184,7 @@ public abstract class Skill<T extends SkillObject> {
 			ArrayList<T> objs = new ArrayList<T>();
 			for (int i = 0; i < objNum; i++) {
 				T obj = createObject();
-				obj.initSkill(batch, spritePath);
+				obj.initSkill(batch, spriteTexture);
 				objs.add(obj);
 			}
 

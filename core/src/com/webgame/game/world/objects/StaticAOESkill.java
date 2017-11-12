@@ -1,6 +1,8 @@
 package com.webgame.game.world.objects;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.webgame.game.world.objects.impl.SpriteTextureLoader;
 
 public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
 
@@ -9,7 +11,14 @@ public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
 	protected int index;
 
 	public StaticAOESkill(SpriteBatch batch, String spritePath) {
-		super(batch, spritePath);
+		super(batch, SpriteTextureLoader.loadSprite(spritePath));
+		createSkill(10);
+		fallTimer = 0;
+		index = 0;
+	}
+
+	public StaticAOESkill(SpriteBatch batch, Texture spriteTexture) {
+		super(batch, spriteTexture);
 		createSkill(10);
 		fallTimer = 0;
 		index = 0;
@@ -26,8 +35,6 @@ public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
 	public void customAnimation(float dt) {
 		if (!isActive)
 			return;
-
-
 
 	}
 

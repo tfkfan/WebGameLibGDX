@@ -12,51 +12,49 @@ import com.webgame.game.world.objects.SkillObject;
 public class IceRainObject extends SkillObject {
 	protected Animation<TextureRegion> animation;
 	protected TextureRegion standTexture;
-	
+
 	public IceRainObject() {
 		super();
 	}
 
 	@Override
-	public void initSkill(SpriteBatch batch, String spritePath) {
+	public void initSkill(SpriteBatch batch, Texture spriteTexture) {
 		this.setSpriteBatch(batch);
-		this.setSpriteTexture(spritePath);
-
-		Texture spriteTexture = getSpriteTexture();
+		this.setSpriteTexture(spriteTexture);
 
 		int h = 30;
 		int w = 30;
 		int l = 3;
-		
-		TextureRegion[] frames =  new TextureRegion[l];
-		
-		//Доделать
-		for(int i = 0; i < l; i++)
-			frames[i] = new TextureRegion(spriteTexture,5 + w*(i+1),245, w, h);
-		
-		standTexture = new TextureRegion(spriteTexture,5,245, w, h);
-		
+
+		TextureRegion[] frames = new TextureRegion[l];
+
+		// Доделать
+		for (int i = 0; i < l; i++)
+			frames[i] = new TextureRegion(this.spriteTexture, 5 + w * (i + 1), 245, w, h);
+
+		standTexture = new TextureRegion(this.spriteTexture, 5, 245, w, h);
+
 		animation = new Animation<TextureRegion>(animationDuration, frames);
 
 		int w2 = 20;
 		int h2 = 25;
-		this.setBounds(0,0, w2/PPM, h2/PPM);
+		this.setBounds(0, 0, w2 / PPM, h2 / PPM);
 		setRegion(standTexture);
 	}
 
 	@Override
-	public State getState(){
+	public State getState() {
 		return currState;
 	}
-	
+
 	@Override
 	public TextureRegion getFrame() {
 		TextureRegion region = null;
 
-		if(isActive)
+		if (isActive)
 			region = isStatic && !isFinalAnimated ? animation.getKeyFrame(animateTimer, false) : standTexture;
-			
+
 		return region;
 	}
-	
+
 }

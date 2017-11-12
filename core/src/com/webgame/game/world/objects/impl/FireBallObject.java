@@ -16,10 +16,8 @@ public class FireBallObject extends SkillObject {
 	}
 
 	@Override
-	public void initSkill(SpriteBatch batch, String spritePath) {
-		super.initSkill(batch, spritePath);
-
-		Texture spriteTexture = getSpriteTexture();
+	public void initSkill(SpriteBatch batch, Texture spriteTexture) {
+		super.initSkill(batch, spriteTexture);
 
 		int h = 50;
 		int w = 30;
@@ -29,9 +27,9 @@ public class FireBallObject extends SkillObject {
 
 		// Доделать
 		for (int i = 0; i < l; i++)
-			frames[i] = new TextureRegion(spriteTexture, 200, 155, w, h);
+			frames[i] = new TextureRegion(this.spriteTexture, 200, 155, w, h);
 
-		standTexture = new TextureRegion(spriteTexture, 810, 50, w, h);
+		standTexture = new TextureRegion(this.spriteTexture, 810, 50, w, h);
 
 		int w2 = 30;
 		int h2 = 50;

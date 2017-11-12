@@ -1,6 +1,10 @@
 package com.webgame.game.world.objects;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.webgame.game.world.objects.impl.SpriteTextureLoader;
+import static com.webgame.game.Configs.PPM;
 
 public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 
@@ -9,9 +13,17 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 	protected int index;
 
 	public FallingAOESkill(SpriteBatch batch, String spritePath) {
-		super(batch, spritePath);
+		super(batch, SpriteTextureLoader.loadSprite(spritePath));
 		fallTimer = 0;
 		index = 0;
+		this.setArea(new Rectangle(0,0,100/PPM, 100/PPM));
+	}
+
+	public FallingAOESkill(SpriteBatch batch, Texture spriteTexture) {
+		super(batch, spriteTexture);
+		fallTimer = 0;
+		index = 0;
+		this.setArea(new Rectangle(0,0,100/PPM, 100/PPM));
 	}
 
 	@Override
@@ -30,11 +42,11 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 				obj.setStatic(false);
 				obj.setPosition(0, 0);
 				obj.setFinalAnimated(false);
-				
+
 			}
 			index = 0;
 			updateTimers();
-			return;	
+			return;
 		}
 
 		skillTimer += dt;
@@ -47,7 +59,7 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 
 				obj.updateDistance();
 				obj.setActive(true);
-		
+
 				if (index < skillObjectsNum - 1)
 					index++;
 				else

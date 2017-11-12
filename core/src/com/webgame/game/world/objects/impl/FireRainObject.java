@@ -18,11 +18,9 @@ public class FireRainObject extends SkillObject {
 	}
 
 	@Override
-	public void initSkill(SpriteBatch batch, String spritePath) {
+	public void initSkill(SpriteBatch batch, Texture spriteTexture) {
 		this.setSpriteBatch(batch);
-		this.setSpriteTexture(spritePath);
-
-		Texture spriteTexture = getSpriteTexture();
+		this.setSpriteTexture(spriteTexture);
 
 		xOffset = yOffset = 0;
 		int h = 50;
@@ -36,9 +34,9 @@ public class FireRainObject extends SkillObject {
 
 		// Доделать
 		for (int i = 0; i < l; i++)
-			frames[i] = new TextureRegion(spriteTexture, 190 + w2 * (i + 1), 110, w2, h2);
+			frames[i] = new TextureRegion(this.spriteTexture, 190 + w2 * (i + 1), 110, w2, h2);
 
-		standTexture = new TextureRegion(spriteTexture, 810, 55, w, h);
+		standTexture = new TextureRegion(this.spriteTexture, 810, 55, w, h);
 
 		animation = new Animation<TextureRegion>(0.2f, frames);
 
