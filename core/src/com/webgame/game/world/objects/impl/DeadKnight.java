@@ -20,7 +20,13 @@ public class DeadKnight extends Player {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spritePath);
 
-		this.setSkill(new IceRain(batch, "skills.png"));
+		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
+		try {
+			this.setSkill(new IceRain(batch, skillTexture, 10));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);

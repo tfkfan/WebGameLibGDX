@@ -1,19 +1,12 @@
 package com.webgame.game.world.objects.impl;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.webgame.game.world.objects.FallingAOESkill;
 
 public class FireRain extends FallingAOESkill<FireRainObject> {
-
-	float stateTimer;
-
-	int index;
-
-	public FireRain(SpriteBatch batch, String spritePath) {
-		super(batch, spritePath);
-		createSkill(50);
-		stateTimer = 0;
-		index = 0;
+	public FireRain(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
+		super(batch, spriteTexture, numFrames);
 	}
 
 	@Override

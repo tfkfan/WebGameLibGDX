@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import static com.webgame.game.Configs.PPM;
 
 public abstract class SkillObject extends GameObject {
 	protected boolean isActive;
@@ -108,7 +107,6 @@ public abstract class SkillObject extends GameObject {
 	public void update(float dt) {
 		if (!isActive)
 			return;
-		preMove(dt);
 
 		if (!isStatic) {
 			setPosition(getX() + getSkillVelocity().x - xOffset, getY() + getSkillVelocity().y - yOffset);
@@ -117,8 +115,10 @@ public abstract class SkillObject extends GameObject {
 		}
 		
 		super.update(dt);
-
-		afterMove();
+	}
+	
+	public void draw(){
+		draw(batch);	
 	}
 
 	public void initSkill(SpriteBatch batch, Texture spriteTexture) {
@@ -132,50 +132,5 @@ public abstract class SkillObject extends GameObject {
 
 	public void setAOE(boolean isAOE) {
 		this.isAOE = isAOE;
-	}
-
-	public void initPositions() {
-		updateDistance();
-		if (isFalling || isStatic) {
-			if (isFalling) {
-				float x = getRandomPos(area.getX(), area.getX() + area.getWidth());
-				float y = getRandomPos(area.getY(), area.getY() + area.getHeight());
-				if (!isStatic)
-					setPosition(x - fallOffsetVec.x - xOffset, y + fallOffsetVec.y - yOffset);
-			}else if(isStatic && isAOE){
-				setPosition(targetPosition.x - getWidth()/2, targetPosition.y - getHeight()/2);
-			}
-		
-		} else
-			setPosition(playerPosition.x - xOffset, playerPosition.y - yOffset);
-	}
-
-	public void preMove(float dt) {
-
-	}
-
-	public void afterMove() {
-		if (isFalling) {
-			if (distance.y > fallOffsetVec.y) {
-				if (!isFinalAnimated) {
-					isStatic = true;
-				} else {
-					isStatic = false;
-					isFinalAnimated = false;
-					initPositions();
-				}
-
-			}
-		}
-		float x = getX();
-		float y = getY();
-		if (x < -10 || y < -10 || x > 10 || y > 10){
-			setActive(false);
-		}
-	}
-
-	public float getRandomPos(float min, float max) {
-		Double random = min + Math.random() * (max - min);
-		return random.floatValue();
 	}
 }

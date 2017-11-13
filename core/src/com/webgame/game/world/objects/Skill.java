@@ -3,6 +3,7 @@ package com.webgame.game.world.objects;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -28,12 +29,12 @@ public abstract class Skill<T extends SkillObject> {
 	protected boolean isFalling;
 	protected boolean isTimed;
 	protected boolean isStatic;
-	
+
 	protected final float absVelocity = 10f / PPM;
 
 	protected Rectangle area;
 	protected float skillTimer;
-	
+
 	public Skill(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
 		setBatch(batch);
 		setSpriteTexture(spriteTexture);
@@ -65,13 +66,36 @@ public abstract class Skill<T extends SkillObject> {
 			obj.setTargetPosition(targetPosition);
 			obj.setPlayerPosition(playerPosition);
 			obj.setArea(area);
-			obj.initPositions();
 			obj.setVelocity(skillVelocity);
+			initFrame(obj);
 		}
 	}
-	
-	protected void updateFrame(T frame, float dt){
+
+	public void animateSkill(float dt) {
+		if (skillObjects == null || !isActive)
+			return;
+
+		customAnimation(dt);
+
+		for (int i = 0; i < numFrames; i++) {
+			T frame = skillObjects.get(i);
+			if (!frame.isActive())
+				continue;
+			updateFrame(frame, dt);
+			frame.draw();
+		}
+		
+		afterCustomAnimation();
+	}
+
+	protected abstract void customAnimation(float dt);
+	protected abstract void afterCustomAnimation();
+	protected abstract T createObject();
+	protected abstract void initFrame(T frame);
+
+	protected void updateFrame(T frame, float dt) {
 		frame.update(dt);
+		initFrame(frame);
 	}
 
 	public void drawShape(ShapeRenderer sr) {
@@ -84,6 +108,11 @@ public abstract class Skill<T extends SkillObject> {
 			sr.rect(area.getX(), area.getY(), area.getWidth(), area.getHeight());
 	}
 
+	public float getRandomPos(float min, float max) {
+		Double random = min + Math.random() * (max - min);
+		return random.floatValue();
+	}
+
 	protected void clearTimers() {
 		skillTimer = 0;
 	}
@@ -91,7 +120,6 @@ public abstract class Skill<T extends SkillObject> {
 	protected void updateTimers(float dt) {
 		skillTimer += dt;
 	}
-	
 
 	public boolean isAOE() {
 		return isAOE;
@@ -216,21 +244,4 @@ public abstract class Skill<T extends SkillObject> {
 
 		this.numFrames = numFrames;
 	}
-
-	public void animateSkill(float dt) {
-		if (skillObjects == null || !isActive)
-			return;
-		
-		customAnimation(dt);
-		
-		for (int i = 0; i < numFrames; i++) {
-			T frame = skillObjects.get(i);
-			updateFrame(frame);
-		}
-	}
-
-	protected abstract void customAnimation(float dt);
-
-	protected abstract T createObject();
-
 }

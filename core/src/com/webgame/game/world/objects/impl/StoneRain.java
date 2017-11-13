@@ -1,13 +1,12 @@
 package com.webgame.game.world.objects.impl;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.webgame.game.world.objects.FallingAOESkill;
 
 public class StoneRain extends FallingAOESkill<StoneRainObject> {
-
-	public StoneRain(SpriteBatch batch, String spritePath) {
-		super(batch, spritePath);
-		createSkill(10);
+	public StoneRain(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
+		super(batch, spriteTexture, numFrames);
 	}
 
 	@Override

@@ -1,13 +1,13 @@
 package com.webgame.game.world.objects.impl;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.webgame.game.world.objects.FallingAOESkill;
 
 public class IceRain extends FallingAOESkill<IceRainObject> {
 
-	public IceRain(SpriteBatch batch, String spritePath) {
-		super(batch, spritePath);
-		createSkill(50);
+	public IceRain(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
+		super(batch, spriteTexture, numFrames);
 	}
 
 	@Override
@@ -17,5 +17,4 @@ public class IceRain extends FallingAOESkill<IceRainObject> {
 		// obj.rotate(-150);
 		return obj;
 	}
-
 }

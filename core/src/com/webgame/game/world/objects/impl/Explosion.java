@@ -1,13 +1,13 @@
 package com.webgame.game.world.objects.impl;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.webgame.game.world.objects.StaticAOESkill;
 
 public class Explosion extends StaticAOESkill<ExplosionObject> {
 
-	public Explosion(SpriteBatch batch, String spritePath) {
-		super(batch, spritePath);
-		createSkill(1);
+	public Explosion(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
+		super(batch, spriteTexture, numFrames);
 	}
 
 	@Override
@@ -17,6 +17,18 @@ public class Explosion extends StaticAOESkill<ExplosionObject> {
 		obj.setAOE(true);
 		// obj.rotate(-150);
 		return obj;
+	}
+
+	@Override
+	protected void afterCustomAnimation() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void initFrame(ExplosionObject frame) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

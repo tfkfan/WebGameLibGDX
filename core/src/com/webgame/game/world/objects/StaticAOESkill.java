@@ -5,7 +5,6 @@ import static com.webgame.game.Configs.PPM;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.webgame.game.world.objects.impl.SpriteTextureLoader;
 
 public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
 	protected final float skillDuration = 10;
@@ -13,24 +12,10 @@ public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
 	final int w = 50;
 	final int h = 50;
 
-	public StaticAOESkill(SpriteBatch batch, String spritePath) {
-		super(batch, SpriteTextureLoader.loadSprite(spritePath));
+	public StaticAOESkill(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
+		super(batch, spriteTexture, numFrames);
 		this.setArea(new Rectangle(0,0,w/PPM, h/PPM));
 		index = 0;
-	}
-
-	public StaticAOESkill(SpriteBatch batch, Texture spriteTexture) {
-		super(batch, spriteTexture);
-		this.setArea(new Rectangle(0,0,w/PPM, h/PPM));
-		index = 0;
-	}
-	
-	@Override
-	public void afterCast(){
-		for (int i = 0; i < numFrames; i++) {
-			SkillObject obj = skillObjects.get(i);
-			obj.setActive(true);
-		}
 	}
 
 	@Override

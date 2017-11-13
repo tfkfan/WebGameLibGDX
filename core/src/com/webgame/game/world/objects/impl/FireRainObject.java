@@ -62,10 +62,4 @@ public class FireRainObject extends SkillObject {
 		}
 		return region;
 	}
-
-	@Override
-	public void afterMove() {
-		super.afterMove();
-	}
-
 }

@@ -21,7 +21,7 @@ public class Soldier extends Player {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spritePath);
 
-		this.setSkill(new IceRain(batch, "skills.png"));
+		//this.setSkill(new IceRain(batch, "skills.png"));
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);

@@ -54,14 +54,4 @@ public class ExplosionObject extends SkillObject {
 		
 		return region;
 	}
-	
-	@Override
-	public void afterMove() {
-		super.afterMove();
-		if(isFinalAnimated){
-			isActive = false;
-			animateTimer = 0;	
-		}
-	}
-
 }
