@@ -30,7 +30,6 @@ public class TornadoObject extends SkillObject {
 		for (int i = 0; i < l; i++)
 			frames[i] = new TextureRegion(spriteTexture,592 + w * (i + 1), 295, 60, h);
 
-
 		animation = new Animation<TextureRegion>(animationDuration, frames);
 
 		int w2 = 100;

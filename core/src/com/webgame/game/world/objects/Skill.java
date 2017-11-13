@@ -17,63 +17,112 @@ public abstract class Skill<T extends SkillObject> {
 	protected Vector2 skillVelocity;
 
 	protected ArrayList<T> skillObjects;
-	protected Integer skillObjectsNum;
+	protected Integer numFrames;
 
 	protected SpriteBatch batch;
 	protected String spritePath;
 	protected Texture spriteTexture;
 
 	protected boolean isActive;
-
+	protected boolean isAOE;
+	protected boolean isFalling;
+	protected boolean isTimed;
+	protected boolean isStatic;
+	
 	protected final float absVelocity = 10f / PPM;
 
 	protected Rectangle area;
 	protected float skillTimer;
-
-	public Skill() {
-
-	}
-
-	public Skill(SpriteBatch batch, Texture spriteTexture) {
+	
+	public Skill(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
 		setBatch(batch);
 		setSpriteTexture(spriteTexture);
+		initSkill(numFrames);
+	}
+
+	protected void initSkill(Integer numFrames) throws Exception {
+		setNumFrames(numFrames);
+		ArrayList<T> objs = new ArrayList<T>();
+		for (int i = 0; i < numFrames; i++) {
+			T obj = createObject();
+			obj.initSkill(batch, spriteTexture);
+			objs.add(obj);
+		}
+		setSkillObjects(objs);
 	}
 
 	public void cast(Vector2 playerPosition, Vector2 targetPosition) {
 		setActive(true);
-		updateTimers();
+		clearTimers();
+
 		skillVelocity = calculateVelocity(playerPosition, targetPosition);
+
 		if (area != null)
 			area.setPosition(targetPosition.x - area.getWidth() / 2, targetPosition.y - area.getHeight() / 2);
 
-		for (int i = 0; i < skillObjectsNum; i++) {
-			SkillObject obj = skillObjects.get(i);
+		for (int i = 0; i < numFrames; i++) {
+			T obj = skillObjects.get(i);
 			obj.setTargetPosition(targetPosition);
 			obj.setPlayerPosition(playerPosition);
 			obj.setArea(area);
 			obj.initPositions();
 			obj.setVelocity(skillVelocity);
 		}
-
-		afterCast();
 	}
-
-	public void afterCast() {
-
+	
+	protected void updateFrame(T frame, float dt){
+		frame.update(dt);
 	}
 
 	public void drawShape(ShapeRenderer sr) {
 		sr.setColor(Color.BLUE);
-		for (int i = 0; i < skillObjectsNum; i++) {
-			SkillObject obj = skillObjects.get(i);
+		for (int i = 0; i < numFrames; i++) {
+			T obj = skillObjects.get(i);
 			obj.drawShape(sr);
 		}
 		if (area != null)
 			sr.rect(area.getX(), area.getY(), area.getWidth(), area.getHeight());
 	}
 
-	public void updateTimers() {
+	protected void clearTimers() {
 		skillTimer = 0;
+	}
+
+	protected void updateTimers(float dt) {
+		skillTimer += dt;
+	}
+	
+
+	public boolean isAOE() {
+		return isAOE;
+	}
+
+	public void setAOE(boolean isAOE) {
+		this.isAOE = isAOE;
+	}
+
+	public boolean isFalling() {
+		return isFalling;
+	}
+
+	public void setFalling(boolean isFalling) {
+		this.isFalling = isFalling;
+	}
+
+	public boolean isTimed() {
+		return isTimed;
+	}
+
+	public void setTimed(boolean isTimed) {
+		this.isTimed = isTimed;
+	}
+
+	public boolean isStatic() {
+		return isStatic;
+	}
+
+	public void setStatic(boolean isStatic) {
+		this.isStatic = isStatic;
 	}
 
 	public void setSpriteTexture(Texture spriteTexture) {
@@ -92,26 +141,13 @@ public abstract class Skill<T extends SkillObject> {
 		this.area = area;
 	}
 
-	public Vector2 calculateVelocity(Vector2 playerPosition, Vector2 targetPosition) {
+	protected Vector2 calculateVelocity(Vector2 playerPosition, Vector2 targetPosition) {
 		Vector2 vec = new Vector2(targetPosition.x - playerPosition.x, targetPosition.y - playerPosition.y);
 		float len = vec.len();
 		vec.x = absVelocity * vec.x / len;
 		vec.y = absVelocity * vec.y / len;
 
 		return vec;
-	}
-
-	public void animateSkill(float dt) {
-		if (skillObjects == null || !isActive)
-			return;
-		customAnimation(dt);
-		afterAnimation();
-	}
-
-	public abstract void customAnimation(float dt);
-
-	public void afterAnimation() {
-
 	}
 
 	public boolean isActive() {
@@ -170,36 +206,31 @@ public abstract class Skill<T extends SkillObject> {
 		this.skillObjects = skillObjects;
 	}
 
-	public Integer getSkillObjectsNum() {
-		return skillObjectsNum;
+	public Integer getNumFrames() {
+		return numFrames;
 	}
 
-	public void setSkillObjectsNum(Integer skillObjectsNum) throws Exception {
-		if (skillObjectsNum <= 0)
+	public void setNumFrames(Integer numFrames) throws Exception {
+		if (numFrames <= 0)
 			throw new Exception("Skill objects num cannot be less or equal zero");
 
-		this.skillObjectsNum = skillObjectsNum;
+		this.numFrames = numFrames;
 	}
 
-	public void createSkill(Integer objNum) {
-		try {
-			setSkillObjectsNum(objNum);
-
-			ArrayList<T> objs = new ArrayList<T>();
-			for (int i = 0; i < objNum; i++) {
-				T obj = createObject();
-				obj.initSkill(batch, spriteTexture);
-				objs.add(obj);
-			}
-
-			setSkillObjects(objs);
-
-		} catch (Exception e) {
-			e.printStackTrace();
+	public void animateSkill(float dt) {
+		if (skillObjects == null || !isActive)
+			return;
+		
+		customAnimation(dt);
+		
+		for (int i = 0; i < numFrames; i++) {
+			T frame = skillObjects.get(i);
+			updateFrame(frame);
 		}
-
 	}
 
-	public abstract T createObject();
+	protected abstract void customAnimation(float dt);
+
+	protected abstract T createObject();
 
 }

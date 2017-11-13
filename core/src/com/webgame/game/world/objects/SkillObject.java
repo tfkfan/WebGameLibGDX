@@ -18,22 +18,25 @@ public abstract class SkillObject extends GameObject {
 	protected Vector2 playerPosition;
 	
 	protected Rectangle area;
-
-	protected final Vector2 fallVelocity;
-	protected final Vector2 fallOffsetVec;
-	protected final float fallOffset;
 	
 	protected float animationDuration = 0.2f;
 	protected float animationMaxDuration;
 	protected float animateTimer = 0;
+	
+	protected Vector2 skillVelocity;
 
 	public SkillObject() {
 		super();
 		distance = new Vector2(0, 0);
 		animationMaxDuration = animationDuration * 3;
-		fallOffset = 1f / PPM;
-		fallVelocity = new Vector2(2 / PPM, 4 / PPM);
-		fallOffsetVec = new Vector2(fallVelocity.x * 25, fallVelocity.y * 25);
+	}
+	
+	public Vector2 getSkillVelocity() {
+		return skillVelocity;
+	}
+
+	public void setSkillVelocity(Vector2 skillVelocity) {
+		this.skillVelocity = skillVelocity;
 	}
 
 	public Rectangle getArea() {
@@ -108,23 +111,10 @@ public abstract class SkillObject extends GameObject {
 		preMove(dt);
 
 		if (!isStatic) {
-			if (!isFalling) {
-				setPosition(getX() + getVelocity().x - xOffset, getY() + getVelocity().y - yOffset);
-				distance.x += getVelocity().x;
-				distance.y += getVelocity().y;
-			} else {
-				setPosition(getX() + fallVelocity.x - xOffset, getY() - fallVelocity.y - yOffset);
-				distance.x += fallVelocity.x;
-				distance.y += fallVelocity.y;
-			}
+			setPosition(getX() + getSkillVelocity().x - xOffset, getY() + getSkillVelocity().y - yOffset);
+			distance.x += getSkillVelocity().x;
+			distance.y += getSkillVelocity().y;	
 		}
-		
-		if(animateTimer > animationMaxDuration){
-		
-			isFinalAnimated = true;
-		}
-		if(isStatic && !isFinalAnimated || isStatic && isAOE)
-			animateTimer += dt;
 		
 		super.update(dt);
 

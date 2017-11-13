@@ -27,7 +27,7 @@ public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
 	
 	@Override
 	public void afterCast(){
-		for (int i = 0; i < skillObjectsNum; i++) {
+		for (int i = 0; i < numFrames; i++) {
 			SkillObject obj = skillObjects.get(i);
 			obj.setActive(true);
 		}
@@ -37,7 +37,7 @@ public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
 	public void customAnimation(float dt) {
 		if (skillTimer >= skillDuration) {
 			isActive = false;
-			for (int i = 0; i < skillObjectsNum; i++) {
+			for (int i = 0; i < numFrames; i++) {
 				SkillObject obj = skillObjects.get(i);
 				obj.setActive(false);
 				obj.setStatic(true);
@@ -47,12 +47,12 @@ public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
 
 			}
 			index = 0;
-			updateTimers();
+			clearTimers();
 			return;
 		}
 		if(isActive)
 			skillTimer += dt;
-		for (int i = 0; i < skillObjectsNum; i++) {
+		for (int i = 0; i < numFrames; i++) {
 			SkillObject obj = skillObjects.get(i);
 			if (obj.isActive()) {
 				obj.update(dt);
