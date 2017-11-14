@@ -9,11 +9,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.state.State;
 import com.webgame.game.world.objects.SkillObject;
 
-public class IceRainObject extends SkillObject {
+public class BlizzardObject extends SkillObject {
 	protected Animation<TextureRegion> animation;
 	protected TextureRegion standTexture;
 
-	public IceRainObject() {
+	public BlizzardObject() {
 		super();
 	}
 
@@ -33,7 +33,7 @@ public class IceRainObject extends SkillObject {
 			frames[i] = new TextureRegion(this.spriteTexture, 5 + w * (i + 1), 245, w, h);
 
 		standTexture = new TextureRegion(this.spriteTexture, 5, 245, w, h);
-
+		animationMaxDuration = animationDuration * l;
 		animation = new Animation<TextureRegion>(animationDuration, frames);
 
 		int w2 = 20;

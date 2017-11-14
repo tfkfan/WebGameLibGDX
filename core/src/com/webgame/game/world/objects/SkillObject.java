@@ -20,6 +20,7 @@ public abstract class SkillObject extends GameObject {
 	public SkillObject() {
 		super();
 		distance = new Vector2(0, 0);
+		animationMaxDuration = animationDuration * 3;
 	}
 	
 	public float getAnimationDuration() {

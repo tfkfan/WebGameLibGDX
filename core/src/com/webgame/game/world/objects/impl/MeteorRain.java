@@ -4,14 +4,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.webgame.game.world.objects.FallingAOESkill;
 
-public class FireRain extends FallingAOESkill<FireRainObject> {
-	public FireRain(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
+public class MeteorRain extends FallingAOESkill<MeteorRainObject> {
+	public MeteorRain(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
 		super(batch, spriteTexture, numFrames);
 	}
 
 	@Override
-	public FireRainObject createObject() {
-		FireRainObject obj = new FireRainObject();
+	public MeteorRainObject createObject() {
+		MeteorRainObject obj = new MeteorRainObject();
 		obj.setFalling(true);
 		// obj.rotate(-150);
 		return obj;

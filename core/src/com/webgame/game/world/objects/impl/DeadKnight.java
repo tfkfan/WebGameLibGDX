@@ -22,7 +22,7 @@ public class DeadKnight extends Player {
 
 		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
 		try {
-			this.setSkill(new IceRain(batch, skillTexture, 10));
+			this.setSkill(new Blizzard(batch, skillTexture, 10));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

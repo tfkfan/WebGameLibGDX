@@ -9,11 +9,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.state.State;
 import com.webgame.game.world.objects.SkillObject;
 
-public class FireRainObject extends SkillObject {
+public class MeteorRainObject extends SkillObject {
 	protected Animation<TextureRegion> animation;
 	protected TextureRegion standTexture;
 
-	public FireRainObject() {
+	public MeteorRainObject() {
 		super();
 	}
 
@@ -25,7 +25,7 @@ public class FireRainObject extends SkillObject {
 		xOffset = yOffset = 0;
 		int h = 50;
 		int w = 30;
-		int l = 6;
+		int l = 5;
 
 		int h2 = 50;
 		int w2 = 60;
@@ -34,11 +34,11 @@ public class FireRainObject extends SkillObject {
 
 		
 		for (int i = 0; i < l; i++)
-			frames[i] = new TextureRegion(this.spriteTexture, 190 + w2 * (i + 1), 110, w2, h2);
+			frames[i] = new TextureRegion(this.spriteTexture, 190 + w2 * (i), 110, w2, h2);
 
 		standTexture = new TextureRegion(this.spriteTexture, 810, 55, w, h);
-
-		animation = new Animation<TextureRegion>(0.2f, frames);
+		animationMaxDuration = animationDuration * l;
+		animation = new Animation<TextureRegion>(animationDuration, frames);
 
 		int w3 = 20;
 		int h3 = 20;
