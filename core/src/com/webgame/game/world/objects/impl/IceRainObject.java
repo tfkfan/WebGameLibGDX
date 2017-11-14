@@ -51,10 +51,6 @@ public class IceRainObject extends SkillObject {
 	public TextureRegion getFrame() {
 		TextureRegion region = null;
 
-		int g = 0;
-		if( isStatic && !isFinalAnimated )
-			g = 0;
-		
 		if (isActive)
 			region = isStatic && !isFinalAnimated ? animation.getKeyFrame(animateTimer, false) : standTexture;
 

@@ -35,7 +35,7 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 	@Override
 	public void customAnimation(float dt) {
 		if (skillTimer >= fallDuration) {
-			isActive = false;
+			setActive(false);
 			for (int i = 0; i < numFrames; i++) {
 				T obj = skillObjects.get(i);
 				obj.setActive(false);
@@ -97,19 +97,26 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 	protected void updateFrame(T frame, float dt) {
 		super.updateFrame(frame, dt);
 	
-		if(!frame.isFinalAnimated)
-			frame.animateTimer += dt;
-		else
-			frame.animateTimer = 0;
 		if (frame.getDistance().y > fallOffsetVec.y) {
 			if (!frame.isFinalAnimated()) {
 				frame.setStatic(true);
-			} else {
+			}
+			if(frame.isFinalAnimated() && frame.isStatic()) {
+				frame.setFinalAnimated(false);
 				frame.setStatic(false);
-				frame.setFinalAnimated(true);
 				initPositions(frame);
 			}
 		}
+		
+		if(!frame.isFinalAnimated() && frame.isStatic()) {
+			frame.animateTimer += dt;
+			if(frame.animateTimer > frame.animationMaxDuration) {
+				frame.setFinalAnimated(true);
+				frame.animateTimer = 0;
+			
+			}
+		}
+		
 		
 		float x = frame.getX();
 		float y = frame.getY();
