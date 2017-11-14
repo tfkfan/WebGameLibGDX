@@ -14,6 +14,8 @@ public class LightningObject extends SkillObject {
 
 	public LightningObject() {
 		super();
+		animationDuration = 0.1f;
+		
 	}
 
 	@Override
@@ -27,11 +29,12 @@ public class LightningObject extends SkillObject {
 
 		TextureRegion[] frames = new TextureRegion[l];
 
-		for (int i = 0; i < 2; i++) {
-			for(int j = 0; j < 2; j++)
-				frames[i + j] = new TextureRegion(spriteTexture,w * i, h * j, w, h);
+		for (int i = 0, k = 0; i < 2; i++) {
+			for(int j = 0; j < 2; j++, k++) 
+				frames[k] = new TextureRegion(spriteTexture,w * i, h * j, w, h);
 		}
-
+		
+		this.animationMaxDuration = animationDuration * l;
 		animation = new Animation<TextureRegion>(animationDuration, frames);
 
 		int w2 = 100;
@@ -50,8 +53,8 @@ public class LightningObject extends SkillObject {
 		TextureRegion region = null;
 
 		if (isActive)
-			region = animation.getKeyFrame(animateTimer, true);
-		
+			region = animation.getKeyFrame(animateTimer, false);
+
 		return region;
 	}
 

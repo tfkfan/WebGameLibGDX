@@ -20,9 +20,9 @@ public class Mage extends Player {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spritePath);
 
-		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
+		Texture skillTexture = SpriteTextureLoader.loadSprite("lightning.png");
 		try {
-			this.setSkill(new Blizzard(batch, skillTexture, 50));
+			this.setSkill(new Lightning(batch, skillTexture));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
