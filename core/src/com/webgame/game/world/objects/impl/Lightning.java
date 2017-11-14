@@ -2,9 +2,11 @@ package com.webgame.game.world.objects.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.world.objects.StaticAOESkill;
+import com.webgame.game.world.objects.StaticSkill;
 
-public class Lightning extends StaticAOESkill<LightningObject> {
+public class Lightning extends StaticSkill<LightningObject> {
 	public Lightning(SpriteBatch batch, Texture spriteTexture) throws Exception {
 		super(batch, spriteTexture, 1);
 	}
@@ -24,5 +26,14 @@ public class Lightning extends StaticAOESkill<LightningObject> {
 		if(obj.getAnimateTimer() > obj.getAnimationMaxDuration()) {
 			isActive = false;
 		}
+	}
+	@Override
+	protected void initPositions(LightningObject frame, Vector2 target) {
+		float x = target.x - frame.getWidth()/2;
+		float y = target.y;
+		frame.updateDistance();
+		frame.setAnimateTimer(0);
+		frame.setActive(true);
+		frame.setPosition(x, y);
 	}
 }

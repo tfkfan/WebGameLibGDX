@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import static com.webgame.game.Configs.PPM;
 
 public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
-
 	protected float fallTimer;
 	protected final float fallDuration = 10;
 	protected int index;
@@ -23,6 +22,7 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 		index = 0;
 		setAOE(true);
 		setFalling(true);
+		setTimed(true);
 		this.setArea(new Rectangle(0, 0, 100 / PPM, 100 / PPM));
 	}
 
