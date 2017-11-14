@@ -5,6 +5,8 @@ import static com.webgame.game.Configs.PPM;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.webgame.game.world.objects.impl.ExplosionObject;
 
 public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
 	protected final float skillDuration = 10;
@@ -44,5 +46,12 @@ public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
 				obj.draw(batch);
 			}
 		}
+	}
+	
+
+	@Override
+	protected void initFrame(T frame, Vector2 playerPosition, Vector2 targetPosition) {
+		// TODO Auto-generated method stub
+		
 	}
 }

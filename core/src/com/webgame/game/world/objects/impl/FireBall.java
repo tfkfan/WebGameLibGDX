@@ -24,11 +24,6 @@ public class FireBall extends SingleSkill<FireBallObject> {
 		
 	}
 
-	@Override
-	protected void initFrame(FireBallObject frame) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 }

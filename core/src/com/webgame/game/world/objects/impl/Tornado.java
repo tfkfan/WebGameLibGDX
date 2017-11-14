@@ -23,11 +23,4 @@ public class Tornado extends StaticAOESkill<TornadoObject> {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	protected void initFrame(TornadoObject frame) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

@@ -2,7 +2,6 @@ package com.webgame.game.world.objects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class SkillObject extends GameObject {
@@ -13,37 +12,15 @@ public abstract class SkillObject extends GameObject {
 	protected boolean isAOE;
 
 	protected final Vector2 distance;
-	protected Vector2 targetPosition;
-	protected Vector2 playerPosition;
-	
-	protected Rectangle area;
 	
 	protected float animationDuration = 0.2f;
 	protected float animationMaxDuration;
 	protected float animateTimer = 0;
-	
-	protected Vector2 skillVelocity;
 
 	public SkillObject() {
 		super();
 		distance = new Vector2(0, 0);
 		animationMaxDuration = animationDuration * 3;
-	}
-	
-	public Vector2 getSkillVelocity() {
-		return skillVelocity;
-	}
-
-	public void setSkillVelocity(Vector2 skillVelocity) {
-		this.skillVelocity = skillVelocity;
-	}
-
-	public Rectangle getArea() {
-		return area;
-	}
-
-	public void setArea(Rectangle area) {
-		this.area = area;
 	}
 	
 	public boolean isFinalAnimated() {
@@ -87,31 +64,15 @@ public abstract class SkillObject extends GameObject {
 		distance.x = 0;
 	}
 
-	public Vector2 getTargetPosition() {
-		return targetPosition;
-	}
-
-	public void setTargetPosition(Vector2 targetPosition) {
-		this.targetPosition = targetPosition;
-	}
-
-	public Vector2 getPlayerPosition() {
-		return playerPosition;
-	}
-
-	public void setPlayerPosition(Vector2 playerPosition) {
-		this.playerPosition = playerPosition;
-	}
-
 	@Override
 	public void update(float dt) {
 		if (!isActive)
 			return;
 
 		if (!isStatic) {
-			setPosition(getX() + getSkillVelocity().x - xOffset, getY() + getSkillVelocity().y - yOffset);
-			distance.x += getSkillVelocity().x;
-			distance.y += getSkillVelocity().y;	
+			setPosition(getX() + getVelocity().x - xOffset, getY() + getVelocity().y - yOffset);
+			distance.x += Math.abs(getVelocity().x);
+			distance.y += Math.abs(getVelocity().y);	
 		}
 		
 		super.update(dt);

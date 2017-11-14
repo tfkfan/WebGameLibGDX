@@ -25,10 +25,4 @@ public class Explosion extends StaticAOESkill<ExplosionObject> {
 		
 	}
 
-	@Override
-	protected void initFrame(ExplosionObject frame) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

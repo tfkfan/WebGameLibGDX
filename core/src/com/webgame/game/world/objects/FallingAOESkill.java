@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.world.objects.impl.IceRainObject;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -13,16 +12,18 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 	protected float fallTimer;
 	protected final float fallDuration = 10;
 	protected int index;
-	
-	protected final float	fallOffset = 1f / PPM;
-	protected final Vector2 fallVelocity = new Vector2(2 / PPM, 4 / PPM);
-	protected final Vector2 fallOffsetVec = new Vector2(fallVelocity.x * 25, fallVelocity.y * 25);
+
+	protected final float fallOffset = 1f / PPM;
+	protected final Vector2 fallVelocity = new Vector2(2 / PPM, -4 / PPM);
+	protected final Vector2 fallOffsetVec = new Vector2(fallVelocity.x * 25, (-fallVelocity.y) * 25);
 
 	public FallingAOESkill(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
 		super(batch, spriteTexture, numFrames);
 		fallTimer = 0;
 		index = 0;
-		this.setArea(new Rectangle(0,0,100/PPM, 100/PPM));
+		setAOE(true);
+		setFalling(true);
+		this.setArea(new Rectangle(0, 0, 100 / PPM, 100 / PPM));
 	}
 
 	@Override
@@ -41,7 +42,6 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 				obj.setStatic(false);
 				obj.setPosition(0, 0);
 				obj.setFinalAnimated(false);
-				
 			}
 			index = 0;
 			clearTimers();
@@ -69,25 +69,52 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 
 		if (fallTimer >= tmp)
 			fallTimer = 0;
-
-		for (int i = 0; i < numFrames; i++) {
-			T obj = skillObjects.get(i);
-			if (obj.isActive()) {
-				obj.update(dt);
-				obj.draw(batch);
-			}
-		}
 	}
-	
+
 	@Override
 	protected void afterCustomAnimation() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	protected void initFrame(T frame) {
-		// TODO Auto-generated method stub
+	protected void initFrame(T frame, Vector2 playerPosition, Vector2 targetPosition) {
+		frame.setVelocity(fallVelocity);
+		frame.setFinalAnimated(false);
+	
+		area.setPosition(targetPosition.x - area.getWidth() / 2, targetPosition.y - area.getHeight() / 2);
+		initPositions(frame);
+	}
+
+	protected void initPositions(T frame) {
+		float x = getRandomPos(area.getX(), area.getX() + area.getWidth());
+		float y = getRandomPos(area.getY(), area.getY() + area.getHeight());
+		frame.updateDistance();
+		frame.setPosition(x - fallOffsetVec.x - frame.getXOffset(), y + fallOffsetVec.y - frame.getYOffset());
+	}
+
+	@Override
+	protected void updateFrame(T frame, float dt) {
+		super.updateFrame(frame, dt);
+	
+		if(!frame.isFinalAnimated)
+			frame.animateTimer += dt;
+		else
+			frame.animateTimer = 0;
+		if (frame.getDistance().y > fallOffsetVec.y) {
+			if (!frame.isFinalAnimated()) {
+				frame.setStatic(true);
+			} else {
+				frame.setStatic(false);
+				frame.setFinalAnimated(true);
+				initPositions(frame);
+			}
+		}
 		
+		float x = frame.getX();
+		float y = frame.getY();
+		if (x < -10 || y < -10 || x > 10 || y > 10) {
+			frame.setActive(false);
+		}
 	}
 }

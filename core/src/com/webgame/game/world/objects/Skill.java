@@ -3,7 +3,6 @@ package com.webgame.game.world.objects;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -56,18 +55,9 @@ public abstract class Skill<T extends SkillObject> {
 		setActive(true);
 		clearTimers();
 
-		skillVelocity = calculateVelocity(playerPosition, targetPosition);
-
-		if (area != null)
-			area.setPosition(targetPosition.x - area.getWidth() / 2, targetPosition.y - area.getHeight() / 2);
-
 		for (int i = 0; i < numFrames; i++) {
 			T obj = skillObjects.get(i);
-			obj.setTargetPosition(targetPosition);
-			obj.setPlayerPosition(playerPosition);
-			obj.setArea(area);
-			obj.setVelocity(skillVelocity);
-			initFrame(obj);
+			initFrame(obj, playerPosition, targetPosition);
 		}
 	}
 
@@ -91,11 +81,10 @@ public abstract class Skill<T extends SkillObject> {
 	protected abstract void customAnimation(float dt);
 	protected abstract void afterCustomAnimation();
 	protected abstract T createObject();
-	protected abstract void initFrame(T frame);
+	protected abstract void initFrame(T frame, Vector2 playerPosition, Vector2 targetPosition);
 
 	protected void updateFrame(T frame, float dt) {
 		frame.update(dt);
-		initFrame(frame);
 	}
 
 	public void drawShape(ShapeRenderer sr) {
