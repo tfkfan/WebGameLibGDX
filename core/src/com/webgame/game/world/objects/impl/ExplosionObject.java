@@ -33,7 +33,7 @@ public class ExplosionObject extends SkillObject {
 			frames[i] = new TextureRegion(spriteTexture,4 + w * i, 165, w, h);
 
 		animation = new Animation<TextureRegion>(animationDuration, frames);
-
+		animationMaxDuration = animationDuration * l;
 		int w2 = 100;
 		int h2 = 100;
 		this.setBounds(0, 0, w2 / PPM, h2 / PPM);

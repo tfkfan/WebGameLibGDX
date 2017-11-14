@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.webgame.game.world.objects.StaticAOESkill;
 
 public class Tornado extends StaticAOESkill<TornadoObject> {
-	public Tornado(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
-		super(batch, spriteTexture, numFrames);
+	public Tornado(SpriteBatch batch, Texture spriteTexture) throws Exception {
+		super(batch, spriteTexture, 1);
 	}
 
 	@Override

@@ -116,8 +116,7 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 			
 			}
 		}
-		
-		
+			
 		float x = frame.getX();
 		float y = frame.getY();
 		if (x < -10 || y < -10 || x > 10 || y > 10) {

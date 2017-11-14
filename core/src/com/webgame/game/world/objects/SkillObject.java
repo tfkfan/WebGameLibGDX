@@ -20,7 +20,30 @@ public abstract class SkillObject extends GameObject {
 	public SkillObject() {
 		super();
 		distance = new Vector2(0, 0);
-		animationMaxDuration = animationDuration * 3;
+	}
+	
+	public float getAnimationDuration() {
+		return animationDuration;
+	}
+
+	public void setAnimationDuration(float animationDuration) {
+		this.animationDuration = animationDuration;
+	}
+
+	public float getAnimationMaxDuration() {
+		return animationMaxDuration;
+	}
+
+	public void setAnimationMaxDuration(float animationMaxDuration) {
+		this.animationMaxDuration = animationMaxDuration;
+	}
+
+	public float getAnimateTimer() {
+		return animateTimer;
+	}
+
+	public void setAnimateTimer(float animateTimer) {
+		this.animateTimer = animateTimer;
 	}
 	
 	public boolean isFinalAnimated() {

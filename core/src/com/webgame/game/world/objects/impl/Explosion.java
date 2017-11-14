@@ -6,8 +6,8 @@ import com.webgame.game.world.objects.StaticAOESkill;
 
 public class Explosion extends StaticAOESkill<ExplosionObject> {
 
-	public Explosion(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
-		super(batch, spriteTexture, numFrames);
+	public Explosion(SpriteBatch batch, Texture spriteTexture) throws Exception {
+		super(batch, spriteTexture, 1);
 	}
 
 	@Override
@@ -21,8 +21,10 @@ public class Explosion extends StaticAOESkill<ExplosionObject> {
 
 	@Override
 	protected void afterCustomAnimation() {
-		// TODO Auto-generated method stub
-		
+		ExplosionObject obj = this.getSkillObjects().get(0);
+		if(obj.getAnimateTimer() > obj.getAnimationMaxDuration()) {
+			isActive = false;
+		}
 	}
 
 }

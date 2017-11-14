@@ -22,7 +22,7 @@ public class Mage extends Player {
 
 		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
 		try {
-			this.setSkill(new FireRain(batch, skillTexture, 10));
+			this.setSkill(new Tornado(batch, skillTexture));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

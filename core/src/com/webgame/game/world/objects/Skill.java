@@ -54,7 +54,7 @@ public abstract class Skill<T extends SkillObject> {
 	public void cast(Vector2 playerPosition, Vector2 targetPosition) {
 		setActive(true);
 		clearTimers();
-
+		
 		for (int i = 0; i < numFrames; i++) {
 			T obj = skillObjects.get(i);
 			initFrame(obj, playerPosition, targetPosition);
@@ -65,6 +65,7 @@ public abstract class Skill<T extends SkillObject> {
 		if (skillObjects == null || !isActive)
 			return;
 
+		updateTimers(dt);
 		customAnimation(dt);
 
 		for (int i = 0; i < numFrames; i++) {
