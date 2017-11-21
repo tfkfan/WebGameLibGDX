@@ -1,4 +1,4 @@
-package com.webgame.game.world.objects;
+package com.webgame.game.world.skills;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

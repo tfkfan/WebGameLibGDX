@@ -33,5 +33,5 @@ public abstract class WorldGameObject extends GameObject {
 		super.update(dt);
 	}
 
-	public abstract void createObject(World world);
+	public abstract void createObject(World world, boolean isSensor);
 }

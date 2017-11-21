@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.webgame.game.state.Direction;
 import com.webgame.game.state.PlayerState;
+import com.webgame.game.world.skills.Skill;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -57,7 +58,7 @@ public abstract class Player extends WorldGameObject {
 	}
 
 	@Override
-	public void createObject(World world) {
+	public void createObject(World world, boolean isSensor) {
 		setWorld(world);
 
 		BodyDef bdef = new BodyDef();
@@ -66,6 +67,7 @@ public abstract class Player extends WorldGameObject {
 		b2body = world.createBody(bdef);
 
 		FixtureDef fdef = new FixtureDef();
+		fdef.isSensor = isSensor;
 		CircleShape shape = new CircleShape();
 
 		shape.setRadius(20 / PPM);
@@ -220,7 +222,7 @@ public abstract class Player extends WorldGameObject {
 	}
 
 	public void animateSkills(float dt) {
-		if (skill.isActive)
+		if (skill.isActive())
 			skill.animateSkill(dt);
 	}
 
@@ -230,11 +232,12 @@ public abstract class Player extends WorldGameObject {
 		sr.set(ShapeType.Line);
 	
 		super.drawShape(sr);
-		skill.drawShape(sr);
+		if(skill != null)
+			skill.drawShape(sr);
 		sr.set(ShapeType.Filled);
 		sr.setColor(Color.GREEN);
 		sr.rect(this.getX(), this.getY() + getHeight() + 5 / PPM, (getHealthPoints()/(float)getMaxHealthPoints()) * getWidth(), 5 / PPM);
-		sr.end();
+		//sr.end();
 	}
 
 	@Override

@@ -1,10 +1,10 @@
-package com.webgame.game.world.objects.impl;
+package com.webgame.game.world.skills.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.world.objects.StaticAOESkill;
-import com.webgame.game.world.objects.StaticSkill;
+import com.webgame.game.world.skills.StaticAOESkill;
+import com.webgame.game.world.skills.StaticSkill;
 
 public class Lightning extends StaticSkill<LightningObject> {
 	public Lightning(SpriteBatch batch, Texture spriteTexture) throws Exception {

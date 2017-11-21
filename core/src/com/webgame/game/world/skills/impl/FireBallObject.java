@@ -1,4 +1,4 @@
-package com.webgame.game.world.objects.impl;
+package com.webgame.game.world.skills.impl;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.state.State;
-import com.webgame.game.world.objects.SkillObject;
+import com.webgame.game.world.skills.SkillObject;
 
 public class FireBallObject extends SkillObject {
 	protected TextureRegion standTexture;

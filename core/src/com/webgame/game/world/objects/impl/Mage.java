@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.state.PlayerState;
 import com.webgame.game.world.objects.Player;
+import com.webgame.game.world.skills.impl.Lightning;
+
 import static com.webgame.game.Configs.PPM;
 
 public class Mage extends Player {

@@ -36,6 +36,8 @@ public class MainScreen implements Screen, InputProcessor {
 	private WorldRenderer worldRenderer;
 	protected ShapeRenderer sr;
 	private Player player;
+	
+	private Player enemy;
 
 	@Override
 	public void show() {
@@ -50,7 +52,12 @@ public class MainScreen implements Screen, InputProcessor {
 		worldRenderer.initWorld(cam);
 
 		player = new Mage(batch, "mage.png");
-		player.createObject(worldRenderer.world);
+		player.createObject(worldRenderer.world, false);
+		
+		enemy = new Knight(batch, "knight.png");
+		enemy.setPosition(0.5f,0.5f);
+		enemy.createObject(worldRenderer.world, true);
+		
 		sr = new ShapeRenderer();
 		sr.setAutoShapeType(true);
 
@@ -76,6 +83,8 @@ public class MainScreen implements Screen, InputProcessor {
 
 		player.draw(batch);
 		player.animateSkills(dt);
+		
+		enemy.draw(batch);
 
 		batch.end();
 		
@@ -83,6 +92,7 @@ public class MainScreen implements Screen, InputProcessor {
 		
 		sr.begin();
 		player.drawShape(sr);
+		enemy.drawShape(sr);
 		sr.end();
 	}
 

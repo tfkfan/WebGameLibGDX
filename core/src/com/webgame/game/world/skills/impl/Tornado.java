@@ -1,8 +1,8 @@
-package com.webgame.game.world.objects.impl;
+package com.webgame.game.world.skills.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.webgame.game.world.objects.StaticAOESkill;
+import com.webgame.game.world.skills.StaticAOESkill;
 
 public class Tornado extends StaticAOESkill<TornadoObject> {
 	public Tornado(SpriteBatch batch, Texture spriteTexture) throws Exception {

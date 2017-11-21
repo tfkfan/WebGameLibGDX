@@ -1,8 +1,9 @@
-package com.webgame.game.world.objects;
+package com.webgame.game.world.skills;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.webgame.game.world.objects.GameObject;
 
 public abstract class SkillObject extends GameObject {
 	protected boolean isActive;
