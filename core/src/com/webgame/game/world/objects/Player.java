@@ -3,6 +3,7 @@ package com.webgame.game.world.objects;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -28,6 +29,7 @@ public abstract class Player extends WorldGameObject {
 
 	protected boolean isAnimated;
 	protected boolean attackAnimation;
+	protected boolean isAlive;
 	protected float attackTimer;
 	protected final float attackLimit = 0.8f;
 
@@ -42,6 +44,7 @@ public abstract class Player extends WorldGameObject {
 	@Override
 	public void init() {
 		super.init();
+		isAlive = true;
 		isAnimated = false;
 		attackAnimation = false;
 		direction = Direction.UP;
@@ -77,12 +80,23 @@ public abstract class Player extends WorldGameObject {
 	}
 
 	public void attack(float targetX, float targetY) {
-		if (!skill.isActive()) {
-			this.prevState = this.currState;
-			this.currState = PlayerState.ATTACK;
-			this.attackAnimation = true;
-			skill.cast(new Vector2(getX(), getY()), new Vector2(targetX, targetY));
-		}
+		if (skill.isActive())
+			return;
+		this.prevState = this.currState;
+		this.currState = PlayerState.ATTACK;
+		this.attackAnimation = true;
+		skill.cast(new Vector2(getX(), getY()), new Vector2(targetX, targetY));
+	}
+	
+	public void skillCollision(Skill<?> skill) {
+		if(!skill.isActive())
+			return;
+		
+		Rectangle playerRect = this.getPlayerRectangle();
+		boolean isAOE = skill.isAOE();
+		boolean isFalling = skill.isFalling();
+		boolean isTimed = skill.isTimed();
+		
 	}
 
 	public Direction getDirection() {
@@ -230,14 +244,19 @@ public abstract class Player extends WorldGameObject {
 	public void drawShape(ShapeRenderer sr) {
 		sr.setColor(Color.BLUE);
 		sr.set(ShapeType.Line);
-	
+
 		super.drawShape(sr);
-		if(skill != null)
+		if (skill != null)
 			skill.drawShape(sr);
 		sr.set(ShapeType.Filled);
 		sr.setColor(Color.GREEN);
-		sr.rect(this.getX(), this.getY() + getHeight() + 5 / PPM, (getHealthPoints()/(float)getMaxHealthPoints()) * getWidth(), 5 / PPM);
-		//sr.end();
+		sr.rect(this.getX(), this.getY() + getHeight() + 5 / PPM,
+				(getHealthPoints() / (float) getMaxHealthPoints()) * getWidth(), 5 / PPM);
+		// sr.end();
+	}
+
+	public Rectangle getPlayerRectangle() {
+		return new Rectangle(this.getX(), this.getY(), getWidth(), getHeight() );
 	}
 
 	@Override

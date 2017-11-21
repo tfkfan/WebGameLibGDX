@@ -9,6 +9,8 @@ import com.webgame.game.world.skills.StaticSkill;
 public class Lightning extends StaticSkill<LightningObject> {
 	public Lightning(SpriteBatch batch, Texture spriteTexture) throws Exception {
 		super(batch, spriteTexture, 1);
+		setTimed(false);
+		setAOE(true);
 	}
 
 	@Override

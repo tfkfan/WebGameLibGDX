@@ -8,6 +8,7 @@ public class Blizzard extends FallingAOESkill<BlizzardObject> {
 
 	public Blizzard(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
 		super(batch, spriteTexture, numFrames);
+		setTimed(true);
 	}
 
 	@Override

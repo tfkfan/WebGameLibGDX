@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.state.PlayerState;
 import com.webgame.game.world.objects.Player;
+import com.webgame.game.world.skills.impl.Blizzard;
+import com.webgame.game.world.skills.impl.Explosion;
 import com.webgame.game.world.skills.impl.Lightning;
 
 import static com.webgame.game.Configs.PPM;
@@ -22,9 +24,9 @@ public class Mage extends Player {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spritePath);
 
-		Texture skillTexture = SpriteTextureLoader.loadSprite("lightning.png");
+		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
 		try {
-			this.setSkill(new Lightning(batch, skillTexture));
+			this.setSkill(new Explosion(batch, skillTexture));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

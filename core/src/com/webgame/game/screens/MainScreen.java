@@ -4,24 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.world.WorldRenderer;
 import com.webgame.game.world.objects.Player;
-import com.webgame.game.world.objects.impl.Archer;
-import com.webgame.game.world.objects.impl.DeadKnight;
 import com.webgame.game.world.objects.impl.Knight;
 import com.webgame.game.world.objects.impl.Mage;
-import com.webgame.game.world.objects.impl.Soldier;
-
 import static com.webgame.game.Configs.VIEW_WIDTH;
 import static com.webgame.game.Configs.VIEW_HEIGHT;
 import static com.webgame.game.Configs.PPM;
@@ -55,8 +49,10 @@ public class MainScreen implements Screen, InputProcessor {
 		player.createObject(worldRenderer.world, false);
 		
 		enemy = new Knight(batch, "knight.png");
-		enemy.setPosition(0.5f,0.5f);
-		enemy.createObject(worldRenderer.world, true);
+		enemy.setPosition(1.5f,1.5f);
+	
+		enemy.createObject(worldRenderer.world, false);
+		enemy.getB2body().setTransform(1.5f, 1.5f,0);
 		
 		sr = new ShapeRenderer();
 		sr.setAutoShapeType(true);
@@ -69,7 +65,9 @@ public class MainScreen implements Screen, InputProcessor {
 		handleInput();
 		cam.update();
 		player.update(dt);
-
+		enemy.skillCollision(player.getSkill());
+		enemy.update(dt);
+		
 		batch.setProjectionMatrix(cam.combined);
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -82,9 +80,8 @@ public class MainScreen implements Screen, InputProcessor {
 		batch.begin();
 
 		player.draw(batch);
-		player.animateSkills(dt);
-		
 		enemy.draw(batch);
+		player.animateSkills(dt);
 
 		batch.end();
 		

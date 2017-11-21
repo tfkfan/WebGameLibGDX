@@ -7,6 +7,7 @@ import com.webgame.game.world.skills.StaticAOESkill;
 public class Tornado extends StaticAOESkill<TornadoObject> {
 	public Tornado(SpriteBatch batch, Texture spriteTexture) throws Exception {
 		super(batch, spriteTexture, 1);
+		setTimed(true);
 	}
 
 	@Override
