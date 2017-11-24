@@ -9,6 +9,7 @@ public class Explosion extends StaticAOESkill<ExplosionObject> {
 	public Explosion(SpriteBatch batch, Texture spriteTexture) throws Exception {
 		super(batch, spriteTexture, 1);
 		setTimed(false);
+		this.setDamage(30d);
 	}
 
 	@Override

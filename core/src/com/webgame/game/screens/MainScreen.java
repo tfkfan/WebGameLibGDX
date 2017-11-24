@@ -17,6 +17,10 @@ import com.webgame.game.world.objects.Player;
 import com.webgame.game.world.objects.impl.Knight;
 import com.webgame.game.world.objects.impl.Mage;
 import static com.webgame.game.Configs.VIEW_WIDTH;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.webgame.game.Configs.VIEW_HEIGHT;
 import static com.webgame.game.Configs.PPM;
 
@@ -30,8 +34,8 @@ public class MainScreen implements Screen, InputProcessor {
 	private WorldRenderer worldRenderer;
 	protected ShapeRenderer sr;
 	private Player player;
-	
-	private Player enemy;
+
+	private List<Player> enemies;
 
 	@Override
 	public void show() {
@@ -47,13 +51,15 @@ public class MainScreen implements Screen, InputProcessor {
 
 		player = new Mage(batch, "mage.png");
 		player.createObject(worldRenderer.world, false);
-		
-		enemy = new Knight(batch, "knight.png");
-		enemy.setPosition(1.5f,1.5f);
-	
+
+		Player enemy = new Knight(batch, "knight.png");
+		enemy.setPosition(1.5f, 1.5f);
 		enemy.createObject(worldRenderer.world, false);
-		enemy.getB2body().setTransform(1.5f, 1.5f,0);
-		
+		enemy.getB2body().setTransform(1.5f, 1.5f, 0);
+	
+		enemies = new ArrayList<Player>();
+		enemies.add(enemy);
+
 		sr = new ShapeRenderer();
 		sr.setAutoShapeType(true);
 
@@ -65,9 +71,7 @@ public class MainScreen implements Screen, InputProcessor {
 		handleInput();
 		cam.update();
 		player.update(dt);
-		enemy.skillCollision(player.getSkill());
-		enemy.update(dt);
-		
+
 		batch.setProjectionMatrix(cam.combined);
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -80,16 +84,25 @@ public class MainScreen implements Screen, InputProcessor {
 		batch.begin();
 
 		player.draw(batch);
-		enemy.draw(batch);
+
+		for (Player enemy : enemies) {
+			enemy.update(dt);
+			enemy.draw(batch);
+			enemy.animateSkills(dt);
+			enemy.skillCollision(player.getSkill());
+		}
+
 		player.animateSkills(dt);
 
 		batch.end();
-		
+
 		sr.setProjectionMatrix(cam.combined);
-		
+
 		sr.begin();
 		player.drawShape(sr);
-		enemy.drawShape(sr);
+		for (Player enemy : enemies) {
+			enemy.drawShape(sr);
+		}
 		sr.end();
 	}
 
@@ -188,7 +201,7 @@ public class MainScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-	
+
 		return false;
 	}
 

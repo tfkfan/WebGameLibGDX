@@ -23,6 +23,7 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 		setAOE(true);
 		setFalling(true);
 		setTimed(true);
+		setDamage(2d);
 		this.setArea(new Rectangle(0, 0, 100 / PPM, 100 / PPM));
 	}
 
@@ -33,20 +34,16 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 	}
 
 	@Override
+	protected void resetSkill() {
+		super.resetSkill();
+		fallTimer = 0;
+		index = 0;
+	}
+
+	@Override
 	public void customAnimation(float dt) {
-		if (skillTimer >= fallDuration) {
-			setActive(false);
-			for (int i = 0; i < numFrames; i++) {
-				T obj = skillObjects.get(i);
-				obj.setActive(false);
-				obj.setStatic(false);
-				obj.setPosition(0, 0);
-				obj.setFinalAnimated(false);
-			}
-			index = 0;
-			clearTimers();
+		if (!isActive)
 			return;
-		}
 
 		skillTimer += dt;
 		float tmp = 0.1f;
@@ -81,7 +78,7 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 	protected void initFrame(T frame, Vector2 playerPosition, Vector2 targetPosition) {
 		frame.setVelocity(fallVelocity);
 		frame.setFinalAnimated(false);
-	
+		
 		area.setPosition(targetPosition.x - area.getWidth() / 2, targetPosition.y - area.getHeight() / 2);
 		initPositions(frame);
 	}
@@ -90,33 +87,34 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 		float x = getRandomPos(area.getX(), area.getX() + area.getWidth());
 		float y = getRandomPos(area.getY(), area.getY() + area.getHeight());
 		frame.updateDistance();
+		frame.setMarked(false);
 		frame.setPosition(x - fallOffsetVec.x - frame.getXOffset(), y + fallOffsetVec.y - frame.getYOffset());
 	}
 
 	@Override
 	protected void updateFrame(T frame, float dt) {
 		super.updateFrame(frame, dt);
-	
+
 		if (frame.getDistance().y > fallOffsetVec.y) {
 			if (!frame.isFinalAnimated()) {
 				frame.setStatic(true);
 			}
-			if(frame.isFinalAnimated() && frame.isStatic()) {
+			if (frame.isFinalAnimated() && frame.isStatic()) {
 				frame.setFinalAnimated(false);
 				frame.setStatic(false);
 				initPositions(frame);
 			}
 		}
-		
-		if(!frame.isFinalAnimated() && frame.isStatic()) {
+
+		if (!frame.isFinalAnimated() && frame.isStatic()) {
 			frame.animateTimer += dt;
-			if(frame.animateTimer > frame.animationMaxDuration) {
+			if (frame.animateTimer > frame.animationMaxDuration) {
 				frame.setFinalAnimated(true);
 				frame.animateTimer = 0;
-			
+
 			}
 		}
-			
+
 		float x = frame.getX();
 		float y = frame.getY();
 		if (x < -10 || y < -10 || x > 10 || y > 10) {

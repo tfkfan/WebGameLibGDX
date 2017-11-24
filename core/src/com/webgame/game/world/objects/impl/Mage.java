@@ -9,6 +9,7 @@ import com.webgame.game.state.PlayerState;
 import com.webgame.game.world.objects.Player;
 import com.webgame.game.world.skills.impl.Blizzard;
 import com.webgame.game.world.skills.impl.Explosion;
+import com.webgame.game.world.skills.impl.FireBall;
 import com.webgame.game.world.skills.impl.Lightning;
 
 import static com.webgame.game.Configs.PPM;
@@ -26,7 +27,7 @@ public class Mage extends Player {
 
 		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
 		try {
-			this.setSkill(new Explosion(batch, skillTexture));
+			this.setSkill(new FireBall(batch, skillTexture));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

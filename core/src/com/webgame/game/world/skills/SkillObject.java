@@ -11,7 +11,8 @@ public abstract class SkillObject extends GameObject {
 	protected boolean isFalling;
 	protected boolean isFinalAnimated;
 	protected boolean isAOE;
-
+	protected boolean isMarked;
+	
 	protected final Vector2 distance;
 	
 	protected float animationDuration = 0.2f;
@@ -82,6 +83,14 @@ public abstract class SkillObject extends GameObject {
 
 	public Vector2 getDistance() {
 		return distance;
+	}
+	
+	public boolean isMarked() {
+		return isMarked;
+	}
+
+	public void setMarked(boolean isMarked) {
+		this.isMarked = isMarked;
 	}
 
 	public void updateDistance() {

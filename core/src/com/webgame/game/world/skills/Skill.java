@@ -11,6 +11,7 @@ import com.webgame.game.world.objects.Player;
 import static com.webgame.game.Configs.PPM;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Skill<T extends SkillObject> {
 	protected Double damage;
@@ -30,8 +31,10 @@ public abstract class Skill<T extends SkillObject> {
 	protected boolean isFalling;
 	protected boolean isTimed;
 	protected boolean isStatic;
+	protected boolean isMarked;
 
 	protected final float absVelocity = 10f / PPM;
+	protected float skillDuration = 10;
 
 	protected Rectangle area;
 	protected float skillTimer;
@@ -50,13 +53,16 @@ public abstract class Skill<T extends SkillObject> {
 			obj.initSkill(batch, spriteTexture);
 			objs.add(obj);
 		}
+
+		setDamage(1d);
 		setSkillObjects(objs);
 	}
 
 	public void cast(Vector2 playerPosition, Vector2 targetPosition) {
 		setActive(true);
+		setMarked(false);
 		clearTimers();
-		
+
 		for (int i = 0; i < numFrames; i++) {
 			T obj = skillObjects.get(i);
 			initFrame(obj, playerPosition, targetPosition);
@@ -70,24 +76,87 @@ public abstract class Skill<T extends SkillObject> {
 		updateTimers(dt);
 		customAnimation(dt);
 
+		boolean flag = false;
 		for (int i = 0; i < numFrames; i++) {
 			T frame = skillObjects.get(i);
 			if (!frame.isActive())
 				continue;
+			else
+				flag = true;
+
 			updateFrame(frame, dt);
 			frame.draw();
 		}
-		
+
+		if (isTimed && skillTimer >= skillDuration || !isTimed && !flag)
+			resetSkill();
+
 		afterCustomAnimation();
 	}
 
-	protected abstract void customAnimation(float dt);
+	protected void resetSkill() {
+		setActive(false);
+		setMarked(false);
+		for (int i = 0; i < numFrames; i++) {
+			T obj = skillObjects.get(i);
+			obj.setActive(false);
+			obj.setStatic(false);
+			obj.setPosition(0, 0);
+			obj.setAOE(isAOE);
+			obj.setMarked(false);
+			obj.setFinalAnimated(false);
+		}
+		clearTimers();
+	}
+
+	public void collisionFrame(T frame) {
+		float x = frame.getX();
+		float y = frame.getY();
+
+		if (x < -10 || y < -10 || x > 10 || y > 10)
+			frame.setActive(false);
+	}
+
+	protected void customAnimation(float dt) {
+	}
+
 	protected abstract void afterCustomAnimation();
+
 	protected abstract T createObject();
+
 	protected abstract void initFrame(T frame, Vector2 playerPosition, Vector2 targetPosition);
 
 	protected void updateFrame(T frame, float dt) {
 		frame.update(dt);
+		collisionFrame(frame);
+	}
+
+	public void skillCollision(Player player) {
+		if (player.getHealthPoints() <= 0) {
+			player.setHealthPoints(player.getMaxHealthPoints());
+			return;
+		}
+
+		Rectangle pRect = player.getPlayerRectangle();
+		boolean isAOE = isAOE();
+		boolean isFalling = isFalling();
+		boolean isTimed = isTimed();
+
+		if (!isAOE || isAOE && isFalling) {
+			for (T frame : this.skillObjects) {
+				if (!frame.isMarked() && (!isAOE || frame.isStatic())&& pRect.overlaps(frame.getBoundingRectangle())) {
+					player.setHealthPoints(player.getHealthPoints() - getDamage().intValue());
+					frame.setMarked(true);
+				}
+			}
+		} else if (isAOE) {
+			if (!isFalling && pRect.overlaps(getArea())) {
+				if (!isMarked)
+					player.setHealthPoints(player.getHealthPoints() - getDamage().intValue());
+				if (!isTimed)
+					isMarked = true;
+			}
+		}
 	}
 
 	public void drawShape(ShapeRenderer sr) {
@@ -127,6 +196,14 @@ public abstract class Skill<T extends SkillObject> {
 
 	public void setFalling(boolean isFalling) {
 		this.isFalling = isFalling;
+	}
+
+	public boolean isMarked() {
+		return isMarked;
+	}
+
+	public void setMarked(boolean isMarked) {
+		this.isMarked = isMarked;
 	}
 
 	public boolean isTimed() {

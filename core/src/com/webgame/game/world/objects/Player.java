@@ -87,16 +87,12 @@ public abstract class Player extends WorldGameObject {
 		this.attackAnimation = true;
 		skill.cast(new Vector2(getX(), getY()), new Vector2(targetX, targetY));
 	}
-	
+
 	public void skillCollision(Skill<?> skill) {
-		if(!skill.isActive())
+		if (!skill.isActive())
 			return;
-		
-		Rectangle playerRect = this.getPlayerRectangle();
-		boolean isAOE = skill.isAOE();
-		boolean isFalling = skill.isFalling();
-		boolean isTimed = skill.isTimed();
-		
+
+		skill.skillCollision(this);
 	}
 
 	public Direction getDirection() {
@@ -236,7 +232,7 @@ public abstract class Player extends WorldGameObject {
 	}
 
 	public void animateSkills(float dt) {
-		if (skill.isActive())
+		if (skill != null && skill.isActive())
 			skill.animateSkill(dt);
 	}
 
@@ -256,7 +252,7 @@ public abstract class Player extends WorldGameObject {
 	}
 
 	public Rectangle getPlayerRectangle() {
-		return new Rectangle(this.getX(), this.getY(), getWidth(), getHeight() );
+		return new Rectangle(this.getX(), this.getY(), getWidth(), getHeight());
 	}
 
 	@Override

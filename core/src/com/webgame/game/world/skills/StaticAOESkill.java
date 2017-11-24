@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
-	protected float skillDuration = 10;
 	final int w = 100;
 	final int h = 100;
 
@@ -19,23 +18,6 @@ public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
 		this.isAOE = true;
 		this.isStatic = true;
 		this.setArea(new Rectangle(0, 0, w / PPM, h / PPM));
-	}
-
-	@Override
-	public void customAnimation(float dt) {
-		T obj = skillObjects.get(0);
-		if (skillTimer >= skillDuration) {
-			isActive = false;
-			obj.setActive(false);
-			obj.setStatic(true);
-			obj.setAOE(true);
-			obj.setPosition(0, 0);
-			obj.setFinalAnimated(false);
-
-			clearTimers();
-			return;
-		}
-
 	}
 
 	@Override
@@ -62,11 +44,5 @@ public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
 
 		frame.updateDistance();
 		frame.animateTimer += dt;
-
-		float x = frame.getX();
-		float y = frame.getY();
-		if (x < -10 || y < -10 || x > 10 || y > 10) {
-			frame.setActive(false);
-		}
 	}
 }
