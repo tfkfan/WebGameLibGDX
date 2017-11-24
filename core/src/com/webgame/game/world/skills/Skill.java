@@ -18,6 +18,7 @@ public abstract class Skill<T extends SkillObject> {
 	protected String title;
 
 	protected Vector2 skillVelocity;
+	protected Vector2 targetPosition;
 
 	protected ArrayList<T> skillObjects;
 	protected Integer numFrames;
@@ -62,6 +63,8 @@ public abstract class Skill<T extends SkillObject> {
 		setActive(true);
 		setMarked(false);
 		clearTimers();
+
+		setTargetPosition(targetPosition);
 
 		for (int i = 0; i < numFrames; i++) {
 			T obj = skillObjects.get(i);
@@ -141,16 +144,17 @@ public abstract class Skill<T extends SkillObject> {
 		boolean isAOE = isAOE();
 		boolean isFalling = isFalling();
 		boolean isTimed = isTimed();
+		boolean isStatic = isStatic();
 
-		if (!isAOE || isAOE && isFalling) {
+		if ((!isAOE || isAOE && isFalling) && !isStatic) {
 			for (T frame : this.skillObjects) {
-				if (!frame.isMarked() && (!isAOE || frame.isStatic())&& pRect.overlaps(frame.getBoundingRectangle())) {
+				if (!frame.isMarked() && (!isAOE || frame.isStatic())  && pRect.overlaps(frame.getBoundingRectangle())) {
 					player.setHealthPoints(player.getHealthPoints() - getDamage().intValue());
 					frame.setMarked(true);
 				}
 			}
-		} else if (isAOE) {
-			if (!isFalling && pRect.overlaps(getArea())) {
+		} else if (isAOE || !isAOE && isStatic) {
+			if (isAOE && !isFalling && pRect.overlaps(getArea()) || !isAOE && isStatic && pRect.contains(getTargetPosition())) {
 				if (!isMarked)
 					player.setHealthPoints(player.getHealthPoints() - getDamage().intValue());
 				if (!isTimed)
@@ -172,6 +176,14 @@ public abstract class Skill<T extends SkillObject> {
 	public float getRandomPos(float min, float max) {
 		Double random = min + Math.random() * (max - min);
 		return random.floatValue();
+	}
+
+	public Vector2 getTargetPosition() {
+		return targetPosition;
+	}
+
+	public void setTargetPosition(Vector2 targetPosition) {
+		this.targetPosition = targetPosition;
 	}
 
 	protected void clearTimers() {

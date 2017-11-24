@@ -3,14 +3,14 @@ package com.webgame.game.world.skills.impl;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.world.skills.StaticAOESkill;
 import com.webgame.game.world.skills.StaticSkill;
 
 public class Lightning extends StaticSkill<LightningObject> {
 	public Lightning(SpriteBatch batch, Texture spriteTexture) throws Exception {
 		super(batch, spriteTexture, 1);
 		setTimed(false);
-		setAOE(true);
+		setAOE(false);
+		setDamage(30d);
 	}
 
 	@Override
@@ -27,6 +27,7 @@ public class Lightning extends StaticSkill<LightningObject> {
 		LightningObject obj = this.getSkillObjects().get(0);
 		if(obj.getAnimateTimer() > obj.getAnimationMaxDuration()) {
 			isActive = false;
+			obj.setMarked(false);
 		}
 	}
 	@Override
