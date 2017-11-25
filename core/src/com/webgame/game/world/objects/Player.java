@@ -1,6 +1,8 @@
 package com.webgame.game.world.objects;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
@@ -9,8 +11,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.webgame.game.state.Direction;
 import com.webgame.game.state.PlayerState;
+import com.webgame.game.state.State;
 import com.webgame.game.world.skills.Skill;
 
 import static com.webgame.game.Configs.PPM;
@@ -35,6 +39,10 @@ public abstract class Player extends WorldGameObject {
 
 	protected Direction direction;
 	protected Direction oldDirection;
+	
+	protected Array<Animation<TextureRegion>> animations;
+	protected Array<Animation<TextureRegion>> attackAnimations;
+	protected TextureRegion[] standRegions;
 
 	public Player() {
 		super();
@@ -53,8 +61,8 @@ public abstract class Player extends WorldGameObject {
 		prevState = PlayerState.STAND;
 		currState = PlayerState.STAND;
 
-		this.setHealthPoints(100);
-		this.setMaxHealthPoints(100);
+		this.setHealthPoints(1000);
+		this.setMaxHealthPoints(1000);
 
 		attackTimer = 0;
 		setBounds(0, 0, 60 / PPM, 60 / PPM);
@@ -88,7 +96,8 @@ public abstract class Player extends WorldGameObject {
 		skill.cast(new Vector2(getX(), getY()), new Vector2(targetX, targetY));
 	}
 
-	public void skillCollision(Skill<?> skill) {
+	public void playerCollision(Player player) {
+		Skill<?> skill = player.getSkill();
 		if (!skill.isActive())
 			return;
 
@@ -103,6 +112,30 @@ public abstract class Player extends WorldGameObject {
 		this.direction = direction;
 	}
 
+	public Array<Animation<TextureRegion>> getAnimations() {
+		return animations;
+	}
+
+	public void setAnimations(Array<Animation<TextureRegion>> animations) {
+		this.animations = animations;
+	}
+
+	public Array<Animation<TextureRegion>> getAttackAnimations() {
+		return attackAnimations;
+	}
+
+	public void setAttackAnimations(Array<Animation<TextureRegion>> attackAnimations) {
+		this.attackAnimations = attackAnimations;
+	}
+
+	public TextureRegion[] getStandRegions() {
+		return standRegions;
+	}
+
+	public void setStandRegions(TextureRegion[] standRegions) {
+		this.standRegions = standRegions;
+	}
+	
 	public Integer getDirectionIndex() {
 		Integer index = 0;
 		switch (direction) {
@@ -248,7 +281,34 @@ public abstract class Player extends WorldGameObject {
 		sr.setColor(Color.GREEN);
 		sr.rect(this.getX(), this.getY() + getHeight() + 5 / PPM,
 				(getHealthPoints() / (float) getMaxHealthPoints()) * getWidth(), 5 / PPM);
-		// sr.end();
+	}
+	
+	@Override
+	public TextureRegion getFrame() {
+		PlayerState currState = getState();
+
+		TextureRegion standRegion, region;
+		Integer index = getDirectionIndex();
+
+		Animation<TextureRegion> animation = animations.get(index);
+		Animation<TextureRegion> attackAnimation = attackAnimations.get(index);
+
+		standRegion = standRegions[index];
+
+		switch (currState) {
+		case WALK:
+			region = animation.getKeyFrame(stateTimer, true);
+			break;
+		case ATTACK:
+			region = attackAnimation.getKeyFrame(stateTimer, false);
+			break;
+		case STAND:
+		default:
+			region = standRegion;
+			break;
+		}
+
+		return region;
 	}
 
 	public Rectangle getPlayerRectangle() {
@@ -257,17 +317,20 @@ public abstract class Player extends WorldGameObject {
 
 	@Override
 	public PlayerState getState() {
-		prevState = currState;
 		if (velocity.x != 0 || velocity.y != 0)
-			currState = PlayerState.WALK;
+			setState(PlayerState.WALK);
 		else
-			currState = PlayerState.STAND;
+			setState(PlayerState.STAND);
 
 		if (attackAnimation)
-			currState = PlayerState.ATTACK;
+			setState(PlayerState.ATTACK);
 
 		return (PlayerState) currState;
 
 	}
 
+	public void setState(State state) {
+		this.prevState = this.currState;
+		currState = state;
+	}
 }

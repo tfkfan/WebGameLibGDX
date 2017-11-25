@@ -46,7 +46,7 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 			return;
 
 		skillTimer += dt;
-		float tmp = 0.1f;
+		final float tmp = 0.1f;
 
 		if (index != -1) {
 			fallTimer += dt;

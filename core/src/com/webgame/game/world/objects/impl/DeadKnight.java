@@ -12,10 +12,6 @@ import com.webgame.game.world.skills.impl.Blizzard;
 import static com.webgame.game.Configs.PPM;
 
 public class DeadKnight extends Player {
-	protected Array<Animation<TextureRegion>> animations;
-	protected Array<Animation<TextureRegion>> attackAnimations;
-	protected TextureRegion[] standRegions;
-
 	public DeadKnight(SpriteBatch batch, String spritePath) {
 		super();
 
@@ -37,9 +33,9 @@ public class DeadKnight extends Player {
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		TextureRegion[][] attackFrames = new TextureRegion[dirs][5];
-		animations = new Array<Animation<TextureRegion>>();
-		attackAnimations = new Array<Animation<TextureRegion>>();
-		standRegions = new TextureRegion[dirs];
+		Array<Animation<TextureRegion>> animations = new Array<Animation<TextureRegion>>();
+		Array<Animation<TextureRegion>> attackAnimations = new Array<Animation<TextureRegion>>();
+		TextureRegion[] standRegions = new TextureRegion[dirs];
 
 		int h = 67;
 		int w = 67;
@@ -112,14 +108,17 @@ public class DeadKnight extends Player {
 			frames[i] = null;
 			attackFrames[i] = null;
 		}
+		
+		this.setAnimations(attackAnimations);
+		this.setAttackAnimations(attackAnimations);
+		this.setStandRegions(standRegions);
 
 		setRegion(standRegions[0]);
 	}
 
 	@Override
 	public TextureRegion getFrame() {
-		prevState = currState;
-		currState = getState();
+		PlayerState currState = getState();
 
 		TextureRegion standRegion, region;
 		Integer index = getDirectionIndex();
@@ -129,7 +128,7 @@ public class DeadKnight extends Player {
 	
 		standRegion = standRegions[index];
 
-		switch ((PlayerState) currState) {
+		switch (currState) {
 		case WALK:
 			region = animation.getKeyFrame(stateTimer, true);
 			break;

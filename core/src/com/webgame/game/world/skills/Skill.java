@@ -7,11 +7,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.world.objects.Player;
-
 import static com.webgame.game.Configs.PPM;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public abstract class Skill<T extends SkillObject> {
 	protected Double damage;
@@ -148,13 +145,14 @@ public abstract class Skill<T extends SkillObject> {
 
 		if ((!isAOE || isAOE && isFalling) && !isStatic) {
 			for (T frame : this.skillObjects) {
-				if (!frame.isMarked() && (!isAOE || frame.isStatic())  && pRect.overlaps(frame.getBoundingRectangle())) {
+				if (!frame.isMarked() && (!isAOE || frame.isStatic()) && pRect.overlaps(frame.getBoundingRectangle())) {
 					player.setHealthPoints(player.getHealthPoints() - getDamage().intValue());
 					frame.setMarked(true);
 				}
 			}
 		} else if (isAOE || !isAOE && isStatic) {
-			if (isAOE && !isFalling && pRect.overlaps(getArea()) || !isAOE && isStatic && pRect.contains(getTargetPosition())) {
+			if (isAOE && !isFalling && pRect.overlaps(getArea())
+					|| !isAOE && isStatic && pRect.contains(getTargetPosition())) {
 				if (!isMarked)
 					player.setHealthPoints(player.getHealthPoints() - getDamage().intValue());
 				if (!isTimed)

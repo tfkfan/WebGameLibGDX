@@ -11,10 +11,6 @@ import static com.webgame.game.Configs.PPM;
 
 @Deprecated
 public class Soldier extends Player {
-	protected Array<Animation<TextureRegion>> animations;
-	protected Array<Animation<TextureRegion>> attackAnimations;
-	protected TextureRegion[] standRegions;
-
 	public Soldier(SpriteBatch batch, String spritePath) {
 		super();
 
@@ -30,9 +26,9 @@ public class Soldier extends Player {
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		TextureRegion[][] attackFrames = new TextureRegion[dirs][5];
-		animations = new Array<Animation<TextureRegion>>();
-		attackAnimations = new Array<Animation<TextureRegion>>();
-		standRegions = new TextureRegion[dirs];
+		Array<Animation<TextureRegion>> animations = new Array<Animation<TextureRegion>>();
+		Array<Animation<TextureRegion>> attackAnimations = new Array<Animation<TextureRegion>>();
+		TextureRegion[] standRegions = new TextureRegion[dirs];
 
 		int h =52;
 		int w = 75;
@@ -105,6 +101,10 @@ public class Soldier extends Player {
 			frames[i] = null;
 			attackFrames[i] = null;
 		}
+		
+		this.setAnimations(attackAnimations);
+		this.setAttackAnimations(attackAnimations);
+		this.setStandRegions(standRegions);
 
 		setRegion(standRegions[0]);
 	}

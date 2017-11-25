@@ -89,7 +89,7 @@ public class MainScreen implements Screen, InputProcessor {
 			enemy.update(dt);
 			enemy.draw(batch);
 			enemy.animateSkills(dt);
-			enemy.skillCollision(player.getSkill());
+			enemy.playerCollision(player);
 		}
 
 		player.animateSkills(dt);

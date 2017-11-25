@@ -13,10 +13,6 @@ import static com.webgame.game.Configs.PPM;
 
 @Deprecated
 public class Archer extends Player {
-	protected Array<Animation<TextureRegion>> animations;
-	protected Array<Animation<TextureRegion>> attackAnimations;
-	protected TextureRegion[] standRegions;
-
 	public Archer(SpriteBatch batch, String spritePath) {
 		super();
 
@@ -38,9 +34,9 @@ public class Archer extends Player {
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		TextureRegion[][] attackFrames = new TextureRegion[dirs][5];
-		animations = new Array<Animation<TextureRegion>>();
-		attackAnimations = new Array<Animation<TextureRegion>>();
-		standRegions = new TextureRegion[dirs];
+		Array<Animation<TextureRegion>> animations = new Array<Animation<TextureRegion>>();
+		Array<Animation<TextureRegion>> attackAnimations = new Array<Animation<TextureRegion>>();
+		TextureRegion[] standRegions = new TextureRegion[dirs];
 
 		int h = 75;
 		int w = 60;
@@ -113,36 +109,11 @@ public class Archer extends Player {
 			frames[i] = null;
 			attackFrames[i] = null;
 		}
+		
+		this.setAnimations(attackAnimations);
+		this.setAttackAnimations(attackAnimations);
+		this.setStandRegions(standRegions);
 
 		setRegion(standRegions[0]);
-	}
-
-	@Override
-	public TextureRegion getFrame() {
-		prevState = currState;
-		currState = getState();
-
-		TextureRegion standRegion, region;
-		Integer index = getDirectionIndex();
-	
-		Animation<TextureRegion> animation = animations.get(index);
-		Animation<TextureRegion> attackAnimation = attackAnimations.get(index);
-	
-		standRegion = standRegions[index];
-
-		switch ((PlayerState) currState) {
-		case WALK:
-			region = animation.getKeyFrame(stateTimer, true);
-			break;
-		case ATTACK:
-			region = attackAnimation.getKeyFrame(stateTimer, false);
-			break;
-		case STAND:
-		default:
-			region = standRegion;
-			break;
-		}
-
-		return region;
 	}
 }
