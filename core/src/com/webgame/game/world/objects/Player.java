@@ -318,19 +318,20 @@ public abstract class Player extends WorldGameObject {
 	@Override
 	public PlayerState getState() {
 		if (velocity.x != 0 || velocity.y != 0)
-			setState(PlayerState.WALK);
+			setState(PlayerState.WALK, true);
 		else
-			setState(PlayerState.STAND);
+			setState(PlayerState.STAND, true);
 
 		if (attackAnimation)
-			setState(PlayerState.ATTACK);
+			setState(PlayerState.ATTACK, false);
 
 		return (PlayerState) currState;
 
 	}
 
-	public void setState(State state) {
-		this.prevState = this.currState;
+	public void setState(State state, boolean swap) {
+		if(swap)
+			this.prevState = this.currState;
 		currState = state;
 	}
 }
