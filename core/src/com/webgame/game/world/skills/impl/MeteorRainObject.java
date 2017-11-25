@@ -46,10 +46,6 @@ public class MeteorRainObject extends SkillObject {
 		setRegion(standTexture);
 	}
 
-	@Override
-	public State getState() {
-		return currState;
-	}
 
 	@Override
 	public TextureRegion getFrame() {

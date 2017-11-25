@@ -13,8 +13,6 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 
 	protected float stateTimer;
 
-	protected State currState;
-	protected State prevState;
 
 	protected float xOffset;
 	protected float yOffset;
@@ -87,29 +85,12 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 		this.stateTimer = stateTimer;
 	}
 
-	public State getCurrState() {
-		return currState;
-	}
-
-	public void setCurrState(State currState) {
-		this.currState = currState;
-	}
-
-	public State getPrevState() {
-		return prevState;
-	}
-
-	public void setPrevState(State prevState) {
-		this.prevState = prevState;
-	}
 
 	protected void updateStateTimer(float dt) {
 		stateTimer += dt;
 	}
 
-	public State getState() {
-		return currState;
-	}
+
 
 	@Override
 	public void update(float dt) {

@@ -41,11 +41,6 @@ public class ExplosionObject extends SkillObject {
 	}
 
 	@Override
-	public State getState() {
-		return currState;
-	}
-
-	@Override
 	public TextureRegion getFrame() {
 		TextureRegion region = null;
 

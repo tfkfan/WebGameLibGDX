@@ -16,8 +16,9 @@ import com.webgame.game.state.Direction;
 import com.webgame.game.state.PlayerState;
 import com.webgame.game.state.State;
 import com.webgame.game.world.skills.Skill;
-
 import static com.webgame.game.Configs.PPM;
+
+import java.util.List;
 
 public abstract class Player extends WorldGameObject {
 	protected Integer healthPoints;
@@ -29,7 +30,8 @@ public abstract class Player extends WorldGameObject {
 	protected String playerName;
 	protected Integer level;
 
-	protected Skill<?> skill;
+	protected List<Skill<?>> skills;
+	protected Integer currentSkillIndex;
 
 	protected boolean isAnimated;
 	protected boolean attackAnimation;
@@ -39,7 +41,10 @@ public abstract class Player extends WorldGameObject {
 
 	protected Direction direction;
 	protected Direction oldDirection;
-	
+
+	protected State currState;
+	protected State prevState;
+
 	protected Array<Animation<TextureRegion>> animations;
 	protected Array<Animation<TextureRegion>> attackAnimations;
 	protected TextureRegion[] standRegions;
@@ -64,7 +69,9 @@ public abstract class Player extends WorldGameObject {
 		this.setHealthPoints(1000);
 		this.setMaxHealthPoints(1000);
 
+		
 		attackTimer = 0;
+		setCurrentSkillIndex(0);
 		setBounds(0, 0, 60 / PPM, 60 / PPM);
 	}
 
@@ -88,7 +95,8 @@ public abstract class Player extends WorldGameObject {
 	}
 
 	public void attack(float targetX, float targetY) {
-		if (skill.isActive())
+		Skill<?> skill = getSkill();
+		if (skill == null || skill.isActive())
 			return;
 		this.prevState = this.currState;
 		this.currState = PlayerState.ATTACK;
@@ -96,9 +104,17 @@ public abstract class Player extends WorldGameObject {
 		skill.cast(new Vector2(getX(), getY()), new Vector2(targetX, targetY));
 	}
 
+	public Integer getCurrentSkillIndex() {
+		return currentSkillIndex;
+	}
+
+	public void setCurrentSkillIndex(Integer currentSkillIndex) {
+		this.currentSkillIndex = currentSkillIndex;
+	}
+
 	public void playerCollision(Player player) {
 		Skill<?> skill = player.getSkill();
-		if (!skill.isActive())
+		if (skill == null || !skill.isActive())
 			return;
 
 		skill.skillCollision(this);
@@ -135,7 +151,7 @@ public abstract class Player extends WorldGameObject {
 	public void setStandRegions(TextureRegion[] standRegions) {
 		this.standRegions = standRegions;
 	}
-	
+
 	public Integer getDirectionIndex() {
 		Integer index = 0;
 		switch (direction) {
@@ -192,7 +208,7 @@ public abstract class Player extends WorldGameObject {
 		else if (velocity.x < 0 && velocity.y < 0)
 			direction = Direction.LEFTDOWN;
 
-		if (oldDirection != direction || currState != prevState)
+		if (oldDirection != direction || currState != prevState || stateTimer > 1000)
 			stateTimer = 0;
 	}
 
@@ -236,12 +252,18 @@ public abstract class Player extends WorldGameObject {
 		this.playerName = playerName;
 	}
 
-	public Skill<?> getSkill() {
-		return skill;
+	public List<Skill<?>> getSkills() {
+		return skills;
 	}
 
-	public void setSkill(Skill<?> skill) {
-		this.skill = skill;
+	public void setSkills(List<Skill<?>> skills) {
+		this.skills = skills;
+	}
+
+	public Skill<?> getSkill() {
+		if (skills == null || currentSkillIndex < 0 || currentSkillIndex >= skills.size())
+			return null;
+		return skills.get(currentSkillIndex);
 	}
 
 	public Integer getLevel() {
@@ -265,8 +287,10 @@ public abstract class Player extends WorldGameObject {
 	}
 
 	public void animateSkills(float dt) {
-		if (skill != null && skill.isActive())
-			skill.animateSkill(dt);
+		if (skills != null)
+			for (Skill<?> skill : skills)
+				if (skill != null && skill.isActive())
+					skill.animateSkill(dt);
 	}
 
 	@Override
@@ -275,6 +299,8 @@ public abstract class Player extends WorldGameObject {
 		sr.set(ShapeType.Line);
 
 		super.drawShape(sr);
+
+		Skill<?> skill = getSkill();
 		if (skill != null)
 			skill.drawShape(sr);
 		sr.set(ShapeType.Filled);
@@ -282,7 +308,7 @@ public abstract class Player extends WorldGameObject {
 		sr.rect(this.getX(), this.getY() + getHeight() + 5 / PPM,
 				(getHealthPoints() / (float) getMaxHealthPoints()) * getWidth(), 5 / PPM);
 	}
-	
+
 	@Override
 	public TextureRegion getFrame() {
 		PlayerState currState = getState();
@@ -315,7 +341,10 @@ public abstract class Player extends WorldGameObject {
 		return new Rectangle(this.getX(), this.getY(), getWidth(), getHeight());
 	}
 
-	@Override
+	public State getPrevState() {
+		return prevState;
+	}
+
 	public PlayerState getState() {
 		if (velocity.x != 0 || velocity.y != 0)
 			setState(PlayerState.WALK, true);
@@ -330,7 +359,7 @@ public abstract class Player extends WorldGameObject {
 	}
 
 	public void setState(State state, boolean swap) {
-		if(swap)
+		if (swap)
 			this.prevState = this.currState;
 		currState = state;
 	}

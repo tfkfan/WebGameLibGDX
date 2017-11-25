@@ -30,6 +30,7 @@ public abstract class Skill<T extends SkillObject> {
 	protected boolean isTimed;
 	protected boolean isStatic;
 	protected boolean isMarked;
+	protected boolean isBuff;
 
 	protected final float absVelocity = 10f / PPM;
 	protected float skillDuration = 10;

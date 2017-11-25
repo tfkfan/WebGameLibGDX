@@ -7,19 +7,20 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.state.PlayerState;
 import com.webgame.game.world.objects.Player;
+import com.webgame.game.world.skills.Skill;
 import com.webgame.game.world.skills.impl.Blizzard;
 import com.webgame.game.world.skills.impl.Explosion;
 import com.webgame.game.world.skills.impl.FireBall;
 import com.webgame.game.world.skills.impl.Lightning;
 import com.webgame.game.world.skills.impl.MeteorRain;
+import com.webgame.game.world.skills.impl.StoneRain;
 import com.webgame.game.world.skills.impl.Tornado;
 
 import static com.webgame.game.Configs.PPM;
 
+import java.util.ArrayList;
+
 public class Mage extends Player {
-	protected Array<Animation<TextureRegion>> animations;
-	protected Array<Animation<TextureRegion>> attackAnimations;
-	protected TextureRegion[] standRegions;
 
 	public Mage(SpriteBatch batch, String spritePath) {
 		super();
@@ -27,9 +28,18 @@ public class Mage extends Player {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spritePath);
 
-		Texture skillTexture = SpriteTextureLoader.loadSprite("lightning.png");
+		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
+		Texture skillTexture2 = SpriteTextureLoader.loadSprite("lightning.png");
 		try {
-			this.setSkill(new Lightning(batch, skillTexture));
+			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
+			skills.add(new Blizzard(batch, skillTexture, 30));
+			skills.add(new MeteorRain(batch, skillTexture, 30));
+			skills.add(new StoneRain(batch, skillTexture, 30));
+			skills.add(new Explosion(batch, skillTexture));
+			skills.add(new FireBall(batch, skillTexture));
+			skills.add(new Lightning(batch, skillTexture2));
+			skills.add(new Tornado(batch, skillTexture));
+			this.setSkills(skills);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,9 +52,9 @@ public class Mage extends Player {
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		TextureRegion[][] attackFrames = new TextureRegion[dirs][5];
-		animations = new Array<Animation<TextureRegion>>();
-		attackAnimations = new Array<Animation<TextureRegion>>();
-		standRegions = new TextureRegion[dirs];
+		Array<Animation<TextureRegion>> animations = new Array<Animation<TextureRegion>>();
+		Array<Animation<TextureRegion>> attackAnimations = new Array<Animation<TextureRegion>>();
+		TextureRegion[] standRegions = new TextureRegion[dirs];
 
 		int h = 61;
 		int w = 75;
@@ -54,7 +64,7 @@ public class Mage extends Player {
 				frames[i][j] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
 			for (int j = 5; j < 9; j++)
 				attackFrames[i][j - 5] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
-			
+
 			standRegions[i] = new TextureRegion(spriteTexture, w * i, 0, w, h);
 			attackFrames[i][4] = standRegions[i];
 		}
@@ -108,7 +118,7 @@ public class Mage extends Player {
 		tr = new TextureRegion(spriteTexture, w * 3, 0, w, h);
 		tr.flip(true, false);
 		attackFrames[5][4] = tr;
-		
+
 		for (int i = 0; i < dirs; i++) {
 			Animation<TextureRegion> anim = new Animation<TextureRegion>(0.2f, frames[i]);
 			Animation<TextureRegion> attackAnim = new Animation<TextureRegion>(0.2f, attackFrames[i]);
@@ -118,35 +128,11 @@ public class Mage extends Player {
 			attackFrames[i] = null;
 		}
 
+		this.setAnimations(animations);
+		this.setAttackAnimations(attackAnimations);
+		this.setStandRegions(standRegions);
+
 		setRegion(standRegions[0]);
 	}
 
-	@Override
-	public TextureRegion getFrame() {
-		prevState = currState;
-		currState = getState();
-
-		TextureRegion standRegion, region;
-		Integer index = getDirectionIndex();
-	
-		Animation<TextureRegion> animation = animations.get(index);
-		Animation<TextureRegion> attackAnimation = attackAnimations.get(index);
-	
-		standRegion = standRegions[index];
-
-		switch ((PlayerState) currState) {
-		case WALK:
-			region = animation.getKeyFrame(stateTimer, true);
-			break;
-		case ATTACK:
-			region = attackAnimation.getKeyFrame(stateTimer, false);
-			break;
-		case STAND:
-		default:
-			region = standRegion;
-			break;
-		}
-
-		return region;
-	}
 }

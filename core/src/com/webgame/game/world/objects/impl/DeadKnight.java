@@ -7,9 +7,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.state.PlayerState;
 import com.webgame.game.world.objects.Player;
+import com.webgame.game.world.skills.Skill;
 import com.webgame.game.world.skills.impl.Blizzard;
 
 import static com.webgame.game.Configs.PPM;
+
+import java.util.ArrayList;
 
 public class DeadKnight extends Player {
 	public DeadKnight(SpriteBatch batch, String spritePath) {
@@ -20,7 +23,10 @@ public class DeadKnight extends Player {
 
 		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
 		try {
-			this.setSkill(new Blizzard(batch, skillTexture, 10));
+			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
+			skills.add(new Blizzard(batch, skillTexture, 10));
+
+			this.setSkills(skills);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

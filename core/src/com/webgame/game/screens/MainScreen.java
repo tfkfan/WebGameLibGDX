@@ -122,6 +122,7 @@ public class MainScreen implements Screen, InputProcessor {
 			vec.y = -d;
 		if (Gdx.input.isKeyPressed(Input.Keys.W))
 			vec.y = d;
+		
 
 		player.setVelocity(vec);
 		cam.position.x = player.getX();
@@ -158,6 +159,8 @@ public class MainScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
+		if(keycode >= 8 && keycode <=16)
+			player.setCurrentSkillIndex(keycode - 8);
 		return false;
 	}
 
@@ -175,6 +178,7 @@ public class MainScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
+	
 		if (button == Input.Buttons.LEFT) {
 
 			Vector3 target = cam.unproject(new Vector3(x, y, 0), viewport.getScreenX(), viewport.getScreenY(),
