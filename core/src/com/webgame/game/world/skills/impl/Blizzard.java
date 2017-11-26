@@ -15,7 +15,6 @@ public class Blizzard extends FallingAOESkill<BlizzardObject> {
 	public BlizzardObject createObject() {
 		BlizzardObject obj = new BlizzardObject();
 		obj.setFalling(true);
-		// obj.rotate(-150);
 		return obj;
 	}
 }

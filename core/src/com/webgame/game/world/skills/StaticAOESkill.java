@@ -41,7 +41,6 @@ public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
 	@Override
 	protected void updateFrame(T frame, float dt) {
 		super.updateFrame(frame, dt);
-
 		frame.updateDistance();
 		frame.animateTimer += dt;
 	}

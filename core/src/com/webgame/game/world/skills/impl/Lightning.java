@@ -23,14 +23,6 @@ public class Lightning extends StaticSkill<LightningObject> {
 	}
 
 	@Override
-	protected void afterCustomAnimation() {
-		LightningObject obj = this.getSkillObjects().get(0);
-		if(obj.getAnimateTimer() > obj.getAnimationMaxDuration()) {
-			isActive = false;
-			obj.setMarked(false);
-		}
-	}
-	@Override
 	protected void initPositions(LightningObject frame, Vector2 target) {
 		float x = target.x - frame.getWidth()/2;
 		float y = target.y;

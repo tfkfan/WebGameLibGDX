@@ -19,13 +19,4 @@ public class FireBall extends SingleSkill<FireBallObject> {
 		FireBallObject obj = new FireBallObject();
 		return obj;
 	}
-
-	@Override
-	protected void afterCustomAnimation() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
 }

@@ -69,12 +69,6 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 	}
 
 	@Override
-	protected void afterCustomAnimation() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	protected void initFrame(T frame, Vector2 playerPosition, Vector2 targetPosition) {
 		frame.setVelocity(fallVelocity);
 		frame.setFinalAnimated(false);

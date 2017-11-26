@@ -21,5 +21,4 @@ public abstract class SingleSkill<T extends SkillObject> extends Skill<T> {
 		frame.setActive(true);
 		frame.setPosition(playerPosition.x, playerPosition.y);
 	}
-
 }

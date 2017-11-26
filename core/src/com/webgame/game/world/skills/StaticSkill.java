@@ -12,25 +12,9 @@ public abstract class StaticSkill<T extends SkillObject> extends Skill<T> {
 
 	public StaticSkill(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
 		super(batch, spriteTexture, numFrames);
-		this.isStatic = true;
+		setStatic(true);
 	}
-
-	@Override
-	public void customAnimation(float dt) {
-		T obj = skillObjects.get(0);
-		if (skillTimer >= skillDuration) {
-			isActive = false;
-			obj.setActive(false);
-			obj.setStatic(true);
-			obj.setPosition(0, 0);
-			obj.setFinalAnimated(false);
-
-			clearTimers();
-			return;
-		}
-
-	}
-
+	
 	@Override
 	protected void initFrame(T frame, Vector2 playerPosition, Vector2 targetPosition) {
 		frame.setVelocity(vel);
@@ -47,6 +31,13 @@ public abstract class StaticSkill<T extends SkillObject> extends Skill<T> {
 		frame.animateTimer = 0;
 		frame.setActive(true);
 		frame.setPosition(x, y);
+	}
+	
+	@Override
+	protected void afterCustomAnimation() {
+		T obj = this.getSkillObjects().get(0);
+		if(obj.getAnimateTimer() > obj.getAnimationMaxDuration())
+			isActive = false;
 	}
 
 	@Override
