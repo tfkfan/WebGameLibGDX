@@ -1,12 +1,10 @@
 package com.webgame.game.world.skills.impl;
 
 import static com.webgame.game.Configs.PPM;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.game.state.State;
 import com.webgame.game.world.skills.SkillObject;
 
 public class TornadoObject extends SkillObject {
@@ -28,7 +26,7 @@ public class TornadoObject extends SkillObject {
 		TextureRegion[] frames = new TextureRegion[l];
 
 		for (int i = 0; i < l; i++)
-			frames[i] = new TextureRegion(spriteTexture,592 + w * (i + 1), 295, 60, h);
+			frames[i] = new TextureRegion(spriteTexture, 592 + w * (i + 1), 295, 60, h);
 
 		animation = new Animation<TextureRegion>(animationDuration, frames);
 
@@ -44,7 +42,7 @@ public class TornadoObject extends SkillObject {
 
 		if (isActive)
 			region = animation.getKeyFrame(animateTimer, true);
-		
+
 		return region;
 	}
 

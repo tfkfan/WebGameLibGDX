@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.game.state.State;
 import com.webgame.game.world.skills.SkillObject;
 
 public class ExplosionObject extends SkillObject {
@@ -30,7 +29,7 @@ public class ExplosionObject extends SkillObject {
 		TextureRegion[] frames = new TextureRegion[l];
 
 		for (int i = 0; i < l; i++)
-			frames[i] = new TextureRegion(spriteTexture,4 + w * i, 165, w, h);
+			frames[i] = new TextureRegion(spriteTexture, 4 + w * i, 165, w, h);
 
 		animation = new Animation<TextureRegion>(animationDuration, frames);
 		animationMaxDuration = animationDuration * l;
@@ -46,7 +45,7 @@ public class ExplosionObject extends SkillObject {
 
 		if (isActive)
 			region = animation.getKeyFrame(animateTimer, false);
-		
+
 		return region;
 	}
 }

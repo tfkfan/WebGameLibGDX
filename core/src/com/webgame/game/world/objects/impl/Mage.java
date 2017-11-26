@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.webgame.game.state.PlayerState;
 import com.webgame.game.world.objects.Player;
 import com.webgame.game.world.skills.Skill;
 import com.webgame.game.world.skills.impl.Blizzard;

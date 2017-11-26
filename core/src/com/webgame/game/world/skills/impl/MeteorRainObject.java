@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.game.state.State;
 import com.webgame.game.world.skills.SkillObject;
 
 public class MeteorRainObject extends SkillObject {
@@ -32,7 +31,6 @@ public class MeteorRainObject extends SkillObject {
 
 		TextureRegion[] frames = new TextureRegion[l];
 
-		
 		for (int i = 0; i < l; i++)
 			frames[i] = new TextureRegion(this.spriteTexture, 190 + w2 * (i), 110, w2, h2);
 
@@ -45,7 +43,6 @@ public class MeteorRainObject extends SkillObject {
 		this.setBounds(0, 0, w3 / PPM, h3 / PPM);
 		setRegion(standTexture);
 	}
-
 
 	@Override
 	public TextureRegion getFrame() {

@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.game.state.State;
 import com.webgame.game.world.skills.SkillObject;
 
 public class BlizzardObject extends SkillObject {
@@ -28,7 +27,6 @@ public class BlizzardObject extends SkillObject {
 
 		TextureRegion[] frames = new TextureRegion[l];
 
-		
 		for (int i = 0; i < l; i++)
 			frames[i] = new TextureRegion(this.spriteTexture, 5 + w * (i + 1), 245, w, h);
 

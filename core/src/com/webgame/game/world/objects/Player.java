@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -37,6 +38,7 @@ public abstract class Player extends WorldGameObject {
 	protected boolean attackAnimation;
 	protected boolean isAlive;
 	protected float attackTimer;
+	protected float stateTimer;
 	protected final float attackLimit = 0.8f;
 
 	protected Direction direction;
@@ -60,17 +62,17 @@ public abstract class Player extends WorldGameObject {
 		isAlive = true;
 		isAnimated = false;
 		attackAnimation = false;
+
 		direction = Direction.UP;
-		oldDirection = Direction.UP;
+		oldDirection = direction;
 
-		prevState = PlayerState.STAND;
 		currState = PlayerState.STAND;
+		prevState = currState;
 
-		this.setHealthPoints(1000);
-		this.setMaxHealthPoints(1000);
+		setHealthPoints(1000);
+		setMaxHealthPoints(1000);
 
-		
-		attackTimer = 0;
+		stateTimer = attackTimer = 0;
 		setCurrentSkillIndex(0);
 		setBounds(0, 0, 60 / PPM, 60 / PPM);
 	}
@@ -95,12 +97,12 @@ public abstract class Player extends WorldGameObject {
 	}
 
 	public void attack(float targetX, float targetY) {
-		Skill<?> skill = getSkill();
+		Skill<?> skill = getCurrentSkill();
 		if (skill == null || skill.isActive())
 			return;
-		this.prevState = this.currState;
-		this.currState = PlayerState.ATTACK;
-		this.attackAnimation = true;
+
+		setState(PlayerState.ATTACK, true);
+		attackAnimation = true;
 		skill.cast(new Vector2(getX(), getY()), new Vector2(targetX, targetY));
 	}
 
@@ -113,7 +115,7 @@ public abstract class Player extends WorldGameObject {
 	}
 
 	public void playerCollision(Player player) {
-		Skill<?> skill = player.getSkill();
+		Skill<?> skill = player.getCurrentSkill();
 		if (skill == null || !skill.isActive())
 			return;
 
@@ -207,9 +209,6 @@ public abstract class Player extends WorldGameObject {
 			direction = Direction.UPLEFT;
 		else if (velocity.x < 0 && velocity.y < 0)
 			direction = Direction.LEFTDOWN;
-
-		if (oldDirection != direction || currState != prevState || stateTimer > 1000)
-			stateTimer = 0;
 	}
 
 	public Integer getMaxHealthPoints() {
@@ -260,7 +259,7 @@ public abstract class Player extends WorldGameObject {
 		this.skills = skills;
 	}
 
-	public Skill<?> getSkill() {
+	public Skill<?> getCurrentSkill() {
 		if (skills == null || currentSkillIndex < 0 || currentSkillIndex >= skills.size())
 			return null;
 		return skills.get(currentSkillIndex);
@@ -276,21 +275,30 @@ public abstract class Player extends WorldGameObject {
 
 	@Override
 	public void update(float dt) {
-		this.updateDirection();
+		updateDirection();
+
+		if (oldDirection != direction || currState != prevState || stateTimer > 1000)
+			stateTimer = 0;
+
 		if (attackAnimation)
 			attackTimer += dt;
 		if (attackTimer >= attackLimit) {
 			attackAnimation = false;
 			attackTimer = 0;
 		}
+
+		stateTimer += dt;
+
 		super.update(dt);
 	}
 
 	public void animateSkills(float dt) {
-		if (skills != null)
-			for (Skill<?> skill : skills)
-				if (skill != null && skill.isActive())
-					skill.animateSkill(dt);
+		if (skills == null)
+			return;
+
+		for (Skill<?> skill : skills)
+			if (skill != null && skill.isActive())
+				skill.animateSkill(dt);
 	}
 
 	@Override
@@ -300,7 +308,7 @@ public abstract class Player extends WorldGameObject {
 
 		super.drawShape(sr);
 
-		Skill<?> skill = getSkill();
+		Skill<?> skill = getCurrentSkill();
 		if (skill != null)
 			skill.drawShape(sr);
 		sr.set(ShapeType.Filled);
@@ -312,25 +320,19 @@ public abstract class Player extends WorldGameObject {
 	@Override
 	public TextureRegion getFrame() {
 		PlayerState currState = getState();
-
-		TextureRegion standRegion, region;
+		TextureRegion region;
 		Integer index = getDirectionIndex();
-
-		Animation<TextureRegion> animation = animations.get(index);
-		Animation<TextureRegion> attackAnimation = attackAnimations.get(index);
-
-		standRegion = standRegions[index];
 
 		switch (currState) {
 		case WALK:
-			region = animation.getKeyFrame(stateTimer, true);
+			region = animations.get(index).getKeyFrame(stateTimer, true);
 			break;
 		case ATTACK:
-			region = attackAnimation.getKeyFrame(stateTimer, false);
+			region = attackAnimations.get(index).getKeyFrame(stateTimer, false);
 			break;
 		case STAND:
 		default:
-			region = standRegion;
+			region = standRegions[index];
 			break;
 		}
 
@@ -362,5 +364,9 @@ public abstract class Player extends WorldGameObject {
 		if (swap)
 			this.prevState = this.currState;
 		currState = state;
+	}
+
+	public float getStateTimer() {
+		return stateTimer;
 	}
 }

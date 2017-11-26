@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.game.state.State;
 import com.webgame.game.world.skills.SkillObject;
 
 public class LightningObject extends SkillObject {
@@ -15,7 +14,6 @@ public class LightningObject extends SkillObject {
 	public LightningObject() {
 		super();
 		animationDuration = 0.1f;
-		
 	}
 
 	@Override
@@ -30,10 +28,10 @@ public class LightningObject extends SkillObject {
 		TextureRegion[] frames = new TextureRegion[l];
 
 		for (int i = 0, k = 0; i < 2; i++) {
-			for(int j = 0; j < 2; j++, k++) 
-				frames[k] = new TextureRegion(spriteTexture,w * i, h * j, w, h);
+			for (int j = 0; j < 2; j++, k++)
+				frames[k] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
 		}
-		
+
 		this.animationMaxDuration = animationDuration * l;
 		animation = new Animation<TextureRegion>(animationDuration, frames);
 

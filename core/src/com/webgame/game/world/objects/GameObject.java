@@ -5,14 +5,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.state.State;
 import com.webgame.game.world.objects.impl.SpriteTextureLoader;
 
 public abstract class GameObject extends Sprite implements Movable, Animated {
 	protected Vector2 velocity;
-
-	protected float stateTimer;
-
 
 	protected float xOffset;
 	protected float yOffset;
@@ -30,7 +26,6 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 	public void init() {
 		xOffset = yOffset = 0;
 		velocity = new Vector2();
-		stateTimer = 0;
 	}
 
 	public Texture getSpriteTexture() {
@@ -77,24 +72,8 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 		this.yOffset = yOffset;
 	}
 
-	public float getStateTimer() {
-		return stateTimer;
-	}
-
-	public void setStateTimer(float stateTimer) {
-		this.stateTimer = stateTimer;
-	}
-
-
-	protected void updateStateTimer(float dt) {
-		stateTimer += dt;
-	}
-
-
-
 	@Override
 	public void update(float dt) {
-		updateStateTimer(dt);
 		setRegion(getFrame());
 	}
 

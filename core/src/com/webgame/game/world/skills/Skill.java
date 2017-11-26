@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.world.objects.Player;
@@ -137,7 +138,7 @@ public abstract class Skill<T extends SkillObject> {
 			player.setHealthPoints(player.getMaxHealthPoints());
 			return;
 		}
-
+		
 		Rectangle pRect = player.getPlayerRectangle();
 		boolean isAOE = isAOE();
 		boolean isFalling = isFalling();
