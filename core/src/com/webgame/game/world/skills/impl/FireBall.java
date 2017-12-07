@@ -9,7 +9,7 @@ public class FireBall extends SingleSkill<FireBallObject> {
 	boolean isRotated;
 
 	public FireBall(SpriteBatch batch, Texture spriteTexture) throws Exception {
-		super(batch, spriteTexture, 1);
+		super(batch, spriteTexture);
 		setTimed(false);
 		setDamage(10d);
 	}

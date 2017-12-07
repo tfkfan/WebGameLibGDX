@@ -94,18 +94,22 @@ public abstract class Skill<T extends SkillObject> {
 
 		afterCustomAnimation();
 	}
+	
+	protected void resetObject(SkillObject obj){
+		obj.setActive(false);
+		obj.setStatic(false);
+		obj.setPosition(0, 0);
+		obj.setAOE(isAOE);
+		obj.setMarked(false);
+		obj.setFinalAnimated(false);
+	}
 
 	protected void resetSkill() {
 		setActive(false);
 		setMarked(false);
 		for (int i = 0; i < numFrames; i++) {
 			T obj = skillObjects.get(i);
-			obj.setActive(false);
-			obj.setStatic(false);
-			obj.setPosition(0, 0);
-			obj.setAOE(isAOE);
-			obj.setMarked(false);
-			obj.setFinalAnimated(false);
+			resetObject(obj);
 		}
 		clearTimers();
 	}

@@ -15,6 +15,7 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 	protected final float fallOffset = 1f / PPM;
 	protected final Vector2 fallVelocity = new Vector2(2 / PPM, -4 / PPM);
 	protected final Vector2 fallOffsetVec = new Vector2(fallVelocity.x * 25, (-fallVelocity.y) * 25);
+	protected final float tmp = 0.1f;
 
 	public FallingAOESkill(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
 		super(batch, spriteTexture, numFrames);
@@ -46,13 +47,11 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 			return;
 
 		skillTimer += dt;
-		final float tmp = 0.1f;
 
 		if (index != -1) {
 			fallTimer += dt;
 			if (fallTimer >= tmp) {
 				T obj = skillObjects.get(index);
-
 				obj.updateDistance();
 				obj.setActive(true);
 
