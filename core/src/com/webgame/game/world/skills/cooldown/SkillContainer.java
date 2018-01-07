@@ -26,7 +26,7 @@ public class SkillContainer extends ArrayList<Skill<?>> {
 	public void animate(float dt) {
 		if(this.isEmpty())
 			return;
-		
+
 		for (int i = 0; i < this.size(); i++){
 			Skill<?> currSkill = this.get(i);
 			if (currSkill.isActive())
@@ -39,7 +39,7 @@ public class SkillContainer extends ArrayList<Skill<?>> {
 	protected void init() {
 		isAvailable = true;
 		cooldown_start = 0L;
-		cooldown_time = 2000L;
+		cooldown_time = 200L;
 	}
 
 	public Skill<?> getSkill() {

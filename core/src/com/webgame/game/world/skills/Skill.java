@@ -47,12 +47,18 @@ public abstract class Skill<T extends SkillObject> implements Cloneable{
 	@SuppressWarnings("unchecked")
 	public Skill<T> clone() {
 		try {
-			return (Skill<T>) super.clone();
+			Skill<T> newSkill = (Skill<T>) super.clone();
+			newSkill.initSkill(numFrames);
+			return newSkill;
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return null;
 	}
 
 	protected void initSkill(Integer numFrames) throws Exception {

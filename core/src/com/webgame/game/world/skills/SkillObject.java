@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.world.objects.GameObject;
 
-public abstract class SkillObject extends GameObject {
+public abstract class SkillObject extends GameObject implements Cloneable {
 	protected boolean isActive;
 	protected boolean isStatic;
 	protected boolean isFalling;
