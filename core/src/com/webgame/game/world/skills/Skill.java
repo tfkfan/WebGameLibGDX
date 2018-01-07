@@ -49,6 +49,7 @@ public abstract class Skill<T extends SkillObject> implements Cloneable{
 		try {
 			Skill<T> newSkill = (Skill<T>) super.clone();
 			newSkill.initSkill(numFrames);
+			newSkill.setArea(new Rectangle(this.getArea()));
 			return newSkill;
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
