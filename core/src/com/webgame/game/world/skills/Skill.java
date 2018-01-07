@@ -10,7 +10,7 @@ import com.webgame.game.world.objects.Player;
 import static com.webgame.game.Configs.PPM;
 import java.util.ArrayList;
 
-public abstract class Skill<T extends SkillObject> {
+public abstract class Skill<T extends SkillObject> implements Cloneable{
 	protected Double damage;
 	protected String title;
 
@@ -42,6 +42,17 @@ public abstract class Skill<T extends SkillObject> {
 		setBatch(batch);
 		setSpriteTexture(spriteTexture);
 		initSkill(numFrames);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Skill<T> clone() {
+		try {
+			return (Skill<T>) super.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	protected void initSkill(Integer numFrames) throws Exception {
@@ -94,8 +105,8 @@ public abstract class Skill<T extends SkillObject> {
 
 		afterCustomAnimation();
 	}
-	
-	protected void resetObject(SkillObject obj){
+
+	protected void resetObject(SkillObject obj) {
 		obj.setActive(false);
 		obj.setStatic(false);
 		obj.setPosition(0, 0);
@@ -125,7 +136,7 @@ public abstract class Skill<T extends SkillObject> {
 	protected void customAnimation(float dt) {
 	}
 
-	protected void afterCustomAnimation() {	
+	protected void afterCustomAnimation() {
 	}
 
 	protected abstract T createObject();

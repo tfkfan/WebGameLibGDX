@@ -16,8 +16,11 @@ import com.webgame.game.state.Direction;
 import com.webgame.game.state.PlayerState;
 import com.webgame.game.state.State;
 import com.webgame.game.world.skills.Skill;
+import com.webgame.game.world.skills.cooldown.SkillContainer;
+
 import static com.webgame.game.Configs.PPM;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Player extends WorldGameObject {
@@ -30,7 +33,7 @@ public abstract class Player extends WorldGameObject {
 	protected String playerName;
 	protected Integer level;
 
-	protected List<Skill<?>> skills;
+	protected List<SkillContainer> skillContainers;
 	protected Integer currentSkillIndex;
 
 	protected boolean isAnimated;
@@ -72,6 +75,7 @@ public abstract class Player extends WorldGameObject {
 		setMaxHealthPoints(1000);
 
 		stateTimer = attackTimer = 0;
+		skillContainers = new ArrayList<SkillContainer>();
 		setCurrentSkillIndex(0);
 		setBounds(0, 0, 60 / PPM, 60 / PPM);
 	}
@@ -96,13 +100,15 @@ public abstract class Player extends WorldGameObject {
 	}
 
 	public void attack(float targetX, float targetY) {
-		Skill<?> skill = getCurrentSkill();
-		if (skill == null || skill.isActive())
-			return;
+		SkillContainer container = getCurrentSkillContainer();
+		if (container.isAvailable()) {
+			Skill<?> newSkill = container.createSkill();
+			setState(PlayerState.ATTACK, true);
+			attackAnimation = true;
 
-		setState(PlayerState.ATTACK, true);
-		attackAnimation = true;
-		skill.cast(new Vector2(getX(), getY()), new Vector2(targetX, targetY));
+			newSkill.cast(new Vector2(getX(), getY()), new Vector2(targetX, targetY));
+			container.add(newSkill);
+		}
 	}
 
 	public Integer getCurrentSkillIndex() {
@@ -114,11 +120,11 @@ public abstract class Player extends WorldGameObject {
 	}
 
 	public void playerCollision(Player player) {
-		Skill<?> skill = player.getCurrentSkill();
-		if (skill == null || !skill.isActive())
-			return;
+		// Skill<?> skill = player.getCurrentSkillContainer();
+		// if (skill == null || !skill.isActive())
+		// return;
 
-		skill.skillCollision(this);
+		// skill.skillCollision(this);
 	}
 
 	public Direction getDirection() {
@@ -250,18 +256,33 @@ public abstract class Player extends WorldGameObject {
 		this.playerName = playerName;
 	}
 
-	public List<Skill<?>> getSkills() {
-		return skills;
-	}
+	// public List<Skill<?>> getSkills() {
+	// return skillContainers;
+	// }
 
 	public void setSkills(List<Skill<?>> skills) {
-		this.skills = skills;
+		for (int i = 0; i < skills.size(); i++) {
+			Skill<?> skill = skills.get(i);
+			
+			SkillContainer container = null;
+			try{
+				container = this.skillContainers.get(i);
+			}catch(IndexOutOfBoundsException e){
+				container = new SkillContainer();
+			}
+
+			container.clear();
+			container.add(skill);
+			container.setSkill(skill);
+
+			this.skillContainers.add(container);
+		}
 	}
 
-	public Skill<?> getCurrentSkill() {
-		if (skills == null || currentSkillIndex < 0 || currentSkillIndex >= skills.size())
+	public SkillContainer getCurrentSkillContainer() {
+		if (skillContainers == null || currentSkillIndex < 0 || currentSkillIndex >= skillContainers.size())
 			return null;
-		return skills.get(currentSkillIndex);
+		return skillContainers.get(currentSkillIndex);
 	}
 
 	public Integer getLevel() {
@@ -292,12 +313,11 @@ public abstract class Player extends WorldGameObject {
 	}
 
 	public void animateSkills(float dt) {
-		if (skills == null)
+		if (skillContainers == null)
 			return;
 
-		for (Skill<?> skill : skills)
-			if (skill != null && skill.isActive())
-				skill.animateSkill(dt);
+		for (SkillContainer container : skillContainers)
+			container.animate(dt);
 	}
 
 	@Override
@@ -307,9 +327,10 @@ public abstract class Player extends WorldGameObject {
 
 		super.drawShape(sr);
 
-		Skill<?> skill = getCurrentSkill();
-		if (skill != null)
-			skill.drawShape(sr);
+		/*
+		 * Skill<?> skill = getCurrentSkillContainer(); if (skill != null)
+		 * skill.drawShape(sr);
+		 */
 		sr.set(ShapeType.Filled);
 		sr.setColor(Color.GREEN);
 		sr.rect(this.getX(), this.getY() + getHeight() + 5 / PPM,
