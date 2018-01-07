@@ -10,7 +10,7 @@ import com.webgame.game.world.objects.Player;
 import static com.webgame.game.Configs.PPM;
 import java.util.ArrayList;
 
-public abstract class Skill<T extends SkillObject> implements Cloneable{
+public abstract class Skill<T extends SkillObject> implements Cloneable {
 	protected Double damage;
 	protected String title;
 
@@ -49,7 +49,8 @@ public abstract class Skill<T extends SkillObject> implements Cloneable{
 		try {
 			Skill<T> newSkill = (Skill<T>) super.clone();
 			newSkill.initSkill(numFrames);
-			newSkill.setArea(new Rectangle(this.getArea()));
+			if (this.getArea() != null)
+				newSkill.setArea(new Rectangle(this.getArea()));
 			return newSkill;
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
@@ -59,6 +60,7 @@ public abstract class Skill<T extends SkillObject> implements Cloneable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("null");
 		return null;
 	}
 
