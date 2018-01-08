@@ -13,8 +13,8 @@ public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
 	protected int index;
 
 	protected final float fallOffset = 1f / PPM;
-	protected final Vector2 fallVelocity = new Vector2(2 / PPM, -4 / PPM);
-	protected final Vector2 fallOffsetVec = new Vector2(fallVelocity.x * 25, (-fallVelocity.y) * 25);
+	protected final Vector2 fallVelocity = new Vector2(4 / PPM, -8 / PPM);
+	protected final Vector2 fallOffsetVec = new Vector2(fallVelocity.x * 10, (-fallVelocity.y) * 10);
 	protected final float tmp = 0.1f;
 
 	public FallingAOESkill(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {

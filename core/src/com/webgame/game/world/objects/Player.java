@@ -119,18 +119,6 @@ public abstract class Player extends WorldGameObject {
 		this.currentSkillIndex = currentSkillIndex;
 	}
 
-	public void playerCollision(Player player) {
-		SkillContainer skillContainer = player.getCurrentSkillContainer();
-		if (skillContainer == null || skillContainer.isEmpty())
-			return;
-
-		for (Skill<?> skill : skillContainer) {
-			if (skill == null || !skill.isActive())
-				return;
-
-			skill.skillCollision(this);
-		}
-	}
 
 	public Direction getDirection() {
 		return direction;
@@ -261,9 +249,9 @@ public abstract class Player extends WorldGameObject {
 		this.playerName = playerName;
 	}
 
-	// public List<Skill<?>> getSkills() {
-	// return skillContainers;
-	// }
+	public List<SkillContainer> getSkillContainers() {
+		return skillContainers;
+	}
 
 	public void setSkills(List<Skill<?>> skills) {
 		for (int i = 0; i < skills.size(); i++) {

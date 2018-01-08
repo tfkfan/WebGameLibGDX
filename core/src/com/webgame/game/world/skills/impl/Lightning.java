@@ -10,7 +10,6 @@ public class Lightning extends StaticSkill<LightningObject> {
 		super(batch, spriteTexture, 1);
 		setTimed(false);
 		setAOE(false);
-		setDamage(30d);
 	}
 
 	@Override

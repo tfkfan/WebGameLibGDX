@@ -16,6 +16,8 @@ import com.webgame.game.world.WorldRenderer;
 import com.webgame.game.world.objects.Player;
 import com.webgame.game.world.objects.impl.Knight;
 import com.webgame.game.world.objects.impl.Mage;
+import com.webgame.game.world.skills.collision.CollisionHandler;
+
 import static com.webgame.game.Configs.VIEW_WIDTH;
 
 import java.util.ArrayList;
@@ -36,6 +38,8 @@ public class MainScreen implements Screen, InputProcessor {
 	private Player player;
 
 	private List<Player> enemies;
+	
+	private CollisionHandler clsnHandler;
 
 	@Override
 	public void show() {
@@ -56,6 +60,8 @@ public class MainScreen implements Screen, InputProcessor {
 		enemy.setPosition(1.5f, 1.5f);
 		enemy.createObject(worldRenderer.world, false);
 		enemy.getB2body().setTransform(1.5f, 1.5f, 0);
+		
+		clsnHandler = new CollisionHandler();
 	
 		enemies = new ArrayList<Player>();
 		enemies.add(enemy);
@@ -80,29 +86,23 @@ public class MainScreen implements Screen, InputProcessor {
 		worldRenderer.world.step(0.01f, 6, 2);
 		worldRenderer.render();
 		// DRAWING GAME OBJECTS
-
 		batch.begin();
-
 		player.draw(batch);
-
 		for (Player enemy : enemies) {
 			enemy.update(dt);
 			enemy.draw(batch);
 			enemy.animateSkills(dt);
-			enemy.playerCollision(player);
+			clsnHandler.collision(player, enemy);
 		}
-
 		player.animateSkills(dt);
-
 		batch.end();
 
 		sr.setProjectionMatrix(cam.combined);
 
 		sr.begin();
 		player.drawShape(sr);
-		for (Player enemy : enemies) {
+		for (Player enemy : enemies)
 			enemy.drawShape(sr);
-		}
 		sr.end();
 	}
 

@@ -11,7 +11,6 @@ public class FireBall extends SingleSkill<FireBallObject> {
 	public FireBall(SpriteBatch batch, Texture spriteTexture) throws Exception {
 		super(batch, spriteTexture);
 		setTimed(false);
-		setDamage(10d);
 	}
 
 	@Override

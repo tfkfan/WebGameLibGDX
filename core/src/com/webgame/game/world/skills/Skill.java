@@ -42,6 +42,7 @@ public abstract class Skill<T extends SkillObject> implements Cloneable {
 		setBatch(batch);
 		setSpriteTexture(spriteTexture);
 		initSkill(numFrames);
+		setDamage(1d);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -51,6 +52,7 @@ public abstract class Skill<T extends SkillObject> implements Cloneable {
 			newSkill.initSkill(numFrames);
 			if (this.getArea() != null)
 				newSkill.setArea(new Rectangle(this.getArea()));
+			newSkill.setDamage(damage);
 			return newSkill;
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
@@ -73,7 +75,7 @@ public abstract class Skill<T extends SkillObject> implements Cloneable {
 			objs.add(obj);
 		}
 
-		setDamage(1d);
+		//setDamage(1d);
 		setSkillObjects(objs);
 	}
 

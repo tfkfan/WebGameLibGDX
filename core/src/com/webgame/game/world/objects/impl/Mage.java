@@ -31,17 +31,38 @@ public class Mage extends Player {
 		Texture skillTexture2 = SpriteTextureLoader.loadSprite("lightning.png");
 		try {
 			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
-			skills.add(new Blizzard(batch, skillTexture, 30));
-			skills.add(new MeteorRain(batch, skillTexture, 30));
-			skills.add(new StoneRain(batch, skillTexture, 30));
-			skills.add(new Explosion(batch, skillTexture));
-			skills.add(new FireBall(batch, skillTexture));
-			skills.add(new Lightning(batch, skillTexture2));
-			skills.add(new Tornado(batch, skillTexture));
+			Blizzard b = new Blizzard(batch, skillTexture, 30);
+			b.setDamage(5d);
+			skills.add(b);
+			
+			MeteorRain mr = new MeteorRain(batch, skillTexture, 30);
+			mr.setDamage(5d);
+			
+			skills.add(mr);
+			
+			StoneRain sr = new StoneRain(batch, skillTexture, 30);
+			sr.setDamage(5d);
+			skills.add(sr);
+			
+			Explosion e = new Explosion(batch, skillTexture);
+			e.setDamage(50d);
+			skills.add(e);
+			
+			FireBall fb = new FireBall(batch, skillTexture);
+			fb.setDamage(100d);
+			skills.add(fb);
+			
+			Lightning l = new Lightning(batch, skillTexture2);
+			l.setDamage(30d);
+			skills.add(l);
+			
+			Tornado t = new Tornado(batch, skillTexture);
+			t.setDamage(3d);
+			skills.add(t);
 			this.setSkills(skills);
-		} catch (Exception e) {
+		} catch (Exception e2) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e2.printStackTrace();
 		}
 
 		setXOffset(30 / PPM);
