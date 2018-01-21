@@ -6,10 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.webgame.game.animation.MeteorBlastAnimation;
 import com.webgame.game.world.skills.SkillObject;
 
 public class MeteorRainObject extends SkillObject {
-	protected Animation<TextureRegion> animation;
+	protected MeteorBlastAnimation animation;
 	protected TextureRegion standTexture;
 
 	public MeteorRainObject() {
@@ -26,17 +27,9 @@ public class MeteorRainObject extends SkillObject {
 		int w = 30;
 		int l = 5;
 
-		int h2 = 50;
-		int w2 = 60;
-
-		TextureRegion[] frames = new TextureRegion[l];
-
-		for (int i = 0; i < l; i++)
-			frames[i] = new TextureRegion(this.spriteTexture, 190 + w2 * (i), 110, w2, h2);
-
 		standTexture = new TextureRegion(this.spriteTexture, 810, 55, w, h);
 		animationMaxDuration = animationDuration * l;
-		animation = new Animation<TextureRegion>(animationDuration, frames);
+		animation = new MeteorBlastAnimation(spriteTexture, animationDuration, animationMaxDuration);
 
 		int w3 = 20;
 		int h3 = 20;
@@ -49,7 +42,7 @@ public class MeteorRainObject extends SkillObject {
 		TextureRegion region = null;
 		if (isActive) {
 			if (isStatic && !isFinalAnimated)
-				region = animation.getKeyFrame(animateTimer, false);
+				region = animation.getAnimation().getKeyFrame(animateTimer, false);
 			else
 				region = standTexture;
 		}
