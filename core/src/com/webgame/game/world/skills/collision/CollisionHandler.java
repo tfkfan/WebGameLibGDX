@@ -2,7 +2,7 @@ package com.webgame.game.world.skills.collision;
 
 import java.util.List;
 
-import com.webgame.game.world.objects.Player;
+import com.webgame.game.world.player.Player;
 import com.webgame.game.world.skills.Skill;
 import com.webgame.game.world.skills.cooldown.SkillContainer;
 

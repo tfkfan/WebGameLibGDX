@@ -1,11 +1,11 @@
-package com.webgame.game.world.objects;
+package com.webgame.game.world;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.world.objects.impl.SpriteTextureLoader;
+import com.webgame.game.utils.SpriteTextureLoader;
 
 public abstract class GameObject extends Sprite implements Movable, Animated {
 	protected Vector2 velocity;

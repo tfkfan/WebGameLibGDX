@@ -13,9 +13,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.world.WorldRenderer;
-import com.webgame.game.world.objects.Player;
-import com.webgame.game.world.objects.impl.Knight;
-import com.webgame.game.world.objects.impl.Mage;
+import com.webgame.game.world.player.Player;
+import com.webgame.game.world.player.impl.Knight;
+import com.webgame.game.world.player.impl.Mage;
 import com.webgame.game.world.skills.collision.CollisionHandler;
 
 import static com.webgame.game.Configs.VIEW_WIDTH;

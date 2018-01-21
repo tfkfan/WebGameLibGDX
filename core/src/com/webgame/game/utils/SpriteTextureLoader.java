@@ -1,4 +1,4 @@
-package com.webgame.game.world.objects.impl;
+package com.webgame.game.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

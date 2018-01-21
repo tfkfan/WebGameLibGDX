@@ -1,7 +1,8 @@
-package com.webgame.game.world.objects;
+package com.webgame.game.world;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.webgame.game.world.GameObject;
 
 public abstract class WorldGameObject extends GameObject {
 	protected World world;

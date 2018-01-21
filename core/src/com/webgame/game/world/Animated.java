@@ -1,4 +1,4 @@
-package com.webgame.game.world.objects;
+package com.webgame.game.world;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 

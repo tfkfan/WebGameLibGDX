@@ -3,7 +3,7 @@ package com.webgame.game.world.skills;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.world.objects.GameObject;
+import com.webgame.game.world.GameObject;
 
 public abstract class SkillObject extends GameObject implements Cloneable {
 	protected boolean isActive;

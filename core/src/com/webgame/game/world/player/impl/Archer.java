@@ -1,69 +1,36 @@
-package com.webgame.game.world.objects.impl;
+package com.webgame.game.world.player.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.webgame.game.world.objects.Player;
-import com.webgame.game.world.skills.Skill;
-import com.webgame.game.world.skills.impl.Blizzard;
-import com.webgame.game.world.skills.impl.Explosion;
-import com.webgame.game.world.skills.impl.FireBall;
-import com.webgame.game.world.skills.impl.Lightning;
-import com.webgame.game.world.skills.impl.MeteorRain;
-import com.webgame.game.world.skills.impl.StoneRain;
-import com.webgame.game.world.skills.impl.Tornado;
+import com.webgame.game.utils.SpriteTextureLoader;
+import com.webgame.game.world.player.Player;
 
 import static com.webgame.game.Configs.PPM;
 
-import java.util.ArrayList;
-
-public class Mage extends Player {
-
-	public Mage(SpriteBatch batch, String spritePath) {
+@Deprecated
+public class Archer extends Player {
+	public Archer(SpriteBatch batch, String spritePath) {
 		super();
 
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spritePath);
 
 		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
-		Texture skillTexture2 = SpriteTextureLoader.loadSprite("lightning.png");
+
+		/*
 		try {
 			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
-			Blizzard b = new Blizzard(batch, skillTexture, 30);
-			b.setDamage(5d);
-			skills.add(b);
-			
-			MeteorRain mr = new MeteorRain(batch, skillTexture, 30);
-			mr.setDamage(5d);
-			
-			skills.add(mr);
-			
-			StoneRain sr = new StoneRain(batch, skillTexture, 30);
-			sr.setDamage(5d);
-			skills.add(sr);
-			
-			Explosion e = new Explosion(batch, skillTexture);
-			e.setDamage(50d);
-			skills.add(e);
-			
-			FireBall fb = new FireBall(batch, skillTexture);
-			fb.setDamage(100d);
-			skills.add(fb);
-			
-			Lightning l = new Lightning(batch, skillTexture2);
-			l.setDamage(30d);
-			skills.add(l);
-			
-			Tornado t = new Tornado(batch, skillTexture);
-			t.setDamage(3d);
-			skills.add(t);
+			skills.add(new Blizzard(batch, skillTexture, 10));
+
 			this.setSkills(skills);
-		} catch (Exception e2) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			e.printStackTrace();
 		}
+		*/
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
@@ -76,8 +43,8 @@ public class Mage extends Player {
 		Array<Animation<TextureRegion>> attackAnimations = new Array<Animation<TextureRegion>>();
 		TextureRegion[] standRegions = new TextureRegion[dirs];
 
-		int h = 61;
-		int w = 75;
+		int h = 75;
+		int w = 60;
 
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++)
@@ -148,11 +115,10 @@ public class Mage extends Player {
 			attackFrames[i] = null;
 		}
 
-		this.setAnimations(animations);
+		this.setAnimations(attackAnimations);
 		this.setAttackAnimations(attackAnimations);
 		this.setStandRegions(standRegions);
 
 		setRegion(standRegions[0]);
 	}
-
 }

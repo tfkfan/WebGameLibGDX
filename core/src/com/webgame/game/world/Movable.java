@@ -1,4 +1,4 @@
-package com.webgame.game.world.objects;
+package com.webgame.game.world;
 
 public interface Movable {
 	void update(float dt);

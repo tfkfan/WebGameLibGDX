@@ -1,4 +1,4 @@
-package com.webgame.game.world.objects.impl;
+package com.webgame.game.world.player.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -6,43 +6,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.state.PlayerState;
-import com.webgame.game.world.objects.Player;
-import com.webgame.game.world.skills.Skill;
-import com.webgame.game.world.skills.impl.Blizzard;
-import com.webgame.game.world.skills.impl.Explosion;
-import com.webgame.game.world.skills.impl.FireBall;
-import com.webgame.game.world.skills.impl.Lightning;
-import com.webgame.game.world.skills.impl.MeteorRain;
-import com.webgame.game.world.skills.impl.StoneRain;
-import com.webgame.game.world.skills.impl.Tornado;
-
+import com.webgame.game.world.player.Player;
 import static com.webgame.game.Configs.PPM;
 
-import java.util.ArrayList;
-
-public class Knight extends Player {
-
-	public Knight(SpriteBatch batch, String spritePath) {
+@Deprecated
+public class Soldier extends Player {
+	public Soldier(SpriteBatch batch, String spritePath) {
 		super();
 
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spritePath);
 
-		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
-		ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
-		try {
-			Blizzard b = new Blizzard(batch, skillTexture, 30);
-
-			b.setDamage(5d);
-			skills.add(b);
-
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		this.setSkills(skills);
+		//this.setSkill(new IceRain(batch, "skills.png"));
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
@@ -55,16 +30,16 @@ public class Knight extends Player {
 		Array<Animation<TextureRegion>> attackAnimations = new Array<Animation<TextureRegion>>();
 		TextureRegion[] standRegions = new TextureRegion[dirs];
 
-		int h = 75;
+		int h =52;
 		int w = 75;
 
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++)
-				frames[i][j] = new TextureRegion(spriteTexture, 5 + w * i, h * j, w, h);
+				frames[i][j] = new TextureRegion(spriteTexture, w * i, 5 + h * j, w, h);
 			for (int j = 5; j < 9; j++)
-				attackFrames[i][j - 5] = new TextureRegion(spriteTexture, 5 + w * i, h * j, w, h);
-
-			standRegions[i] = new TextureRegion(spriteTexture, 5 + w * i, 0, w, h);
+				attackFrames[i][j - 5] = new TextureRegion(spriteTexture,  w * i, h * j, w, h);
+			
+			standRegions[i] = new TextureRegion(spriteTexture,  w * i, 0, w, h);
 			attackFrames[i][4] = standRegions[i];
 		}
 
@@ -117,7 +92,7 @@ public class Knight extends Player {
 		tr = new TextureRegion(spriteTexture, w * 3, 0, w, h);
 		tr.flip(true, false);
 		attackFrames[5][4] = tr;
-
+		
 		for (int i = 0; i < dirs; i++) {
 			Animation<TextureRegion> anim = new Animation<TextureRegion>(0.2f, frames[i]);
 			Animation<TextureRegion> attackAnim = new Animation<TextureRegion>(0.2f, attackFrames[i]);
@@ -126,7 +101,7 @@ public class Knight extends Player {
 			frames[i] = null;
 			attackFrames[i] = null;
 		}
-
+		
 		this.setAnimations(attackAnimations);
 		this.setAttackAnimations(attackAnimations);
 		this.setStandRegions(standRegions);
@@ -136,17 +111,18 @@ public class Knight extends Player {
 
 	@Override
 	public TextureRegion getFrame() {
-		PlayerState currState = getState();
+		prevState = currState;
+		currState = getState();
 
 		TextureRegion standRegion, region;
 		Integer index = getDirectionIndex();
-
+	
 		Animation<TextureRegion> animation = animations.get(index);
 		Animation<TextureRegion> attackAnimation = attackAnimations.get(index);
-
+	
 		standRegion = standRegions[index];
 
-		switch (currState) {
+		switch ((PlayerState) currState) {
 		case WALK:
 			region = animation.getKeyFrame(stateTimer, true);
 			break;

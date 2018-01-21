@@ -1,4 +1,4 @@
-package com.webgame.game.world.objects;
+package com.webgame.game.world.player;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Array;
 import com.webgame.game.state.Direction;
 import com.webgame.game.state.PlayerState;
 import com.webgame.game.state.State;
+import com.webgame.game.world.WorldGameObject;
 import com.webgame.game.world.skills.Skill;
 import com.webgame.game.world.skills.cooldown.SkillContainer;
 
