@@ -101,6 +101,8 @@ public abstract class Player extends WorldGameObject {
 
 	public void attack(float targetX, float targetY) {
 		SkillContainer container = getCurrentSkillContainer();
+		if(container == null)
+			return;
 		if (container.isAvailable()) {
 			Skill<?> newSkill = container.createSkill();
 			setState(PlayerState.ATTACK, true);

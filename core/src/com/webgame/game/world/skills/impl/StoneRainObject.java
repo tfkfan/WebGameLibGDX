@@ -6,10 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.webgame.game.animation.StoneBlastAnimation;
 import com.webgame.game.world.skills.SkillObject;
 
 public class StoneRainObject extends SkillObject {
-	protected Animation<TextureRegion> animation;
+	protected StoneBlastAnimation animation;
 	protected TextureRegion standTexture;
 
 	public StoneRainObject() {
@@ -21,19 +22,8 @@ public class StoneRainObject extends SkillObject {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spriteTexture);
 
-		int h = 30;
-		int w = 40;
-		int l = 3;
-
-		TextureRegion[] frames = new TextureRegion[l];
-
-		// Доделать
-		for (int i = 0; i < l; i++)
-			frames[i] = new TextureRegion(spriteTexture, -5 + w * (i + 1), 80, w, h);
-
-		standTexture = new TextureRegion(spriteTexture, 5, 80, w, h);
-
-		animation = new Animation<TextureRegion>(animationDuration, frames);
+		standTexture = new TextureRegion(spriteTexture, 5, 80, 40, 30);
+		animation = new StoneBlastAnimation(spriteTexture, animationDuration, animationMaxDuration);
 
 		int w2 = 20;
 		int h2 = 20;
@@ -46,7 +36,7 @@ public class StoneRainObject extends SkillObject {
 		TextureRegion region = null;
 
 		if (isActive)
-			region = isStatic && !isFinalAnimated ? animation.getKeyFrame(animateTimer, false) : standTexture;
+			region = isStatic && !isFinalAnimated ? animation.getAnimation().getKeyFrame(animateTimer, false) : standTexture;
 
 		return region;
 	}

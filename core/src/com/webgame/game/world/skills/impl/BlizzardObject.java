@@ -6,10 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.webgame.game.animation.BlizzardFragmentAnimation;
 import com.webgame.game.world.skills.SkillObject;
 
 public class BlizzardObject extends SkillObject {
-	protected Animation<TextureRegion> animation;
+	protected BlizzardFragmentAnimation animation;
 	protected TextureRegion standTexture;
 
 	public BlizzardObject() {
@@ -21,18 +22,10 @@ public class BlizzardObject extends SkillObject {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spriteTexture);
 
-		int h = 30;
-		int w = 30;
-		int l = 3;
-
-		TextureRegion[] frames = new TextureRegion[l];
-
-		for (int i = 0; i < l; i++)
-			frames[i] = new TextureRegion(this.spriteTexture, 5 + w * (i + 1), 245, w, h);
-
-		standTexture = new TextureRegion(this.spriteTexture, 5, 245, w, h);
-		animationMaxDuration = animationDuration * l;
-		animation = new Animation<TextureRegion>(animationDuration, frames);
+		animationDuration = 0.1f;
+		animationMaxDuration = animationDuration * 2;
+		animation = new BlizzardFragmentAnimation(spriteTexture, animationDuration, animationMaxDuration);
+		standTexture = new TextureRegion(this.spriteTexture, 5, 245, 30, 30);
 
 		int w2 = 20;
 		int h2 = 25;
@@ -45,7 +38,7 @@ public class BlizzardObject extends SkillObject {
 		TextureRegion region = null;
 
 		if (isActive)
-			region = isStatic && !isFinalAnimated ? animation.getKeyFrame(animateTimer, false) : standTexture;
+			region = isStatic && !isFinalAnimated ? animation.getAnimation().getKeyFrame(animateTimer, false) : standTexture;
 
 		return region;
 	}

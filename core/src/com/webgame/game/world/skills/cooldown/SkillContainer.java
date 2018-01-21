@@ -39,7 +39,7 @@ public class SkillContainer extends ArrayList<Skill<?>> {
 	protected void init() {
 		isAvailable = true;
 		cooldown_start = 0L;
-		cooldown_time = 200L;
+		cooldown_time = 0L;
 	}
 
 	public Skill<?> getSkill() {

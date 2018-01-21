@@ -6,15 +6,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.webgame.game.animation.FireBlastAnimation;
 import com.webgame.game.world.skills.SkillObject;
 
 public class ExplosionObject extends SkillObject {
-	protected Animation<TextureRegion> animation;
+	protected FireBlastAnimation animation;
 
 	public ExplosionObject() {
 		super();
-		animationMaxDuration = 1.7f;
-		animationDuration = 0.1f;
 	}
 
 	@Override
@@ -22,21 +21,13 @@ public class ExplosionObject extends SkillObject {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spriteTexture);
 
-		int h = 65;
-		int w = 65;
-		int l = 16;
-
-		TextureRegion[] frames = new TextureRegion[l];
-
-		for (int i = 0; i < l; i++)
-			frames[i] = new TextureRegion(spriteTexture, 4 + w * i, 165, w, h);
-
-		animation = new Animation<TextureRegion>(animationDuration, frames);
-		animationMaxDuration = animationDuration * l;
+		animationMaxDuration = 1.7f;
+		animationDuration = 0.1f;
+		animation = new FireBlastAnimation(spriteTexture, animationDuration, animationMaxDuration);
 		int w2 = 100;
 		int h2 = 100;
 		this.setBounds(0, 0, w2 / PPM, h2 / PPM);
-		setRegion(animation.getKeyFrame(0));
+		setRegion(animation.getAnimation().getKeyFrame(0));
 	}
 
 	@Override
@@ -44,7 +35,7 @@ public class ExplosionObject extends SkillObject {
 		TextureRegion region = null;
 
 		if (isActive)
-			region = animation.getKeyFrame(animateTimer, false);
+			region = animation.getAnimation().getKeyFrame(animateTimer, false);
 
 		return region;
 	}
