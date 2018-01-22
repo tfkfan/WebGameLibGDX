@@ -28,7 +28,7 @@ import static com.webgame.game.Configs.VIEW_HEIGHT;
 import static com.webgame.game.Configs.PPM;
 
 public class GameStage extends Stage implements InputProcessor {
-    private final float TIME_STEP = 1 / 300f;
+    private final float TIME_STEP = 1 / 30f;
     private SpriteBatch batch;
     private World world;
     private WorldRenderer worldRenderer;
@@ -48,11 +48,9 @@ public class GameStage extends Stage implements InputProcessor {
         camera.position.set(0, 0, 0);
         camera.update();
 
-        setViewport( new StretchViewport(VIEW_WIDTH / PPM, VIEW_HEIGHT / PPM, camera));
-
         world = new World(new Vector2(0, 0), true);
         worldRenderer = new WorldRenderer(world , camera);
-
+        setViewport( new StretchViewport(VIEW_WIDTH / PPM, VIEW_HEIGHT / PPM, camera));
 
         player = new Mage(batch, "mage.png");
         player.createObject(worldRenderer.world, false);
@@ -76,11 +74,11 @@ public class GameStage extends Stage implements InputProcessor {
     public void act(float delta) {
         super.act(delta);
         handleInput();
-        //camera.update();
+        getCamera().update();
         player.update(TIME_STEP);
 
-        //batch.setProjectionMatrix(camera.combined);
-       // sr.setProjectionMatrix(camera.combined);
+        batch.setProjectionMatrix(getCamera().combined);
+        sr.setProjectionMatrix(getCamera().combined);
         worldRenderer.world.step(0.01f, 6, 2);
 
         for (Player enemy : enemies) {
@@ -92,10 +90,8 @@ public class GameStage extends Stage implements InputProcessor {
 
     @Override
     public void draw(){
-        super.draw();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 
         worldRenderer.render();
         // DRAWING GAME OBJECTS
@@ -107,7 +103,6 @@ public class GameStage extends Stage implements InputProcessor {
         }
         player.animateSkills(TIME_STEP);
         batch.end();
-
 
         sr.begin();
         player.drawShape(sr);
@@ -136,8 +131,8 @@ public class GameStage extends Stage implements InputProcessor {
 
 
         player.setVelocity(vec);
-       // camera.position.x = player.getX();
-     //   camera.position.y = player.getY();
+        getCamera().position.x = player.getX();
+        getCamera().position.y = player.getY();
     }
 
 
@@ -165,10 +160,10 @@ public class GameStage extends Stage implements InputProcessor {
 
         if (button == Input.Buttons.LEFT) {
 
-           // Vector3 target = camera.unproject(new Vector3(x, y, 0), viewport.getScreenX(), viewport.getScreenY(),
-            //        viewport.getScreenWidth(), viewport.getScreenHeight());
+            Vector3 target = getCamera().unproject(new Vector3(x, y, 0), getViewport().getScreenX(), getViewport().getScreenY(),
+                   getViewport().getScreenWidth(), getViewport().getScreenHeight());
 
-            //player.attack(target.x, target.y);
+            player.attack(target.x, target.y);
 
             return true;
         }
