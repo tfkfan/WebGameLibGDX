@@ -58,13 +58,10 @@ public abstract class Player extends WorldGameObject {
     protected Circle playerShape;
 
     public Player() {
-        super();
         init();
     }
 
-    @Override
     public void init() {
-        super.init();
         isAlive = true;
         isAnimated = false;
         attackAnimation = false;
@@ -85,7 +82,7 @@ public abstract class Player extends WorldGameObject {
     }
 
     @Override
-    public void createObject(World world, boolean isSensor) {
+    public void createObject(World world) {
         setWorld(world);
         float r = 20 / PPM;
         BodyDef bdef = new BodyDef();
@@ -94,7 +91,6 @@ public abstract class Player extends WorldGameObject {
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
-        fdef.isSensor = isSensor;
         CircleShape shape = new CircleShape();
 
         playerShape = new Circle(0, 0, r);
@@ -329,13 +325,12 @@ public abstract class Player extends WorldGameObject {
             container.animate(dt);
     }
 
-    @Override
+
     public void drawShape(ShapeRenderer sr) {
         sr.setColor(Color.BLUE);
         sr.set(ShapeType.Line);
         sr.circle(playerShape.x, playerShape.y, playerShape.radius, 100);
 
-        super.drawShape(sr);
 
         /*
          * Skill<?> skill = getCurrentSkillContainer(); if (skill != null)

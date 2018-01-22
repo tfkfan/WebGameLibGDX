@@ -28,7 +28,7 @@ import static com.webgame.game.Configs.VIEW_HEIGHT;
 import static com.webgame.game.Configs.PPM;
 
 public class GameStage extends Stage implements InputProcessor {
-    private final float TIME_STEP = 1 / 30f;
+    private final float TIME_STEP = 1 / 20f;
     private SpriteBatch batch;
     private World world;
     private WorldRenderer worldRenderer;
@@ -53,11 +53,13 @@ public class GameStage extends Stage implements InputProcessor {
         setViewport( new StretchViewport(VIEW_WIDTH / PPM, VIEW_HEIGHT / PPM, camera));
 
         player = new Mage(batch, "mage.png");
-        player.createObject(worldRenderer.world, false);
+        player.createObject(world);
+
+
 
         Player enemy = new Knight(batch, "knight.png");
         enemy.setPosition(1.5f, 1.5f);
-        enemy.createObject(worldRenderer.world, false);
+        enemy.createObject(world);
         enemy.getB2body().setTransform(1.5f, 1.5f, 0);
 
         clsnHandler = new CollisionHandler();
@@ -72,7 +74,7 @@ public class GameStage extends Stage implements InputProcessor {
 
     @Override
     public void act(float delta) {
-        super.act(delta);
+        super.act(TIME_STEP);
         handleInput();
         getCamera().update();
         player.update(TIME_STEP);
@@ -96,11 +98,10 @@ public class GameStage extends Stage implements InputProcessor {
         worldRenderer.render();
         // DRAWING GAME OBJECTS
         batch.begin();
-        player.draw(batch);
-        for (Player enemy : enemies) {
-            enemy.draw(batch);
+
+        for (Player enemy : enemies)
             enemy.animateSkills(TIME_STEP);
-        }
+
         player.animateSkills(TIME_STEP);
         batch.end();
 

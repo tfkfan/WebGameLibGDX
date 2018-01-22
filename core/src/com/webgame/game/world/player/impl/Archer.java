@@ -14,13 +14,13 @@ import static com.webgame.game.Configs.PPM;
 public class Archer extends Player {
 	public Archer(SpriteBatch batch, String spritePath) {
 		super();
-
+		/*
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spritePath);
 
 		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
 
-		/*
+
 		try {
 			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
 			skills.add(new Blizzard(batch, skillTexture, 10));
@@ -30,7 +30,7 @@ public class Archer extends Player {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
+		
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
@@ -120,5 +120,6 @@ public class Archer extends Player {
 		this.setStandRegions(standRegions);
 
 		setRegion(standRegions[0]);
+		*/
 	}
 }
