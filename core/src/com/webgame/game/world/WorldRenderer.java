@@ -31,19 +31,13 @@ public class WorldRenderer {
 	
 	private OrthographicCamera cam;
 
-	public WorldRenderer() {
-		
-	}
-
-	public void initWorld(OrthographicCamera cam) {
+	public WorldRenderer(World world, OrthographicCamera cam) {
 		this.cam = cam;
-		
+		this.world = world;
+
 		loader = new TmxMapLoader();
 		map = loader.load("map.tmx");
 		mapRenderer = new OrthogonalTiledMapRenderer(map, 1/PPM);
-	
-
-		world = new World(new Vector2(0, 0), true);
 		worldRenderer = new Box2DDebugRenderer();
 
 		BodyDef bdef = new BodyDef();
