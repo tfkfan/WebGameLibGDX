@@ -2,6 +2,7 @@ package com.webgame.game.world.player;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.webgame.game.stages.GameStage;
 import com.webgame.game.state.Direction;
 import com.webgame.game.state.PlayerState;
 import com.webgame.game.state.State;
@@ -58,10 +60,12 @@ public abstract class Player extends WorldGameObject {
     protected Circle playerShape;
 
     public Player() {
-        init();
+        super();
     }
 
+    @Override
     public void init() {
+        super.init();
         isAlive = true;
         isAnimated = false;
         attackAnimation = false;
@@ -278,6 +282,8 @@ public abstract class Player extends WorldGameObject {
             container.add(skill);
             container.setSkill(skill);
 
+
+
             this.skillContainers.add(container);
         }
     }
@@ -314,7 +320,7 @@ public abstract class Player extends WorldGameObject {
 
         super.update(dt);
 
-        playerShape.setPosition(getX() + getXOffset(), getY() + getYOffset());
+        playerShape.setPosition(getX(), getY());
     }
 
     public void animateSkills(float dt) {
@@ -340,7 +346,7 @@ public abstract class Player extends WorldGameObject {
         sr.set(ShapeType.Filled);
         sr.setColor(Color.GREEN);
 
-        sr.rect(this.getX(), this.getY() + getHeight() + 5 / PPM,
+        sr.rect(this.getX() - getXOffset(), this.getY() + getHeight() - getYOffset() + 5 / PPM,
                 (getHealthPoints() / (float) getMaxHealthPoints()) * getWidth(), 5 / PPM);
 
     }
@@ -348,7 +354,7 @@ public abstract class Player extends WorldGameObject {
     @Override
     public TextureRegion getFrame() {
         PlayerState currState = getState();
-        TextureRegion region;
+        TextureRegion region = null;
         Integer index = getDirectionIndex();
 
         switch (currState) {
@@ -373,6 +379,11 @@ public abstract class Player extends WorldGameObject {
 
     public State getPrevState() {
         return prevState;
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha){
+        super.draw(batch, parentAlpha);
     }
 
     public PlayerState getState() {

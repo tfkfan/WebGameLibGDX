@@ -25,8 +25,7 @@ public class Mage extends Player {
 	public Mage(SpriteBatch batch, String spritePath) {
 		super();
 
-		this.setSpriteBatch(batch);
-		this.setSpriteTexture(spritePath);
+
 
 		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
 		Texture skillTexture2 = SpriteTextureLoader.loadSprite("lightning.png");
@@ -69,7 +68,7 @@ public class Mage extends Player {
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
 
-		Texture spriteTexture = getSpriteTexture();
+		Texture spriteTexture =SpriteTextureLoader.loadSprite(spritePath);
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		TextureRegion[][] attackFrames = new TextureRegion[dirs][5];
@@ -152,8 +151,5 @@ public class Mage extends Player {
 		this.setAnimations(animations);
 		this.setAttackAnimations(attackAnimations);
 		this.setStandRegions(standRegions);
-
-		setRegion(standRegions[0]);
 	}
-
 }

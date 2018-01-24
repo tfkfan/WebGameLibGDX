@@ -19,9 +19,6 @@ public class DeadKnight extends Player {
 	public DeadKnight(SpriteBatch batch, String spritePath) {
 		super();
 
-		this.setSpriteBatch(batch);
-		this.setSpriteTexture(spritePath);
-
 		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
 		try {
 			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
@@ -36,7 +33,7 @@ public class DeadKnight extends Player {
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
 
-		Texture spriteTexture = getSpriteTexture();
+		Texture spriteTexture =SpriteTextureLoader.loadSprite(spritePath);
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		TextureRegion[][] attackFrames = new TextureRegion[dirs][5];
@@ -120,7 +117,7 @@ public class DeadKnight extends Player {
 		this.setAttackAnimations(attackAnimations);
 		this.setStandRegions(standRegions);
 
-		setRegion(standRegions[0]);
+		//setRegion(standRegions[0]);
 	}
 
 	@Override

@@ -1,32 +1,29 @@
 package com.webgame.game.world;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.webgame.game.utils.SpriteTextureLoader;
-import com.webgame.game.world.GameObject;
 
-public abstract class WorldGameObject extends Actor {
+import static com.webgame.game.Configs.PPM;
+
+public abstract class WorldGameObject extends GameActor {
     protected World world;
     protected Body b2body;
-    protected Vector2 velocity;
-
-    protected float xOffset;
-    protected float yOffset;
 
     public WorldGameObject() {
-
+        init();
     }
 
     public WorldGameObject(World world) {
         setWorld(world);
         createObject(world);
+        init();
+    }
+
+    @Override
+    protected void init(){
+        super.init();
+        this.setPosition(0,0);
+        setBounds(getX(), getX(),100/PPM,100/PPM);
     }
 
     public Body getB2body() {
@@ -45,34 +42,6 @@ public abstract class WorldGameObject extends Actor {
         this.world = world;
     }
 
-    public Vector2 getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(Vector2 velocity) {
-        this.velocity = velocity;
-    }
-
-    public float getXOffset() {
-        return xOffset;
-    }
-
-    public void setXOffset(float xOffset) {
-        this.xOffset = xOffset;
-    }
-
-    public float getYOffset() {
-        return yOffset;
-    }
-
-    public void setYOffset(float yOffset) {
-        this.yOffset = yOffset;
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha){
-       batch.draw(getFrame(), getX(), getY(), getWidth(), getHeight());
-    }
 
     public void update(float dt) {
         b2body.setLinearVelocity(velocity);
@@ -80,5 +49,4 @@ public abstract class WorldGameObject extends Actor {
     }
 
     public abstract void createObject(World world);
-    protected abstract TextureRegion getFrame();
 }

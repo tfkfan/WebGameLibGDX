@@ -20,8 +20,6 @@ public class Knight extends Player {
 	public Knight(SpriteBatch batch, String spritePath) {
 		super();
 
-		this.setSpriteBatch(batch);
-		this.setSpriteTexture(spritePath);
 
 		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
 		ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
@@ -42,7 +40,7 @@ public class Knight extends Player {
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
 
-		Texture spriteTexture = getSpriteTexture();
+		Texture spriteTexture =SpriteTextureLoader.loadSprite(spritePath);
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		TextureRegion[][] attackFrames = new TextureRegion[dirs][5];
@@ -125,8 +123,6 @@ public class Knight extends Player {
 		this.setAnimations(attackAnimations);
 		this.setAttackAnimations(attackAnimations);
 		this.setStandRegions(standRegions);
-
-		setRegion(standRegions[0]);
 	}
 
 	@Override

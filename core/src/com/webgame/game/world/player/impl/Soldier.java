@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.state.PlayerState;
+import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.world.player.Player;
 import static com.webgame.game.Configs.PPM;
 
@@ -14,15 +15,12 @@ public class Soldier extends Player {
 	public Soldier(SpriteBatch batch, String spritePath) {
 		super();
 
-		this.setSpriteBatch(batch);
-		this.setSpriteTexture(spritePath);
 
 		//this.setSkill(new IceRain(batch, "skills.png"));
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
-
-		Texture spriteTexture = getSpriteTexture();
+		Texture spriteTexture = SpriteTextureLoader.loadSprite(spritePath);
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		TextureRegion[][] attackFrames = new TextureRegion[dirs][5];
@@ -105,8 +103,6 @@ public class Soldier extends Player {
 		this.setAnimations(attackAnimations);
 		this.setAttackAnimations(attackAnimations);
 		this.setStandRegions(standRegions);
-
-		setRegion(standRegions[0]);
 	}
 
 	@Override

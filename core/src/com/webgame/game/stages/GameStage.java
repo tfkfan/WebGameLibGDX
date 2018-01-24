@@ -28,7 +28,7 @@ import static com.webgame.game.Configs.VIEW_HEIGHT;
 import static com.webgame.game.Configs.PPM;
 
 public class GameStage extends Stage implements InputProcessor {
-    private final float TIME_STEP = 1 / 20f;
+    public static final float TIME_STEP = 1 / 20f;
     private SpriteBatch batch;
     private World world;
     private WorldRenderer worldRenderer;
@@ -70,6 +70,9 @@ public class GameStage extends Stage implements InputProcessor {
         sr = new ShapeRenderer();
 
         sr.setAutoShapeType(true);
+
+        this.addActor(player);
+        this.addActor(enemy);
     }
 
     @Override
@@ -81,7 +84,7 @@ public class GameStage extends Stage implements InputProcessor {
 
         batch.setProjectionMatrix(getCamera().combined);
         sr.setProjectionMatrix(getCamera().combined);
-        worldRenderer.world.step(0.01f, 6, 2);
+        world.step(0.01f, 6, 2);
 
         for (Player enemy : enemies) {
             enemy.update(TIME_STEP);
@@ -92,11 +95,13 @@ public class GameStage extends Stage implements InputProcessor {
 
     @Override
     public void draw(){
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         worldRenderer.render();
         // DRAWING GAME OBJECTS
+        super.draw();
         batch.begin();
 
         for (Player enemy : enemies)
@@ -110,6 +115,8 @@ public class GameStage extends Stage implements InputProcessor {
         for (Player enemy : enemies)
             enemy.drawShape(sr);
         sr.end();
+
+
     }
 
 
