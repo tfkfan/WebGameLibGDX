@@ -28,15 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Player extends WorldGameObject {
-    protected Integer healthPoints;
-    protected Integer manaPoints;
-
-    protected Integer maxHealthPoints;
-    protected Integer maxManaPoints;
-
-    protected String playerName;
-    protected Integer level;
-
     protected List<SkillContainer> skillContainers;
     protected Integer currentSkillIndex;
 
@@ -76,32 +67,14 @@ public abstract class Player extends WorldGameObject {
         currState = PlayerState.STAND;
         prevState = currState;
 
-        setHealthPoints(1000);
-        setMaxHealthPoints(1000);
+        getActorState().setHealthPoints(1000);
+        getActorState().setMaxHealthPoints(1000);
 
         stateTimer = attackTimer = 0;
         skillContainers = new ArrayList<SkillContainer>();
         setCurrentSkillIndex(0);
+        playerShape = new Circle(0, 0, getRadius());
         setBounds(0, 0, 60 / PPM, 60 / PPM);
-    }
-
-    @Override
-    public void createObject(World world) {
-        setWorld(world);
-        float r = 20 / PPM;
-        BodyDef bdef = new BodyDef();
-        bdef.position.set(0, 0);
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
-
-        FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-
-        playerShape = new Circle(0, 0, r);
-        shape.setRadius(r);
-
-        fdef.shape = shape;
-        b2body.createFixture(fdef);
     }
 
     public void attack(float targetX, float targetY) {
@@ -223,46 +196,6 @@ public abstract class Player extends WorldGameObject {
             direction = Direction.LEFTDOWN;
     }
 
-    public Integer getMaxHealthPoints() {
-        return maxHealthPoints;
-    }
-
-    public void setMaxHealthPoints(Integer maxHealthPoints) {
-        this.maxHealthPoints = maxHealthPoints;
-    }
-
-    public Integer getMaxManaPoints() {
-        return maxManaPoints;
-    }
-
-    public void setMaxManaPoints(Integer maxManaPoints) {
-        this.maxManaPoints = maxManaPoints;
-    }
-
-    public Integer getHealthPoints() {
-        return healthPoints;
-    }
-
-    public void setHealthPoints(Integer healthPoints) {
-        this.healthPoints = healthPoints;
-    }
-
-    public Integer getManaPoints() {
-        return manaPoints;
-    }
-
-    public void setManaPoints(Integer manaPoints) {
-        this.manaPoints = manaPoints;
-    }
-
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-    }
-
     public List<SkillContainer> getSkillContainers() {
         return skillContainers;
     }
@@ -283,7 +216,6 @@ public abstract class Player extends WorldGameObject {
             container.setSkill(skill);
 
 
-
             this.skillContainers.add(container);
         }
     }
@@ -294,16 +226,9 @@ public abstract class Player extends WorldGameObject {
         return skillContainers.get(currentSkillIndex);
     }
 
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
     @Override
     public void update(float dt) {
+        super.update(dt);
         updateDirection();
 
         if (oldDirection != direction || currState != prevState || stateTimer > 1000)
@@ -317,9 +242,6 @@ public abstract class Player extends WorldGameObject {
         }
 
         stateTimer += dt;
-
-        super.update(dt);
-
         playerShape.setPosition(getX(), getY());
     }
 
@@ -331,24 +253,17 @@ public abstract class Player extends WorldGameObject {
             container.animate(dt);
     }
 
-
     public void drawShape(ShapeRenderer sr) {
         sr.setColor(Color.BLUE);
         sr.set(ShapeType.Line);
         sr.circle(playerShape.x, playerShape.y, playerShape.radius, 100);
 
-
-        /*
-         * Skill<?> skill = getCurrentSkillContainer(); if (skill != null)
-         * skill.drawShape(sr);
-         */
-
+        //Health line
         sr.set(ShapeType.Filled);
         sr.setColor(Color.GREEN);
 
         sr.rect(this.getX() - getXOffset(), this.getY() + getHeight() - getYOffset() + 5 / PPM,
-                (getHealthPoints() / (float) getMaxHealthPoints()) * getWidth(), 5 / PPM);
-
+                (getActorState().getHealthPoints() / (float) getActorState().getMaxHealthPoints()) * getWidth(), 5 / PPM);
     }
 
     @Override
@@ -379,11 +294,6 @@ public abstract class Player extends WorldGameObject {
 
     public State getPrevState() {
         return prevState;
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha){
-        super.draw(batch, parentAlpha);
     }
 
     public PlayerState getState() {

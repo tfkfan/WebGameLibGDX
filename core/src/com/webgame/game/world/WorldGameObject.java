@@ -1,13 +1,14 @@
 package com.webgame.game.world;
 
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.physics.box2d.*;
 
 import static com.webgame.game.Configs.PPM;
 
 public abstract class WorldGameObject extends GameActor {
     protected World world;
     protected Body b2body;
+    protected float defaultRadius = 20/PPM;
 
     public WorldGameObject() {
         init();
@@ -48,5 +49,29 @@ public abstract class WorldGameObject extends GameActor {
         setPosition(b2body.getPosition().x, b2body.getPosition().y);
     }
 
-    public abstract void createObject(World world);
+
+    public void createObject(World world) {
+        setWorld(world);
+
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(0, 0);
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        b2body = world.createBody(bdef);
+
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+
+        shape.setRadius(defaultRadius);
+
+        fdef.shape = shape;
+        b2body.createFixture(fdef);
+    }
+
+    public float getRadius(){
+        return defaultRadius;
+    }
+
+    public void setRadius(float radius){
+        defaultRadius = radius;
+    }
 }

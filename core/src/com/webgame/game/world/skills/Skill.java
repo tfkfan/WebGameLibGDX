@@ -163,8 +163,8 @@ public abstract class Skill<T extends SkillObject> implements Cloneable {
     }
 
     public void skillCollision(Player player) {
-        if (player.getHealthPoints() <= 0) {
-            player.setHealthPoints(player.getMaxHealthPoints());
+        if (player.getActorState().getHealthPoints() <= 0) {
+            player.getActorState().setHealthPoints(player.getActorState().getMaxHealthPoints());
             return;
         }
 
@@ -177,7 +177,7 @@ public abstract class Skill<T extends SkillObject> implements Cloneable {
         if ((!isAOE || isAOE && isFalling) && !isStatic) {
             for (T frame : this.skillObjects) {
                 if (!frame.isMarked() && (!isAOE || frame.isStatic()) && Intersector.overlaps(player.getPlayerShape(), frame.getBoundingRectangle())) {
-                    player.setHealthPoints(player.getHealthPoints() - getDamage().intValue());
+                    player.getActorState().setHealthPoints(player.getActorState().getHealthPoints() - getDamage().intValue());
                     frame.setMarked(true);
 
                 }
@@ -186,7 +186,7 @@ public abstract class Skill<T extends SkillObject> implements Cloneable {
             if (isAOE && !isFalling && Intersector.overlaps(player.getPlayerShape(), getArea())
                     || !isAOE && isStatic && player.getPlayerShape().contains(getTargetPosition())) {
                 if (!isMarked)
-                    player.setHealthPoints(player.getHealthPoints() - getDamage().intValue());
+                    player.getActorState().setHealthPoints(player.getActorState().getHealthPoints() - getDamage().intValue());
                 if (!isTimed)
                     isMarked = true;
             }
