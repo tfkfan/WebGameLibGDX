@@ -1,7 +1,7 @@
-package com.webgame.game.world;
+package com.webgame.game.world.common;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public interface Animated {
+public interface IFramed {
 	TextureRegion getFrame();
 }

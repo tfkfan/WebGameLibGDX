@@ -3,17 +3,16 @@ package com.webgame.game.world.skills.impl;
 import static com.webgame.game.Configs.PPM;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.BlizzardFragmentAnimation;
-import com.webgame.game.world.skills.SkillObject;
+import com.webgame.game.world.skills.SkillSprite;
 
-public class BlizzardObject extends SkillObject {
+public class BlizzardSprite extends SkillSprite {
 	protected BlizzardFragmentAnimation animation;
 	protected TextureRegion standTexture;
 
-	public BlizzardObject() {
+	public BlizzardSprite() {
 		super();
 	}
 

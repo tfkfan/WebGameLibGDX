@@ -1,19 +1,18 @@
-package com.webgame.game.world;
+package com.webgame.game.world.common;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public abstract class GameActor extends Actor implements Movable, Animated {
+public abstract class GameActor extends Actor implements IUpdatable, IFramed {
 	protected Vector2 velocity;
 	protected float xOffset;
 	protected float yOffset;
-	protected GameActorState actorState = new GameActorState();
-
+	protected GameActorState actorState;
 	protected static final int dirs = 8;
 
 	public GameActor(){
-
+		init();
 	}
 
 	public GameActorState getActorState() {
@@ -21,6 +20,7 @@ public abstract class GameActor extends Actor implements Movable, Animated {
 	}
 
 	protected void init(){
+		actorState = new GameActorState();
 		velocity = new Vector2(0,0);
 		xOffset = yOffset = 0;
 	}

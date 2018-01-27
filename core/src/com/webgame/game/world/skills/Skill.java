@@ -13,7 +13,7 @@ import static com.webgame.game.Configs.PPM;
 
 import java.util.ArrayList;
 
-public abstract class Skill<T extends SkillObject> implements Cloneable {
+public abstract class Skill<T extends SkillSprite> implements Cloneable {
     protected Double damage;
     protected String title;
 
@@ -120,7 +120,7 @@ public abstract class Skill<T extends SkillObject> implements Cloneable {
         afterCustomAnimation();
     }
 
-    protected void resetObject(SkillObject obj) {
+    protected void resetObject(SkillSprite obj) {
         obj.setActive(false);
         obj.setStatic(false);
         obj.setPosition(0, 0);

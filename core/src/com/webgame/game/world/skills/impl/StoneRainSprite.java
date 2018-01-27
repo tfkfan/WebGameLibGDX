@@ -3,17 +3,16 @@ package com.webgame.game.world.skills.impl;
 import static com.webgame.game.Configs.PPM;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.StoneBlastAnimation;
-import com.webgame.game.world.skills.SkillObject;
+import com.webgame.game.world.skills.SkillSprite;
 
-public class StoneRainObject extends SkillObject {
+public class StoneRainSprite extends SkillSprite {
 	protected StoneBlastAnimation animation;
 	protected TextureRegion standTexture;
 
-	public StoneRainObject() {
+	public StoneRainSprite() {
 		super();
 	}
 

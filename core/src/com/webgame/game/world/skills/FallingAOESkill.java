@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import static com.webgame.game.Configs.PPM;
 
-public abstract class FallingAOESkill<T extends SkillObject> extends Skill<T> {
+public abstract class FallingAOESkill<T extends SkillSprite> extends Skill<T> {
 	protected float fallTimer;
 	protected final float fallDuration = 10;
 	protected int index;

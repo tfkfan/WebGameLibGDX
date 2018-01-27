@@ -1,7 +1,7 @@
 package com.webgame.game.world;
 
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.physics.box2d.*;
+import com.webgame.game.world.common.GameActor;
 
 import static com.webgame.game.Configs.PPM;
 

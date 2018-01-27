@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.webgame.game.world.skills.SingleSkill;
 
-public class FireBall extends SingleSkill<FireBallObject> {
+public class FireBall extends SingleSkill<FireBallSprite> {
 
 	boolean isRotated;
 
@@ -14,8 +14,8 @@ public class FireBall extends SingleSkill<FireBallObject> {
 	}
 
 	@Override
-	public FireBallObject createObject() {
-		FireBallObject obj = new FireBallObject();
+	public FireBallSprite createObject() {
+		FireBallSprite obj = new FireBallSprite();
 		return obj;
 	}
 }

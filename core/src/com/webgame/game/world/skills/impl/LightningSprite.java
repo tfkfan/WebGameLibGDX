@@ -3,16 +3,15 @@ package com.webgame.game.world.skills.impl;
 import static com.webgame.game.Configs.PPM;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.LightningAnimation;
-import com.webgame.game.world.skills.SkillObject;
+import com.webgame.game.world.skills.SkillSprite;
 
-public class LightningObject extends SkillObject {
+public class LightningSprite extends SkillSprite {
 	protected LightningAnimation animation;
 
-	public LightningObject() {
+	public LightningSprite() {
 		super();
 		animationDuration = 0.1f;
 	}

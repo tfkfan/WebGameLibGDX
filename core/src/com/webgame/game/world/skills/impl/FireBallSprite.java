@@ -3,17 +3,16 @@ package com.webgame.game.world.skills.impl;
 import static com.webgame.game.Configs.PPM;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.FireBlastAnimation;
-import com.webgame.game.world.skills.SkillObject;
+import com.webgame.game.world.skills.SkillSprite;
 
-public class FireBallObject extends SkillObject {
+public class FireBallSprite extends SkillSprite {
 	protected TextureRegion standTexture;
 	protected FireBlastAnimation animation;
 
-	public FireBallObject() {
+	public FireBallSprite() {
 		super();
 	}
 

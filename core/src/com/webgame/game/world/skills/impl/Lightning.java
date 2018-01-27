@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.world.skills.StaticSkill;
 
-public class Lightning extends StaticSkill<LightningObject> {
+public class Lightning extends StaticSkill<LightningSprite> {
 	public Lightning(SpriteBatch batch, Texture spriteTexture) throws Exception {
 		super(batch, spriteTexture, 1);
 		setTimed(false);
@@ -13,8 +13,8 @@ public class Lightning extends StaticSkill<LightningObject> {
 	}
 
 	@Override
-	public LightningObject createObject() {
-		LightningObject obj = new LightningObject();
+	public LightningSprite createObject() {
+		LightningSprite obj = new LightningSprite();
 		obj.setStatic(true);
 		obj.setAOE(true);
 		// obj.rotate(-150);
@@ -22,7 +22,7 @@ public class Lightning extends StaticSkill<LightningObject> {
 	}
 
 	@Override
-	protected void initPositions(LightningObject frame, Vector2 target) {
+	protected void initPositions(LightningSprite frame, Vector2 target) {
 		float x = target.x - frame.getWidth()/2;
 		float y = target.y;
 		frame.updateDistance();

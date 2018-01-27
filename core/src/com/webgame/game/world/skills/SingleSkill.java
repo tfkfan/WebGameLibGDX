@@ -1,12 +1,10 @@
 package com.webgame.game.world.skills;
 
-import java.util.List;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-public abstract class SingleSkill<T extends SkillObject> extends Skill<T> {
+public abstract class SingleSkill<T extends SkillSprite> extends Skill<T> {
 	public SingleSkill(SpriteBatch batch, Texture spriteTexture) throws Exception {
 		super(batch, spriteTexture, 1);
 		setAOE(false);

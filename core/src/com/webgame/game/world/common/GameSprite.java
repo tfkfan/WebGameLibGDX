@@ -1,4 +1,4 @@
-package com.webgame.game.world;
+package com.webgame.game.world.common;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.utils.SpriteTextureLoader;
 
-public abstract class GameObject extends Sprite implements Movable, Animated {
+public abstract class GameSprite extends Sprite implements IUpdatable, IFramed {
 	protected Vector2 velocity;
 
 	protected float xOffset;
@@ -19,7 +19,7 @@ public abstract class GameObject extends Sprite implements Movable, Animated {
 	protected SpriteBatch batch;
 	protected Texture spriteTexture;
 
-	public GameObject() {
+	public GameSprite() {
 		init();
 	}
 

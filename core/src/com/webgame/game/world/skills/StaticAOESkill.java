@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public abstract class StaticAOESkill<T extends SkillObject> extends Skill<T> {
+public abstract class StaticAOESkill<T extends SkillSprite> extends Skill<T> {
 	final int w = 100;
 	final int h = 100;
 

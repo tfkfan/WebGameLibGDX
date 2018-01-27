@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.webgame.game.world.skills.StaticAOESkill;
 
-public class Explosion extends StaticAOESkill<ExplosionObject> {
+public class Explosion extends StaticAOESkill<ExplosionSprite> {
 	public Explosion(SpriteBatch batch, Texture spriteTexture) throws Exception {
 		super(batch, spriteTexture, 1);
 		setTimed(false);
@@ -12,8 +12,8 @@ public class Explosion extends StaticAOESkill<ExplosionObject> {
 	}
 
 	@Override
-	public ExplosionObject createObject() {
-		ExplosionObject obj = new ExplosionObject();
+	public ExplosionSprite createObject() {
+		ExplosionSprite obj = new ExplosionSprite();
 		obj.setStatic(true);
 		obj.setAOE(true);
 		return obj;
@@ -21,7 +21,7 @@ public class Explosion extends StaticAOESkill<ExplosionObject> {
 
 	@Override
 	protected void afterCustomAnimation() {
-		ExplosionObject obj = getSkillObjects().get(0);
+		ExplosionSprite obj = getSkillObjects().get(0);
 		if (obj.getAnimateTimer() > obj.getAnimationMaxDuration())
 			isActive = false;
 	}

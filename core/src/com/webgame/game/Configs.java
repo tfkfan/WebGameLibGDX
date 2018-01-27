@@ -17,4 +17,5 @@ public class Configs {
 	public static final float PPM = 100;
 	
 	public static final String PLAYER_SPRITE_PATH = "sprites.jpg";
+    public static final float TIME_STEP = 1 / 20f;
 }

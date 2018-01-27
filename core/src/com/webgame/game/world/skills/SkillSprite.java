@@ -3,9 +3,9 @@ package com.webgame.game.world.skills;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.world.GameObject;
+import com.webgame.game.world.common.GameSprite;
 
-public abstract class SkillObject extends GameObject implements Cloneable {
+public abstract class SkillSprite extends GameSprite implements Cloneable {
 	protected boolean isActive;
 	protected boolean isStatic;
 	protected boolean isFalling;
@@ -19,7 +19,7 @@ public abstract class SkillObject extends GameObject implements Cloneable {
 	protected float animationMaxDuration;
 	protected float animateTimer = 0;
 
-	public SkillObject() {
+	public SkillSprite() {
 		super();
 		distance = new Vector2(0, 0);
 		animationMaxDuration = animationDuration * 3;

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-public abstract class StaticSkill<T extends SkillObject> extends Skill<T> {
+public abstract class StaticSkill<T extends SkillSprite> extends Skill<T> {
 	protected float skillDuration = 10;
 
 	protected Vector2 vel = new Vector2(0, 0);
