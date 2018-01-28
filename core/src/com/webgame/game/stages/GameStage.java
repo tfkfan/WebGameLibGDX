@@ -94,7 +94,7 @@ public class GameStage extends Stage {
 
     @Override
     public void act(float delta) {
-        super.act(Configs.TIME_STEP);
+        super.act(delta);
         handleInput();
         getCamera().update();
         player.update(Configs.TIME_STEP);
