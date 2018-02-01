@@ -24,7 +24,7 @@ public class DeadKnight extends Player {
 			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
 			skills.add(new Blizzard(batch, skillTexture, 10));
 
-			this.setSkills(skills);
+			//this.setSkills(skills);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -75,8 +75,8 @@ public class GameStage extends Stage {
         player.addListener(new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                if (keycode >= 8 && keycode <= 16)
-                    player.setCurrentSkillIndex(keycode - 8);
+                //if (keycode >= 8 && keycode <= 16)
+                 //   player.setCurrentSkillIndex(keycode - 8);
                 return false;
             }
 
@@ -119,14 +119,6 @@ public class GameStage extends Stage {
         worldRenderer.render();
         // DRAWING GAME OBJECTS
         super.draw();
-        batch.begin();
-
-        for (Player enemy : enemies)
-            enemy.animateSkills(Configs.TIME_STEP);
-
-        player.animateSkills(Configs.TIME_STEP);
-        batch.end();
-
         sr.begin();
         player.drawShape(sr);
         for (Player enemy : enemies)
@@ -168,7 +160,7 @@ public class GameStage extends Stage {
             Vector3 target = getCamera().unproject(new Vector3(x, y, 0), getViewport().getScreenX(), getViewport().getScreenY(),
                     getViewport().getScreenWidth(), getViewport().getScreenHeight());
 
-            player.attack(target.x, target.y);
+            //player.attack(target.x, target.y);
 
             return true;
         }

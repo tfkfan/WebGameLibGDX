@@ -29,9 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Player extends WorldGameObject {
-    protected List<SkillContainer> skillContainers;
-    protected Integer currentSkillIndex;
-
     protected boolean isAnimated;
     protected boolean attackAnimation;
     protected boolean isAlive;
@@ -72,32 +69,72 @@ public abstract class Player extends WorldGameObject {
         getActorState().setMaxHealthPoints(1000);
 
         stateTimer = attackTimer = 0;
-        skillContainers = new ArrayList<SkillContainer>();
-        setCurrentSkillIndex(0);
         playerShape = new Circle(0, 0, getRadius());
         setBounds(0, 0, 60 / PPM, 60 / PPM);
     }
 
-    public void attack(float targetX, float targetY) {
-        SkillContainer container = getCurrentSkillContainer();
-        if (container == null)
-            return;
-        if (container.isAvailable()) {
-            Skill<?> newSkill = container.createSkill();
-            setState(PlayerState.ATTACK, true);
-            attackAnimation = true;
-
-            newSkill.cast(new Vector2(getX(), getY()), new Vector2(targetX, targetY));
-            container.add(newSkill);
-        }
+    public boolean isAnimated() {
+        return isAnimated;
     }
 
-    public Integer getCurrentSkillIndex() {
-        return currentSkillIndex;
+    public void setAnimated(boolean animated) {
+        isAnimated = animated;
     }
 
-    public void setCurrentSkillIndex(Integer currentSkillIndex) {
-        this.currentSkillIndex = currentSkillIndex;
+    public boolean isAttackAnimation() {
+        return attackAnimation;
+    }
+
+    public void setAttackAnimation(boolean attackAnimation) {
+        this.attackAnimation = attackAnimation;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
+    public float getAttackTimer() {
+        return attackTimer;
+    }
+
+    public void setAttackTimer(float attackTimer) {
+        this.attackTimer = attackTimer;
+    }
+
+    public void setStateTimer(float stateTimer) {
+        this.stateTimer = stateTimer;
+    }
+
+    public float getAttackLimit() {
+        return attackLimit;
+    }
+
+    public Direction getOldDirection() {
+        return oldDirection;
+    }
+
+    public void setOldDirection(Direction oldDirection) {
+        this.oldDirection = oldDirection;
+    }
+
+    public State getCurrState() {
+        return currState;
+    }
+
+    public void setCurrState(State currState) {
+        this.currState = currState;
+    }
+
+    public State getPrevState() {
+        return prevState;
+    }
+
+    public void setPrevState(State prevState) {
+        this.prevState = prevState;
     }
 
     public Circle getPlayerShape() {
@@ -197,10 +234,8 @@ public abstract class Player extends WorldGameObject {
             direction = Direction.LEFTDOWN;
     }
 
-    public List<SkillContainer> getSkillContainers() {
-        return skillContainers;
-    }
 
+/*
     public void setSkills(List<Skill<?>> skills) {
         for (int i = 0; i < skills.size(); i++) {
             Skill<?> skill = skills.get(i);
@@ -220,12 +255,9 @@ public abstract class Player extends WorldGameObject {
             this.skillContainers.add(container);
         }
     }
+    */
 
-    public SkillContainer getCurrentSkillContainer() {
-        if (skillContainers == null || currentSkillIndex < 0 || currentSkillIndex >= skillContainers.size())
-            return null;
-        return skillContainers.get(currentSkillIndex);
-    }
+
 
     @Override
     public void update(float dt) {
@@ -246,13 +278,6 @@ public abstract class Player extends WorldGameObject {
         playerShape.setPosition(getX(), getY());
     }
 
-    public void animateSkills(float dt) {
-        if (skillContainers == null)
-            return;
-
-        for (SkillContainer container : skillContainers)
-            container.animate(dt);
-    }
 
     public void drawShape(ShapeRenderer sr) {
         sr.setColor(Color.BLUE);
@@ -291,10 +316,6 @@ public abstract class Player extends WorldGameObject {
 
     public Rectangle getPlayerRectangle() {
         return new Rectangle(this.getX(), this.getY(), getWidth(), getHeight());
-    }
-
-    public State getPrevState() {
-        return prevState;
     }
 
     public PlayerState getState() {

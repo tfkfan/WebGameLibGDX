@@ -13,6 +13,7 @@ public class CollisionHandler {
 	}
 
 	public void collision(Player player, Player enemy) {
+		/*
 		if (enemy == player)
 			return;
 
@@ -45,5 +46,6 @@ public class CollisionHandler {
 				skill.skillCollision(player);
 			}
 		}
+		*/
 	}
 }

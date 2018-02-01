@@ -35,7 +35,7 @@ public class Knight extends Player {
 			e.printStackTrace();
 		}
 		
-		this.setSkills(skills);
+		//this.setSkills(skills);
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);

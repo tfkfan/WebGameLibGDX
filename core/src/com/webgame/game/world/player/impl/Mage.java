@@ -59,7 +59,7 @@ public class Mage extends Player {
 			Tornado t = new Tornado(batch, skillTexture);
 			t.setDamage(3d);
 			skills.add(t);
-			this.setSkills(skills);
+			//this.setSkills(skills);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
