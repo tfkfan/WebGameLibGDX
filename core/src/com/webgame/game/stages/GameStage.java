@@ -13,13 +13,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.webgame.game.Configs;
+import com.webgame.game.stages.actor.SkillPanel;
 import com.webgame.game.world.WorldRenderer;
 import com.webgame.game.world.player.Player;
 import com.webgame.game.world.player.impl.Knight;
 import com.webgame.game.world.player.impl.Mage;
 import com.webgame.game.world.skills.collision.CollisionHandler;
+import com.webgame.game.world.skills.cooldown.SkillContainer;
 
 import static com.webgame.game.Configs.VIEW_WIDTH;
 
@@ -38,14 +44,17 @@ public class GameStage extends Stage {
     private final Player player;
     private List<Player> enemies;
     private CollisionHandler clsnHandler;
-
+    private SkillPanel skillPanel;
+    private OrthographicCamera camera;
+    public static Skin skin;
 
     public GameStage() {
         Gdx.input.setInputProcessor(this);
 
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
         batch = new SpriteBatch();
 
-        OrthographicCamera camera = new OrthographicCamera();
+        camera = new OrthographicCamera();
         camera.position.set(0, 0, 0);
         camera.update();
 
@@ -63,6 +72,7 @@ public class GameStage extends Stage {
         enemy.getB2body().setTransform(1.5f, 1.5f, 0);
 
         clsnHandler = new CollisionHandler();
+        skillPanel = new SkillPanel(player);
 
         enemies = new ArrayList<Player>();
         enemies.add(enemy);
@@ -82,13 +92,23 @@ public class GameStage extends Stage {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-               
+
 
                 return true;
             }
         });
+
         setKeyboardFocus(player);
+
+
+
+
+        this.addActor(skillPanel);
+
+
+
         this.addActor(player);
+        this.addActor(skillPanel);
         this.addActor(enemy);
     }
 
@@ -96,11 +116,11 @@ public class GameStage extends Stage {
     public void act(float delta) {
         super.act(Configs.TIME_STEP);
         handleInput();
-        getCamera().update();
+        camera.update();
         player.update(Configs.TIME_STEP);
 
-        batch.setProjectionMatrix(getCamera().combined);
-        sr.setProjectionMatrix(getCamera().combined);
+        batch.setProjectionMatrix(camera.combined);
+        sr.setProjectionMatrix(camera.combined);
         world.step(0.01f, 6, 2);
 
         for (Player enemy : enemies) {
@@ -108,6 +128,8 @@ public class GameStage extends Stage {
             clsnHandler.collision(player, enemy);
         }
 
+        skillPanel.setPosition(camera.position.x - camera.viewportWidth / 2,
+                camera.position.y - camera.viewportHeight / 2);
     }
 
     @Override
@@ -118,6 +140,7 @@ public class GameStage extends Stage {
 
         worldRenderer.render();
         // DRAWING GAME OBJECTS
+
         super.draw();
         batch.begin();
 
@@ -162,7 +185,7 @@ public class GameStage extends Stage {
 
     @Override
     public boolean touchDown(int x, int y, int pointer, int button) {
-        super.touchDown( x,  y,  pointer, button);
+        super.touchDown(x, y, pointer, button);
         if (button == Input.Buttons.LEFT) {
 
             Vector3 target = getCamera().unproject(new Vector3(x, y, 0), getViewport().getScreenX(), getViewport().getScreenY(),
