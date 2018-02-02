@@ -23,6 +23,7 @@ public class Mage extends Player {
 		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
 		Texture skillTexture2 = SpriteTextureLoader.loadSprite("lightning.png");
 		Texture skillTexture3 = SpriteTextureLoader.loadSprite("s7.png");
+		Texture skillTexture4 = SpriteTextureLoader.loadSprite("s5.png");
 		try {
 			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
 			Blizzard b = new Blizzard(batch, skillTexture, 30);
@@ -57,6 +58,10 @@ public class Mage extends Player {
 			IceExplosion ie = new IceExplosion(batch, skillTexture3);
 			ie.setDamage(70d);
 			skills.add(ie);
+
+			MagicBuff mb = new MagicBuff (batch, skillTexture4);
+			ie.setDamage(0d);
+			skills.add(mb);
 			this.setSkills(skills);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
