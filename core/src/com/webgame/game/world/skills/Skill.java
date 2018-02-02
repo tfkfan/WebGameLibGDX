@@ -36,7 +36,7 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
     protected boolean isBuff;
 
     protected final float absVelocity = 10f / PPM;
-    protected float skillDuration = 10;
+    protected float skillDuration = 100;
 
     protected Rectangle area;
     protected float skillTimer;

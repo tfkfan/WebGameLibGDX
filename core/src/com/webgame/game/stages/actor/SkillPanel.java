@@ -50,7 +50,7 @@ public class SkillPanel extends Group {
 
     public void act(float dt){
         int d= player.getCurrentSkillIndex();
-        Gdx.app.log("",d + "");
+       // Gdx.app.log("",d + "");
         for(int i = 0; i < buttons.length; i++){
             if(d == i)
                 buttons[i].getStyle().fontColor = Color.RED;
@@ -70,7 +70,7 @@ public class SkillPanel extends Group {
             textButtonStyle.fontColor = Color.WHITE;
 
             textButtonStyle.downFontColor = Color.BLACK;
-            textButtonStyle.checkedFontColor = Color.GREEN;
+            //textButtonStyle.checkedFontColor = Color.GREEN;
             TextButton btn = new TextButton("Skill" + (i+1), textButtonStyle );
 
             btn.setBounds (getX() + (i+1)*50/ Configs.PPM, getY() + 40/Configs.PPM, 15/ Configs.PPM, 15/Configs.PPM);
