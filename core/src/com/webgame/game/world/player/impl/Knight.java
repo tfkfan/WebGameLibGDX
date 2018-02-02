@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.webgame.game.Configs;
 import com.webgame.game.state.PlayerState;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.world.player.Player;
@@ -21,7 +22,7 @@ public class Knight extends Player {
 		super();
 
 
-		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
+		Texture skillTexture = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/skills.png");
 		ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
 		try {
 			Blizzard b = new Blizzard(batch, skillTexture, 30);

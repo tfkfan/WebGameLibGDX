@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.webgame.game.Configs;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -36,7 +37,7 @@ public class WorldRenderer {
 		this.world = world;
 
 		loader = new TmxMapLoader();
-		map = loader.load("map.tmx");
+		map = loader.load(Configs.MAPS_FOLDER + "/map.tmx");
 		mapRenderer = new OrthogonalTiledMapRenderer(map, 1/PPM);
 		worldRenderer = new Box2DDebugRenderer();
 

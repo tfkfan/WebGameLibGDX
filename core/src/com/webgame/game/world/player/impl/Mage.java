@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.webgame.game.Configs;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.world.player.Player;
 import com.webgame.game.world.skills.Skill;
@@ -18,14 +19,14 @@ public class Mage extends Player {
 
 	public Mage(SpriteBatch batch, String spritePath) {
 		super();
-		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
-		Texture skillTexture2 = SpriteTextureLoader.loadSprite("lightning.png");
-		Texture skillTexture3 = SpriteTextureLoader.loadSprite("s7.png");
-		Texture skillTexture4 = SpriteTextureLoader.loadSprite("s5.png");
-		Texture skillTexture5 = SpriteTextureLoader.loadSprite("cast_005.png");
-		Texture skillTexture6 = SpriteTextureLoader.loadSprite("s6.png");
-		Texture skillTexture7 = SpriteTextureLoader.loadSprite("s9.png");
-		Texture skillTexture8 = SpriteTextureLoader.loadSprite("s2.png");
+		Texture skillTexture = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png");
+		Texture skillTexture2 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/lightning.png");
+		Texture skillTexture3 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/s7.png");
+		Texture skillTexture4 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/s5.png");
+		Texture skillTexture5 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/cast_005.png");
+		Texture skillTexture6 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/s6.png");
+		Texture skillTexture7 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/s9.png");
+		Texture skillTexture8 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/s2.png");
 		try {
 			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
 

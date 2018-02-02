@@ -46,12 +46,10 @@ public class GameStage extends Stage {
     private CollisionHandler clsnHandler;
     private SkillPanel skillPanel;
     private OrthographicCamera camera;
-    public static Skin skin;
 
     public GameStage() {
         Gdx.input.setInputProcessor(this);
 
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
         batch = new SpriteBatch();
 
         camera = new OrthographicCamera();
@@ -62,11 +60,11 @@ public class GameStage extends Stage {
         worldRenderer = new WorldRenderer(world, camera);
         setViewport(new StretchViewport(VIEW_WIDTH / PPM, VIEW_HEIGHT / PPM, camera));
 
-        player = new Mage(batch, "mage.png");
+        player = new Mage(batch, Configs.PLAYERSHEETS_FOLDER + "/mage.png");
         player.createObject(world);
 
 
-        Player enemy = new Knight(batch, "knight.png");
+        Player enemy = new Knight(batch, Configs.PLAYERSHEETS_FOLDER + "/knight.png");
         enemy.setPosition(1.5f, 1.5f);
         enemy.createObject(world);
         enemy.getB2body().setTransform(1.5f, 1.5f, 0);
@@ -101,10 +99,7 @@ public class GameStage extends Stage {
         setKeyboardFocus(player);
 
 
-
-
         this.addActor(skillPanel);
-
 
 
         this.addActor(player);
