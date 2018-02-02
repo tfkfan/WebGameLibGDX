@@ -1,17 +1,16 @@
-package com.webgame.game.world.skills.impl;
+package com.webgame.game.world.skills.impl.skill_sprites;
 
 import static com.webgame.game.Configs.PPM;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.game.animation.FireBlastAnimation;
+import com.webgame.game.animation.impl.TornadoAnimation;
 import com.webgame.game.world.skills.SkillSprite;
 
-public class ExplosionSprite extends SkillSprite {
-	protected FireBlastAnimation animation;
+public class TornadoSprite extends SkillSprite {
+	protected TornadoAnimation animation;
 
-	public ExplosionSprite() {
+	public TornadoSprite() {
 		super();
 	}
 
@@ -20,9 +19,8 @@ public class ExplosionSprite extends SkillSprite {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spriteTexture);
 
-		animationMaxDuration = 1.7f;
-		animationDuration = 0.1f;
-		animation = new FireBlastAnimation(spriteTexture, animationDuration, animationMaxDuration);
+		animation = new TornadoAnimation(spriteTexture, animationDuration, animationMaxDuration);
+
 		int w2 = 100;
 		int h2 = 100;
 		this.setBounds(0, 0, w2 / PPM, h2 / PPM);
@@ -34,8 +32,9 @@ public class ExplosionSprite extends SkillSprite {
 		TextureRegion region = null;
 
 		if (isActive)
-			region = animation.getAnimation().getKeyFrame(animateTimer, false);
+			region = animation.getAnimation().getKeyFrame(animateTimer, true);
 
 		return region;
 	}
+
 }

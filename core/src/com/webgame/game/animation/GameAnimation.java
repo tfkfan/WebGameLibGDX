@@ -37,7 +37,7 @@ public abstract class GameAnimation{
         this.animation = animation;
     }
 
-    abstract void initAnimation();
+    public abstract void initAnimation();
 
     public Float getAnimationMaxDuration() {
         return animationMaxDuration;

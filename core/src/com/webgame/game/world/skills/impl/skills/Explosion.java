@@ -1,8 +1,9 @@
-package com.webgame.game.world.skills.impl;
+package com.webgame.game.world.skills.impl.skills;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.webgame.game.world.skills.StaticAOESkill;
+import com.webgame.game.world.skills.impl.skill_sprites.ExplosionSprite;
 
 public class Explosion extends StaticAOESkill<ExplosionSprite> {
 	public Explosion(SpriteBatch batch, Texture spriteTexture) throws Exception {

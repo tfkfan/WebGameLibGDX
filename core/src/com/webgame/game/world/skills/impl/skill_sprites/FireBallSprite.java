@@ -1,11 +1,11 @@
-package com.webgame.game.world.skills.impl;
+package com.webgame.game.world.skills.impl.skill_sprites;
 
 import static com.webgame.game.Configs.PPM;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.game.animation.FireBlastAnimation;
+import com.webgame.game.animation.impl.FireBlastAnimation;
 import com.webgame.game.world.skills.SkillSprite;
 
 public class FireBallSprite extends SkillSprite {

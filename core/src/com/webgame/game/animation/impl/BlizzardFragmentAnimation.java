@@ -1,16 +1,17 @@
-package com.webgame.game.animation;
+package com.webgame.game.animation.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.webgame.game.animation.GameAnimation;
 
-public class TornadoAnimation extends GameAnimation {
+public class BlizzardFragmentAnimation extends GameAnimation {
 
-    public TornadoAnimation(Texture spriteTexture) {
+    public BlizzardFragmentAnimation(Texture spriteTexture) {
         super(spriteTexture);
     }
 
-    public TornadoAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
+    public BlizzardFragmentAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
         super(spriteTexture,  animationDuration, animationMaxDuration);
     }
 
@@ -25,14 +26,14 @@ public class TornadoAnimation extends GameAnimation {
 
     @Override
     public void initAnimation() {
-        int h = 60;
-        int w = 64;
-        int l = 4;
+        int h = 30;
+        int w = 30;
+        int l = 3;
 
         TextureRegion[] frames = new TextureRegion[l];
 
         for (int i = 0; i < l; i++)
-            frames[i] = new TextureRegion(spriteTexture, 594 + w * (i + 1), 295, 60, h);
+            frames[i] = new TextureRegion(this.spriteTexture, 5 + w * (i + 1), 245, w, h);
 
         setAnimation(new Animation<TextureRegion>(animationDuration, frames));
 

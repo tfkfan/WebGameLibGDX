@@ -1,8 +1,9 @@
-package com.webgame.game.animation;
+package com.webgame.game.animation.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.webgame.game.animation.GameAnimation;
 
 public class MeteorBlastAnimation extends GameAnimation {
 

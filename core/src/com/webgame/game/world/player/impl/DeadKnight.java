@@ -9,7 +9,7 @@ import com.webgame.game.state.PlayerState;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.world.player.Player;
 import com.webgame.game.world.skills.Skill;
-import com.webgame.game.world.skills.impl.Blizzard;
+import com.webgame.game.world.skills.impl.skills.Blizzard;
 
 import static com.webgame.game.Configs.PPM;
 

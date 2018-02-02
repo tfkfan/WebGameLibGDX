@@ -1,16 +1,17 @@
-package com.webgame.game.animation;
+package com.webgame.game.animation.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.webgame.game.animation.GameAnimation;
 
-public class LightningAnimation extends GameAnimation {
+public class TornadoAnimation extends GameAnimation {
 
-    public LightningAnimation(Texture spriteTexture) {
+    public TornadoAnimation(Texture spriteTexture) {
         super(spriteTexture);
     }
 
-    public LightningAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
+    public TornadoAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
         super(spriteTexture,  animationDuration, animationMaxDuration);
     }
 
@@ -25,18 +26,14 @@ public class LightningAnimation extends GameAnimation {
 
     @Override
     public void initAnimation() {
-        int h = 700;
-        int w = 700;
+        int h = 60;
+        int w = 64;
         int l = 4;
 
         TextureRegion[] frames = new TextureRegion[l];
 
-        for (int i = 0, k = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++, k++)
-                frames[k] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
-        }
-
-        animation = new Animation<TextureRegion>(animationDuration, frames);
+        for (int i = 0; i < l; i++)
+            frames[i] = new TextureRegion(spriteTexture, 594 + w * (i + 1), 295, 60, h);
 
         setAnimation(new Animation<TextureRegion>(animationDuration, frames));
 

@@ -1,5 +1,7 @@
 package com.webgame.game.world.player.impl;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,13 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.world.player.Player;
 import com.webgame.game.world.skills.Skill;
-import com.webgame.game.world.skills.impl.Blizzard;
-import com.webgame.game.world.skills.impl.Explosion;
-import com.webgame.game.world.skills.impl.FireBall;
-import com.webgame.game.world.skills.impl.Lightning;
-import com.webgame.game.world.skills.impl.MeteorRain;
-import com.webgame.game.world.skills.impl.StoneRain;
-import com.webgame.game.world.skills.impl.Tornado;
+import com.webgame.game.world.skills.impl.skills.*;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -24,11 +20,9 @@ public class Mage extends Player {
 
 	public Mage(SpriteBatch batch, String spritePath) {
 		super();
-
-
-
 		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
 		Texture skillTexture2 = SpriteTextureLoader.loadSprite("lightning.png");
+		Texture skillTexture3 = SpriteTextureLoader.loadSprite("s7.png");
 		try {
 			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
 			Blizzard b = new Blizzard(batch, skillTexture, 30);
@@ -59,6 +53,10 @@ public class Mage extends Player {
 			Tornado t = new Tornado(batch, skillTexture);
 			t.setDamage(3d);
 			skills.add(t);
+
+			IceExplosion ie = new IceExplosion(batch, skillTexture3);
+			ie.setDamage(70d);
+			skills.add(ie);
 			this.setSkills(skills);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
