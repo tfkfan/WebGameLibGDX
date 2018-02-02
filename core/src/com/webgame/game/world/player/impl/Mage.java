@@ -22,7 +22,7 @@ public class Mage extends Player {
 		Texture skillTexture2 = SpriteTextureLoader.loadSprite("lightning.png");
 		Texture skillTexture3 = SpriteTextureLoader.loadSprite("s7.png");
 		Texture skillTexture4 = SpriteTextureLoader.loadSprite("s5.png");
-		Texture skillTexture5 = SpriteTextureLoader.loadSprite("s3.png");
+		Texture skillTexture5 = SpriteTextureLoader.loadSprite("cast_005.png");
 		Texture skillTexture6 = SpriteTextureLoader.loadSprite("s6.png");
 		Texture skillTexture7 = SpriteTextureLoader.loadSprite("s9.png");
 		Texture skillTexture8 = SpriteTextureLoader.loadSprite("s2.png");
