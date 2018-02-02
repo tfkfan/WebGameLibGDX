@@ -3,16 +3,16 @@ package com.webgame.game.world.skills.impl.skill_sprites;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.game.animation.impl.FireBlastAnimation;
-import com.webgame.game.animation.impl.IceBlastAnimation;
+import com.webgame.game.animation.impl.MagicShieldAnimation;
+import com.webgame.game.animation.impl.TeleportAnimation;
 import com.webgame.game.world.skills.SkillSprite;
 
 import static com.webgame.game.Configs.PPM;
 
-public class IceExplosionSprite extends SkillSprite {
-	protected IceBlastAnimation animation;
+public class MagicShieldSprite extends SkillSprite {
+	protected MagicShieldAnimation animation;
 
-	public IceExplosionSprite() {
+	public MagicShieldSprite() {
 		super();
 	}
 
@@ -23,10 +23,10 @@ public class IceExplosionSprite extends SkillSprite {
 
 
 		animationDuration = 0.1f;
-		animation = new IceBlastAnimation(spriteTexture, animationDuration, animationMaxDuration);
-		animationMaxDuration = animationDuration*animation.getAnimation().getKeyFrames().length;
-		int w2 = 300;
-		int h2 = 200;
+		animation = new MagicShieldAnimation(spriteTexture, animationDuration, animationMaxDuration);
+		animationMaxDuration = 10*animationDuration*animation.getAnimation().getKeyFrames().length;
+		int w2 = 100;
+		int h2 = 80;
 		this.setBounds(0, 0, w2 / PPM, h2 / PPM);
 		setRegion(animation.getAnimation().getKeyFrame(0));
 	}
@@ -36,7 +36,7 @@ public class IceExplosionSprite extends SkillSprite {
 		TextureRegion region = null;
 
 		if (isActive)
-			region = animation.getAnimation().getKeyFrame(animateTimer, false);
+			region = animation.getAnimation().getKeyFrame(animateTimer, true);
 
 		return region;
 	}

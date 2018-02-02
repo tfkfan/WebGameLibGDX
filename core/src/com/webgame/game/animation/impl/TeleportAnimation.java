@@ -5,13 +5,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.GameAnimation;
 
-public class IceBlastAnimation extends GameAnimation {
+public class TeleportAnimation extends GameAnimation {
 
-    public IceBlastAnimation(Texture spriteTexture) {
+    public TeleportAnimation(Texture spriteTexture) {
         super(spriteTexture);
     }
 
-    public IceBlastAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
+    public TeleportAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
         super(spriteTexture,  animationDuration, animationMaxDuration);
     }
 
@@ -26,10 +26,10 @@ public class IceBlastAnimation extends GameAnimation {
 
     @Override
     public void initAnimation() {
-        int h = 130;
-        int w = 255;
+        int h = 190;
+        int w = 192;
         int l = 4;
-        int l2 = 3;
+        int l2 = 5;
         TextureRegion[] animationFrames = new TextureRegion[l*l2];
 
 

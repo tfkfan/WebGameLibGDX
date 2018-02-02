@@ -1,7 +1,5 @@
 package com.webgame.game.world.player.impl;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,12 +22,36 @@ public class Mage extends Player {
 		Texture skillTexture2 = SpriteTextureLoader.loadSprite("lightning.png");
 		Texture skillTexture3 = SpriteTextureLoader.loadSprite("s7.png");
 		Texture skillTexture4 = SpriteTextureLoader.loadSprite("s5.png");
+		Texture skillTexture5 = SpriteTextureLoader.loadSprite("s3.png");
+		Texture skillTexture6 = SpriteTextureLoader.loadSprite("s6.png");
+		Texture skillTexture7 = SpriteTextureLoader.loadSprite("s9.png");
+		Texture skillTexture8 = SpriteTextureLoader.loadSprite("s2.png");
 		try {
 			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
+
+
+
+			Teleport s2 = new Teleport(batch, skillTexture5);
+			s2.setDamage(5d);
+			skills.add(s2);
+
+			Heal s3 = new Heal(batch, skillTexture6);
+			//s3.setDamage(5d);
+			skills.add(s3);
+
+			MagicSource s4 = new MagicSource(batch, skillTexture7);
+			//s3.setDamage(5d);
+			skills.add(s4);
+
+			MagicShield s5 = new MagicShield(batch, skillTexture8);
+			//s3.setDamage(5d);
+			skills.add(s5);
+
+			/*
+
 			Blizzard b = new Blizzard(batch, skillTexture, 30);
 			b.setDamage(5d);
 			skills.add(b);
-			
 			MeteorRain mr = new MeteorRain(batch, skillTexture, 30);
 			mr.setDamage(5d);
 			
@@ -46,7 +68,7 @@ public class Mage extends Player {
 			FireBall fb = new FireBall(batch, skillTexture);
 			fb.setDamage(100d);
 			skills.add(fb);
-			
+			*/
 			Lightning l = new Lightning(batch, skillTexture2);
 			l.setDamage(30d);
 			skills.add(l);

@@ -5,13 +5,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.GameAnimation;
 
-public class IceBlastAnimation extends GameAnimation {
+public class MagicShieldAnimation extends GameAnimation {
 
-    public IceBlastAnimation(Texture spriteTexture) {
+    public MagicShieldAnimation(Texture spriteTexture) {
         super(spriteTexture);
     }
 
-    public IceBlastAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
+    public MagicShieldAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
         super(spriteTexture,  animationDuration, animationMaxDuration);
     }
 
@@ -26,14 +26,16 @@ public class IceBlastAnimation extends GameAnimation {
 
     @Override
     public void initAnimation() {
-        int h = 130;
-        int w = 255;
-        int l = 4;
-        int l2 = 3;
-        TextureRegion[] animationFrames = new TextureRegion[l*l2];
+        int h = 190;
+        int w = 192;
+        int l = 3;
+        int l2 = 5;
+        TextureRegion[] animationFrames = new TextureRegion[l*l2-2];
 
 
         for (int k = 0, i = 0; i < l; i++) {
+            if(i==2)
+                l2 = 3;
             for(int j = 0; j < l2; j++, k++)
                 animationFrames[k] = new TextureRegion(spriteTexture, w * j, h*i, w, h);
         }
