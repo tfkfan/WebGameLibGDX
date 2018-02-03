@@ -5,9 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.GameAnimation;
 
-public class MagicShieldAnimation extends GameAnimation {
-
-    public MagicShieldAnimation(Texture spriteTexture, Float animationDuration) {
+public class BuffAnimation extends GameAnimation {
+    public BuffAnimation(Texture spriteTexture, Float animationDuration) {
         super(spriteTexture, animationDuration);
     }
 
@@ -15,14 +14,11 @@ public class MagicShieldAnimation extends GameAnimation {
     public void initAnimation() {
         int h = 190;
         int w = 192;
-        int l = 3;
+        int l = 4;
         int l2 = 5;
-        TextureRegion[] animationFrames = new TextureRegion[l * l2 - 2];
-
+        TextureRegion[] animationFrames = new TextureRegion[l * l2];
 
         for (int k = 0, i = 0; i < l; i++) {
-            if (i == 2)
-                l2 = 3;
             for (int j = 0; j < l2; j++, k++)
                 animationFrames[k] = new TextureRegion(getSpriteTexture(), w * j, h * i, w, h);
         }

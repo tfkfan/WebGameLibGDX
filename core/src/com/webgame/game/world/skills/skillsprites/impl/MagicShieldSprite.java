@@ -9,34 +9,33 @@ import com.webgame.game.world.skills.skillsprites.SkillSprite;
 import static com.webgame.game.Configs.PPM;
 
 public class MagicShieldSprite extends SkillSprite {
-	protected MagicShieldAnimation animation;
+    public MagicShieldSprite() {
+        super();
+    }
 
-	public MagicShieldSprite() {
-		super();
-	}
-
-	@Override
-	public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
-		this.setSpriteBatch(batch);
-		this.setSpriteTexture(spriteTexture);
+    @Override
+    public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
+        this.setSpriteBatch(batch);
+        this.setSpriteTexture(spriteTexture);
 
 
-		animationDuration = 0.1f;
-		animation = new MagicShieldAnimation(spriteTexture, animationDuration, animationMaxDuration);
-		animationMaxDuration = 10*animationDuration*animation.getAnimation().getKeyFrames().length;
-		int w2 = 100;
-		int h2 = 80;
-		this.setBounds(0, 0, w2 / PPM, h2 / PPM);
-		setRegion(animation.getAnimation().getKeyFrame(0));
-	}
+        setAnimationDuration(0.1f);
+        setGameAnimation(new MagicShieldAnimation(getSpriteTexture(), getAnimationDuration()));
 
-	@Override
-	public TextureRegion getFrame() {
-		TextureRegion region = null;
+        setAnimationMaxDuration(getAnimationDuration() * getGameAnimation().getAnimation().getKeyFrames().length);
+        int w2 = 100;
+        int h2 = 80;
+        this.setBounds(0, 0, w2 / PPM, h2 / PPM);
+        setRegion(getGameAnimation().getAnimation().getKeyFrame(0));
+    }
 
-		if (isActive)
-			region = animation.getAnimation().getKeyFrame(animateTimer, true);
+    @Override
+    public TextureRegion getFrame() {
+        TextureRegion region = null;
 
-		return region;
-	}
+        if (isActive())
+            region = getGameAnimation().getAnimation().getKeyFrame(getAnimateTimer(), true);
+
+        return region;
+    }
 }

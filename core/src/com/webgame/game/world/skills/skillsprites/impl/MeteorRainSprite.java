@@ -9,42 +9,39 @@ import com.webgame.game.animation.impl.MeteorBlastAnimation;
 import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 public class MeteorRainSprite extends SkillSprite {
-	protected MeteorBlastAnimation animation;
-	protected TextureRegion standTexture;
+    public MeteorRainSprite() {
+        super();
+    }
 
-	public MeteorRainSprite() {
-		super();
-	}
+    @Override
+    public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
+        this.setSpriteBatch(batch);
+        this.setSpriteTexture(spriteTexture);
 
-	@Override
-	public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
-		this.setSpriteBatch(batch);
-		this.setSpriteTexture(spriteTexture);
+        int h = 50;
+        int w = 30;
 
-		xOffset = yOffset = 0;
-		int h = 50;
-		int w = 30;
-		int l = 5;
+        setStandTexture(new TextureRegion(getSpriteTexture(), 810, 55, w, h));
+        setAnimationDuration(0.1f);
+        setGameAnimation(new MeteorBlastAnimation(getSpriteTexture(), getAnimationDuration()));
 
-		standTexture = new TextureRegion(this.spriteTexture, 810, 55, w, h);
-		animationMaxDuration = animationDuration * l;
-		animation = new MeteorBlastAnimation(spriteTexture, animationDuration, animationMaxDuration);
+        setAnimationMaxDuration(getAnimationDuration() * getGameAnimation().getAnimation().getKeyFrames().length);
 
-		int w3 = 20;
-		int h3 = 20;
-		this.setBounds(0, 0, w3 / PPM, h3 / PPM);
-		setRegion(standTexture);
-	}
+        int w3 = 20;
+        int h3 = 20;
+        this.setBounds(0, 0, w3 / PPM, h3 / PPM);
+        setRegion(getStandTexture());
+    }
 
-	@Override
-	public TextureRegion getFrame() {
-		TextureRegion region = null;
-		if (isActive) {
-			if (isStatic && !isFinalAnimated)
-				region = animation.getAnimation().getKeyFrame(animateTimer, false);
-			else
-				region = standTexture;
-		}
-		return region;
-	}
+    @Override
+    public TextureRegion getFrame() {
+        TextureRegion region = null;
+        if (isActive()) {
+            if (isStatic() && !isFinalAnimated())
+                region = getGameAnimation().getAnimation().getKeyFrame(getAnimateTimer(), false);
+            else
+                region = getStandTexture();
+        }
+        return region;
+    }
 }

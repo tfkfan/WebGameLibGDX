@@ -2,7 +2,9 @@ package com.webgame.game.world.skills.skillsprites;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.webgame.game.animation.GameAnimation;
 import com.webgame.game.world.common.GameSprite;
 
 public abstract class SkillSprite extends GameSprite implements Cloneable {
@@ -12,6 +14,9 @@ public abstract class SkillSprite extends GameSprite implements Cloneable {
     protected boolean isFinalAnimated;
     protected boolean isAOE;
     protected boolean isMarked;
+
+    protected GameAnimation gameAnimation;
+    protected TextureRegion standTexture;
 
     protected final Vector2 distance;
 
@@ -61,6 +66,22 @@ public abstract class SkillSprite extends GameSprite implements Cloneable {
     public SkillSprite setActive(boolean isActive) {
         this.isActive = isActive;
         return this;
+    }
+
+    public GameAnimation getGameAnimation() {
+        return gameAnimation;
+    }
+
+    public void setGameAnimation(GameAnimation gameAnimation) {
+        this.gameAnimation = gameAnimation;
+    }
+
+    public TextureRegion getStandTexture() {
+        return standTexture;
+    }
+
+    public void setStandTexture(TextureRegion standTexture) {
+        this.standTexture = standTexture;
     }
 
     public boolean isActive() {

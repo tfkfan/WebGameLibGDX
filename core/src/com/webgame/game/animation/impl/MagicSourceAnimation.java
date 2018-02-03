@@ -7,21 +7,8 @@ import com.webgame.game.animation.GameAnimation;
 
 public class MagicSourceAnimation extends GameAnimation {
 
-    public MagicSourceAnimation(Texture spriteTexture) {
-        super(spriteTexture);
-    }
-
-    public MagicSourceAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
-        super(spriteTexture,  animationDuration, animationMaxDuration);
-    }
-
-    public Texture getSpriteTexture() {
-        return spriteTexture;
-    }
-
-    public void setSpriteTexture(Texture spriteTexture) {
-        this.spriteTexture = spriteTexture;
-
+    public MagicSourceAnimation(Texture spriteTexture, Float animationDuration) {
+        super(spriteTexture, animationDuration);
     }
 
     @Override
@@ -30,14 +17,14 @@ public class MagicSourceAnimation extends GameAnimation {
         int w = 171;
         int l = 6;
         int l2 = 5;
-        TextureRegion[] animationFrames = new TextureRegion[l*l2];
+        TextureRegion[] animationFrames = new TextureRegion[l * l2];
 
 
         for (int k = 0, i = 0; i < l; i++) {
-            for(int j = 0; j < l2; j++, k++)
-                animationFrames[k] = new TextureRegion(spriteTexture, w * j, h*i, w, h);
+            for (int j = 0; j < l2; j++, k++)
+                animationFrames[k] = new TextureRegion(getSpriteTexture(), w * j, h * i, w, h);
         }
-      //  animationFrames[0] = new TextureRegion(spriteTexture, 0 , 0, w, h);
-        setAnimation(new Animation<TextureRegion>(animationDuration, animationFrames));
+        //  animationFrames[0] = new TextureRegion(spriteTexture, 0 , 0, w, h);
+        setAnimation(new Animation<TextureRegion>(getAnimationDuration(), animationFrames));
     }
 }

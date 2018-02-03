@@ -7,21 +7,8 @@ import com.webgame.game.animation.GameAnimation;
 
 public class FireBlastAnimation extends GameAnimation {
 
-    public FireBlastAnimation(Texture spriteTexture) {
-        super(spriteTexture);
-    }
-
-    public FireBlastAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
-        super(spriteTexture,  animationDuration, animationMaxDuration);
-    }
-
-    public Texture getSpriteTexture() {
-        return spriteTexture;
-    }
-
-    public void setSpriteTexture(Texture spriteTexture) {
-        this.spriteTexture = spriteTexture;
-
+    public FireBlastAnimation(Texture spriteTexture, Float animationDuration) {
+        super(spriteTexture, animationDuration);
     }
 
     @Override
@@ -32,8 +19,8 @@ public class FireBlastAnimation extends GameAnimation {
         TextureRegion[] animationFrames = new TextureRegion[l];
 
         for (int i = 0; i < l; i++)
-            animationFrames[i] = new TextureRegion(spriteTexture, 4 + w * i, 165, w, h);
+            animationFrames[i] = new TextureRegion(getSpriteTexture(), 4 + w * i, 165, w, h);
 
-        setAnimation(new Animation<TextureRegion>(animationDuration, animationFrames));
+        setAnimation(new Animation<TextureRegion>(getAnimationDuration(), animationFrames));
     }
 }

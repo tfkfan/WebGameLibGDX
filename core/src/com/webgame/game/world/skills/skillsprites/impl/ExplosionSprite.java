@@ -9,33 +9,31 @@ import com.webgame.game.animation.impl.FireBlastAnimation;
 import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 public class ExplosionSprite extends SkillSprite {
-	protected FireBlastAnimation animation;
+    public ExplosionSprite() {
+        super();
+    }
 
-	public ExplosionSprite() {
-		super();
-	}
+    @Override
+    public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
+        this.setSpriteBatch(batch);
+        this.setSpriteTexture(spriteTexture);
 
-	@Override
-	public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
-		this.setSpriteBatch(batch);
-		this.setSpriteTexture(spriteTexture);
+        setAnimationDuration(0.1f);
+        setGameAnimation(new FireBlastAnimation(getSpriteTexture(), getAnimationDuration()));
+        setAnimationMaxDuration(getAnimationDuration() * getGameAnimation().getAnimation().getKeyFrames().length);
+        int w2 = 100;
+        int h2 = 100;
+        this.setBounds(0, 0, w2 / PPM, h2 / PPM);
+        setRegion(getGameAnimation().getAnimation().getKeyFrame(0));
+    }
 
-		animationMaxDuration = 1.7f;
-		animationDuration = 0.1f;
-		animation = new FireBlastAnimation(spriteTexture, animationDuration, animationMaxDuration);
-		int w2 = 100;
-		int h2 = 100;
-		this.setBounds(0, 0, w2 / PPM, h2 / PPM);
-		setRegion(animation.getAnimation().getKeyFrame(0));
-	}
+    @Override
+    public TextureRegion getFrame() {
+        TextureRegion region = null;
 
-	@Override
-	public TextureRegion getFrame() {
-		TextureRegion region = null;
+        if (isActive())
+            region = getGameAnimation().getAnimation().getKeyFrame(getAnimateTimer(), false);
 
-		if (isActive)
-			region = animation.getAnimation().getKeyFrame(animateTimer, false);
-
-		return region;
-	}
+        return region;
+    }
 }

@@ -7,21 +7,8 @@ import com.webgame.game.animation.GameAnimation;
 
 public class StoneBlastAnimation extends GameAnimation {
 
-    public StoneBlastAnimation(Texture spriteTexture) {
-        super(spriteTexture);
-    }
-
-    public StoneBlastAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
-        super(spriteTexture,  animationDuration, animationMaxDuration);
-    }
-
-    public Texture getSpriteTexture() {
-        return spriteTexture;
-    }
-
-    public void setSpriteTexture(Texture spriteTexture) {
-        this.spriteTexture = spriteTexture;
-
+    public StoneBlastAnimation(Texture spriteTexture, Float animationDuration) {
+        super(spriteTexture, animationDuration);
     }
 
     @Override
@@ -34,8 +21,8 @@ public class StoneBlastAnimation extends GameAnimation {
 
         // ��������
         for (int i = 0; i < l; i++)
-            animationFrames[i] = new TextureRegion(spriteTexture, -5 + w * (i + 1), 80, w, h);
+            animationFrames[i] = new TextureRegion(getSpriteTexture(), -5 + w * (i + 1), 80, w, h);
 
-        setAnimation(new Animation<TextureRegion>(animationDuration, animationFrames));
+        setAnimation(new Animation<TextureRegion>(getAnimationDuration(), animationFrames));
     }
 }

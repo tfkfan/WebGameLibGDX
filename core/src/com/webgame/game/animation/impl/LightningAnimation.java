@@ -7,21 +7,9 @@ import com.webgame.game.animation.GameAnimation;
 
 public class LightningAnimation extends GameAnimation {
 
-    public LightningAnimation(Texture spriteTexture) {
-        super(spriteTexture);
-    }
 
-    public LightningAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
-        super(spriteTexture,  animationDuration, animationMaxDuration);
-    }
-
-    public Texture getSpriteTexture() {
-        return spriteTexture;
-    }
-
-    public void setSpriteTexture(Texture spriteTexture) {
-        this.spriteTexture = spriteTexture;
-
+    public LightningAnimation(Texture spriteTexture, Float animationDuration) {
+        super(spriteTexture, animationDuration);
     }
 
     @Override
@@ -34,12 +22,9 @@ public class LightningAnimation extends GameAnimation {
 
         for (int i = 0, k = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++, k++)
-                frames[k] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
+                frames[k] = new TextureRegion(getSpriteTexture(), w * i, h * j, w, h);
         }
-
-        animation = new Animation<TextureRegion>(animationDuration, frames);
-
-        setAnimation(new Animation<TextureRegion>(animationDuration, frames));
+        setAnimation(new Animation<TextureRegion>(getAnimationDuration(), frames));
 
     }
 }

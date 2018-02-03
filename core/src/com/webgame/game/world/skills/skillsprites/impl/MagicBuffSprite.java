@@ -3,40 +3,40 @@ package com.webgame.game.world.skills.skillsprites.impl;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.webgame.game.animation.impl.FireBlastAnimation;
 import com.webgame.game.animation.impl.MagicBuffAnimation;
 import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 import static com.webgame.game.Configs.PPM;
 
 public class MagicBuffSprite extends SkillSprite {
-	protected MagicBuffAnimation animation;
+    public MagicBuffSprite() {
+        super();
+    }
 
-	public MagicBuffSprite() {
-		super();
-	}
-
-	@Override
-	public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
-		this.setSpriteBatch(batch);
-		this.setSpriteTexture(spriteTexture);
+    @Override
+    public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
+        this.setSpriteBatch(batch);
+        this.setSpriteTexture(spriteTexture);
 
 
-		animationDuration = 0.1f;
-		animation = new MagicBuffAnimation(spriteTexture, animationDuration, animationMaxDuration);
-		animationMaxDuration = animationDuration*animation.getAnimation().getKeyFrames().length;
-		int w2 = 100;
-		int h2 = 80;
-		this.setBounds(0, 0, w2 / PPM, h2 / PPM);
-		setRegion(animation.getAnimation().getKeyFrame(0));
-	}
+        setAnimationDuration(0.1f);
+        setGameAnimation(new FireBlastAnimation(getSpriteTexture(), getAnimationDuration()));
 
-	@Override
-	public TextureRegion getFrame() {
-		TextureRegion region = null;
+        setAnimationMaxDuration(getAnimationDuration() * getGameAnimation().getAnimation().getKeyFrames().length);
+        int w2 = 100;
+        int h2 = 80;
+        this.setBounds(0, 0, w2 / PPM, h2 / PPM);
+        setRegion(getGameAnimation().getAnimation().getKeyFrame(0));
+    }
 
-		if (isActive)
-			region = animation.getAnimation().getKeyFrame(animateTimer, false);
+    @Override
+    public TextureRegion getFrame() {
+        TextureRegion region = null;
 
-		return region;
-	}
+        if (isActive())
+            region = getGameAnimation().getAnimation().getKeyFrame(getAnimateTimer(), false);
+
+        return region;
+    }
 }

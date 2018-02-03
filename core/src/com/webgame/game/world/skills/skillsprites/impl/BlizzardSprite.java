@@ -9,37 +9,34 @@ import com.webgame.game.animation.impl.BlizzardFragmentAnimation;
 import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 public class BlizzardSprite extends SkillSprite {
-	protected BlizzardFragmentAnimation animation;
-	protected TextureRegion standTexture;
+    public BlizzardSprite() {
+        super();
+    }
 
-	public BlizzardSprite() {
-		super();
-	}
+    @Override
+    public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
+        this.setSpriteBatch(batch);
+        this.setSpriteTexture(spriteTexture);
 
-	@Override
-	public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
-		this.setSpriteBatch(batch);
-		this.setSpriteTexture(spriteTexture);
+        setAnimationDuration(0.1f);
+        setGameAnimation(new BlizzardFragmentAnimation(spriteTexture, getAnimationDuration()));
+        setAnimationMaxDuration(getAnimationDuration() * getGameAnimation().getAnimation().getKeyFrames().length);
+        setStandTexture(new TextureRegion(getSpriteTexture(), 5, 245, 30, 30));
 
-		animationDuration = 0.1f;
-		animationMaxDuration = animationDuration * 2;
-		animation = new BlizzardFragmentAnimation(spriteTexture, animationDuration, animationMaxDuration);
-		standTexture = new TextureRegion(this.spriteTexture, 5, 245, 30, 30);
+        int w2 = 20;
+        int h2 = 25;
+        this.setBounds(0, 0, w2 / PPM, h2 / PPM);
+        setRegion(getStandTexture());
+    }
 
-		int w2 = 20;
-		int h2 = 25;
-		this.setBounds(0, 0, w2 / PPM, h2 / PPM);
-		setRegion(standTexture);
-	}
+    @Override
+    public TextureRegion getFrame() {
+        TextureRegion region = null;
 
-	@Override
-	public TextureRegion getFrame() {
-		TextureRegion region = null;
+        if (isActive())
+            region = isStatic() && !isFinalAnimated() ? this.getGameAnimation().getAnimation().getKeyFrame(getAnimateTimer(), false) : getStandTexture();
 
-		if (isActive)
-			region = isStatic && !isFinalAnimated ? animation.getAnimation().getKeyFrame(animateTimer, false) : standTexture;
-
-		return region;
-	}
+        return region;
+    }
 
 }

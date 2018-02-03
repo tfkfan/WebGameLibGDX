@@ -6,22 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.GameAnimation;
 
 public class MeteorBlastAnimation extends GameAnimation {
-
-    public MeteorBlastAnimation(Texture spriteTexture) {
-        super(spriteTexture);
-    }
-
-    public MeteorBlastAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
-        super(spriteTexture,  animationDuration, animationMaxDuration);
-    }
-
-    public Texture getSpriteTexture() {
-        return spriteTexture;
-    }
-
-    public void setSpriteTexture(Texture spriteTexture) {
-        this.spriteTexture = spriteTexture;
-
+    public MeteorBlastAnimation(Texture spriteTexture, Float animationDuration) {
+        super(spriteTexture, animationDuration);
     }
 
     @Override
@@ -33,11 +19,9 @@ public class MeteorBlastAnimation extends GameAnimation {
         TextureRegion[] frames = new TextureRegion[l];
 
         for (int i = 0; i < l; i++)
-            frames[i] = new TextureRegion(this.spriteTexture, 190 + w2 * (i), 110, w2, h2);
+            frames[i] = new TextureRegion(getSpriteTexture(), 190 + w2 * (i), 110, w2, h2);
 
-        animation = new Animation<TextureRegion>(animationDuration, frames);
-
-        setAnimation(new Animation<TextureRegion>(animationDuration, frames));
+        setAnimation(new Animation<TextureRegion>(getAnimationDuration(), frames));
 
     }
 }

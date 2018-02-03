@@ -229,40 +229,45 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
         return isAOE;
     }
 
-    public void setAOE(boolean isAOE) {
+    public Skill<T> setAOE(boolean isAOE) {
         this.isAOE = isAOE;
+        return this;
     }
 
     public boolean isFalling() {
         return isFalling;
     }
 
-    public void setFalling(boolean isFalling) {
+    public Skill<T> setFalling(boolean isFalling) {
         this.isFalling = isFalling;
+        return this;
     }
 
     public boolean isMarked() {
         return isMarked;
     }
 
-    public void setMarked(boolean isMarked) {
+    public Skill<T> setMarked(boolean isMarked) {
         this.isMarked = isMarked;
+        return this;
     }
 
     public boolean isTimed() {
         return isTimed;
     }
 
-    public void setTimed(boolean isTimed) {
+    public Skill<T> setTimed(boolean isTimed) {
         this.isTimed = isTimed;
+        return this;
     }
 
     public boolean isStatic() {
         return isStatic;
     }
 
-    public void setStatic(boolean isStatic) {
+    public Skill<T> setStatic(boolean isStatic) {
         this.isStatic = isStatic;
+        return this;
     }
 
     public void setSpriteTexture(Texture spriteTexture) {
@@ -294,8 +299,9 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
         return isActive;
     }
 
-    public void setActive(boolean isActive) {
+    public Skill<T> setActive(boolean isActive) {
         this.isActive = isActive;
+        return this;
     }
 
     public SpriteBatch getBatch() {

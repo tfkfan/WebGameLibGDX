@@ -7,21 +7,8 @@ import com.webgame.game.animation.GameAnimation;
 
 public class TornadoAnimation extends GameAnimation {
 
-    public TornadoAnimation(Texture spriteTexture) {
-        super(spriteTexture);
-    }
-
-    public TornadoAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
-        super(spriteTexture,  animationDuration, animationMaxDuration);
-    }
-
-    public Texture getSpriteTexture() {
-        return spriteTexture;
-    }
-
-    public void setSpriteTexture(Texture spriteTexture) {
-        this.spriteTexture = spriteTexture;
-
+    public TornadoAnimation(Texture spriteTexture, Float animationDuration) {
+        super(spriteTexture, animationDuration);
     }
 
     @Override
@@ -33,9 +20,9 @@ public class TornadoAnimation extends GameAnimation {
         TextureRegion[] frames = new TextureRegion[l];
 
         for (int i = 0; i < l; i++)
-            frames[i] = new TextureRegion(spriteTexture, 594 + w * (i + 1), 295, 60, h);
+            frames[i] = new TextureRegion(getSpriteTexture(), 594 + w * (i + 1), 295, 60, h);
 
-        setAnimation(new Animation<TextureRegion>(animationDuration, frames));
+        setAnimation(new Animation<TextureRegion>(getAnimationDuration(), frames));
 
     }
 }

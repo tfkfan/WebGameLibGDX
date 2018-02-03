@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.webgame.game.Configs;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.world.common.factory.ISkillFactory;
-import com.webgame.game.world.common.factory.SkillFactory;
+import com.webgame.game.world.common.factory.impl.SkillFactory;
 import com.webgame.game.world.player.Player;
 import com.webgame.game.world.skills.Skill;
 import com.webgame.game.world.skills.skillsprites.impl.*;
@@ -21,24 +21,28 @@ public class Mage extends Player {
 
     public Mage(SpriteBatch batch, String spritePath) {
         super();
-        Texture skillTexture = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png");
-        Texture skillTexture2 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/lightning.png");
-        Texture skillTexture3 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s7.png");
-        Texture skillTexture4 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s5.png");
-        Texture skillTexture5 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");
-        Texture skillTexture6 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s6.png");
-        Texture skillTexture7 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s9.png");
-        Texture skillTexture8 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s2.png");
+
         try {
             ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
 
             ISkillFactory skillFactory = new SkillFactory();
 
+            skills.add(skillFactory.createStaticSingleAOESkill(BuffSprite.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_005.png")));
+            skills.add(skillFactory.createStaticSingleAOESkill(BuffSprite.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_006.png")));
+            skills.add(skillFactory.createStaticSingleAOESkill(BuffSprite.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_007.png")));
+            skills.add(skillFactory.createStaticSingleAOESkill(BuffSprite.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_008.png")));
+            skills.add(skillFactory.createStaticSingleAOESkill(BuffSprite.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_009.png")));
 
+            /*
             Skill s1 = skillFactory.createFallingAOESkill(BlizzardSprite.class, batch, skillTexture, 30);
             s1.setDamage(5d);
             skills.add(s1);
-            Skill s2 = skillFactory.createStaticSingleAOESkill(TeleportSprite.class, batch, skillTexture5);
+            Skill s2 = skillFactory.createStaticSingleAOESkill(BuffSprite.class, batch, skillTexture5);
             s2.setTimed(false);
             skills.add(s2);
 
@@ -72,6 +76,7 @@ public class Mage extends Player {
             s9.setTimed(true);
             skills.add(s9);
 
+            */
             this.setSkills(skills);
         } catch (Exception e2) {
             // TODO Auto-generated catch block

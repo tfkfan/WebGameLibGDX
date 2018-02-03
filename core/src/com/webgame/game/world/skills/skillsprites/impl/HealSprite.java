@@ -9,34 +9,32 @@ import com.webgame.game.world.skills.skillsprites.SkillSprite;
 import static com.webgame.game.Configs.PPM;
 
 public class HealSprite extends SkillSprite {
-	protected HealAnimation animation;
+    public HealSprite() {
+        super();
+    }
 
-	public HealSprite() {
-		super();
-	}
+    @Override
+    public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
+        this.setSpriteBatch(batch);
+        this.setSpriteTexture(spriteTexture);
 
-	@Override
-	public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
-		this.setSpriteBatch(batch);
-		this.setSpriteTexture(spriteTexture);
+        setAnimationDuration(0.1f);
+        setGameAnimation(new HealAnimation(getSpriteTexture(), getAnimationDuration()));
+        setAnimationMaxDuration(getAnimationDuration() * getGameAnimation().getAnimation().getKeyFrames().length);
 
+        int w2 = 100;
+        int h2 = 80;
+        this.setBounds(0, 0, w2 / PPM, h2 / PPM);
+        setRegion(getGameAnimation().getAnimation().getKeyFrame(0));
+    }
 
-		animationDuration = 0.1f;
-		animation = new HealAnimation(spriteTexture, animationDuration, animationMaxDuration);
-		animationMaxDuration = animationDuration*animation.getAnimation().getKeyFrames().length;
-		int w2 = 100;
-		int h2 = 80;
-		this.setBounds(0, 0, w2 / PPM, h2 / PPM);
-		setRegion(animation.getAnimation().getKeyFrame(0));
-	}
+    @Override
+    public TextureRegion getFrame() {
+        TextureRegion region = null;
 
-	@Override
-	public TextureRegion getFrame() {
-		TextureRegion region = null;
+        if (isActive())
+            region = getGameAnimation().getAnimation().getKeyFrame(getAnimateTimer(), false);
 
-		if (isActive)
-			region = animation.getAnimation().getKeyFrame(animateTimer, false);
-
-		return region;
-	}
+        return region;
+    }
 }

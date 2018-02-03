@@ -7,17 +7,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public abstract class GameAnimation{
     protected Texture spriteTexture;
     protected Animation<TextureRegion> animation;
-    protected Float animationMaxDuration;
     protected Float animationDuration;
 
     public GameAnimation(Texture spriteTexture) {
         setSpriteTexture(spriteTexture);
     }
 
-    public GameAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
+    public GameAnimation(Texture spriteTexture, Float animationDuration){
         setSpriteTexture(spriteTexture);
         setAnimationDuration(animationDuration);
-        setAnimationMaxDuration(animationMaxDuration);
         initAnimation();
     }
 
@@ -38,14 +36,6 @@ public abstract class GameAnimation{
     }
 
     public abstract void initAnimation();
-
-    public Float getAnimationMaxDuration() {
-        return animationMaxDuration;
-    }
-
-    public void setAnimationMaxDuration(Float animationMaxDuration) {
-        this.animationMaxDuration = animationMaxDuration;
-    }
 
     public Float getAnimationDuration() {
         return animationDuration;

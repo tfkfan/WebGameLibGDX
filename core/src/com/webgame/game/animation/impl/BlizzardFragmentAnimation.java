@@ -7,21 +7,8 @@ import com.webgame.game.animation.GameAnimation;
 
 public class BlizzardFragmentAnimation extends GameAnimation {
 
-    public BlizzardFragmentAnimation(Texture spriteTexture) {
-        super(spriteTexture);
-    }
-
-    public BlizzardFragmentAnimation(Texture spriteTexture, Float animationDuration, Float animationMaxDuration){
-        super(spriteTexture,  animationDuration, animationMaxDuration);
-    }
-
-    public Texture getSpriteTexture() {
-        return spriteTexture;
-    }
-
-    public void setSpriteTexture(Texture spriteTexture) {
-        this.spriteTexture = spriteTexture;
-
+    public BlizzardFragmentAnimation(Texture spriteTexture, Float animationDuration){
+        super(spriteTexture, animationDuration);
     }
 
     @Override
@@ -33,9 +20,9 @@ public class BlizzardFragmentAnimation extends GameAnimation {
         TextureRegion[] frames = new TextureRegion[l];
 
         for (int i = 0; i < l; i++)
-            frames[i] = new TextureRegion(this.spriteTexture, 5 + w * (i + 1), 245, w, h);
+            frames[i] = new TextureRegion(getSpriteTexture(), 5 + w * (i + 1), 245, w, h);
 
-        setAnimation(new Animation<TextureRegion>(animationDuration, frames));
+        setAnimation(new Animation<TextureRegion>(getAnimationDuration(), frames));
 
     }
 }
