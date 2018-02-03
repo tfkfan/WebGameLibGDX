@@ -12,10 +12,7 @@ import com.webgame.game.world.common.factory.SkillFactory;
 import com.webgame.game.world.player.Player;
 import com.webgame.game.world.skills.Skill;
 import com.webgame.game.world.skills.StaticAOESkill;
-import com.webgame.game.world.skills.impl.skill_sprites.HealSprite;
-import com.webgame.game.world.skills.impl.skill_sprites.MagicShieldSprite;
-import com.webgame.game.world.skills.impl.skill_sprites.MagicSourceSprite;
-import com.webgame.game.world.skills.impl.skill_sprites.TeleportSprite;
+import com.webgame.game.world.skills.impl.skill_sprites.*;
 import com.webgame.game.world.skills.impl.skills.*;
 
 import static com.webgame.game.Configs.PPM;
@@ -44,55 +41,35 @@ public class Mage extends Player {
             s2.setTimed(false);
             skills.add(s2);
 
-            Skill s3 = skillFactory.createStaticSingleAOESkill(HealSprite.class, batch, skillTexture6);//new Heal(batch, skillTexture6);
+            Skill s3 = skillFactory.createStaticSingleAOESkill(HealSprite.class, batch, skillTexture6);
+
             s3.setTimed(false);
             skills.add(s3);
 
-            Skill s4 = skillFactory.createStaticSingleAOESkill(MagicSourceSprite.class,batch, skillTexture7 );
+            Skill s4 = skillFactory.createStaticSingleAOESkill(MagicSourceSprite.class, batch, skillTexture7);
             //s3.setDamage(5d);
             skills.add(s4);
 
-            Skill s5 =skillFactory.createStaticSingleAOESkill(MagicShieldSprite.class,batch, skillTexture8 );
+            Skill s5 = skillFactory.createStaticSingleAOESkill(MagicShieldSprite.class, batch, skillTexture8);
             //s3.setDamage(5d);
             skills.add(s5);
 
-			/*
+            Skill s6 = skillFactory.createStaticSingleAOESkill(IceExplosionSprite.class, batch, skillTexture3);
+            s6.setDamage(70d);
+            skills.add(s6);
 
-			Blizzard b = new Blizzard(batch, skillTexture, 30);
-			b.setDamage(5d);
-			skills.add(b);
-			MeteorRain mr = new MeteorRain(batch, skillTexture, 30);
-			mr.setDamage(5d);
-			
-			skills.add(mr);
-			
-			StoneRain sr = new StoneRain(batch, skillTexture, 30);
-			sr.setDamage(5d);
-			skills.add(sr);
-			
-			Explosion e = new Explosion(batch, skillTexture);
-			e.setDamage(50d);
-			skills.add(e);
-			
-			FireBall fb = new FireBall(batch, skillTexture);
-			fb.setDamage(100d);
-			skills.add(fb);
-			*/
-            Lightning l = new Lightning(batch, skillTexture2);
-            l.setDamage(30d);
-            skills.add(l);
+            Skill s7 = skillFactory.createStaticSingleSkill(MagicBuffSprite.class, batch, skillTexture4);
+            s7.setDamage(0d);
+            skills.add(s7);
 
-            Tornado t = new Tornado(batch, skillTexture);
-            t.setDamage(3d);
-            skills.add(t);
+            Skill s8 = skillFactory.createStaticSingleSkill(LightningSprite.class, batch, skillTexture2);
+            s8.setDamage(30d);
+            skills.add(s8);
 
-            IceExplosion ie = new IceExplosion(batch, skillTexture3);
-            ie.setDamage(70d);
-            skills.add(ie);
+            Skill s9 = skillFactory.createStaticSingleAOESkill(TornadoSprite.class, batch, skillTexture);
+            s9.setDamage(3d);
+            skills.add(s9);
 
-            MagicBuff mb = new MagicBuff(batch, skillTexture4);
-            ie.setDamage(0d);
-            skills.add(mb);
             this.setSkills(skills);
         } catch (Exception e2) {
             // TODO Auto-generated catch block
