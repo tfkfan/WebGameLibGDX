@@ -316,8 +316,9 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
         return damage;
     }
 
-    public void setDamage(Double damage) {
+    public Skill<T> setDamage(Double damage) {
         this.damage = damage;
+        return this;
     }
 
     public String getTitle() {

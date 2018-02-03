@@ -28,7 +28,7 @@ public class Mage extends Player {
 
             ISkillFactory skillFactory = new SkillFactory();
 
-            
+
             skills.add(skillFactory.createStaticSingleAOESkill(BuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_005.png")));
             skills.add(skillFactory.createStaticSingleAOESkill(BuffAnimation.class, batch,
@@ -39,56 +39,24 @@ public class Mage extends Player {
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_008.png")));
             skills.add(skillFactory.createStaticSingleAOESkill(BuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_009.png")));
-
-
-            Skill s1 = skillFactory.createFallingAOESkill(BlizzardFragmentAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png"), 30);
-            s1.setDamage(5d);
-            skills.add(s1);
-
-            Skill s2 = skillFactory.createStaticTimedAOESkill(MagicShieldAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s2.png"));
-            s2.setTimed(false);
-            skills.add(s2);
-
-            Skill s3 = skillFactory.createStaticSingleAOESkill(HealAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s6.png"));
-
-            s3.setTimed(false);
-            skills.add(s3);
-
-            Skill s4 = skillFactory.createStaticSingleAOESkill(MagicSourceAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s9.png"));
-            //s3.setDamage(5d);
-            skills.add(s4);
-
-            Skill s5 = skillFactory.createStaticSingleAOESkill(MagicBuffAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s5.png"));
-            //s3.setDamage(5d);
-            skills.add(s5);
-
-            Skill s6 = skillFactory.createStaticSingleAOESkill(IceBlastAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s7.png"));
-            s6.setDamage(70d);
-            skills.add(s6);
-
-            Skill s7 = skillFactory.createStaticSingleSkill(MagicBuffAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s3.png"));
-            s7.setDamage(0d);
-            skills.add(s7);
-
-            Skill s8 = skillFactory.createStaticSingleSkill(LightningAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/lightning.png"));
-            s8.setDamage(30d);
-            skills.add(s8);
-
-            Skill s9 = skillFactory.createStaticTimedAOESkill(TornadoAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png"));
-            s9.setDamage(3d);
-            s9.setTimed(true);
-            skills.add(s9);
-
-
+            skills.add( skillFactory.createFallingAOESkill(BlizzardFragmentAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png"), 30).setDamage(10d));
+            skills.add(skillFactory.createStaticTimedAOESkill(MagicShieldAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s2.png")));
+            skills.add(skillFactory.createStaticSingleAOESkill(HealAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s6.png")));
+            skills.add(skillFactory.createStaticSingleAOESkill(MagicSourceAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s9.png")));
+            skills.add(skillFactory.createStaticSingleAOESkill(MagicBuffAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s5.png")));
+            skills.add(skillFactory.createStaticSingleAOESkill(IceBlastAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s7.png")).setDamage(70d));
+            skills.add(skillFactory.createStaticSingleAOESkill(MagicBuffAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s3.png")));
+            skills.add(skillFactory.createStaticSingleSkill(LightningAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/lightning.png")).setDamage(30d));
+            skills.add(skillFactory.createStaticTimedAOESkill(TornadoAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png")).setDamage(3d));
             this.setSkills(skills);
         } catch (Exception e2) {
             // TODO Auto-generated catch block
