@@ -48,6 +48,9 @@ public abstract class StaticAOESkill<T extends SkillSprite> extends Skill<T> {
 
 	@Override
 	protected void afterCustomAnimation() {
+		if(isTimed)
+			return;
+		
 		SkillSprite obj = getSkillObjects().get(0);
 		if (obj.getAnimateTimer() > obj.getAnimationMaxDuration())
 			isActive = false;

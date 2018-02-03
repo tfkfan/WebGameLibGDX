@@ -10,7 +10,6 @@ import com.webgame.game.state.PlayerState;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.world.player.Player;
 import com.webgame.game.world.skills.Skill;
-import com.webgame.game.world.skills.impl.skills.Blizzard;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -25,10 +24,10 @@ public class Knight extends Player {
 		Texture skillTexture = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/skills.png");
 		ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
 		try {
-			Blizzard b = new Blizzard(batch, skillTexture, 30);
+			//Blizzard b = new Blizzard(batch, skillTexture, 30);
 
-			b.setDamage(5d);
-			skills.add(b);
+			//b.setDamage(5d);
+			//skills.add(b);
 
 			
 		} catch (Exception e) {

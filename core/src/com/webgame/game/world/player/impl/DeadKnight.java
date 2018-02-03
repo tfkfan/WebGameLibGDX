@@ -9,7 +9,6 @@ import com.webgame.game.state.PlayerState;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.world.player.Player;
 import com.webgame.game.world.skills.Skill;
-import com.webgame.game.world.skills.impl.skills.Blizzard;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -22,7 +21,7 @@ public class DeadKnight extends Player {
 		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
 		try {
 			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
-			skills.add(new Blizzard(batch, skillTexture, 10));
+			//skills.add(new Blizzard(batch, skillTexture, 10));
 
 			this.setSkills(skills);
 		} catch (Exception e) {

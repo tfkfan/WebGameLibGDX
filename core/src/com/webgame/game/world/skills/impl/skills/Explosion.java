@@ -20,10 +20,4 @@ public class Explosion extends StaticAOESkill<ExplosionSprite> {
 		return obj;
 	}
 
-	@Override
-	protected void afterCustomAnimation() {
-		ExplosionSprite obj = getSkillObjects().get(0);
-		if (obj.getAnimateTimer() > obj.getAnimationMaxDuration())
-			isActive = false;
-	}
 }

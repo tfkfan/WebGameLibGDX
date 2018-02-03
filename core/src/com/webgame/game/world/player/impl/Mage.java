@@ -37,6 +37,9 @@ public class Mage extends Player {
             ISkillFactory skillFactory = new SkillFactory();
 
 
+            Skill s1 = skillFactory.createFallingAOESkill(BlizzardSprite.class, batch, skillTexture, 30);
+            s1.setDamage(5d);
+            skills.add(s1);
             Skill s2 = skillFactory.createStaticSingleAOESkill(TeleportSprite.class, batch, skillTexture5);
             s2.setTimed(false);
             skills.add(s2);
@@ -68,6 +71,7 @@ public class Mage extends Player {
 
             Skill s9 = skillFactory.createStaticSingleAOESkill(TornadoSprite.class, batch, skillTexture);
             s9.setDamage(3d);
+            s9.setTimed(true);
             skills.add(s9);
 
             this.setSkills(skills);
