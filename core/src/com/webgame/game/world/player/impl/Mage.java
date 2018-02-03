@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.Configs;
+import com.webgame.game.animation.impl.BuffAnimation;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.world.common.factory.ISkillFactory;
 import com.webgame.game.world.common.factory.impl.SkillFactory;
@@ -27,15 +28,15 @@ public class Mage extends Player {
 
             ISkillFactory skillFactory = new SkillFactory();
 
-            skills.add(skillFactory.createStaticSingleAOESkill(BuffSprite.class, batch,
+            skills.add(skillFactory.createStaticSingleAOESkill(BuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_005.png")));
-            skills.add(skillFactory.createStaticSingleAOESkill(BuffSprite.class, batch,
+            skills.add(skillFactory.createStaticSingleAOESkill(BuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_006.png")));
-            skills.add(skillFactory.createStaticSingleAOESkill(BuffSprite.class, batch,
+            skills.add(skillFactory.createStaticSingleAOESkill(BuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_007.png")));
-            skills.add(skillFactory.createStaticSingleAOESkill(BuffSprite.class, batch,
+            skills.add(skillFactory.createStaticSingleAOESkill(BuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_008.png")));
-            skills.add(skillFactory.createStaticSingleAOESkill(BuffSprite.class, batch,
+            skills.add(skillFactory.createStaticSingleAOESkill(BuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_009.png")));
 
             /*

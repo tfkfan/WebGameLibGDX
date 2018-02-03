@@ -29,7 +29,12 @@ public abstract class SkillSprite extends GameSprite implements Cloneable {
         distance = new Vector2(0, 0);
         animationMaxDuration = animationDuration * 3;
     }
-
+    public SkillSprite(GameAnimation animation){
+        super();
+        setGameAnimation(animation);
+        distance = new Vector2(0, 0);
+        animationMaxDuration = animationDuration * 3;
+    }
 
     public float getAnimationDuration() {
         return animationDuration;

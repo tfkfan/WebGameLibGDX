@@ -2,12 +2,16 @@ package com.webgame.game.world.common.factory.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.webgame.game.animation.GameAnimation;
 import com.webgame.game.world.common.factory.ISkillFactory;
+import com.webgame.game.world.common.factory.ISkillSpriteFactory;
 import com.webgame.game.world.skills.*;
 import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 public class SkillFactory implements ISkillFactory {
-    public SkillFactory(){
+    ISkillSpriteFactory skillSpriteFactory = new SkillSpriteFactory();
+
+    public SkillFactory() {
 
     }
 
@@ -18,7 +22,7 @@ public class SkillFactory implements ISkillFactory {
             protected T createObject() {
                 try {
                     return (T) clazz.newInstance();
-                }catch(InstantiationException | IllegalAccessException e){
+                } catch (InstantiationException | IllegalAccessException e) {
                     e.printStackTrace();
                     return null;
                 }
@@ -33,7 +37,7 @@ public class SkillFactory implements ISkillFactory {
             protected T createObject() {
                 try {
                     return (T) clazz.newInstance();
-                }catch(InstantiationException | IllegalAccessException e){
+                } catch (InstantiationException | IllegalAccessException e) {
                     e.printStackTrace();
                     return null;
                 }
@@ -48,7 +52,7 @@ public class SkillFactory implements ISkillFactory {
             protected T createObject() {
                 try {
                     return (T) clazz.newInstance();
-                }catch(InstantiationException | IllegalAccessException e){
+                } catch (InstantiationException | IllegalAccessException e) {
                     e.printStackTrace();
                     return null;
                 }
@@ -63,7 +67,7 @@ public class SkillFactory implements ISkillFactory {
             protected T createObject() {
                 try {
                     return (T) clazz.newInstance();
-                }catch(InstantiationException | IllegalAccessException e){
+                } catch (InstantiationException | IllegalAccessException e) {
                     e.printStackTrace();
                     return null;
                 }
@@ -72,28 +76,23 @@ public class SkillFactory implements ISkillFactory {
     }
 
     @Override
-    public <T extends SkillSprite> Skill<T> createStaticSingleAOESkill(final Class<T> clazz, final SpriteBatch batch, final Texture spriteTexture) throws Exception {
+    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createStaticSingleAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception {
         return new StaticAOESkill<T>(batch, spriteTexture, 1) {
             @Override
             protected T createObject() {
-                try {
-                    return (T) clazz.newInstance();
-                }catch(InstantiationException | IllegalAccessException e){
-                    e.printStackTrace();
-                    return null;
-                }
+                return skillSpriteFactory.createSingleSkillSprite(animationClass);
             }
         };
     }
 
     @Override
-    public <T extends SkillSprite> Skill<T> createStaticSingleSkill(final Class<T> clazz, final SpriteBatch batch, final Texture spriteTexture) throws Exception{
+    public <T extends SkillSprite> Skill<T> createStaticSingleSkill(final Class<T> clazz, final SpriteBatch batch, final Texture spriteTexture) throws Exception {
         return new StaticSkill<T>(batch, spriteTexture, 1) {
             @Override
             protected T createObject() {
                 try {
                     return (T) clazz.newInstance();
-                }catch(InstantiationException | IllegalAccessException e){
+                } catch (InstantiationException | IllegalAccessException e) {
                     e.printStackTrace();
                     return null;
                 }
