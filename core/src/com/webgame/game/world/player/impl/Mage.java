@@ -7,8 +7,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.Configs;
 import com.webgame.game.utils.SpriteTextureLoader;
+import com.webgame.game.world.common.factory.ISkillFactory;
+import com.webgame.game.world.common.factory.SkillFactory;
 import com.webgame.game.world.player.Player;
 import com.webgame.game.world.skills.Skill;
+import com.webgame.game.world.skills.StaticAOESkill;
+import com.webgame.game.world.skills.impl.skill_sprites.HealSprite;
+import com.webgame.game.world.skills.impl.skill_sprites.MagicShieldSprite;
+import com.webgame.game.world.skills.impl.skill_sprites.MagicSourceSprite;
+import com.webgame.game.world.skills.impl.skill_sprites.TeleportSprite;
 import com.webgame.game.world.skills.impl.skills.*;
 
 import static com.webgame.game.Configs.PPM;
@@ -17,36 +24,37 @@ import java.util.ArrayList;
 
 public class Mage extends Player {
 
-	public Mage(SpriteBatch batch, String spritePath) {
-		super();
-		Texture skillTexture = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png");
-		Texture skillTexture2 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/lightning.png");
-		Texture skillTexture3 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/s7.png");
-		Texture skillTexture4 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/s5.png");
-		Texture skillTexture5 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/cast_005.png");
-		Texture skillTexture6 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/s6.png");
-		Texture skillTexture7 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/s9.png");
-		Texture skillTexture8 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/s2.png");
-		try {
-			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
+    public Mage(SpriteBatch batch, String spritePath) {
+        super();
+        Texture skillTexture = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png");
+        Texture skillTexture2 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/lightning.png");
+        Texture skillTexture3 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s7.png");
+        Texture skillTexture4 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s5.png");
+        Texture skillTexture5 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");
+        Texture skillTexture6 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s6.png");
+        Texture skillTexture7 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s9.png");
+        Texture skillTexture8 = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s2.png");
+        try {
+            ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
+
+            ISkillFactory skillFactory = new SkillFactory();
 
 
+            Skill s2 = skillFactory.createStaticSingleAOESkill(TeleportSprite.class, batch, skillTexture5);
+            s2.setTimed(false);
+            skills.add(s2);
 
-			Teleport s2 = new Teleport(batch, skillTexture5);
-			s2.setDamage(5d);
-			skills.add(s2);
+            Skill s3 = skillFactory.createStaticSingleAOESkill(HealSprite.class, batch, skillTexture6);//new Heal(batch, skillTexture6);
+            s3.setTimed(false);
+            skills.add(s3);
 
-			Heal s3 = new Heal(batch, skillTexture6);
-			//s3.setDamage(5d);
-			skills.add(s3);
+            Skill s4 = skillFactory.createStaticSingleAOESkill(MagicSourceSprite.class,batch, skillTexture7 );
+            //s3.setDamage(5d);
+            skills.add(s4);
 
-			MagicSource s4 = new MagicSource(batch, skillTexture7);
-			//s3.setDamage(5d);
-			skills.add(s4);
-
-			MagicShield s5 = new MagicShield(batch, skillTexture8);
-			//s3.setDamage(5d);
-			skills.add(s5);
+            Skill s5 =skillFactory.createStaticSingleAOESkill(MagicShieldSprite.class,batch, skillTexture8 );
+            //s3.setDamage(5d);
+            skills.add(s5);
 
 			/*
 
@@ -70,112 +78,112 @@ public class Mage extends Player {
 			fb.setDamage(100d);
 			skills.add(fb);
 			*/
-			Lightning l = new Lightning(batch, skillTexture2);
-			l.setDamage(30d);
-			skills.add(l);
-			
-			Tornado t = new Tornado(batch, skillTexture);
-			t.setDamage(3d);
-			skills.add(t);
+            Lightning l = new Lightning(batch, skillTexture2);
+            l.setDamage(30d);
+            skills.add(l);
 
-			IceExplosion ie = new IceExplosion(batch, skillTexture3);
-			ie.setDamage(70d);
-			skills.add(ie);
+            Tornado t = new Tornado(batch, skillTexture);
+            t.setDamage(3d);
+            skills.add(t);
 
-			MagicBuff mb = new MagicBuff (batch, skillTexture4);
-			ie.setDamage(0d);
-			skills.add(mb);
-			this.setSkills(skills);
-		} catch (Exception e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
+            IceExplosion ie = new IceExplosion(batch, skillTexture3);
+            ie.setDamage(70d);
+            skills.add(ie);
 
-		setXOffset(30 / PPM);
-		setYOffset(15 / PPM);
+            MagicBuff mb = new MagicBuff(batch, skillTexture4);
+            ie.setDamage(0d);
+            skills.add(mb);
+            this.setSkills(skills);
+        } catch (Exception e2) {
+            // TODO Auto-generated catch block
+            e2.printStackTrace();
+        }
 
-		Texture spriteTexture =SpriteTextureLoader.loadSprite(spritePath);
+        setXOffset(30 / PPM);
+        setYOffset(15 / PPM);
 
-		TextureRegion[][] frames = new TextureRegion[dirs][5];
-		TextureRegion[][] attackFrames = new TextureRegion[dirs][5];
-		Array<Animation<TextureRegion>> animations = new Array<Animation<TextureRegion>>();
-		Array<Animation<TextureRegion>> attackAnimations = new Array<Animation<TextureRegion>>();
-		TextureRegion[] standRegions = new TextureRegion[dirs];
+        Texture spriteTexture = SpriteTextureLoader.loadSprite(spritePath);
 
-		int h = 61;
-		int w = 75;
+        TextureRegion[][] frames = new TextureRegion[dirs][5];
+        TextureRegion[][] attackFrames = new TextureRegion[dirs][5];
+        Array<Animation<TextureRegion>> animations = new Array<Animation<TextureRegion>>();
+        Array<Animation<TextureRegion>> attackAnimations = new Array<Animation<TextureRegion>>();
+        TextureRegion[] standRegions = new TextureRegion[dirs];
 
-		for (int i = 0; i < 5; i++) {
-			for (int j = 0; j < 5; j++)
-				frames[i][j] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
-			for (int j = 5; j < 9; j++)
-				attackFrames[i][j - 5] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
+        int h = 61;
+        int w = 75;
 
-			standRegions[i] = new TextureRegion(spriteTexture, w * i, 0, w, h);
-			attackFrames[i][4] = standRegions[i];
-		}
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++)
+                frames[i][j] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
+            for (int j = 5; j < 9; j++)
+                attackFrames[i][j - 5] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
 
-		for (int j = 0; j < 5; j++) {
-			TextureRegion tr = new TextureRegion(spriteTexture, w, h * j, w, h);
-			tr.flip(true, false);
-			frames[7][j] = tr;
+            standRegions[i] = new TextureRegion(spriteTexture, w * i, 0, w, h);
+            attackFrames[i][4] = standRegions[i];
+        }
 
-			if (j == 0)
-				standRegions[7] = tr;
+        for (int j = 0; j < 5; j++) {
+            TextureRegion tr = new TextureRegion(spriteTexture, w, h * j, w, h);
+            tr.flip(true, false);
+            frames[7][j] = tr;
 
-			tr = new TextureRegion(spriteTexture, w * 2, h * j, w, h);
-			tr.flip(true, false);
-			frames[6][j] = tr;
+            if (j == 0)
+                standRegions[7] = tr;
 
-			if (j == 0)
-				standRegions[6] = tr;
+            tr = new TextureRegion(spriteTexture, w * 2, h * j, w, h);
+            tr.flip(true, false);
+            frames[6][j] = tr;
 
-			tr = new TextureRegion(spriteTexture, w * 3, h * j, w, h);
-			tr.flip(true, false);
-			frames[5][j] = tr;
+            if (j == 0)
+                standRegions[6] = tr;
 
-			if (j == 0)
-				standRegions[5] = tr;
-		}
+            tr = new TextureRegion(spriteTexture, w * 3, h * j, w, h);
+            tr.flip(true, false);
+            frames[5][j] = tr;
 
-		for (int j = 5; j < 9; j++) {
+            if (j == 0)
+                standRegions[5] = tr;
+        }
 
-			TextureRegion tr = new TextureRegion(spriteTexture, w, h * j, w, h);
-			tr.flip(true, false);
-			attackFrames[7][j - 5] = tr;
+        for (int j = 5; j < 9; j++) {
 
-			tr = new TextureRegion(spriteTexture, w * 2, h * j, w, h);
-			tr.flip(true, false);
-			attackFrames[6][j - 5] = tr;
+            TextureRegion tr = new TextureRegion(spriteTexture, w, h * j, w, h);
+            tr.flip(true, false);
+            attackFrames[7][j - 5] = tr;
 
-			tr = new TextureRegion(spriteTexture, w * 3, h * j, w, h);
-			tr.flip(true, false);
-			attackFrames[5][j - 5] = tr;
-		}
+            tr = new TextureRegion(spriteTexture, w * 2, h * j, w, h);
+            tr.flip(true, false);
+            attackFrames[6][j - 5] = tr;
 
-		TextureRegion tr = new TextureRegion(spriteTexture, w, 0, w, h);
-		tr.flip(true, false);
-		attackFrames[7][4] = tr;
+            tr = new TextureRegion(spriteTexture, w * 3, h * j, w, h);
+            tr.flip(true, false);
+            attackFrames[5][j - 5] = tr;
+        }
 
-		tr = new TextureRegion(spriteTexture, w * 2, 0, w, h);
-		tr.flip(true, false);
-		attackFrames[6][4] = tr;
+        TextureRegion tr = new TextureRegion(spriteTexture, w, 0, w, h);
+        tr.flip(true, false);
+        attackFrames[7][4] = tr;
 
-		tr = new TextureRegion(spriteTexture, w * 3, 0, w, h);
-		tr.flip(true, false);
-		attackFrames[5][4] = tr;
+        tr = new TextureRegion(spriteTexture, w * 2, 0, w, h);
+        tr.flip(true, false);
+        attackFrames[6][4] = tr;
 
-		for (int i = 0; i < dirs; i++) {
-			Animation<TextureRegion> anim = new Animation<TextureRegion>(0.2f, frames[i]);
-			Animation<TextureRegion> attackAnim = new Animation<TextureRegion>(0.2f, attackFrames[i]);
-			animations.add(anim);
-			attackAnimations.add(attackAnim);
-			frames[i] = null;
-			attackFrames[i] = null;
-		}
+        tr = new TextureRegion(spriteTexture, w * 3, 0, w, h);
+        tr.flip(true, false);
+        attackFrames[5][4] = tr;
 
-		this.setAnimations(animations);
-		this.setAttackAnimations(attackAnimations);
-		this.setStandRegions(standRegions);
-	}
+        for (int i = 0; i < dirs; i++) {
+            Animation<TextureRegion> anim = new Animation<TextureRegion>(0.2f, frames[i]);
+            Animation<TextureRegion> attackAnim = new Animation<TextureRegion>(0.2f, attackFrames[i]);
+            animations.add(anim);
+            attackAnimations.add(attackAnim);
+            frames[i] = null;
+            attackFrames[i] = null;
+        }
+
+        this.setAnimations(animations);
+        this.setAttackAnimations(attackAnimations);
+        this.setStandRegions(standRegions);
+    }
 }

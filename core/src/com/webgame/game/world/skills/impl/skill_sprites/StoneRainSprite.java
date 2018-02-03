@@ -17,7 +17,7 @@ public class StoneRainSprite extends SkillSprite {
 	}
 
 	@Override
-	public void initSkill(SpriteBatch batch, Texture spriteTexture) {
+	public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spriteTexture);
 

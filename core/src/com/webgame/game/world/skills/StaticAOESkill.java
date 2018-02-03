@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.webgame.game.world.skills.impl.skill_sprites.TeleportSprite;
 
 public abstract class StaticAOESkill<T extends SkillSprite> extends Skill<T> {
 	final int w = 100;
@@ -43,5 +44,12 @@ public abstract class StaticAOESkill<T extends SkillSprite> extends Skill<T> {
 		super.updateFrame(frame, dt);
 		frame.updateDistance();
 		frame.animateTimer += dt;
+	}
+
+	@Override
+	protected void afterCustomAnimation() {
+		SkillSprite obj = getSkillObjects().get(0);
+		if (obj.getAnimateTimer() > obj.getAnimationMaxDuration())
+			isActive = false;
 	}
 }

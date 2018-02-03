@@ -20,11 +20,4 @@ public class Teleport extends StaticAOESkill<TeleportSprite> {
 		obj.setAOE(true);
 		return obj;
 	}
-
-	@Override
-	protected void afterCustomAnimation() {
-		TeleportSprite obj = getSkillObjects().get(0);
-		if (obj.getAnimateTimer() > obj.getAnimationMaxDuration())
-			isActive = false;
-	}
 }

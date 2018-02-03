@@ -74,7 +74,7 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
         ArrayList<T> objs = new ArrayList<T>();
         for (int i = 0; i < numFrames; i++) {
             T obj = createObject();
-            obj.initSkill(batch, spriteTexture);
+            obj.initSkillSprite(batch, spriteTexture);
             objs.add(obj);
         }
 

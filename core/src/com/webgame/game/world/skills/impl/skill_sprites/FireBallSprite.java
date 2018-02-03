@@ -17,8 +17,8 @@ public class FireBallSprite extends SkillSprite {
 	}
 
 	@Override
-	public void initSkill(SpriteBatch batch, Texture spriteTexture) {
-		super.initSkill(batch, spriteTexture);
+	public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
+		super.initSkillSprite(batch, spriteTexture);
 
 		int h = 50;
 		int w = 30;
