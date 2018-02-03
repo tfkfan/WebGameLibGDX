@@ -4,6 +4,7 @@ package com.webgame.game.world.skills;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 public abstract class StaticSkill<T extends SkillSprite> extends Skill<T> {
 	protected float skillDuration = 10;
@@ -19,7 +20,7 @@ public abstract class StaticSkill<T extends SkillSprite> extends Skill<T> {
 	protected void initFrame(T frame, Vector2 playerPosition, Vector2 targetPosition) {
 		frame.setVelocity(vel);
 		frame.setFinalAnimated(false);
-		frame.animateTimer = 0;
+        frame.setAnimateTimer(0);
 		frame.setPosition(targetPosition.x, targetPosition.y);
 		initPositions(frame, targetPosition);
 	}
@@ -28,7 +29,7 @@ public abstract class StaticSkill<T extends SkillSprite> extends Skill<T> {
 		float x = target.x - frame.getWidth()/2;
 		float y = target.y;
 		frame.updateDistance();
-		frame.animateTimer = 0;
+        frame.setAnimateTimer(0);
 		frame.setActive(true);
 		frame.setPosition(x, y);
 	}
@@ -45,7 +46,7 @@ public abstract class StaticSkill<T extends SkillSprite> extends Skill<T> {
 		super.updateFrame(frame, dt);
 
 		frame.updateDistance();
-		frame.animateTimer += dt;
+        frame.setAnimateTimer(frame.getAnimateTimer() + dt);
 
 		float x = frame.getX();
 		float y = frame.getY();

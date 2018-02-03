@@ -1,11 +1,10 @@
-package com.webgame.game.world.skills.impl.skill_sprites;
+package com.webgame.game.world.skills.skillsprites.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.impl.MagicShieldAnimation;
-import com.webgame.game.animation.impl.TeleportAnimation;
-import com.webgame.game.world.skills.SkillSprite;
+import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 import static com.webgame.game.Configs.PPM;
 

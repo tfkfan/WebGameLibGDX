@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.world.player.Player;
+import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 import static com.webgame.game.Configs.PPM;
 

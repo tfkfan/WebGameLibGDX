@@ -1,18 +1,17 @@
-package com.webgame.game.world.skills.impl.skill_sprites;
+package com.webgame.game.world.skills.skillsprites.impl;
+
+import static com.webgame.game.Configs.PPM;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.game.animation.impl.MagicBuffAnimation;
-import com.webgame.game.animation.impl.TeleportAnimation;
-import com.webgame.game.world.skills.SkillSprite;
+import com.webgame.game.animation.impl.FireBlastAnimation;
+import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
-import static com.webgame.game.Configs.PPM;
+public class ExplosionSprite extends SkillSprite {
+	protected FireBlastAnimation animation;
 
-public class TeleportSprite extends SkillSprite {
-	protected TeleportAnimation animation;
-
-	public TeleportSprite() {
+	public ExplosionSprite() {
 		super();
 	}
 
@@ -21,12 +20,11 @@ public class TeleportSprite extends SkillSprite {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spriteTexture);
 
-
+		animationMaxDuration = 1.7f;
 		animationDuration = 0.1f;
-		animation = new TeleportAnimation(spriteTexture, animationDuration, animationMaxDuration);
-		animationMaxDuration = animationDuration*animation.getAnimation().getKeyFrames().length;
+		animation = new FireBlastAnimation(spriteTexture, animationDuration, animationMaxDuration);
 		int w2 = 100;
-		int h2 = 80;
+		int h2 = 100;
 		this.setBounds(0, 0, w2 / PPM, h2 / PPM);
 		setRegion(animation.getAnimation().getKeyFrame(0));
 	}

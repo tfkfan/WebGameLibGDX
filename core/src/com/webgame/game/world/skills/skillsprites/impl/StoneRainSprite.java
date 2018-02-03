@@ -1,18 +1,18 @@
-package com.webgame.game.world.skills.impl.skill_sprites;
+package com.webgame.game.world.skills.skillsprites.impl;
 
 import static com.webgame.game.Configs.PPM;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.game.animation.impl.BlizzardFragmentAnimation;
-import com.webgame.game.world.skills.SkillSprite;
+import com.webgame.game.animation.impl.StoneBlastAnimation;
+import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
-public class BlizzardSprite extends SkillSprite {
-	protected BlizzardFragmentAnimation animation;
+public class StoneRainSprite extends SkillSprite {
+	protected StoneBlastAnimation animation;
 	protected TextureRegion standTexture;
 
-	public BlizzardSprite() {
+	public StoneRainSprite() {
 		super();
 	}
 
@@ -21,13 +21,11 @@ public class BlizzardSprite extends SkillSprite {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spriteTexture);
 
-		animationDuration = 0.1f;
-		animationMaxDuration = animationDuration * 2;
-		animation = new BlizzardFragmentAnimation(spriteTexture, animationDuration, animationMaxDuration);
-		standTexture = new TextureRegion(this.spriteTexture, 5, 245, 30, 30);
+		standTexture = new TextureRegion(spriteTexture, 5, 80, 40, 30);
+		animation = new StoneBlastAnimation(spriteTexture, animationDuration, animationMaxDuration);
 
 		int w2 = 20;
-		int h2 = 25;
+		int h2 = 20;
 		this.setBounds(0, 0, w2 / PPM, h2 / PPM);
 		setRegion(standTexture);
 	}

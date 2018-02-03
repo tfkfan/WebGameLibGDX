@@ -1,18 +1,17 @@
-package com.webgame.game.world.skills.impl.skill_sprites;
+package com.webgame.game.world.skills.skillsprites.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.game.animation.impl.IceBlastAnimation;
-import com.webgame.game.animation.impl.MagicBuffAnimation;
-import com.webgame.game.world.skills.SkillSprite;
+import com.webgame.game.animation.impl.TeleportAnimation;
+import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 import static com.webgame.game.Configs.PPM;
 
-public class MagicBuffSprite extends SkillSprite {
-	protected MagicBuffAnimation animation;
+public class TeleportSprite extends SkillSprite {
+	protected TeleportAnimation animation;
 
-	public MagicBuffSprite() {
+	public TeleportSprite() {
 		super();
 	}
 
@@ -23,7 +22,7 @@ public class MagicBuffSprite extends SkillSprite {
 
 
 		animationDuration = 0.1f;
-		animation = new MagicBuffAnimation(spriteTexture, animationDuration, animationMaxDuration);
+		animation = new TeleportAnimation(spriteTexture, animationDuration, animationMaxDuration);
 		animationMaxDuration = animationDuration*animation.getAnimation().getKeyFrames().length;
 		int w2 = 100;
 		int h2 = 80;

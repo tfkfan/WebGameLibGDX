@@ -1,17 +1,17 @@
-package com.webgame.game.world.skills.impl.skill_sprites;
-
-import static com.webgame.game.Configs.PPM;
+package com.webgame.game.world.skills.skillsprites.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.game.animation.impl.FireBlastAnimation;
-import com.webgame.game.world.skills.SkillSprite;
+import com.webgame.game.animation.impl.IceBlastAnimation;
+import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
-public class ExplosionSprite extends SkillSprite {
-	protected FireBlastAnimation animation;
+import static com.webgame.game.Configs.PPM;
 
-	public ExplosionSprite() {
+public class IceExplosionSprite extends SkillSprite {
+	protected IceBlastAnimation animation;
+
+	public IceExplosionSprite() {
 		super();
 	}
 
@@ -20,11 +20,12 @@ public class ExplosionSprite extends SkillSprite {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spriteTexture);
 
-		animationMaxDuration = 1.7f;
+
 		animationDuration = 0.1f;
-		animation = new FireBlastAnimation(spriteTexture, animationDuration, animationMaxDuration);
-		int w2 = 100;
-		int h2 = 100;
+		animation = new IceBlastAnimation(spriteTexture, animationDuration, animationMaxDuration);
+		animationMaxDuration = animationDuration*animation.getAnimation().getKeyFrames().length;
+		int w2 = 300;
+		int h2 = 200;
 		this.setBounds(0, 0, w2 / PPM, h2 / PPM);
 		setRegion(animation.getAnimation().getKeyFrame(0));
 	}

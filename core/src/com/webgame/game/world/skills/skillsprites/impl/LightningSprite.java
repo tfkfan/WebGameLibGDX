@@ -1,19 +1,19 @@
-package com.webgame.game.world.skills.impl.skill_sprites;
+package com.webgame.game.world.skills.skillsprites.impl;
+
+import static com.webgame.game.Configs.PPM;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.game.animation.impl.HealAnimation;
-import com.webgame.game.animation.impl.TeleportAnimation;
-import com.webgame.game.world.skills.SkillSprite;
+import com.webgame.game.animation.impl.LightningAnimation;
+import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
-import static com.webgame.game.Configs.PPM;
+public class LightningSprite extends SkillSprite {
+	protected LightningAnimation animation;
 
-public class HealSprite extends SkillSprite {
-	protected HealAnimation animation;
-
-	public HealSprite() {
+	public LightningSprite() {
 		super();
+		animationDuration = 0.1f;
 	}
 
 	@Override
@@ -21,12 +21,11 @@ public class HealSprite extends SkillSprite {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spriteTexture);
 
+		this.animationMaxDuration = animationDuration * 4;
+		animation = new LightningAnimation(spriteTexture, animationDuration, animationMaxDuration);
 
-		animationDuration = 0.1f;
-		animation = new HealAnimation(spriteTexture, animationDuration, animationMaxDuration);
-		animationMaxDuration = animationDuration*animation.getAnimation().getKeyFrames().length;
 		int w2 = 100;
-		int h2 = 80;
+		int h2 = 100;
 		this.setBounds(0, 0, w2 / PPM, h2 / PPM);
 		setRegion(animation.getAnimation().getKeyFrame(0));
 	}
@@ -40,4 +39,5 @@ public class HealSprite extends SkillSprite {
 
 		return region;
 	}
+
 }

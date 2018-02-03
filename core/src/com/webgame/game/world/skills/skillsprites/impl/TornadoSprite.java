@@ -1,19 +1,17 @@
-package com.webgame.game.world.skills.impl.skill_sprites;
+package com.webgame.game.world.skills.skillsprites.impl;
 
 import static com.webgame.game.Configs.PPM;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.game.animation.impl.LightningAnimation;
-import com.webgame.game.world.skills.SkillSprite;
+import com.webgame.game.animation.impl.TornadoAnimation;
+import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
-public class LightningSprite extends SkillSprite {
-	protected LightningAnimation animation;
+public class TornadoSprite extends SkillSprite {
+	protected TornadoAnimation animation;
 
-	public LightningSprite() {
+	public TornadoSprite() {
 		super();
-		animationDuration = 0.1f;
 	}
 
 	@Override
@@ -21,8 +19,7 @@ public class LightningSprite extends SkillSprite {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spriteTexture);
 
-		this.animationMaxDuration = animationDuration * 4;
-		animation = new LightningAnimation(spriteTexture, animationDuration, animationMaxDuration);
+		animation = new TornadoAnimation(spriteTexture, animationDuration, animationMaxDuration);
 
 		int w2 = 100;
 		int h2 = 100;
@@ -35,7 +32,7 @@ public class LightningSprite extends SkillSprite {
 		TextureRegion region = null;
 
 		if (isActive)
-			region = animation.getAnimation().getKeyFrame(animateTimer, false);
+			region = animation.getAnimation().getKeyFrame(animateTimer, true);
 
 		return region;
 	}

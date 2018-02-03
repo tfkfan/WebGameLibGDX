@@ -1,18 +1,17 @@
-package com.webgame.game.world.skills.impl.skill_sprites;
+package com.webgame.game.world.skills.skillsprites.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.impl.HealAnimation;
-import com.webgame.game.animation.impl.MagicSourceAnimation;
-import com.webgame.game.world.skills.SkillSprite;
+import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 import static com.webgame.game.Configs.PPM;
 
-public class MagicSourceSprite extends SkillSprite {
-	protected MagicSourceAnimation animation;
+public class HealSprite extends SkillSprite {
+	protected HealAnimation animation;
 
-	public MagicSourceSprite() {
+	public HealSprite() {
 		super();
 	}
 
@@ -23,7 +22,7 @@ public class MagicSourceSprite extends SkillSprite {
 
 
 		animationDuration = 0.1f;
-		animation = new MagicSourceAnimation(spriteTexture, animationDuration, animationMaxDuration);
+		animation = new HealAnimation(spriteTexture, animationDuration, animationMaxDuration);
 		animationMaxDuration = animationDuration*animation.getAnimation().getKeyFrames().length;
 		int w2 = 100;
 		int h2 = 80;

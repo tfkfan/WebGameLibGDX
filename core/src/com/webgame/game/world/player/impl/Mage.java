@@ -11,9 +11,7 @@ import com.webgame.game.world.common.factory.ISkillFactory;
 import com.webgame.game.world.common.factory.SkillFactory;
 import com.webgame.game.world.player.Player;
 import com.webgame.game.world.skills.Skill;
-import com.webgame.game.world.skills.StaticAOESkill;
-import com.webgame.game.world.skills.impl.skill_sprites.*;
-import com.webgame.game.world.skills.impl.skills.*;
+import com.webgame.game.world.skills.skillsprites.impl.*;
 
 import static com.webgame.game.Configs.PPM;
 

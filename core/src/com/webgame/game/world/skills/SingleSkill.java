@@ -3,6 +3,7 @@ package com.webgame.game.world.skills;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 public abstract class SingleSkill<T extends SkillSprite> extends Skill<T> {
 	public SingleSkill(SpriteBatch batch, Texture spriteTexture) throws Exception {
@@ -40,9 +41,9 @@ public abstract class SingleSkill<T extends SkillSprite> extends Skill<T> {
 		}
 		
 		if (!frame.isFinalAnimated() && frame.isStatic()) {
-			frame.animateTimer += dt;
-			if (frame.animateTimer > frame.animationMaxDuration) {
-				frame.animateTimer = 0;
+			frame.setAnimateTimer(frame.getAnimateTimer() + dt);
+			if (frame.getAnimateTimer() > frame.getAnimationMaxDuration()) {
+				frame.setAnimateTimer(0);
 				resetSkill();
 			}
 		}

@@ -1,4 +1,4 @@
-package com.webgame.game.world.skills.impl.skill_sprites;
+package com.webgame.game.world.skills.skillsprites.impl;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.impl.MeteorBlastAnimation;
-import com.webgame.game.world.skills.SkillSprite;
+import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 public class MeteorRainSprite extends SkillSprite {
 	protected MeteorBlastAnimation animation;

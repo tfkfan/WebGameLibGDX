@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.world.skills.impl.skill_sprites.TeleportSprite;
+import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 public abstract class StaticAOESkill<T extends SkillSprite> extends Skill<T> {
 	final int w = 100;
@@ -25,7 +25,7 @@ public abstract class StaticAOESkill<T extends SkillSprite> extends Skill<T> {
 	protected void initFrame(T frame, Vector2 playerPosition, Vector2 targetPosition) {
 		frame.setVelocity(vel);
 		frame.setFinalAnimated(false);
-		frame.animateTimer = 0;
+		frame.setAnimateTimer(0);
 		area.setPosition(targetPosition.x - area.getWidth() / 2, targetPosition.y - area.getHeight() / 2);
 		initPositions(frame);
 	}
@@ -34,7 +34,7 @@ public abstract class StaticAOESkill<T extends SkillSprite> extends Skill<T> {
 		float x = area.getX() - (frame.getWidth() - area.getWidth()) / 2;
 		float y = area.getY() - (frame.getHeight() - area.getHeight()) / 2;
 		frame.updateDistance();
-		frame.animateTimer = 0;
+		frame.setAnimateTimer(0);
 		frame.setActive(true);
 		frame.setPosition(x, y);
 	}
@@ -43,14 +43,14 @@ public abstract class StaticAOESkill<T extends SkillSprite> extends Skill<T> {
 	protected void updateFrame(T frame, float dt) {
 		super.updateFrame(frame, dt);
 		frame.updateDistance();
-		frame.animateTimer += dt;
+		frame.setAnimateTimer(frame.getAnimateTimer() + dt);
 	}
 
 	@Override
 	protected void afterCustomAnimation() {
 		if(isTimed)
 			return;
-		
+
 		SkillSprite obj = getSkillObjects().get(0);
 		if (obj.getAnimateTimer() > obj.getAnimationMaxDuration())
 			isActive = false;
