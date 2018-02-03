@@ -160,9 +160,9 @@ public class GameStage extends Stage {
     private void handleInput() {
         float d = 5f;
         if (Gdx.input.isKeyPressed(Input.Keys.Z))
-         camera.zoom += 0.1;
-         if (Gdx.input.isKeyPressed(Input.Keys.X))
-         camera.zoom -= 0.1;
+            camera.zoom += 0.1;
+        if (Gdx.input.isKeyPressed(Input.Keys.X))
+            camera.zoom -= 0.1;
 
         Vector2 vec = new Vector2(0, 0);
         if (Gdx.input.isKeyPressed(Input.Keys.A))

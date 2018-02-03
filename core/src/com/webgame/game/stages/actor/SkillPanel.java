@@ -40,6 +40,7 @@ public class SkillPanel extends Group {
         sr = new ShapeRenderer();
         setPlayer(player);
         init();
+
     }
 
     public Player getPlayer() {
@@ -50,11 +51,11 @@ public class SkillPanel extends Group {
         this.player = player;
     }
 
-    public void act(float dt){
-        int d= player.getCurrentSkillIndex();
-       // Gdx.app.log("",d + "");
-        for(int i = 0; i < buttons.length; i++){
-            if(d == i)
+    public void act(float dt) {
+        int d = player.getCurrentSkillIndex();
+        // Gdx.app.log("",d + "");
+        for (int i = 0; i < buttons.length; i++) {
+            if (d == i)
                 buttons[i].getStyle().fontColor = Color.RED;
             else
                 buttons[i].getStyle().fontColor = Color.WHITE;
@@ -62,10 +63,10 @@ public class SkillPanel extends Group {
     }
 
 
-    public void init(){
+    public void init() {
         List<SkillContainer> containers = player.getSkillContainers();
         buttons = new TextButton[containers.size()];
-        for(int i = 0; i < containers.size(); i++) {
+        for (int i = 0; i < containers.size(); i++) {
             TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
             textButtonStyle.font = new BitmapFont();
 
@@ -73,17 +74,17 @@ public class SkillPanel extends Group {
 
             textButtonStyle.downFontColor = Color.BLACK;
             //textButtonStyle.checkedFontColor = Color.GREEN;
-            TextButton btn = new TextButton("Skill" + (i+1), textButtonStyle );
-            btn.addListener(new ClickListener(){
+            TextButton btn = new TextButton("Skill" + (i + 1), textButtonStyle);
+            btn.addListener(new ClickListener() {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                   String val = btn.getText().toString().replace("Skill", "");
-                   player.setCurrentSkillIndex(Integer.parseInt(val) - 1);
+                    String val = btn.getText().toString().replace("Skill", "");
+                    player.setCurrentSkillIndex(Integer.parseInt(val) - 1);
                 }
             });
 
-            btn.setBounds (getX() + (i+1)*50/ Configs.PPM, getY() + 40/Configs.PPM, 15/ Configs.PPM, 15/Configs.PPM);
+            btn.setBounds(getX() + (i + 1) * 50 / Configs.PPM, getY() + 40 / Configs.PPM, 15 / Configs.PPM, 15 / Configs.PPM);
             btn.setTransform(true);
             btn.setScale(1 / PPM);
 
@@ -91,7 +92,7 @@ public class SkillPanel extends Group {
             buttons[i] = btn;
         }
 
-        setBounds (getX(), getY() , 550/ Configs.PPM, 100/Configs.PPM);
+        setBounds(getX(), getY(), Configs.VIEW_WIDTH / Configs.PPM, 100 / Configs.PPM);
         setDebug(true);
 
     }

@@ -43,8 +43,10 @@ public class Mage extends Player {
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png"), 30).setDamage(10d));
             skills.add(skillFactory.createStaticTimedAOESkill(MagicShieldAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s2.png")));
-            skills.add(skillFactory.createStaticSingleAOESkill(HealAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s6.png")));
+            Skill s = skillFactory.createStaticSingleAOESkill(HealAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s6.png"));
+            s.setHeal(true);
+            skills.add(s);
             skills.add(skillFactory.createStaticSingleAOESkill(MagicSourceAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s9.png")));
             skills.add(skillFactory.createStaticSingleAOESkill(MagicBuffAnimation.class, batch,

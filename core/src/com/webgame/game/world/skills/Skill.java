@@ -35,6 +35,7 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
     protected boolean isStatic;
     protected boolean isMarked;
     protected boolean isBuff;
+    protected boolean isHeal;
 
     protected final float absVelocity = 10f / PPM;
     protected float skillDuration = 100;
@@ -175,7 +176,14 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
         boolean isTimed = isTimed();
         boolean isStatic = isStatic();
 
-        if ((!isAOE || isAOE && isFalling) && !isStatic) {
+        if(isBuff() || isHeal()){
+            if(Intersector.overlaps(player.getPlayerShape(), getArea())) {
+                if (!isMarked)
+                 player.getActorState().setHealthPoints(player.getActorState().getMaxHealthPoints());
+                if (!isTimed)
+                    isMarked = true;
+            }
+        }else if ((!isAOE || isAOE && isFalling) && !isStatic) {
             for (T frame : this.skillObjects) {
                 if (!frame.isMarked() && (!isAOE || frame.isStatic()) && Intersector.overlaps(player.getPlayerShape(), frame.getBoundingRectangle())) {
                     player.getActorState().setHealthPoints(player.getActorState().getHealthPoints() - getDamage().intValue());
@@ -232,6 +240,22 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
     public Skill<T> setAOE(boolean isAOE) {
         this.isAOE = isAOE;
         return this;
+    }
+
+    public boolean isBuff() {
+        return isBuff;
+    }
+
+    public void setBuff(boolean buff) {
+        isBuff = buff;
+    }
+
+    public boolean isHeal() {
+        return isHeal;
+    }
+
+    public void setHeal(boolean heal) {
+        isHeal = heal;
     }
 
     public boolean isFalling() {
