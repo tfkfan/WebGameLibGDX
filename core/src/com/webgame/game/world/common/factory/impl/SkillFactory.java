@@ -16,61 +16,42 @@ public class SkillFactory implements ISkillFactory {
     }
 
     @Override
-    public <T extends SkillSprite> Skill<T> createStaticSkill(final Class<T> clazz, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception {
+    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createStaticSkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception {
         return new StaticSkill<T>(batch, spriteTexture, numFrames) {
             @Override
             protected T createObject() {
-                try {
-                    return (T) clazz.newInstance();
-                } catch (InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
-                    return null;
-                }
+                return skillSpriteFactory.createStaticSkillSprite(animationClass);
             }
         };
     }
 
     @Override
-    public <T extends SkillSprite> Skill<T> createStaticAOESkill(final Class<T> clazz, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception {
+    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createStaticAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception {
         return new StaticAOESkill<T>(batch, spriteTexture, numFrames) {
             @Override
             protected T createObject() {
-                try {
-                    return (T) clazz.newInstance();
-                } catch (InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
-                    return null;
-                }
+                return skillSpriteFactory.createStaticSkillSprite(animationClass);
             }
         };
     }
 
     @Override
-    public <T extends SkillSprite> Skill<T> createFallingAOESkill(final Class<T> clazz, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception {
+    public <A extends GameAnimation, T extends SkillSprite> Skill<T>
+    createFallingAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception {
         return new FallingAOESkill<T>(batch, spriteTexture, numFrames) {
             @Override
             protected T createObject() {
-                try {
-                    return (T) clazz.newInstance();
-                } catch (InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
-                    return null;
-                }
+                return skillSpriteFactory.createFallingSkillSprite(animationClass);
             }
         };
     }
 
     @Override
-    public <T extends SkillSprite> Skill<T> createSingleSkill(final Class<T> clazz, final SpriteBatch batch, final Texture spriteTexture) throws Exception {
+    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createSingleSkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception {
         return new SingleSkill<T>(batch, spriteTexture) {
             @Override
             protected T createObject() {
-                try {
-                    return (T) clazz.newInstance();
-                } catch (InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
-                    return null;
-                }
+                return skillSpriteFactory.createSingleSkillSprite(animationClass);
             }
         };
     }
@@ -80,22 +61,32 @@ public class SkillFactory implements ISkillFactory {
         return new StaticAOESkill<T>(batch, spriteTexture, 1) {
             @Override
             protected T createObject() {
-                return skillSpriteFactory.createSingleSkillSprite(animationClass);
+                T obj = skillSpriteFactory.createStaticSkillSprite(animationClass);
+                obj.setAOE(true);
+                return obj;
             }
         };
     }
 
     @Override
-    public <T extends SkillSprite> Skill<T> createStaticSingleSkill(final Class<T> clazz, final SpriteBatch batch, final Texture spriteTexture) throws Exception {
+    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createStaticTimedAOESkill(Class<A> animationClass, SpriteBatch batch, Texture spriteTexture) throws Exception {
+        Skill<T> skill =  new StaticAOESkill<T>(batch, spriteTexture, 1) {
+            @Override
+            protected T createObject() {
+                T obj = skillSpriteFactory.createStaticTimedSkillSprite(animationClass);
+                return obj;
+            }
+        };
+        skill.setTimed(true);
+        return skill;
+    }
+
+    @Override
+    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createStaticSingleSkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception {
         return new StaticSkill<T>(batch, spriteTexture, 1) {
             @Override
             protected T createObject() {
-                try {
-                    return (T) clazz.newInstance();
-                } catch (InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
-                    return null;
-                }
+                return skillSpriteFactory.createStaticSkillSprite(animationClass);
             }
         };
     }

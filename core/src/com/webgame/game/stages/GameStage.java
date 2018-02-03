@@ -47,6 +47,8 @@ public class GameStage extends Stage {
     private SkillPanel skillPanel;
     private OrthographicCamera camera;
 
+    private Vector3 target = new Vector3();
+
     public GameStage() {
         Gdx.input.setInputProcessor(this);
 
@@ -183,7 +185,7 @@ public class GameStage extends Stage {
         super.touchDown(x, y, pointer, button);
         if (button == Input.Buttons.LEFT) {
 
-            Vector3 target = getCamera().unproject(new Vector3(x, y, 0), getViewport().getScreenX(), getViewport().getScreenY(),
+            target = getCamera().unproject(new Vector3(x, y, 0), getViewport().getScreenX(), getViewport().getScreenY(),
                     getViewport().getScreenWidth(), getViewport().getScreenHeight());
 
             player.attack(target.x, target.y);

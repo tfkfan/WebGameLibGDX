@@ -7,15 +7,24 @@ import com.webgame.game.world.skills.Skill;
 import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 public interface ISkillFactory {
-    public abstract <T extends SkillSprite> Skill<T> createStaticSkill(final Class<T> clazz, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception;
+    public abstract <A extends GameAnimation, T extends SkillSprite> Skill<T>
+    createStaticSkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception;
 
-    public abstract <T extends SkillSprite> Skill<T> createStaticAOESkill(final Class<T> clazz, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception;
+    public abstract <A extends GameAnimation, T extends SkillSprite> Skill<T>
+    createStaticAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception;
 
-    public abstract <T extends SkillSprite> Skill<T> createFallingAOESkill(final Class<T> clazz, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception;
+    public abstract <A extends GameAnimation, T extends SkillSprite> Skill<T>
+    createFallingAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception;
 
-    public abstract <T extends SkillSprite> Skill<T> createSingleSkill(final Class<T> clazz, final SpriteBatch batch, final Texture spriteTexture) throws Exception;
+    public abstract <A extends GameAnimation, T extends SkillSprite> Skill<T>
+    createSingleSkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception;
 
-    public abstract <A extends GameAnimation, T extends SkillSprite> Skill<T> createStaticSingleAOESkill(final Class<A> clazz, final SpriteBatch batch, final Texture spriteTexture) throws Exception;
+    public abstract <A extends GameAnimation, T extends SkillSprite> Skill<T>
+    createStaticSingleAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception;
 
-    public abstract <T extends SkillSprite> Skill<T> createStaticSingleSkill(final Class<T> clazz, final SpriteBatch batch, final Texture spriteTexture) throws Exception;
+    public abstract <A extends GameAnimation, T extends SkillSprite> Skill<T>
+    createStaticTimedAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception;
+
+    public abstract <A extends GameAnimation, T extends SkillSprite> Skill<T>
+    createStaticSingleSkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception;
 }

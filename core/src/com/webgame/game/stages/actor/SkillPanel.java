@@ -9,10 +9,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.webgame.game.Configs;
 import com.webgame.game.stages.GameStage;
 import com.webgame.game.world.player.Player;
@@ -72,6 +74,14 @@ public class SkillPanel extends Group {
             textButtonStyle.downFontColor = Color.BLACK;
             //textButtonStyle.checkedFontColor = Color.GREEN;
             TextButton btn = new TextButton("Skill" + (i+1), textButtonStyle );
+            btn.addListener(new ClickListener(){
+
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                   String val = btn.getText().toString().replace("Skill", "");
+                   player.setCurrentSkillIndex(Integer.parseInt(val) - 1);
+                }
+            });
 
             btn.setBounds (getX() + (i+1)*50/ Configs.PPM, getY() + 40/Configs.PPM, 15/ Configs.PPM, 15/Configs.PPM);
             btn.setTransform(true);

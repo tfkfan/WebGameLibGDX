@@ -22,11 +22,6 @@ public class FireBallSprite extends SkillSprite {
         int w = 30;
         int l = 1;
 
-        TextureRegion[] frames = new TextureRegion[l];
-
-        for (int i = 0; i < l; i++)
-            frames[i] = new TextureRegion(getSpriteTexture(), 200, 155, w, h);
-
         setStandTexture(new TextureRegion(getSpriteTexture(), 810, 50, w, h));
 
         setAnimationDuration(0.1f);
