@@ -1,25 +1,19 @@
 package com.webgame.game.world.skills;
 
-import static com.webgame.game.Configs.PPM;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
-public abstract class StaticAOESkill<T extends SkillSprite> extends Skill<T> {
+public abstract class BuffSkill<T extends SkillSprite> extends Skill<T> {
     final int w = 100;
     final int h = 100;
 
     protected Vector2 vel = new Vector2(0, 0);
 
-    public StaticAOESkill(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
+    public BuffSkill(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
         super(batch, spriteTexture, numFrames);
-        this.getSkillState().setAOE(true);
-        this.getSkillState().setStatic(true);
-        this.getSkillState().setArea(new Rectangle(0, 0, w / PPM, h / PPM));
     }
 
     @Override
@@ -27,24 +21,20 @@ public abstract class StaticAOESkill<T extends SkillSprite> extends Skill<T> {
         frame.setVelocity(vel);
         frame.setFinalAnimated(false);
         frame.setAnimateTimer(0);
-        getSkillState().getArea().setPosition(targetPosition.x - getSkillState().getArea().getWidth() / 2, targetPosition.y - getSkillState().getArea().getHeight() / 2);
         initPositions(frame);
     }
 
     protected void initPositions(T frame) {
-        float x = getSkillState().getArea().getX() - (frame.getWidth() - getSkillState().getArea().getWidth()) / 2;
-        float y = getSkillState().getArea().getY() - (frame.getHeight() - getSkillState().getArea().getHeight()) / 2;
         frame.updateDistance();
         frame.setAnimateTimer(0);
         frame.setActive(true);
-        frame.setPosition(x, y);
     }
 
     @Override
     protected void updateFrame(T frame, float dt) {
+        frame.setPosition(castingPlayer.getX() - frame.getWidth()/2, castingPlayer.getY() - frame.getHeight()/2);
         super.updateFrame(frame, dt);
         frame.updateDistance();
-
         frame.setAnimateTimer(frame.getAnimateTimer() + dt);
     }
 

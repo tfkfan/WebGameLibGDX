@@ -41,6 +41,18 @@ public class SkillState {
 
     public void init(){
         damage = 1d;
+        setDamage(0d);
+        setTitle("SKILL");
+        setActive(false);
+        setStatic(false);
+        setAOE(false);
+        setFalling(false);
+        setTimed(false);
+        setMarked(false);
+        setBuff(false);
+        setHeal(false);
+        setHealHP(0d);
+        setLevel(0);
     }
 
     public Integer getLevel() {

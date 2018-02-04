@@ -66,7 +66,11 @@ public class SkillPanel extends Group {
     public void init() {
         List<SkillContainer> containers = player.getSkillContainers();
         buttons = new TextButton[containers.size()];
+
+        float panelWidth = Configs.VIEW_WIDTH / Configs.PPM;
+        float panelHeight = 70 / Configs.PPM;
         for (int i = 0; i < containers.size(); i++) {
+            SkillContainer cont = containers.get(i);
             TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
             textButtonStyle.font = new BitmapFont();
 
@@ -74,17 +78,16 @@ public class SkillPanel extends Group {
 
             textButtonStyle.downFontColor = Color.BLACK;
             //textButtonStyle.checkedFontColor = Color.GREEN;
-            TextButton btn = new TextButton("Skill" + (i + 1), textButtonStyle);
+            SkillButton btn = new SkillButton(cont.getSkill().getSkillState().getTitle(), textButtonStyle, i);
             btn.addListener(new ClickListener() {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    String val = btn.getText().toString().replace("Skill", "");
-                    player.setCurrentSkillIndex(Integer.parseInt(val) - 1);
+                    player.setCurrentSkillIndex(((SkillButton) event.getListenerActor()).getSkillIndex());
                 }
             });
 
-            btn.setBounds(getX() + (i + 1) * 50 / Configs.PPM, getY() + 40 / Configs.PPM, 15 / Configs.PPM, 15 / Configs.PPM);
+            btn.setBounds(getX() + (i + 1) * 50 / Configs.PPM, getY() + 40 / Configs.PPM, (panelWidth)/ containers.size(), 15 / Configs.PPM);
             btn.setTransform(true);
             btn.setScale(1 / PPM);
 
@@ -92,7 +95,7 @@ public class SkillPanel extends Group {
             buttons[i] = btn;
         }
 
-        setBounds(getX(), getY(), Configs.VIEW_WIDTH / Configs.PPM, 100 / Configs.PPM);
+        setBounds(getX(), getY(), panelWidth, panelHeight);
         setDebug(true);
 
     }

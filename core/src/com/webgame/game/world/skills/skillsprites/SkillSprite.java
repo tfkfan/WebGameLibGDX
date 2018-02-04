@@ -10,9 +10,7 @@ import com.webgame.game.world.common.GameSprite;
 public abstract class SkillSprite extends GameSprite implements Cloneable {
     protected boolean isActive;
     protected boolean isStatic;
-    protected boolean isFalling;
     protected boolean isFinalAnimated;
-    protected boolean isAOE;
     protected boolean isMarked;
 
     protected GameAnimation gameAnimation;
@@ -20,20 +18,18 @@ public abstract class SkillSprite extends GameSprite implements Cloneable {
 
     protected final Vector2 distance;
 
-    protected float animationDuration = 0.2f;
+    protected float animationDuration;
     protected float animationMaxDuration;
     protected float animateTimer = 0;
 
     public SkillSprite() {
         super();
         distance = new Vector2(0, 0);
-        animationMaxDuration = animationDuration * 3;
     }
     public SkillSprite(GameAnimation animation){
         super();
         setGameAnimation(animation);
         distance = new Vector2(0, 0);
-        animationMaxDuration = animationDuration * 3;
     }
 
     public float getAnimationDuration() {
@@ -102,15 +98,6 @@ public abstract class SkillSprite extends GameSprite implements Cloneable {
         return this;
     }
 
-    public boolean isFalling() {
-        return isFalling;
-    }
-
-    public SkillSprite setFalling(boolean isFalling) {
-        this.isFalling = isFalling;
-        return this;
-    }
-
     public Vector2 getDistance() {
         return distance;
     }
@@ -149,14 +136,5 @@ public abstract class SkillSprite extends GameSprite implements Cloneable {
     public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
         setSpriteBatch(batch);
         setSpriteTexture(spriteTexture);
-    }
-
-    public boolean isAOE() {
-        return isAOE;
-    }
-
-    public SkillSprite setAOE(boolean isAOE) {
-        this.isAOE = isAOE;
-        return this;
     }
 }

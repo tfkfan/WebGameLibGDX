@@ -13,10 +13,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.webgame.game.Configs;
 import com.webgame.game.stages.actor.SkillPanel;
@@ -25,7 +21,6 @@ import com.webgame.game.world.player.Player;
 import com.webgame.game.world.player.impl.Knight;
 import com.webgame.game.world.player.impl.Mage;
 import com.webgame.game.world.skills.collision.CollisionHandler;
-import com.webgame.game.world.skills.cooldown.SkillContainer;
 
 import static com.webgame.game.Configs.VIEW_WIDTH;
 

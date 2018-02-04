@@ -1,10 +1,10 @@
 package com.webgame.game.world.skills;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -17,7 +17,7 @@ import static com.webgame.game.Configs.PPM;
 
 import java.util.ArrayList;
 
-public abstract class Skill<T extends SkillSprite> implements Cloneable {
+public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCollision {
     protected Vector2 skillVelocity;
     protected Vector2 targetPosition;
 
@@ -33,6 +33,8 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
     protected final float absVelocity = 10f / PPM;
     protected float skillDuration = 100;
     protected float skillTimer;
+
+    protected Player castingPlayer;
 
     public Skill(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
         skillState = new SkillState();
@@ -62,6 +64,56 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
         return null;
     }
 
+    @Override
+    public  void skillCollision(Player player) {
+        if (player == null || !getSkillState().isActive())
+            return;
+
+        //TODO remove after game finishing
+        if (player.getActorState().getHealthPoints() <= 0) {
+            player.getActorState().setHealthPoints(player.getActorState().getMaxHealthPoints());
+            return;
+        }
+
+        Rectangle area = getSkillState().getArea();
+        Circle pShape = player.getPlayerShape();
+        boolean isAOE = getSkillState().isAOE();
+        boolean isFalling = getSkillState().isFalling();
+        boolean isTimed = getSkillState().isTimed();
+        boolean isStatic = getSkillState().isStatic();
+        boolean isMarked = getSkillState().isMarked();
+
+        if (getSkillState().isHeal()) {
+            if (!getSkillState().isMarked()) {
+                if (getSkillState().isHeal()) {
+                    Integer hp = castingPlayer.getActorState().getHealthPoints();
+                    Integer maxHP = castingPlayer.getActorState().getMaxHealthPoints();
+                    Integer resHP = hp + getSkillState().getHealHP().intValue();
+                    castingPlayer.getActorState().setHealthPoints(resHP >= maxHP ? maxHP : resHP);
+                }
+            }
+            if (!isTimed)
+                getSkillState().setMarked(true);
+
+        } else if ((!isAOE || isAOE && isFalling) && !isStatic) {
+            for (T frame : getSkillObjects()) {
+                if (!frame.isMarked() && (!isAOE || frame.isStatic()) && Intersector.overlaps(pShape, frame.getBoundingRectangle())) {
+                    player.getActorState().setHealthPoints(player.getActorState().getHealthPoints() - getSkillState().getDamage().intValue());
+                    frame.setMarked(true);
+
+                }
+            }
+        } else if (isAOE || !isAOE && isStatic) {
+            if (isAOE && !isFalling && Intersector.overlaps(pShape, area)
+                    || !isAOE && isStatic && pShape.contains(getTargetPosition())) {
+                if (!isMarked)
+                    player.getActorState().setHealthPoints(player.getActorState().getHealthPoints() - getSkillState().getDamage().intValue());
+                if (!isTimed)
+                    getSkillState().setMarked(true);
+            }
+        }
+    }
+
     protected void initSkill(Integer numFrames) throws Exception {
         setNumFrames(numFrames);
         ArrayList<T> objs = new ArrayList<T>();
@@ -73,14 +125,19 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
         setSkillObjects(objs);
     }
 
-    public void cast(Vector2 playerPosition, Vector2 targetPosition) {
+    public void cast(Player player, Vector2 targetPosition) {
+        this.castingPlayer = player;
+        Vector2 playerPosition = new Vector2(player.getX(), player.getY());
         getSkillState().setActive(true);
         getSkillState().setMarked(false);
         clearTimers();
         setTargetPosition(targetPosition);
         for (int i = 0; i < numFrames; i++) {
             T obj = skillObjects.get(i);
-            initFrame(obj, playerPosition, targetPosition);
+            if(getSkillState().isHeal() || getSkillState().isBuff())
+                initFrame(obj, playerPosition, playerPosition);
+            else
+                initFrame(obj, playerPosition, targetPosition);
         }
     }
 
@@ -113,7 +170,6 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
         obj.setActive(false);
         obj.setStatic(false);
         obj.setPosition(0, 0);
-        obj.setAOE(getSkillState().isAOE());
         obj.setMarked(false);
         obj.setFinalAnimated(false);
     }

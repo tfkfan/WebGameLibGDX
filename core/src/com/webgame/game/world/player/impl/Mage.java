@@ -29,25 +29,53 @@ public class Mage extends Player {
             ISkillFactory skillFactory = new SkillFactory();
 
 
-            skills.add(skillFactory.createStaticSingleAOESkill(BuffAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_005.png")));
-            skills.add(skillFactory.createStaticSingleAOESkill(BuffAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_006.png")));
-            skills.add(skillFactory.createStaticSingleAOESkill(BuffAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_007.png")));
-            skills.add(skillFactory.createStaticSingleAOESkill(BuffAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_008.png")));
-            skills.add(skillFactory.createStaticSingleAOESkill(BuffAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_009.png")));
-            skills.add( skillFactory.createFallingAOESkill(BlizzardFragmentAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png"), 30));
-            skills.add(skillFactory.createStaticTimedAOESkill(MagicShieldAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s2.png")));
-            Skill s = skillFactory.createStaticSingleAOESkill(HealAnimation.class, batch,
+            Skill s1 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_005.png"));
+            s1.getSkillState().setBuff(true);
+            s1.getSkillState().setTitle("Buff1");
+            skills.add(s1);
+
+            Skill s2 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_006.png"));
+            s2.getSkillState().setTitle("Buff2");
+            s2.getSkillState().setBuff(true);
+            skills.add(s2);
+
+            Skill s3 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_007.png"));
+            s3.getSkillState().setBuff(true);
+            s3.getSkillState().setTitle("Buff3");
+            skills.add(s3);
+
+            Skill s4 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_008.png"));
+            s4.getSkillState().setBuff(true);
+            s4.getSkillState().setTitle("Buff4");
+            skills.add(s4);
+
+            Skill s5 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_009.png"));
+            s5.getSkillState().setTitle("Buff5");
+            s5.getSkillState().setBuff(true);
+            skills.add(s5);
+
+            Skill s6 = skillFactory.createFallingAOESkill(BlizzardFragmentAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png"), 30);
+            s6.getSkillState().setTitle("Blizzard");
+            skills.add(s6);
+
+            Skill s7 = skillFactory.createStaticTimedAOESkill(MagicShieldAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s2.png"));
+            s7.getSkillState().setTitle("Some skill");
+            skills.add(s7);
+
+            Skill s = skillFactory.createBuffSkill(HealAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s6.png"));
+            s.getSkillState().setTitle("heal");
             s.getSkillState().setHeal(true);
-            s.getSkillState().setHealHP(10d);
+            s.getSkillState().setHealHP(50d);
             skills.add(s);
+
             skills.add(skillFactory.createStaticSingleAOESkill(MagicSourceAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s9.png")));
             skills.add(skillFactory.createStaticSingleAOESkill(MagicBuffAnimation.class, batch,

@@ -23,6 +23,9 @@ public interface ISkillFactory {
     createStaticSingleAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception;
 
     public abstract <A extends GameAnimation, T extends SkillSprite> Skill<T>
+    createBuffSkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception;
+
+    public abstract <A extends GameAnimation, T extends SkillSprite> Skill<T>
     createStaticTimedAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception;
 
     public abstract <A extends GameAnimation, T extends SkillSprite> Skill<T>

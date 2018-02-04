@@ -58,19 +58,34 @@ public class SkillFactory implements ISkillFactory {
 
     @Override
     public <A extends GameAnimation, T extends SkillSprite> Skill<T> createStaticSingleAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception {
-        return new StaticAOESkill<T>(batch, spriteTexture, 1) {
+        Skill<T> skill = new StaticAOESkill<T>(batch, spriteTexture, 1) {
             @Override
             protected T createObject() {
                 T obj = skillSpriteFactory.createStaticSkillSprite(animationClass);
-                obj.setAOE(true);
                 return obj;
             }
         };
+        skill.getSkillState().setStatic(true);
+        skill.getSkillState().setAOE(true);
+        return skill;
+    }
+
+    @Override
+    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createBuffSkill(Class<A> animationClass, SpriteBatch batch, Texture spriteTexture) throws Exception {
+        Skill skill = new BuffSkill<T>(batch, spriteTexture, 1) {
+            @Override
+            protected T createObject() {
+                return skillSpriteFactory.createStaticSkillSprite(animationClass);
+            }
+        };
+        skill.getSkillState().setBuff(true);
+        skill.getSkillState().setStatic(true);
+        return skill;
     }
 
     @Override
     public <A extends GameAnimation, T extends SkillSprite> Skill<T> createStaticTimedAOESkill(Class<A> animationClass, SpriteBatch batch, Texture spriteTexture) throws Exception {
-        Skill<T> skill =  new StaticAOESkill<T>(batch, spriteTexture, 1) {
+        Skill<T> skill = new StaticAOESkill<T>(batch, spriteTexture, 1) {
             @Override
             protected T createObject() {
                 T obj = skillSpriteFactory.createStaticTimedSkillSprite(animationClass);
@@ -78,16 +93,19 @@ public class SkillFactory implements ISkillFactory {
             }
         };
         skill.getSkillState().setTimed(true);
+        skill.getSkillState().setStatic(true);
         return skill;
     }
 
     @Override
     public <A extends GameAnimation, T extends SkillSprite> Skill<T> createStaticSingleSkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception {
-        return new StaticSkill<T>(batch, spriteTexture, 1) {
+        Skill<T> skill = new StaticSkill<T>(batch, spriteTexture, 1) {
             @Override
             protected T createObject() {
                 return skillSpriteFactory.createStaticSkillSprite(animationClass);
             }
         };
+        skill.getSkillState().setStatic(true);
+        return skill;
     }
 }

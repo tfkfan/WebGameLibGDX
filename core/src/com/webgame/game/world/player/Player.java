@@ -86,7 +86,7 @@ public abstract class Player extends WorldGameObject {
             setState(PlayerState.ATTACK, true);
             attackAnimation = true;
 
-            newSkill.cast(new Vector2(getX(), getY()), new Vector2(targetX, targetY));
+            newSkill.cast(this, new Vector2(targetX, targetY));
             container.add(newSkill);
         }
     }
