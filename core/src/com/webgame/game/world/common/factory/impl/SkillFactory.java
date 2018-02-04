@@ -77,7 +77,7 @@ public class SkillFactory implements ISkillFactory {
                 return obj;
             }
         };
-        skill.setTimed(true);
+        skill.getSkillState().setTimed(true);
         return skill;
     }
 

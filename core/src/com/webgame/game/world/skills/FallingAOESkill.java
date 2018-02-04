@@ -1,5 +1,6 @@
 package com.webgame.game.world.skills;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -22,11 +23,11 @@ public abstract class FallingAOESkill<T extends SkillSprite> extends Skill<T> {
         super(batch, spriteTexture, numFrames);
         fallTimer = 0;
         index = 0;
-        setAOE(true);
-        setFalling(true);
-        setTimed(true);
-        setDamage(2d);
-        this.setArea(new Rectangle(0, 0, 100 / PPM, 100 / PPM));
+        getSkillState().setAOE(true);
+        getSkillState().setFalling(true);
+        getSkillState().setTimed(true);
+        getSkillState().setDamage(2d);
+        this.getSkillState().setArea(new Rectangle(0, 0, 100 / PPM, 100 / PPM));
     }
 
     @Override
@@ -44,8 +45,6 @@ public abstract class FallingAOESkill<T extends SkillSprite> extends Skill<T> {
 
     @Override
     public void customAnimation(float dt) {
-        if (!isActive)
-            return;
 
         skillTimer += dt;
 
@@ -73,13 +72,13 @@ public abstract class FallingAOESkill<T extends SkillSprite> extends Skill<T> {
         frame.setVelocity(fallVelocity);
         frame.setFinalAnimated(false);
 
-        area.setPosition(targetPosition.x - area.getWidth() / 2, targetPosition.y - area.getHeight() / 2);
+        getSkillState().getArea().setPosition(targetPosition.x - getSkillState().getArea().getWidth() / 2, targetPosition.y - getSkillState().getArea().getHeight() / 2);
         initPositions(frame);
     }
 
     protected void initPositions(T frame) {
-        float x = getRandomPos(area.getX(), area.getX() + area.getWidth());
-        float y = getRandomPos(area.getY(), area.getY() + area.getHeight());
+        float x = getRandomPos(getSkillState().getArea().getX(), getSkillState().getArea().getX() + getSkillState().getArea().getWidth());
+        float y = getRandomPos(getSkillState().getArea().getY(), getSkillState().getArea().getY() + getSkillState().getArea().getHeight());
         frame.updateDistance();
         frame.setMarked(false);
         frame.setPosition(x - fallOffsetVec.x - frame.getXOffset(), y + fallOffsetVec.y - frame.getYOffset());

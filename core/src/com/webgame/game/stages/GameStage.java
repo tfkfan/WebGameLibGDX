@@ -102,8 +102,6 @@ public class GameStage extends Stage {
 
 
         this.addActor(skillPanel);
-
-
         this.addActor(player);
         this.addActor(skillPanel);
         this.addActor(enemy);

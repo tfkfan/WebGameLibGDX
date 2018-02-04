@@ -1,5 +1,6 @@
 package com.webgame.game.world.skills;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,16 +9,15 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.world.player.Player;
+import com.webgame.game.world.skills.collision.SkillCollision;
 import com.webgame.game.world.skills.skillsprites.SkillSprite;
+import com.webgame.game.world.skills.state.SkillState;
 
 import static com.webgame.game.Configs.PPM;
 
 import java.util.ArrayList;
 
 public abstract class Skill<T extends SkillSprite> implements Cloneable {
-    protected Double damage;
-    protected String title;
-
     protected Vector2 skillVelocity;
     protected Vector2 targetPosition;
 
@@ -28,36 +28,28 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
     protected String spritePath;
     protected Texture spriteTexture;
 
-    protected boolean isActive;
-    protected boolean isAOE;
-    protected boolean isFalling;
-    protected boolean isTimed;
-    protected boolean isStatic;
-    protected boolean isMarked;
-    protected boolean isBuff;
-    protected boolean isHeal;
+    protected SkillState skillState;
 
     protected final float absVelocity = 10f / PPM;
     protected float skillDuration = 100;
-
-    protected Rectangle area;
     protected float skillTimer;
 
     public Skill(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
+        skillState = new SkillState();
         setBatch(batch);
         setSpriteTexture(spriteTexture);
         initSkill(numFrames);
-        setDamage(1d);
     }
 
     @SuppressWarnings("unchecked")
     public Skill<T> clone() {
         try {
             Skill<T> newSkill = (Skill<T>) super.clone();
+            newSkill.skillState = new SkillState(this.getSkillState());
             newSkill.initSkill(numFrames);
-            if (this.getArea() != null)
-                newSkill.setArea(new Rectangle(this.getArea()));
-            newSkill.setDamage(damage);
+            if (this.getSkillState().getArea() != null)
+                newSkill.getSkillState().setArea(new Rectangle(this.getSkillState().getArea()));
+            newSkill.getSkillState().setDamage(getSkillState().getDamage());
             return newSkill;
         } catch (CloneNotSupportedException e) {
             // TODO Auto-generated catch block
@@ -67,7 +59,6 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        System.out.println("null");
         return null;
     }
 
@@ -79,18 +70,14 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
             obj.initSkillSprite(batch, spriteTexture);
             objs.add(obj);
         }
-
-        //setDamage(1d);
         setSkillObjects(objs);
     }
 
     public void cast(Vector2 playerPosition, Vector2 targetPosition) {
-        setActive(true);
-        setMarked(false);
+        getSkillState().setActive(true);
+        getSkillState().setMarked(false);
         clearTimers();
-
         setTargetPosition(targetPosition);
-
         for (int i = 0; i < numFrames; i++) {
             T obj = skillObjects.get(i);
             initFrame(obj, playerPosition, targetPosition);
@@ -98,7 +85,7 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
     }
 
     public void animateSkill(float dt) {
-        if (skillObjects == null || !isActive)
+        if (skillObjects == null || !getSkillState().isActive())
             return;
 
         updateTimers(dt);
@@ -116,7 +103,7 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
             frame.draw();
         }
 
-        if (isTimed && skillTimer >= skillDuration || !isTimed && !flag)
+        if (getSkillState().isTimed() && skillTimer >= skillDuration || !getSkillState().isTimed() && !flag)
             resetSkill();
 
         afterCustomAnimation();
@@ -126,14 +113,14 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
         obj.setActive(false);
         obj.setStatic(false);
         obj.setPosition(0, 0);
-        obj.setAOE(isAOE);
+        obj.setAOE(getSkillState().isAOE());
         obj.setMarked(false);
         obj.setFinalAnimated(false);
     }
 
     protected void resetSkill() {
-        setActive(false);
-        setMarked(false);
+        getSkillState().setActive(false);
+        getSkillState().setMarked(false);
         for (int i = 0; i < numFrames; i++) {
             T obj = skillObjects.get(i);
             resetObject(obj);
@@ -147,6 +134,10 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
 
         if (x < -10 || y < -10 || x > 10 || y > 10)
             frame.setActive(false);
+    }
+
+    public SkillState getSkillState() {
+        return skillState;
     }
 
     protected void customAnimation(float dt) {
@@ -164,43 +155,6 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
         collisionFrame(frame);
     }
 
-    public void skillCollision(Player player) {
-        if (player.getActorState().getHealthPoints() <= 0) {
-            player.getActorState().setHealthPoints(player.getActorState().getMaxHealthPoints());
-            return;
-        }
-
-        Rectangle pRect = player.getPlayerRectangle();
-        boolean isAOE = isAOE();
-        boolean isFalling = isFalling();
-        boolean isTimed = isTimed();
-        boolean isStatic = isStatic();
-
-        if(isBuff() || isHeal()){
-            if(Intersector.overlaps(player.getPlayerShape(), getArea())) {
-                if (!isMarked)
-                 player.getActorState().setHealthPoints(player.getActorState().getMaxHealthPoints());
-                if (!isTimed)
-                    isMarked = true;
-            }
-        }else if ((!isAOE || isAOE && isFalling) && !isStatic) {
-            for (T frame : this.skillObjects) {
-                if (!frame.isMarked() && (!isAOE || frame.isStatic()) && Intersector.overlaps(player.getPlayerShape(), frame.getBoundingRectangle())) {
-                    player.getActorState().setHealthPoints(player.getActorState().getHealthPoints() - getDamage().intValue());
-                    frame.setMarked(true);
-
-                }
-            }
-        } else if (isAOE || !isAOE && isStatic) {
-            if (isAOE && !isFalling && Intersector.overlaps(player.getPlayerShape(), getArea())
-                    || !isAOE && isStatic && player.getPlayerShape().contains(getTargetPosition())) {
-                if (!isMarked)
-                    player.getActorState().setHealthPoints(player.getActorState().getHealthPoints() - getDamage().intValue());
-                if (!isTimed)
-                    isMarked = true;
-            }
-        }
-    }
 
     public void drawShape(ShapeRenderer sr) {
         sr.setColor(Color.BLUE);
@@ -208,8 +162,8 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
             T obj = skillObjects.get(i);
             obj.drawShape(sr);
         }
-        if (area != null)
-            sr.rect(area.getX(), area.getY(), area.getWidth(), area.getHeight());
+        if (getSkillState().getArea() != null)
+            sr.rect(getSkillState().getArea().getX(),getSkillState().getArea().getY(), getSkillState().getArea().getWidth(), getSkillState().getArea().getHeight());
     }
 
     public float getRandomPos(float min, float max) {
@@ -233,81 +187,12 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
         skillTimer += dt;
     }
 
-    public boolean isAOE() {
-        return isAOE;
-    }
-
-    public Skill<T> setAOE(boolean isAOE) {
-        this.isAOE = isAOE;
-        return this;
-    }
-
-    public boolean isBuff() {
-        return isBuff;
-    }
-
-    public void setBuff(boolean buff) {
-        isBuff = buff;
-    }
-
-    public boolean isHeal() {
-        return isHeal;
-    }
-
-    public void setHeal(boolean heal) {
-        isHeal = heal;
-    }
-
-    public boolean isFalling() {
-        return isFalling;
-    }
-
-    public Skill<T> setFalling(boolean isFalling) {
-        this.isFalling = isFalling;
-        return this;
-    }
-
-    public boolean isMarked() {
-        return isMarked;
-    }
-
-    public Skill<T> setMarked(boolean isMarked) {
-        this.isMarked = isMarked;
-        return this;
-    }
-
-    public boolean isTimed() {
-        return isTimed;
-    }
-
-    public Skill<T> setTimed(boolean isTimed) {
-        this.isTimed = isTimed;
-        return this;
-    }
-
-    public boolean isStatic() {
-        return isStatic;
-    }
-
-    public Skill<T> setStatic(boolean isStatic) {
-        this.isStatic = isStatic;
-        return this;
-    }
-
     public void setSpriteTexture(Texture spriteTexture) {
         this.spriteTexture = spriteTexture;
     }
 
     public Texture getSpriteTexture() {
         return spriteTexture;
-    }
-
-    public Rectangle getArea() {
-        return area;
-    }
-
-    public void setArea(Rectangle area) {
-        this.area = area;
     }
 
     protected Vector2 calculateVelocity(Vector2 playerPosition, Vector2 targetPosition) {
@@ -319,38 +204,12 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable {
         return vec;
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public Skill<T> setActive(boolean isActive) {
-        this.isActive = isActive;
-        return this;
-    }
-
     public SpriteBatch getBatch() {
         return batch;
     }
 
     public void setBatch(SpriteBatch batch) {
         this.batch = batch;
-    }
-
-    public Double getDamage() {
-        return damage;
-    }
-
-    public Skill<T> setDamage(Double damage) {
-        this.damage = damage;
-        return this;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public Vector2 getSkillVelocity() {

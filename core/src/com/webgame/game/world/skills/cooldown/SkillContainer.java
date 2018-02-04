@@ -29,7 +29,7 @@ public class SkillContainer extends ArrayList<Skill<?>> {
 
 		for (int i = 0; i < this.size(); i++){
 			Skill<?> currSkill = this.get(i);
-			if (currSkill.isActive())
+			if (currSkill.getSkillState().isActive())
 				currSkill.animateSkill(dt);
 			else
 				remove(currSkill);

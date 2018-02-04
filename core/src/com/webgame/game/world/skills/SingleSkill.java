@@ -8,7 +8,7 @@ import com.webgame.game.world.skills.skillsprites.SkillSprite;
 public abstract class SingleSkill<T extends SkillSprite> extends Skill<T> {
 	public SingleSkill(SpriteBatch batch, Texture spriteTexture) throws Exception {
 		super(batch, spriteTexture, 1);
-		setAOE(false);
+		getSkillState().setAOE(false);
 
 	}
 
