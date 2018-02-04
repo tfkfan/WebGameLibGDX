@@ -30,8 +30,9 @@ public abstract class SingleSkill<T extends SkillSprite> extends Skill<T> {
         super.updateFrame(frame, dt);
 
         if (frame.isMarked()) {
-            if (!frame.isFinalAnimated())
+            if (!frame.isFinalAnimated()) {
                 frame.setStatic(true);
+            }
             if (frame.isFinalAnimated() && frame.isStatic()) {
                 frame.setFinalAnimated(false);
                 frame.setStatic(false);

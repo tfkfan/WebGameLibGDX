@@ -2,19 +2,13 @@ package com.webgame.game.world.player;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.webgame.game.stages.GameStage;
 import com.webgame.game.state.Direction;
 import com.webgame.game.state.PlayerState;
 import com.webgame.game.state.State;
@@ -48,8 +42,6 @@ public abstract class Player extends WorldGameObject {
     protected Array<Animation<TextureRegion>> attackAnimations;
     protected TextureRegion[] standRegions;
 
-    protected Circle playerShape;
-
     public Player() {
         super();
     }
@@ -73,7 +65,6 @@ public abstract class Player extends WorldGameObject {
         stateTimer = attackTimer = 0;
         skillContainers = new ArrayList<SkillContainer>();
         setCurrentSkillIndex(0);
-        playerShape = new Circle(0, 0, getRadius());
         setBounds(0, 0, 60 / PPM, 60 / PPM);
     }
 
@@ -97,14 +88,6 @@ public abstract class Player extends WorldGameObject {
 
     public void setCurrentSkillIndex(Integer currentSkillIndex) {
         this.currentSkillIndex = currentSkillIndex;
-    }
-
-    public Circle getPlayerShape() {
-        return playerShape;
-    }
-
-    public void setPlayerShape(Circle playerShape) {
-        this.playerShape = playerShape;
     }
 
     public Direction getDirection() {
@@ -242,7 +225,7 @@ public abstract class Player extends WorldGameObject {
         }
 
         stateTimer += dt;
-        playerShape.setPosition(getX(), getY());
+        objectShape.setPosition(getX(), getY());
     }
 
     public void animateSkills(float dt) {
@@ -256,7 +239,7 @@ public abstract class Player extends WorldGameObject {
     public void drawShape(ShapeRenderer sr) {
         sr.setColor(Color.BLUE);
         sr.set(ShapeType.Line);
-        sr.circle(playerShape.x, playerShape.y, playerShape.radius, 100);
+        sr.circle(objectShape.x, objectShape.y, objectShape.radius, 100);
 
 
         SkillContainer sc = getCurrentSkillContainer();
@@ -268,7 +251,6 @@ public abstract class Player extends WorldGameObject {
         //Health line
         sr.set(ShapeType.Filled);
         sr.setColor(Color.GREEN);
-
         sr.rect(this.getX() - getXOffset(), this.getY() + getHeight() - getYOffset() + 5 / PPM,
                 (getActorState().getHealthPoints() / (float) getActorState().getMaxHealthPoints()) * getWidth(), 5 / PPM);
     }

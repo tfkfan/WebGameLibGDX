@@ -125,6 +125,9 @@ public abstract class SkillSprite extends GameSprite implements Cloneable {
 
     @Override
     public void update(float dt) {
+        if(getX() >= 100 || getY() >= 100 || getX() <= -100 || getY() <= -100)
+            isActive = false;
+
         if (!isActive)
             return;
 

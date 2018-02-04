@@ -77,7 +77,7 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCo
 
         Rectangle area = getSkillState().getArea();
         Double damage = getSkillState().getDamage();
-        Circle pShape = player.getPlayerShape();
+        Circle pShape = player.getShape();
         boolean isAOE = getSkillState().isAOE();
         boolean isFalling = getSkillState().isFalling();
         boolean isTimed = getSkillState().isTimed();
@@ -100,14 +100,14 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCo
                 if (!frame.isMarked() && (!isAOE || frame.isStatic()) && Intersector.overlaps(pShape, frame.getBoundingRectangle())) {
                     player.getActorState().setHealthPoints(player.getActorState().getHealthPoints() - damage.intValue());
                     frame.setMarked(true);
-
                 }
             }
         } else if (isAOE || !isAOE && isStatic) {
             if (isAOE && !isFalling && Intersector.overlaps(pShape, area)
                     || !isAOE && isStatic && pShape.contains(getTargetPosition())) {
-                if (!isMarked)
+                if (!isMarked) {
                     player.getActorState().setHealthPoints(player.getActorState().getHealthPoints() - damage.intValue());
+                }
                 if (!isTimed)
                     getSkillState().setMarked(true);
             }
@@ -180,14 +180,6 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCo
         clearTimers();
     }
 
-    public void collisionFrame(T frame) {
-        float x = frame.getX();
-        float y = frame.getY();
-
-        if (x < -10 || y < -10 || x > 10 || y > 10)
-            frame.setActive(false);
-    }
-
     public SkillState getSkillState() {
         return skillState;
     }
@@ -211,7 +203,6 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCo
 
     protected void updateFrame(T frame, float dt) {
         frame.update(dt);
-        collisionFrame(frame);
     }
 
     public void drawShape(ShapeRenderer sr) {
@@ -258,7 +249,6 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCo
         float len = vec.len();
         vec.x = absVelocity * vec.x / len;
         vec.y = absVelocity * vec.y / len;
-
         return vec;
     }
 

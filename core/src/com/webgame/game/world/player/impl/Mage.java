@@ -42,8 +42,8 @@ public class Mage extends Player {
 
 
             TextureRegion fireStandTexture = new TextureRegion(SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/fire_002.png"));
-            Skill ss3 = skillFactory.createSingleSkill(IceBlastAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s7.png"),
+            Skill ss3 = skillFactory.createSingleSkill(FireBlastAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png"),
                     fireStandTexture);
             ss3.getSkillState().setDamage(50d);
             skills.add(ss3);

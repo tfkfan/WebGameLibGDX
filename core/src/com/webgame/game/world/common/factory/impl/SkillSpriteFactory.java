@@ -124,8 +124,8 @@ public class SkillSpriteFactory implements ISkillSpriteFactory {
                 int w2 =100;
                 int h2 = 80;
 
-                int w1 = 50;
-                int h1 = 50;
+                int w1 = 30;
+                int h1 = 30;
                 if (isActive()){
                     if(isStatic() && !isFinalAnimated()){
                         setSize(w2 / PPM, h2 / PPM);

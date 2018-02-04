@@ -1,5 +1,6 @@
 package com.webgame.game.world;
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.webgame.game.world.common.GameActor;
 
@@ -9,7 +10,7 @@ public abstract class WorldGameObject extends GameActor {
     protected World world;
     protected Body b2body;
     protected float defaultRadius = 20/PPM;
-
+    protected Circle objectShape;
     public WorldGameObject() {
         init();
     }
@@ -63,8 +64,17 @@ public abstract class WorldGameObject extends GameActor {
 
         shape.setRadius(defaultRadius);
 
+        objectShape = new Circle(0, 0, getRadius());
         fdef.shape = shape;
         b2body.createFixture(fdef);
+    }
+
+    public Circle getShape() {
+        return objectShape;
+    }
+
+    public void setShape(Circle shape) {
+        this.objectShape = shape;
     }
 
     public float getRadius(){
