@@ -1,8 +1,10 @@
 package com.webgame.game.world.skills.skillsprites;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.animation.GameAnimation;
 import com.webgame.game.world.common.GameSprite;
@@ -29,6 +31,12 @@ public abstract class SkillSprite extends GameSprite implements Cloneable {
     public SkillSprite(GameAnimation animation){
         super();
         setGameAnimation(animation);
+        distance = new Vector2(0, 0);
+    }
+
+    public SkillSprite(TextureRegion standTexture){
+        super();
+        setStandTexture(new TextureRegion(standTexture));
         distance = new Vector2(0, 0);
     }
 

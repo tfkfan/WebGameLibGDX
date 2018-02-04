@@ -2,6 +2,7 @@ package com.webgame.game.world.common.factory;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.GameAnimation;
 import com.webgame.game.world.skills.Skill;
 import com.webgame.game.world.skills.skillsprites.SkillSprite;
@@ -14,10 +15,10 @@ public interface ISkillFactory {
     createStaticAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception;
 
     public abstract <A extends GameAnimation, T extends SkillSprite> Skill<T>
-    createFallingAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception;
+    createFallingAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final TextureRegion standTexture, final Integer numFrames) throws Exception;
 
     public abstract <A extends GameAnimation, T extends SkillSprite> Skill<T>
-    createSingleSkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception;
+    createSingleSkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture,final TextureRegion standTexture) throws Exception;
 
     public abstract <A extends GameAnimation, T extends SkillSprite> Skill<T>
     createStaticSingleAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception;

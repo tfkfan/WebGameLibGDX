@@ -2,6 +2,7 @@ package com.webgame.game.world.common.factory.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.GameAnimation;
 import com.webgame.game.world.common.factory.ISkillFactory;
 import com.webgame.game.world.common.factory.ISkillSpriteFactory;
@@ -37,21 +38,22 @@ public class SkillFactory implements ISkillFactory {
 
     @Override
     public <A extends GameAnimation, T extends SkillSprite> Skill<T>
-    createFallingAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception {
+    createFallingAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final TextureRegion standTexture, final Integer numFrames) throws Exception {
         return new FallingAOESkill<T>(batch, spriteTexture, numFrames) {
             @Override
             protected T createObject() {
-                return skillSpriteFactory.createFallingSkillSprite(animationClass);
+                return skillSpriteFactory.createFallingSkillSprite(animationClass, standTexture);
             }
         };
     }
 
     @Override
-    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createSingleSkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception {
+    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createSingleSkill(final Class<A> animationClass, final SpriteBatch batch,
+                                                                                       final Texture spriteTexture,final TextureRegion standTexture) throws Exception {
         return new SingleSkill<T>(batch, spriteTexture) {
             @Override
             protected T createObject() {
-                return skillSpriteFactory.createSingleSkillSprite(animationClass);
+                return skillSpriteFactory.createSingleSkillSprite(animationClass, standTexture);
             }
         };
     }

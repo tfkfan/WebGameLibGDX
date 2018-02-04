@@ -214,7 +214,6 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCo
         collisionFrame(frame);
     }
 
-
     public void drawShape(ShapeRenderer sr) {
         sr.setColor(Color.BLUE);
         for (int i = 0; i < numFrames; i++) {

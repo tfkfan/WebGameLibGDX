@@ -25,6 +25,7 @@ public abstract class GameSprite extends Sprite implements IUpdatable, IFramed {
 
 	public void init() {
 		xOffset = yOffset = 0;
+
 		velocity = new Vector2();
 	}
 

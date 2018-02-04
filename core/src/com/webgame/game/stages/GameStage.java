@@ -145,10 +145,7 @@ public class GameStage extends Stage {
         for (Player enemy : enemies)
             enemy.drawShape(sr);
         sr.end();
-
-
     }
-
 
     private void handleInput() {
         float d = 5f;

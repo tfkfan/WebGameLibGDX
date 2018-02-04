@@ -258,6 +258,13 @@ public abstract class Player extends WorldGameObject {
         sr.set(ShapeType.Line);
         sr.circle(playerShape.x, playerShape.y, playerShape.radius, 100);
 
+
+        SkillContainer sc = getCurrentSkillContainer();
+        if(sc != null){
+            for(Skill skill : sc)
+                skill.drawShape(sr);
+        }
+
         //Health line
         sr.set(ShapeType.Filled);
         sr.setColor(Color.GREEN);

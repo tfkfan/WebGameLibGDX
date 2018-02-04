@@ -57,8 +57,8 @@ public class SkillSpriteFactory implements ISkillSpriteFactory {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <A extends GameAnimation, T extends SkillSprite> T createFallingSkillSprite(Class<A> animationClass) {
-        return (T) new SkillSprite() {
+    public <A extends GameAnimation, T extends SkillSprite> T createFallingSkillSprite(Class<A> animationClass, final TextureRegion standTexture) {
+        return (T) new SkillSprite(standTexture) {
 
             @Override
             public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
@@ -72,7 +72,7 @@ public class SkillSpriteFactory implements ISkillSpriteFactory {
                     e.printStackTrace();
                 }
                 setAnimationMaxDuration(getAnimationDuration() * getGameAnimation().getAnimation().getKeyFrames().length);
-                setStandTexture(new TextureRegion(getSpriteTexture(), 5, 245, 30, 30));
+               // setStandTexture(new TextureRegion(getSpriteTexture(), 5, 245, 30, 30));
 
                 int w2 = 20;
                 int h2 = 25;
@@ -95,8 +95,8 @@ public class SkillSpriteFactory implements ISkillSpriteFactory {
     //TODO доделать с standTexture
     @SuppressWarnings("unchecked")
     @Override
-    public synchronized <A extends GameAnimation, T extends SkillSprite> T createSingleSkillSprite(final Class<A> animationClass) {
-        return (T) new SkillSprite() {
+    public synchronized <A extends GameAnimation, T extends SkillSprite> T createSingleSkillSprite(final Class<A> animationClass,final TextureRegion standTexture) {
+        return (T) new SkillSprite(standTexture) {
 
             @Override
             public void initSkillSprite(SpriteBatch batch, Texture spriteTexture) {
@@ -111,9 +111,9 @@ public class SkillSpriteFactory implements ISkillSpriteFactory {
                 }
                 //setStandTexture(new TextureRegion(getSpriteTexture(), 810, 50, w, h));
                 setAnimationMaxDuration(getAnimationDuration() * getGameAnimation().getAnimation().getKeyFrames().length);
-                int w2 = 100;
-                int h2 = 80;
-                this.setBounds(0, 0, w2 / PPM, h2 / PPM);
+                int w2 = 20;
+                int h2 = 20;
+                setBounds(0, 0, w2 / PPM, h2 / PPM);
                 setRegion(getGameAnimation().getAnimation().getKeyFrame(0));
             }
 
@@ -121,8 +121,21 @@ public class SkillSpriteFactory implements ISkillSpriteFactory {
             public TextureRegion getFrame() {
                 TextureRegion region = null;
 
-                if (isActive())
-                    region = getGameAnimation().getAnimation().getKeyFrame(getAnimateTimer(), false);
+                int w2 =100;
+                int h2 = 80;
+
+                int w1 = 50;
+                int h1 = 50;
+                if (isActive()){
+                    if(isStatic() && !isFinalAnimated()){
+                        setSize(w2 / PPM, h2 / PPM);
+                        region = getGameAnimation().getAnimation().getKeyFrame(getAnimateTimer(), false);
+                    }else {
+                        setSize(w1 / PPM, h1 / PPM);
+                        region = getStandTexture();
+                    }
+                }
+
 
                 return region;
             }
