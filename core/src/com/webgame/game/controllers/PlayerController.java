@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.Enemy;
 import com.webgame.game.entities.Player;
+import com.webgame.game.enums.PlayerState;
 import com.webgame.game.events.MoveEvent;
 import com.webgame.game.stages.GameStage;
 import com.webgame.game.world.player.impl.Mage;
@@ -32,19 +33,25 @@ public class PlayerController extends AbstractController implements InputProcess
 
         this.addListener(event -> {
             if(event instanceof MoveEvent){
-                player.setVelocity(((MoveEvent) event).getVector());
+                Vector2 vec = ((MoveEvent) event).getVector();
+                if(vec.isZero())
+                    player.setState(PlayerState.STAND);
+                else
+                    player.setState(PlayerState.WALK);
+                player.setVelocity(vec);
                 player.applyVelocity();
             }
             return true;
         });
-
-
     }
 
     @Override
     public void act(float dt){
         super.act(dt);
         handleInput();
+        if(player.stateTimer >= 10)
+            player.stateTimer = 0;
+        player.stateTimer+=dt;
     }
 
     private void handleInput() {

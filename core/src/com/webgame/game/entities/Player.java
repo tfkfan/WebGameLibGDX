@@ -14,8 +14,10 @@ public abstract class Player extends WorldEntity {
     protected boolean isAnimated;
     protected boolean attackAnimation;
     protected boolean isAlive;
-    protected float attackTimer;
-    protected float stateTimer;
+
+    public float attackTimer;
+    public float stateTimer;
+
     protected final float attackLimit = 0.8f;
 
     protected Direction direction;
@@ -82,10 +84,19 @@ public abstract class Player extends WorldEntity {
         this.attackAnimations = attackAnimations;
     }
 
+    public void setState(State state) {
+        this.prevState = state;
+        this.currState = state;
+    }
+
+    public State getState() {
+        return currState;
+    }
+
     @Override
-    public void setPosition(float x, float y){
+    public void setPosition(float x, float y) {
         super.setPosition(x, y);
-        if( getB2body() != null)
+        if (getB2body() != null)
             getB2body().setTransform(x, y, 0);
     }
 
@@ -102,10 +113,10 @@ public abstract class Player extends WorldEntity {
     public TextureRegion getFrame() {
         TextureRegion region = null;
 
-        /*
-        State currState = getState();
 
-        Integer index = getDirectionIndex();
+        PlayerState currState = (PlayerState) getState();
+
+        Integer index = direction.getDirIndex();
 
         switch (currState) {
             case WALK:
@@ -116,15 +127,11 @@ public abstract class Player extends WorldEntity {
                 break;
             case STAND:
             default:
-            */
-        region = standRegions[this.direction.getDirIndex()];
-        //        break;
-        // }
+
+                region = standRegions[this.direction.getDirIndex()];
+                break;
+        }
 
         return region;
-    }
-
-    public float getStateTimer() {
-        return stateTimer;
     }
 }
