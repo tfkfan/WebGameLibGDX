@@ -4,20 +4,16 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.webgame.game.world.common.IFramed;
+import java.io.Serializable;
 
-public abstract class Entity extends Group implements IFramed {
+public abstract class Entity extends Group implements IFramed, Serializable {
     protected Long id;
 
     protected Vector2 velocity;
     protected float xOffset;
     protected float yOffset;
-    protected static final int dirs = 8;
 
     public Entity() {
-        init();
-    }
-
-    protected void init() {
         velocity = new Vector2(0, 0);
         xOffset = yOffset = 0;
     }
@@ -44,6 +40,14 @@ public abstract class Entity extends Group implements IFramed {
 
     public void setYOffset(float yOffset) {
         this.yOffset = yOffset;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

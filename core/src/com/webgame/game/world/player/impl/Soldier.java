@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.webgame.game.enums.Direction;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.entities.Player;
 import static com.webgame.game.Configs.PPM;
@@ -14,7 +15,7 @@ public class Soldier extends Player {
 	public Soldier(SpriteBatch batch, String spritePath) {
 		super();
 
-
+		int dirs = Direction.values().length;
 		//this.setSkill(new IceRain(batch, "skills.png"));
 
 		setXOffset(30 / PPM);

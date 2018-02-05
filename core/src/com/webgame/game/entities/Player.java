@@ -82,6 +82,13 @@ public abstract class Player extends WorldEntity {
         this.attackAnimations = attackAnimations;
     }
 
+    @Override
+    public void setPosition(float x, float y){
+        super.setPosition(x, y);
+        if( getB2body() != null)
+            getB2body().setTransform(x, y, 0);
+    }
+
     public TextureRegion[] getStandRegions() {
         return standRegions;
     }

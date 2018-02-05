@@ -22,9 +22,7 @@ public abstract class WorldEntity extends Entity {
         init();
     }
 
-    @Override
     protected void init() {
-        super.init();
         this.setPosition(0, 0);
         setBounds(getX(), getX(), 100 / PPM, 100 / PPM);
     }
@@ -45,7 +43,7 @@ public abstract class WorldEntity extends Entity {
         this.world = world;
     }
 
-    public void update(float dt) {
+    public void applyVelocity() {
         b2body.setLinearVelocity(velocity);
         setPosition(b2body.getPosition().x, b2body.getPosition().y);
     }
