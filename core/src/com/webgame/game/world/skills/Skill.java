@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.world.player.Player;
+import com.webgame.game.entities.Player;
 import com.webgame.game.world.skills.collision.SkillCollision;
 import com.webgame.game.world.skills.skillsprites.SkillSprite;
 import com.webgame.game.world.skills.state.SkillState;
@@ -70,8 +70,8 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCo
             return;
 
         //TODO remove after game finishing
-        if (player.getActorState().getHealthPoints() <= 0) {
-            player.getActorState().setHealthPoints(player.getActorState().getMaxHealthPoints());
+        if (player.getAttributes().getHealthPoints() <= 0) {
+            player.getAttributes().setHealthPoints(player.getAttributes().getMaxHealthPoints());
             return;
         }
 
@@ -87,10 +87,10 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCo
         if (getSkillState().isBuff()) {
             if (!getSkillState().isMarked()) {
                 if (getSkillState().isHeal()) {
-                    Integer hp = castingPlayer.getActorState().getHealthPoints();
-                    Integer maxHP = castingPlayer.getActorState().getMaxHealthPoints();
+                    Integer hp = castingPlayer.getAttributes().getHealthPoints();
+                    Integer maxHP = castingPlayer.getAttributes().getMaxHealthPoints();
                     Integer resHP = hp + getSkillState().getHealHP().intValue();
-                    castingPlayer.getActorState().setHealthPoints(resHP >= maxHP ? maxHP : resHP);
+                    castingPlayer.getAttributes().setHealthPoints(resHP >= maxHP ? maxHP : resHP);
                 }
             }
             if (!isTimed)
@@ -98,7 +98,7 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCo
         } else if ((!isAOE || isAOE && isFalling) && !isStatic) {
             for (T frame : getSkillObjects()) {
                 if (!frame.isMarked() && (!isAOE || frame.isStatic()) && Intersector.overlaps(pShape, frame.getBoundingRectangle())) {
-                    player.getActorState().setHealthPoints(player.getActorState().getHealthPoints() - damage.intValue());
+                    player.getAttributes().setHealthPoints(player.getAttributes().getHealthPoints() - damage.intValue());
                     frame.setMarked(true);
                 }
             }
@@ -106,7 +106,7 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCo
             if (isAOE && !isFalling && Intersector.overlaps(pShape, area)
                     || !isAOE && isStatic && pShape.contains(getTargetPosition())) {
                 if (!isMarked) {
-                    player.getActorState().setHealthPoints(player.getActorState().getHealthPoints() - damage.intValue());
+                    player.getAttributes().setHealthPoints(player.getAttributes().getHealthPoints() - damage.intValue());
                 }
                 if (!isTimed)
                     getSkillState().setMarked(true);

@@ -6,9 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.Configs;
-import com.webgame.game.state.PlayerState;
 import com.webgame.game.utils.SpriteTextureLoader;
-import com.webgame.game.world.player.Player;
+import com.webgame.game.entities.Player;
 import com.webgame.game.world.skills.Skill;
 
 import static com.webgame.game.Configs.PPM;
@@ -35,7 +34,7 @@ public class Knight extends Player {
 			e.printStackTrace();
 		}
 		
-		this.setSkills(skills);
+		//this.setSkills(skills);
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
@@ -123,33 +122,5 @@ public class Knight extends Player {
 		this.setAnimations(attackAnimations);
 		this.setAttackAnimations(attackAnimations);
 		this.setStandRegions(standRegions);
-	}
-
-	@Override
-	public TextureRegion getFrame() {
-		PlayerState currState = getState();
-
-		TextureRegion standRegion, region;
-		Integer index = getDirectionIndex();
-
-		Animation<TextureRegion> animation = animations.get(index);
-		Animation<TextureRegion> attackAnimation = attackAnimations.get(index);
-
-		standRegion = standRegions[index];
-
-		switch (currState) {
-		case WALK:
-			region = animation.getKeyFrame(stateTimer, true);
-			break;
-		case ATTACK:
-			region = attackAnimation.getKeyFrame(stateTimer, false);
-			break;
-		case STAND:
-		default:
-			region = standRegion;
-			break;
-		}
-
-		return region;
 	}
 }

@@ -5,9 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.webgame.game.state.PlayerState;
 import com.webgame.game.utils.SpriteTextureLoader;
-import com.webgame.game.world.player.Player;
+import com.webgame.game.entities.Player;
 import static com.webgame.game.Configs.PPM;
 
 @Deprecated
@@ -105,32 +104,4 @@ public class Soldier extends Player {
 		this.setStandRegions(standRegions);
 	}
 
-	@Override
-	public TextureRegion getFrame() {
-		prevState = currState;
-		currState = getState();
-
-		TextureRegion standRegion, region;
-		Integer index = getDirectionIndex();
-	
-		Animation<TextureRegion> animation = animations.get(index);
-		Animation<TextureRegion> attackAnimation = attackAnimations.get(index);
-	
-		standRegion = standRegions[index];
-
-		switch ((PlayerState) currState) {
-		case WALK:
-			region = animation.getKeyFrame(stateTimer, true);
-			break;
-		case ATTACK:
-			region = attackAnimation.getKeyFrame(stateTimer, false);
-			break;
-		case STAND:
-		default:
-			region = standRegion;
-			break;
-		}
-
-		return region;
-	}
 }

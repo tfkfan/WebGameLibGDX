@@ -1,31 +1,32 @@
-package com.webgame.game.world;
+package com.webgame.game.entities;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.physics.box2d.*;
-import com.webgame.game.world.common.GameActor;
+import com.webgame.game.entities.Entity;
 
 import static com.webgame.game.Configs.PPM;
 
-public abstract class WorldGameObject extends GameActor {
+public abstract class WorldEntity extends Entity {
     protected World world;
     protected Body b2body;
-    protected float defaultRadius = 20/PPM;
+    protected float defaultRadius = 20 / PPM;
     protected Circle objectShape;
-    public WorldGameObject() {
+
+    public WorldEntity() {
         init();
     }
 
-    public WorldGameObject(World world) {
+    public WorldEntity(World world) {
         setWorld(world);
         createObject(world);
         init();
     }
 
     @Override
-    protected void init(){
+    protected void init() {
         super.init();
-        this.setPosition(0,0);
-        setBounds(getX(), getX(),100/PPM,100/PPM);
+        this.setPosition(0, 0);
+        setBounds(getX(), getX(), 100 / PPM, 100 / PPM);
     }
 
     public Body getB2body() {
@@ -44,12 +45,10 @@ public abstract class WorldGameObject extends GameActor {
         this.world = world;
     }
 
-
     public void update(float dt) {
         b2body.setLinearVelocity(velocity);
         setPosition(b2body.getPosition().x, b2body.getPosition().y);
     }
-
 
     public void createObject(World world) {
         setWorld(world);
@@ -77,11 +76,11 @@ public abstract class WorldGameObject extends GameActor {
         this.objectShape = shape;
     }
 
-    public float getRadius(){
+    public float getRadius() {
         return defaultRadius;
     }
 
-    public void setRadius(float radius){
+    public void setRadius(float radius) {
         defaultRadius = radius;
     }
 }

@@ -1,14 +1,7 @@
 package com.webgame.game.world.player.impl;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
-import com.webgame.game.utils.SpriteTextureLoader;
-import com.webgame.game.world.player.Player;
-
-import static com.webgame.game.Configs.PPM;
+import com.webgame.game.entities.Player;
 
 @Deprecated
 public class Archer extends Player {

@@ -1,4 +1,4 @@
-package com.webgame.game.state;
+package com.webgame.game.enums;
 
 public enum PlayerState implements State {
 	WALK, STAND, ATTACK, DIE

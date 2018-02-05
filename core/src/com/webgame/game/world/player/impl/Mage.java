@@ -10,9 +10,8 @@ import com.webgame.game.animation.impl.*;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.world.common.factory.ISkillFactory;
 import com.webgame.game.world.common.factory.impl.SkillFactory;
-import com.webgame.game.world.player.Player;
+import com.webgame.game.entities.Player;
 import com.webgame.game.world.skills.Skill;
-import com.webgame.game.world.skills.skillsprites.*;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -101,7 +100,7 @@ public class Mage extends Player {
             skills.add(skillFactory.createStaticTimedAOESkill(TornadoAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png")));
                     */
-            this.setSkills(skills);
+           // this.setSkills(skills);
         } catch (Exception e2) {
             // TODO Auto-generated catch block
             e2.printStackTrace();

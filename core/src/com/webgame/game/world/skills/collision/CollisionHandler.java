@@ -2,15 +2,9 @@ package com.webgame.game.world.skills.collision;
 
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Rectangle;
-import com.webgame.game.world.player.Player;
+import com.webgame.game.entities.Player;
 import com.webgame.game.world.skills.Skill;
-import com.webgame.game.world.skills.collision.SkillCollision;
 import com.webgame.game.world.skills.cooldown.SkillContainer;
-import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 public class CollisionHandler {
 
@@ -22,6 +16,7 @@ public class CollisionHandler {
         if (enemy == player)
             return;
 
+        /*
         List<SkillContainer> containers = player.getSkillContainers();
         if (containers.isEmpty())
             return;
@@ -45,6 +40,7 @@ public class CollisionHandler {
             for (Skill<?> skill : skillContainer2)
                 skill.skillCollision(player);
         }
+        */
     }
 
 

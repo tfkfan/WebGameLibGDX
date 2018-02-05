@@ -5,9 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.webgame.game.state.PlayerState;
 import com.webgame.game.utils.SpriteTextureLoader;
-import com.webgame.game.world.player.Player;
+import com.webgame.game.entities.Player;
 import com.webgame.game.world.skills.Skill;
 
 import static com.webgame.game.Configs.PPM;
@@ -23,7 +22,7 @@ public class DeadKnight extends Player {
 			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
 			//skills.add(new Blizzard(batch, skillTexture, 10));
 
-			this.setSkills(skills);
+			//this.setSkills(skills);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -32,7 +31,7 @@ public class DeadKnight extends Player {
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
 
-		Texture spriteTexture =SpriteTextureLoader.loadSprite(spritePath);
+		Texture spriteTexture = SpriteTextureLoader.loadSprite(spritePath);
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		TextureRegion[][] attackFrames = new TextureRegion[dirs][5];
@@ -48,7 +47,7 @@ public class DeadKnight extends Player {
 				frames[i][j] = new TextureRegion(spriteTexture, 5 + w * i, h * j, w, h);
 			for (int j = 5; j < 9; j++)
 				attackFrames[i][j - 5] = new TextureRegion(spriteTexture, 5 + w * i, h * j, w, h);
-			
+
 			standRegions[i] = new TextureRegion(spriteTexture, 5 + w * i, 0, w, h);
 			attackFrames[i][4] = standRegions[i];
 		}
@@ -102,7 +101,7 @@ public class DeadKnight extends Player {
 		tr = new TextureRegion(spriteTexture, w * 3, 0, w, h);
 		tr.flip(true, false);
 		attackFrames[5][4] = tr;
-		
+
 		for (int i = 0; i < dirs; i++) {
 			Animation<TextureRegion> anim = new Animation<TextureRegion>(0.2f, frames[i]);
 			Animation<TextureRegion> attackAnim = new Animation<TextureRegion>(0.2f, attackFrames[i]);
@@ -111,39 +110,11 @@ public class DeadKnight extends Player {
 			frames[i] = null;
 			attackFrames[i] = null;
 		}
-		
+
 		this.setAnimations(attackAnimations);
 		this.setAttackAnimations(attackAnimations);
 		this.setStandRegions(standRegions);
 
 		//setRegion(standRegions[0]);
-	}
-
-	@Override
-	public TextureRegion getFrame() {
-		PlayerState currState = getState();
-
-		TextureRegion standRegion, region;
-		Integer index = getDirectionIndex();
-	
-		Animation<TextureRegion> animation = animations.get(index);
-		Animation<TextureRegion> attackAnimation = attackAnimations.get(index);
-	
-		standRegion = standRegions[index];
-
-		switch (currState) {
-		case WALK:
-			region = animation.getKeyFrame(stateTimer, true);
-			break;
-		case ATTACK:
-			region = attackAnimation.getKeyFrame(stateTimer, false);
-			break;
-		case STAND:
-		default:
-			region = standRegion;
-			break;
-		}
-
-		return region;
 	}
 }

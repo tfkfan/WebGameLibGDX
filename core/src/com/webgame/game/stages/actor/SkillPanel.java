@@ -1,23 +1,14 @@
 package com.webgame.game.stages.actor;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.webgame.game.Configs;
-import com.webgame.game.stages.GameStage;
-import com.webgame.game.world.player.Player;
+import com.webgame.game.entities.Player;
 import com.webgame.game.world.skills.cooldown.SkillContainer;
 
 import java.util.List;
@@ -52,18 +43,21 @@ public class SkillPanel extends Group {
     }
 
     public void act(float dt) {
-        int d = player.getCurrentSkillIndex();
+       // int d = player.getCurrentSkillIndex();
         // Gdx.app.log("",d + "");
+        /*
         for (int i = 0; i < buttons.length; i++) {
             if (d == i)
                 buttons[i].getStyle().fontColor = Color.RED;
             else
                 buttons[i].getStyle().fontColor = Color.WHITE;
         }
+        */
     }
 
 
     public void init() {
+        /*
         List<SkillContainer> containers = player.getSkillContainers();
         buttons = new TextButton[containers.size()];
 
@@ -97,6 +91,7 @@ public class SkillPanel extends Group {
 
         setBounds(getX(), getY(), panelWidth, panelHeight);
         setDebug(true);
+        */
 
     }
 }

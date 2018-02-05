@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.webgame.game.Configs;
 import com.webgame.game.stages.actor.SkillPanel;
 import com.webgame.game.world.WorldRenderer;
-import com.webgame.game.world.player.Player;
+import com.webgame.game.entities.Player;
 import com.webgame.game.world.player.impl.Knight;
 import com.webgame.game.world.player.impl.Mage;
 import com.webgame.game.world.skills.collision.CollisionHandler;
@@ -80,8 +80,8 @@ public class GameStage extends Stage {
         player.addListener(new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                if (keycode >= 8 && keycode <= 16)
-                    player.setCurrentSkillIndex(keycode - 8);
+              //  if (keycode >= 8 && keycode <= 16)
+                   // player.setCurrentSkillIndex(keycode - 8);
                 return false;
             }
 
@@ -132,6 +132,7 @@ public class GameStage extends Stage {
         // DRAWING GAME OBJECTS
 
         super.draw();
+        /*
         batch.begin();
 
         for (Player enemy : enemies)
@@ -145,6 +146,7 @@ public class GameStage extends Stage {
         for (Player enemy : enemies)
             enemy.drawShape(sr);
         sr.end();
+        */
     }
 
     private void handleInput() {
@@ -178,7 +180,7 @@ public class GameStage extends Stage {
             target = getCamera().unproject(new Vector3(x, y, 0), getViewport().getScreenX(), getViewport().getScreenY(),
                     getViewport().getScreenWidth(), getViewport().getScreenHeight());
 
-            player.attack(target.x, target.y);
+           // player.attack(target.x, target.y);
 
             return true;
         }
