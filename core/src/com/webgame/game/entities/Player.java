@@ -1,5 +1,6 @@
 package com.webgame.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
@@ -18,9 +19,8 @@ public abstract class Player extends WorldEntity {
     public float attackTimer;
     public float stateTimer;
 
-    protected final float attackLimit = 0.8f;
-
     protected Direction direction;
+    protected Direction oldDirection;
 
     protected State currState;
     protected State prevState;
@@ -45,6 +45,7 @@ public abstract class Player extends WorldEntity {
         attackAnimation = false;
 
         direction = Direction.UP;
+        oldDirection = direction;
 
         currState = PlayerState.STAND;
         prevState = currState;
@@ -68,6 +69,14 @@ public abstract class Player extends WorldEntity {
         this.direction = direction;
     }
 
+    public Direction getOldDirection() {
+        return oldDirection;
+    }
+
+    public void setOldDirection(Direction oldDirection) {
+        this.oldDirection = oldDirection;
+    }
+
     public Array<Animation<TextureRegion>> getAnimations() {
         return animations;
     }
@@ -85,12 +94,19 @@ public abstract class Player extends WorldEntity {
     }
 
     public void setState(State state) {
-        this.prevState = state;
         this.currState = state;
     }
 
     public State getState() {
         return currState;
+    }
+
+    public State getPrevState() {
+        return prevState;
+    }
+
+    public void setPrevState(State prevState) {
+        this.prevState = prevState;
     }
 
     @Override
@@ -109,10 +125,14 @@ public abstract class Player extends WorldEntity {
     }
 
 
+    public boolean isAttackFinished(){
+        Integer index = direction.getDirIndex();
+        return attackAnimations.get(index).isAnimationFinished(stateTimer);
+    }
+
     @Override
     public TextureRegion getFrame() {
         TextureRegion region = null;
-
 
         PlayerState currState = (PlayerState) getState();
 
@@ -127,7 +147,6 @@ public abstract class Player extends WorldEntity {
                 break;
             case STAND:
             default:
-
                 region = standRegions[this.direction.getDirIndex()];
                 break;
         }
