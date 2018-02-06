@@ -3,6 +3,7 @@ package com.webgame.game.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
@@ -16,10 +17,12 @@ import com.webgame.game.events.AttackEvent;
 import com.webgame.game.events.MoveEvent;
 import com.webgame.game.stages.GameStage;
 import com.webgame.game.world.player.impl.Mage;
+
 import java.util.List;
 
-public class PlayerController extends AbstractController implements InputProcessor, EventListener{
+public class PlayerController extends AbstractController implements InputProcessor, EventListener {
     private Player player;
+    private List<Enemy> enemies;
 
     public PlayerController() {
         Gdx.input.setInputProcessor(this);
@@ -27,37 +30,21 @@ public class PlayerController extends AbstractController implements InputProcess
 
     public void init(Player player, List<Enemy> enemies) {
         this.player = player;
-        this.addActor(player);
-        if (enemies != null)
-            for (Actor a : enemies)
-                addActor(a);
-
+        this.enemies = enemies;
         this.addListener(this);
     }
 
     @Override
-    public boolean handle (Event event){
+    public boolean handle(Event event) {
         if (event instanceof MoveEvent) {
-
             Vector2 vec = ((MoveEvent) event).getVector();
-
-            if(!player.getState().equals(PlayerState.ATTACK)
-                    || player.getState().equals(PlayerState.ATTACK) && player.isAttackFinished()) {
-                if (vec.isZero()) {
-                    player.setState(PlayerState.STAND);
-                }
-                else
-                    player.setState(PlayerState.WALK);
-            }
             player.setOldDirection(player.getDirection());
             player.setDirection(((MoveEvent) event).getDirection());
             player.setVelocity(vec);
             player.applyVelocity();
-        }
-        else if(event instanceof AttackEvent){
-            if(!player.getState().equals(PlayerState.ATTACK)) {
-
-                player.stateTimer = 0;
+        } else if (event instanceof AttackEvent) {
+            if (!player.getState().equals(PlayerState.ATTACK)) {
+                player.clearTimers();
                 player.setState(PlayerState.ATTACK);
             }
         }
@@ -68,9 +55,7 @@ public class PlayerController extends AbstractController implements InputProcess
     public void act(float dt) {
         super.act(dt);
         handleInput();
-        if (player.stateTimer >= 10)
-            player.stateTimer = 0;
-        player.stateTimer += dt;
+        player.update(dt);
     }
 
     private void handleInput() {
@@ -112,6 +97,10 @@ public class PlayerController extends AbstractController implements InputProcess
         fire(new MoveEvent(velocity, direction));
     }
 
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        player.draw(batch, parentAlpha);
+    }
 
     @Override
     public boolean keyDown(int keycode) {
@@ -133,8 +122,8 @@ public class PlayerController extends AbstractController implements InputProcess
 
         if (button == Input.Buttons.LEFT) {
 
-            Vector3 target = this.getStage().getCamera().unproject(new Vector3(x, y, 0), getStage().getViewport().getScreenX(),  getStage().getViewport().getScreenY(),
-                    getStage().getViewport().getScreenWidth(),  getStage().getViewport().getScreenHeight());
+            Vector3 target = this.getStage().getCamera().unproject(new Vector3(x, y, 0), getStage().getViewport().getScreenX(), getStage().getViewport().getScreenY(),
+                    getStage().getViewport().getScreenWidth(), getStage().getViewport().getScreenHeight());
 
 
             fire(new AttackEvent((target)));

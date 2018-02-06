@@ -8,16 +8,14 @@ import com.webgame.game.entities.attributes.PlayerAttributes;
 import com.webgame.game.enums.Direction;
 import com.webgame.game.enums.PlayerState;
 import com.webgame.game.enums.State;
+import com.webgame.game.world.common.IUpdatable;
 
 import static com.webgame.game.Configs.PPM;
 
-public abstract class Player extends WorldEntity {
-    protected boolean isAnimated;
-    protected boolean attackAnimation;
+public abstract class Player extends WorldEntity implements IUpdatable{
     protected boolean isAlive;
 
-    public float attackTimer;
-    public float stateTimer;
+    protected float stateTimer;
 
     protected Direction direction;
     protected Direction oldDirection;
@@ -41,8 +39,6 @@ public abstract class Player extends WorldEntity {
         attributes = new PlayerAttributes();
 
         isAlive = true;
-        isAnimated = false;
-        attackAnimation = false;
 
         direction = Direction.UP;
         oldDirection = direction;
@@ -53,7 +49,7 @@ public abstract class Player extends WorldEntity {
         getAttributes().setHealthPoints(1000);
         getAttributes().setMaxHealthPoints(1000);
 
-        stateTimer = attackTimer = 0;
+        clearTimers();
         setBounds(0, 0, 60 / PPM, 60 / PPM);
     }
 
@@ -130,6 +126,10 @@ public abstract class Player extends WorldEntity {
         return attackAnimations.get(index).isAnimationFinished(stateTimer);
     }
 
+    public void clearTimers(){
+        stateTimer = 0;
+    }
+
     @Override
     public TextureRegion getFrame() {
         TextureRegion region = null;
@@ -152,5 +152,21 @@ public abstract class Player extends WorldEntity {
         }
 
         return region;
+    }
+
+    @Override
+    public void update(float dt){
+        if(!getState().equals(PlayerState.ATTACK)
+                || getState().equals(PlayerState.ATTACK) && isAttackFinished()) {
+            if (getVelocity().isZero())
+                setState(PlayerState.STAND);
+            else
+                setState(PlayerState.WALK);
+        }
+
+        stateTimer += dt;
+
+        if (stateTimer >= 10)
+            clearTimers();
     }
 }

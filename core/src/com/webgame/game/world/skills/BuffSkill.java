@@ -32,7 +32,7 @@ public abstract class BuffSkill<T extends SkillSprite> extends Skill<T> {
 
     @Override
     protected void updateFrame(T frame, float dt) {
-        frame.setPosition(castingPlayer.getX() - frame.getWidth()/2, castingPlayer.getY() - frame.getHeight()/2);
+        frame.setPosition(castingPlayer.getPosition().x - frame.getWidth()/2, castingPlayer.getPosition().y - frame.getHeight()/2);
         super.updateFrame(frame, dt);
         frame.updateDistance();
         frame.setAnimateTimer(frame.getAnimateTimer() + dt);

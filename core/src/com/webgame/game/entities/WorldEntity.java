@@ -7,8 +7,8 @@ import com.webgame.game.entities.Entity;
 import static com.webgame.game.Configs.PPM;
 
 public abstract class WorldEntity extends Entity {
-    protected World world;
-    protected Body b2body;
+    transient protected World world;
+    transient protected Body b2body;
     protected float defaultRadius = 20 / PPM;
     protected Circle objectShape;
 
@@ -24,7 +24,7 @@ public abstract class WorldEntity extends Entity {
 
     protected void init() {
         this.setPosition(0, 0);
-        setBounds(getX(), getX(), 100 / PPM, 100 / PPM);
+        setBounds(getPosition().x, getPosition().y, 100 / PPM, 100 / PPM);
     }
 
     public Body getB2body() {
@@ -45,7 +45,7 @@ public abstract class WorldEntity extends Entity {
 
     public void applyVelocity() {
         b2body.setLinearVelocity(velocity);
-        setPosition(b2body.getPosition().x, b2body.getPosition().y);
+        setPosition(b2body.getPosition());
     }
 
     public void createObject(World world) {

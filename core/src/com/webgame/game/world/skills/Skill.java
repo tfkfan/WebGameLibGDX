@@ -133,7 +133,7 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCo
         setTargetPosition(targetPosition);
         for (int i = 0; i < numFrames; i++) {
             T obj = skillObjects.get(i);
-            initFrame(obj, new Vector2(player.getX(), player.getY()), targetPosition);
+            initFrame(obj, new Vector2(player.getPosition().x, player.getPosition().y), targetPosition);
         }
     }
 

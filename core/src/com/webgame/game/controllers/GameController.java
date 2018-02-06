@@ -62,8 +62,8 @@ public class GameController extends AbstractController {
     public void act(float dt) {
         super.act(dt);
 
-        camera.position.x = player.getX();
-        camera.position.y = player.getY();
+        camera.position.x = player.getPosition().x;
+        camera.position.y = player.getPosition().y;
         camera.update();
 
         batch.setProjectionMatrix(camera.combined);

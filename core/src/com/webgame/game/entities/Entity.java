@@ -4,18 +4,62 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.webgame.game.world.common.IFramed;
+
 import java.io.Serializable;
 
-public abstract class Entity extends Group implements IFramed, Serializable {
+public abstract class Entity implements IFramed, Serializable {
     protected Long id;
 
+    protected Vector2 position;
     protected Vector2 velocity;
     protected float xOffset;
     protected float yOffset;
 
+    protected float width;
+    protected float height;
+
     public Entity() {
         velocity = new Vector2(0, 0);
+        position = new Vector2(0, 0);
         xOffset = yOffset = 0;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public void setSize(float width, float height) {
+        setWidth(width);
+        setHeight(height);
+    }
+
+    public void setBounds(float x, float y, float width, float height) {
+        setSize(width, height);
+        setPosition(x, y);
+    }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public void setPosition(Vector2 position) {
+        this.position = position;
+    }
+
+    public void setPosition(float x, float y) {
+        setPosition(new Vector2(x, y));
     }
 
     public Vector2 getVelocity() {
@@ -50,8 +94,7 @@ public abstract class Entity extends Group implements IFramed, Serializable {
         this.id = id;
     }
 
-    @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(getFrame(), getX() - getXOffset(), getY() - getYOffset(), getWidth(), getHeight());
+        batch.draw(getFrame(), position.x - getXOffset(), position.y - getYOffset(), getWidth(), getHeight());
     }
 }
