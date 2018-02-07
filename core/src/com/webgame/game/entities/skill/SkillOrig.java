@@ -1,4 +1,4 @@
-package com.webgame.game.world.skills;
+package com.webgame.game.entities.skill;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.entities.Player;
+import com.webgame.game.entities.player.Player;
 import com.webgame.game.world.skills.collision.SkillCollision;
 import com.webgame.game.world.skills.skillsprites.SkillSprite;
 import com.webgame.game.world.skills.state.SkillState;
@@ -17,7 +17,7 @@ import static com.webgame.game.Configs.PPM;
 
 import java.util.ArrayList;
 
-public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCollision {
+public abstract class SkillOrig<T extends SkillSprite> implements Cloneable, SkillCollision {
     protected Vector2 skillVelocity;
     protected Vector2 targetPosition;
 
@@ -36,7 +36,7 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCo
 
     protected Player castingPlayer;
 
-    public Skill(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
+    public SkillOrig(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
         skillState = new SkillState();
         setBatch(batch);
         setSpriteTexture(spriteTexture);
@@ -44,15 +44,15 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCo
     }
 
     @SuppressWarnings("unchecked")
-    public Skill<T> clone() {
+    public SkillOrig<T> clone() {
         try {
-            Skill<T> newSkill = (Skill<T>) super.clone();
-            newSkill.skillState = new SkillState(this.getSkillState());
-            newSkill.initSkill(numFrames);
+            SkillOrig<T> newSkillOrig = (SkillOrig<T>) super.clone();
+            newSkillOrig.skillState = new SkillState(this.getSkillState());
+            newSkillOrig.initSkill(numFrames);
             if (this.getSkillState().getArea() != null)
-                newSkill.getSkillState().setArea(new Rectangle(this.getSkillState().getArea()));
-            newSkill.getSkillState().setDamage(getSkillState().getDamage());
-            return newSkill;
+                newSkillOrig.getSkillState().setArea(new Rectangle(this.getSkillState().getArea()));
+            newSkillOrig.getSkillState().setDamage(getSkillState().getDamage());
+            return newSkillOrig;
         } catch (CloneNotSupportedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -290,7 +290,7 @@ public abstract class Skill<T extends SkillSprite> implements Cloneable, SkillCo
 
     public void setNumFrames(Integer numFrames) throws Exception {
         if (numFrames <= 0)
-            throw new Exception("Skill objects num cannot be less or equal zero");
+            throw new Exception("SkillOrig objects num cannot be less or equal zero");
 
         this.numFrames = numFrames;
     }

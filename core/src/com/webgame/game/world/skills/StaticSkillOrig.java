@@ -4,14 +4,15 @@ package com.webgame.game.world.skills;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.webgame.game.entities.skill.SkillOrig;
 import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
-public abstract class StaticSkill<T extends SkillSprite> extends Skill<T> {
+public abstract class StaticSkillOrig<T extends SkillSprite> extends SkillOrig<T> {
     protected float skillDuration = 10;
 
     protected Vector2 vel = new Vector2(0, 0);
 
-    public StaticSkill(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
+    public StaticSkillOrig(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
         super(batch, spriteTexture, numFrames);
         getSkillState().setStatic(true);
     }

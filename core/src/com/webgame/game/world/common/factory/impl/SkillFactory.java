@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.GameAnimation;
+import com.webgame.game.entities.skill.SkillOrig;
 import com.webgame.game.world.common.factory.ISkillFactory;
 import com.webgame.game.world.common.factory.ISkillSpriteFactory;
 import com.webgame.game.world.skills.*;
@@ -17,8 +18,8 @@ public class SkillFactory implements ISkillFactory {
     }
 
     @Override
-    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createStaticSkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception {
-        return new StaticSkill<T>(batch, spriteTexture, numFrames) {
+    public <A extends GameAnimation, T extends SkillSprite> SkillOrig<T> createStaticSkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception {
+        return new StaticSkillOrig<T>(batch, spriteTexture, numFrames) {
             @Override
             protected T createObject() {
                 return skillSpriteFactory.createStaticSkillSprite(animationClass);
@@ -27,8 +28,8 @@ public class SkillFactory implements ISkillFactory {
     }
 
     @Override
-    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createStaticAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception {
-        return new StaticAOESkill<T>(batch, spriteTexture, numFrames) {
+    public <A extends GameAnimation, T extends SkillSprite> SkillOrig<T> createStaticAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final Integer numFrames) throws Exception {
+        return new StaticAOESkillOrig<T>(batch, spriteTexture, numFrames) {
             @Override
             protected T createObject() {
                 return skillSpriteFactory.createStaticSkillSprite(animationClass);
@@ -37,9 +38,9 @@ public class SkillFactory implements ISkillFactory {
     }
 
     @Override
-    public <A extends GameAnimation, T extends SkillSprite> Skill<T>
+    public <A extends GameAnimation, T extends SkillSprite> SkillOrig<T>
     createFallingAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture, final TextureRegion standTexture, final Integer numFrames) throws Exception {
-        return new FallingAOESkill<T>(batch, spriteTexture, numFrames) {
+        return new FallingAOESkillOrig<T>(batch, spriteTexture, numFrames) {
             @Override
             protected T createObject() {
                 return skillSpriteFactory.createFallingSkillSprite(animationClass, standTexture);
@@ -48,9 +49,9 @@ public class SkillFactory implements ISkillFactory {
     }
 
     @Override
-    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createSingleSkill(final Class<A> animationClass, final SpriteBatch batch,
-                                                                                       final Texture spriteTexture,final TextureRegion standTexture) throws Exception {
-        return new SingleSkill<T>(batch, spriteTexture) {
+    public <A extends GameAnimation, T extends SkillSprite> SkillOrig<T> createSingleSkill(final Class<A> animationClass, final SpriteBatch batch,
+                                                                                           final Texture spriteTexture, final TextureRegion standTexture) throws Exception {
+        return new SingleSkillOrig<T>(batch, spriteTexture) {
             @Override
             protected T createObject() {
                 return skillSpriteFactory.createSingleSkillSprite(animationClass, standTexture);
@@ -59,55 +60,55 @@ public class SkillFactory implements ISkillFactory {
     }
 
     @Override
-    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createStaticSingleAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception {
-        Skill<T> skill = new StaticAOESkill<T>(batch, spriteTexture, 1) {
+    public <A extends GameAnimation, T extends SkillSprite> SkillOrig<T> createStaticSingleAOESkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception {
+        SkillOrig<T> skillOrig = new StaticAOESkillOrig<T>(batch, spriteTexture, 1) {
             @Override
             protected T createObject() {
                 T obj = skillSpriteFactory.createStaticSkillSprite(animationClass);
                 return obj;
             }
         };
-        skill.getSkillState().setStatic(true);
-        skill.getSkillState().setAOE(true);
-        return skill;
+        skillOrig.getSkillState().setStatic(true);
+        skillOrig.getSkillState().setAOE(true);
+        return skillOrig;
     }
 
     @Override
-    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createBuffSkill(Class<A> animationClass, SpriteBatch batch, Texture spriteTexture) throws Exception {
-        Skill skill = new BuffSkill<T>(batch, spriteTexture, 1) {
+    public <A extends GameAnimation, T extends SkillSprite> SkillOrig<T> createBuffSkill(Class<A> animationClass, SpriteBatch batch, Texture spriteTexture) throws Exception {
+        SkillOrig skillOrig = new BuffSkillOrig<T>(batch, spriteTexture, 1) {
             @Override
             protected T createObject() {
                 return skillSpriteFactory.createStaticSkillSprite(animationClass);
             }
         };
-        skill.getSkillState().setBuff(true);
-        skill.getSkillState().setStatic(true);
-        return skill;
+        skillOrig.getSkillState().setBuff(true);
+        skillOrig.getSkillState().setStatic(true);
+        return skillOrig;
     }
 
     @Override
-    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createStaticTimedAOESkill(Class<A> animationClass, SpriteBatch batch, Texture spriteTexture) throws Exception {
-        Skill<T> skill = new StaticAOESkill<T>(batch, spriteTexture, 1) {
+    public <A extends GameAnimation, T extends SkillSprite> SkillOrig<T> createStaticTimedAOESkill(Class<A> animationClass, SpriteBatch batch, Texture spriteTexture) throws Exception {
+        SkillOrig<T> skillOrig = new StaticAOESkillOrig<T>(batch, spriteTexture, 1) {
             @Override
             protected T createObject() {
                 T obj = skillSpriteFactory.createStaticTimedSkillSprite(animationClass);
                 return obj;
             }
         };
-        skill.getSkillState().setTimed(true);
-        skill.getSkillState().setStatic(true);
-        return skill;
+        skillOrig.getSkillState().setTimed(true);
+        skillOrig.getSkillState().setStatic(true);
+        return skillOrig;
     }
 
     @Override
-    public <A extends GameAnimation, T extends SkillSprite> Skill<T> createStaticSingleSkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception {
-        Skill<T> skill = new StaticSkill<T>(batch, spriteTexture, 1) {
+    public <A extends GameAnimation, T extends SkillSprite> SkillOrig<T> createStaticSingleSkill(final Class<A> animationClass, final SpriteBatch batch, final Texture spriteTexture) throws Exception {
+        SkillOrig<T> skillOrig = new StaticSkillOrig<T>(batch, spriteTexture, 1) {
             @Override
             protected T createObject() {
                 return skillSpriteFactory.createStaticSkillSprite(animationClass);
             }
         };
-        skill.getSkillState().setStatic(true);
-        return skill;
+        skillOrig.getSkillState().setStatic(true);
+        return skillOrig;
     }
 }

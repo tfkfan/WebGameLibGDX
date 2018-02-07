@@ -1,15 +1,15 @@
 package com.webgame.game.world.skills;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.webgame.game.entities.skill.SkillOrig;
 import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 import static com.webgame.game.Configs.PPM;
 
-public abstract class FallingAOESkill<T extends SkillSprite> extends Skill<T> {
+public abstract class FallingAOESkillOrig<T extends SkillSprite> extends SkillOrig<T> {
     protected float fallTimer;
     protected final float fallDuration = 10;
     protected int index;
@@ -19,7 +19,7 @@ public abstract class FallingAOESkill<T extends SkillSprite> extends Skill<T> {
     protected final Vector2 fallOffsetVec = new Vector2(fallVelocity.x * 10, (-fallVelocity.y) * 10);
     protected final float tmp = 0.1f;
 
-    public FallingAOESkill(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
+    public FallingAOESkillOrig(SpriteBatch batch, Texture spriteTexture, Integer numFrames) throws Exception {
         super(batch, spriteTexture, numFrames);
         fallTimer = 0;
         index = 0;

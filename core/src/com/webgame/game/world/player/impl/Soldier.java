@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.utils.SpriteTextureLoader;
-import com.webgame.game.entities.Player;
+import com.webgame.game.entities.player.Player;
 import static com.webgame.game.Configs.PPM;
 
 @Deprecated
@@ -16,7 +16,7 @@ public class Soldier extends Player {
 		super();
 
 		int dirs = DirectionState.values().length;
-		//this.setSkill(new IceRain(batch, "skills.png"));
+		//this.setSkillOrig(new IceRain(batch, "skills.png"));
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);

@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.Configs;
 import com.webgame.game.animation.impl.*;
+import com.webgame.game.entities.skill.SkillOrig;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.world.common.factory.ISkillFactory;
 import com.webgame.game.world.common.factory.impl.SkillFactory;
-import com.webgame.game.entities.Player;
-import com.webgame.game.world.skills.Skill;
+import com.webgame.game.entities.player.Player;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -24,84 +24,84 @@ public class Mage extends Player {
         super();
         int dirs = DirectionState.values().length;
         try {
-            ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
+            ArrayList<SkillOrig<?>> skillOrigs = new ArrayList<SkillOrig<?>>();
 
             ISkillFactory skillFactory = new SkillFactory();
 
-            Skill s1 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
+            SkillOrig s1 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_005.png"));
             s1.getSkillState().setTitle("Buff1");
-            skills.add(s1);
+            skillOrigs.add(s1);
 
             TextureRegion iceStandTexture = new TextureRegion(SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/ice_003.png"));
-            Skill ss2 = skillFactory.createSingleSkill(IceBlastAnimation.class, batch,
+            SkillOrig ss2 = skillFactory.createSingleSkill(IceBlastAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s7.png"),
                     iceStandTexture);
             ss2.getSkillState().setDamage(50d);
-            skills.add(ss2);
+            skillOrigs.add(ss2);
 
 
             TextureRegion fireStandTexture = new TextureRegion(SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/fire_002.png"));
-            Skill ss3 = skillFactory.createSingleSkill(FireBlastAnimation.class, batch,
+            SkillOrig ss3 = skillFactory.createSingleSkill(FireBlastAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png"),
                     fireStandTexture);
             ss3.getSkillState().setDamage(50d);
-            skills.add(ss3);
+            skillOrigs.add(ss3);
 
-            Skill s2 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
+            SkillOrig s2 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_006.png"));
             s2.getSkillState().setTitle("Buff2");
-            skills.add(s2);
+            skillOrigs.add(s2);
 
-            Skill s3 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
+            SkillOrig s3 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_007.png"));
             s3.getSkillState().setTitle("Buff3");
-            skills.add(s3);
+            skillOrigs.add(s3);
 
-            Skill s4 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
+            SkillOrig s4 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_008.png"));
             s4.getSkillState().setTitle("Buff4");
-            skills.add(s4);
+            skillOrigs.add(s4);
 
-            Skill s5 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
+            SkillOrig s5 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_009.png"));
             s5.getSkillState().setTitle("Buff5");
-            skills.add(s5);
+            skillOrigs.add(s5);
 
             Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png");
             TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);
-            Skill s6 = skillFactory.createFallingAOESkill(BlizzardFragmentAnimation.class, batch,
+            SkillOrig s6 = skillFactory.createFallingAOESkill(BlizzardFragmentAnimation.class, batch,
                     skillsTexture, blizzardStandTexture, 30);
             s6.getSkillState().setTitle("Blizzard");
-            skills.add(s6);
+            skillOrigs.add(s6);
 
-            Skill s7 = skillFactory.createStaticTimedAOESkill(MagicShieldAnimation.class, batch,
+            SkillOrig s7 = skillFactory.createStaticTimedAOESkill(MagicShieldAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s2.png"));
             s7.getSkillState().setTitle("Some skill");
-            skills.add(s7);
+            skillOrigs.add(s7);
 
-            Skill s = skillFactory.createBuffSkill(HealAnimation.class, batch,
+            SkillOrig s = skillFactory.createBuffSkill(HealAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s6.png"));
             s.getSkillState().setTitle("heal");
             s.getSkillState().setHeal(true);
             s.getSkillState().setHealHP(50d);
-            skills.add(s);
+            skillOrigs.add(s);
 
             /*
-            skills.add(skillFactory.createStaticSingleAOESkill(MagicSourceAnimation.class, batch,
+            skillOrigs.add(skillFactory.createStaticSingleAOESkill(MagicSourceAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s9.png")));
-            skills.add(skillFactory.createStaticSingleAOESkill(MagicBuffAnimation.class, batch,
+            skillOrigs.add(skillFactory.createStaticSingleAOESkill(MagicBuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s5.png")));
-            skills.add(skillFactory.createStaticSingleAOESkill(IceBlastAnimation.class, batch,
+            skillOrigs.add(skillFactory.createStaticSingleAOESkill(IceBlastAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s7.png")));
-            skills.add(skillFactory.createStaticSingleAOESkill(MagicBuffAnimation.class, batch,
+            skillOrigs.add(skillFactory.createStaticSingleAOESkill(MagicBuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s3.png")));
-            skills.add(skillFactory.createStaticSingleSkill(LightningAnimation.class, batch,
+            skillOrigs.add(skillFactory.createStaticSingleSkill(LightningAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/lightning.png")));
-            skills.add(skillFactory.createStaticTimedAOESkill(TornadoAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png")));
+            skillOrigs.add(skillFactory.createStaticTimedAOESkill(TornadoAnimation.class, batch,
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skillOrigs.png")));
                     */
-           // this.setSkills(skills);
+           // this.setSkills(skillOrigs);
         } catch (Exception e2) {
             // TODO Auto-generated catch block
             e2.printStackTrace();

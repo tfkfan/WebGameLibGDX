@@ -2,15 +2,15 @@ package com.webgame.game.world.skills.cooldown;
 
 import java.util.ArrayList;
 
-import com.webgame.game.world.skills.Skill;
+import com.webgame.game.entities.skill.SkillOrig;
 
-public class SkillContainer extends ArrayList<Skill<?>> {
+public class SkillContainer extends ArrayList<SkillOrig<?>> {
 	private Long cooldown_start;
 	private Long cooldown_time;
 
 	private Boolean isAvailable;
 
-	private Skill<?> skill;
+	private SkillOrig<?> skillOrig;
 
 	private static final long serialVersionUID = 1L;
 
@@ -18,8 +18,8 @@ public class SkillContainer extends ArrayList<Skill<?>> {
 		init();
 	}
 
-	public SkillContainer(Skill<?> skill) {
-		setSkill(skill);
+	public SkillContainer(SkillOrig<?> skillOrig) {
+		setSkillOrig(skillOrig);
 		init();
 	}
 
@@ -28,11 +28,11 @@ public class SkillContainer extends ArrayList<Skill<?>> {
 			return;
 
 		for (int i = 0; i < this.size(); i++){
-			Skill<?> currSkill = this.get(i);
-			if (currSkill.getSkillState().isActive())
-				currSkill.animateSkill(dt);
+			SkillOrig<?> currSkillOrig = this.get(i);
+			if (currSkillOrig.getSkillState().isActive())
+				currSkillOrig.animateSkill(dt);
 			else
-				remove(currSkill);
+				remove(currSkillOrig);
 		}
 	}
 
@@ -42,16 +42,16 @@ public class SkillContainer extends ArrayList<Skill<?>> {
 		cooldown_time = 0L;
 	}
 
-	public Skill<?> getSkill() {
-		return skill;
+	public SkillOrig<?> getSkillOrig() {
+		return skillOrig;
 	}
 
-	public void setSkill(Skill<?> skill) {
-		this.skill = skill;
+	public void setSkillOrig(SkillOrig<?> skillOrig) {
+		this.skillOrig = skillOrig;
 	}
 	
-	public Skill<?> createSkill(){
-		return this.skill.clone();
+	public SkillOrig<?> createSkill(){
+		return this.skillOrig.clone();
 	}
 
 	public Long getCooldown_start() {

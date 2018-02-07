@@ -1,9 +1,11 @@
-package com.webgame.game.entities;
+package com.webgame.game.entities.player;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.webgame.game.entities.WorldEntity;
 import com.webgame.game.entities.attributes.PlayerAttributes;
+import com.webgame.game.entities.skill.Skill;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.enums.PlayerAnimationState;
 import com.webgame.game.enums.PlayerState;
@@ -12,7 +14,7 @@ import com.webgame.game.world.common.IUpdatable;
 
 import static com.webgame.game.Configs.PPM;
 
-public abstract class Player extends WorldEntity implements IUpdatable{
+public abstract class Player extends WorldEntity implements IUpdatable {
     protected boolean isAlive;
 
     protected float stateTimer;
@@ -27,9 +29,11 @@ public abstract class Player extends WorldEntity implements IUpdatable{
 
     protected transient Array<Animation<TextureRegion>> animations;
     protected transient Array<Animation<TextureRegion>> attackAnimations;
-    protected transient  TextureRegion[] standRegions;
+    protected transient TextureRegion[] standRegions;
 
     protected PlayerAttributes attributes;
+
+    protected Skill skill;
 
     public Player() {
         super();
@@ -53,8 +57,77 @@ public abstract class Player extends WorldEntity implements IUpdatable{
         getAttributes().setHealthPoints(1000);
         getAttributes().setMaxHealthPoints(1000);
 
+        skill = new Skill(this){
+
+            @Override
+            public TextureRegion getFrame() {
+                return null;
+            }
+        };
+
         clearTimers();
         setBounds(0, 0, 60 / PPM, 60 / PPM);
+    }
+
+    public Skill getSkill(){
+        return skill;
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
+        if (getB2body() != null)
+            getB2body().setTransform(x, y, 0);
+    }
+
+
+    public boolean isAttackFinished() {
+        Integer index = directionState.getDirIndex();
+        return attackAnimations.get(index).isAnimationFinished(stateTimer);
+    }
+
+    public void clearTimers() {
+        stateTimer = 0;
+    }
+
+    @Override
+    public TextureRegion getFrame() {
+        TextureRegion region = null;
+
+        PlayerAnimationState currState = (PlayerAnimationState) getCurrAnimationState();
+
+        Integer index = directionState.getDirIndex();
+
+        switch (currState) {
+            case WALK:
+                region = animations.get(index).getKeyFrame(stateTimer, true);
+                break;
+            case ATTACK:
+                region = attackAnimations.get(index).getKeyFrame(stateTimer, false);
+                break;
+            case STAND:
+            default:
+                region = standRegions[this.directionState.getDirIndex()];
+                break;
+        }
+
+        return region;
+    }
+
+    @Override
+    public void update(float dt) {
+        if (!getCurrAnimationState().equals(PlayerAnimationState.ATTACK)
+                || getCurrAnimationState().equals(PlayerAnimationState.ATTACK) && isAttackFinished()) {
+            if (getVelocity().isZero())
+                setCurrAnimationState(PlayerAnimationState.STAND);
+            else
+                setCurrAnimationState(PlayerAnimationState.WALK);
+        }
+
+        stateTimer += dt;
+
+        if (stateTimer >= 10)
+            clearTimers();
     }
 
     public PlayerState getPlayerState() {
@@ -117,68 +190,11 @@ public abstract class Player extends WorldEntity implements IUpdatable{
         this.prevAnimationState = prevAnimationState;
     }
 
-    @Override
-    public void setPosition(float x, float y) {
-        super.setPosition(x, y);
-        if (getB2body() != null)
-            getB2body().setTransform(x, y, 0);
-    }
-
     public TextureRegion[] getStandRegions() {
         return standRegions;
     }
 
     public void setStandRegions(TextureRegion[] standRegions) {
         this.standRegions = standRegions;
-    }
-
-
-    public boolean isAttackFinished(){
-        Integer index = directionState.getDirIndex();
-        return attackAnimations.get(index).isAnimationFinished(stateTimer);
-    }
-
-    public void clearTimers(){
-        stateTimer = 0;
-    }
-
-    @Override
-    public TextureRegion getFrame() {
-        TextureRegion region = null;
-
-        PlayerAnimationState currState = (PlayerAnimationState) getCurrAnimationState();
-
-        Integer index = directionState.getDirIndex();
-
-        switch (currState) {
-            case WALK:
-                region = animations.get(index).getKeyFrame(stateTimer, true);
-                break;
-            case ATTACK:
-                region = attackAnimations.get(index).getKeyFrame(stateTimer, false);
-                break;
-            case STAND:
-            default:
-                region = standRegions[this.directionState.getDirIndex()];
-                break;
-        }
-
-        return region;
-    }
-
-    @Override
-    public void update(float dt){
-        if(!getCurrAnimationState().equals(PlayerAnimationState.ATTACK)
-                || getCurrAnimationState().equals(PlayerAnimationState.ATTACK) && isAttackFinished()) {
-            if (getVelocity().isZero())
-                setCurrAnimationState(PlayerAnimationState.STAND);
-            else
-                setCurrAnimationState(PlayerAnimationState.WALK);
-        }
-
-        stateTimer += dt;
-
-        if (stateTimer >= 10)
-            clearTimers();
     }
 }

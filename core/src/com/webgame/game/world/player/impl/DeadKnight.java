@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.utils.SpriteTextureLoader;
-import com.webgame.game.entities.Player;
-import com.webgame.game.world.skills.Skill;
+import com.webgame.game.entities.player.Player;
+import com.webgame.game.entities.skill.SkillOrig;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -20,10 +20,10 @@ public class DeadKnight extends Player {
 		int dirs = DirectionState.values().length;
 		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
 		try {
-			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
-			//skills.add(new Blizzard(batch, skillTexture, 10));
+			ArrayList<SkillOrig<?>> skillOrigs = new ArrayList<SkillOrig<?>>();
+			//skillOrigs.add(new Blizzard(batch, skillTexture, 10));
 
-			//this.setSkills(skills);
+			//this.setSkills(skillOrigs);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

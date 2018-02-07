@@ -8,8 +8,8 @@ import com.badlogic.gdx.utils.Array;
 import com.webgame.game.Configs;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.utils.SpriteTextureLoader;
-import com.webgame.game.entities.Player;
-import com.webgame.game.world.skills.Skill;
+import com.webgame.game.entities.player.Player;
+import com.webgame.game.entities.skill.SkillOrig;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -21,13 +21,13 @@ public class Knight extends Player {
 		super();
 
 		int dirs = DirectionState.values().length;
-		Texture skillTexture = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/skills.png");
-		ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
+		Texture skillTexture = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/skillOrigs.png");
+		ArrayList<SkillOrig<?>> skillOrigs = new ArrayList<SkillOrig<?>>();
 		try {
 			//Blizzard b = new Blizzard(batch, skillTexture, 30);
 
 			//b.setDamage(5d);
-			//skills.add(b);
+			//skillOrigs.add(b);
 
 			
 		} catch (Exception e) {
@@ -35,7 +35,7 @@ public class Knight extends Player {
 			e.printStackTrace();
 		}
 		
-		//this.setSkills(skills);
+		//this.setSkills(skillOrigs);
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);

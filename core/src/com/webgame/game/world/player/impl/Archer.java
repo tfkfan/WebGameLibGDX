@@ -1,7 +1,7 @@
 package com.webgame.game.world.player.impl;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.webgame.game.entities.Player;
+import com.webgame.game.entities.player.Player;
 
 @Deprecated
 public class Archer extends Player {
@@ -15,7 +15,7 @@ public class Archer extends Player {
 
 
 		try {
-			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
+			ArrayList<SkillOrig<?>> skills = new ArrayList<SkillOrig<?>>();
 			skills.add(new Blizzard(batch, skillTexture, 10));
 
 			this.setSkills(skills);

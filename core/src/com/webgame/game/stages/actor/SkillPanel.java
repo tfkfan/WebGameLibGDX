@@ -1,19 +1,10 @@
 package com.webgame.game.stages.actor;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.webgame.game.Configs;
-import com.webgame.game.entities.Player;
-import com.webgame.game.world.skills.cooldown.SkillContainer;
-
-import java.util.List;
-
-import static com.webgame.game.Configs.PPM;
+import com.webgame.game.entities.player.Player;
 
 public class SkillPanel extends Group {
     protected Player player;
@@ -72,7 +63,7 @@ public class SkillPanel extends Group {
 
             textButtonStyle.downFontColor = Color.BLACK;
             //textButtonStyle.checkedFontColor = Color.GREEN;
-            SkillButton btn = new SkillButton(cont.getSkill().getSkillState().getTitle(), textButtonStyle, i);
+            SkillButton btn = new SkillButton(cont.getSkillOrig().getSkillState().getTitle(), textButtonStyle, i);
             btn.addListener(new ClickListener() {
 
                 @Override

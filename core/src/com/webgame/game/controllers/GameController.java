@@ -1,7 +1,6 @@
 package com.webgame.game.controllers;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -10,19 +9,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.Configs;
-import com.webgame.game.entities.Enemy;
-import com.webgame.game.entities.Player;
+import com.webgame.game.entities.player.Enemy;
+import com.webgame.game.entities.player.Player;
 import com.webgame.game.world.WorldRenderer;
 import com.webgame.game.world.player.impl.Mage;
 
 import java.util.List;
-
-import static com.webgame.game.Configs.PPM;
-import static com.webgame.game.Configs.VIEW_HEIGHT;
-import static com.webgame.game.Configs.VIEW_WIDTH;
 
 public class GameController extends AbstractController {
     private SpriteBatch batch;
@@ -51,6 +45,7 @@ public class GameController extends AbstractController {
 
         player = new Mage(batch, Configs.PLAYERSHEETS_FOLDER + "/mage.png");
         player.createObject(world);
+
         enemies = null;
 
         pController = new PlayerController();
@@ -66,7 +61,6 @@ public class GameController extends AbstractController {
     @Override
     public void act(float dt) {
         super.act(dt);
-
         camera.position.x = player.getPosition().x;
         camera.position.y = player.getPosition().y;
         camera.update();
@@ -85,8 +79,11 @@ public class GameController extends AbstractController {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         worldRenderer.render();
+
+        //NOT REMOVE!
         batch.end();
         batch.begin();
+
         super.draw(batch, parentAlpha);
 
     }

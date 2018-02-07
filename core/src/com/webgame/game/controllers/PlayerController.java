@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.webgame.game.entities.Enemy;
-import com.webgame.game.entities.Player;
+import com.webgame.game.entities.player.Enemy;
+import com.webgame.game.entities.player.Player;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.enums.PlayerAnimationState;
 import com.webgame.game.events.AttackEvent;
@@ -40,8 +40,10 @@ public class PlayerController extends AbstractController implements InputProcess
             player.setVelocity(vec);
             player.applyVelocity();
         } else if (event instanceof AttackEvent) {
+            //Casting skill
             if (!player.getCurrAnimationState().equals(PlayerAnimationState.ATTACK)) {
                 player.clearTimers();
+                player.getSkill().cast(((AttackEvent) event).getTargetVector());
                 player.setCurrAnimationState(PlayerAnimationState.ATTACK);
             }
         }
@@ -96,6 +98,7 @@ public class PlayerController extends AbstractController implements InputProcess
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
         player.draw(batch, parentAlpha);
     }
 
@@ -119,10 +122,10 @@ public class PlayerController extends AbstractController implements InputProcess
 
         if (button == Input.Buttons.LEFT) {
 
-            Vector3 target = this.getStage().getCamera().unproject(new Vector3(x, y, 0), getStage().getViewport().getScreenX(), getStage().getViewport().getScreenY(),
+            Vector3 trg = this.getStage().getCamera().unproject(new Vector3(x, y, 0), getStage().getViewport().getScreenX(), getStage().getViewport().getScreenY(),
                     getStage().getViewport().getScreenWidth(), getStage().getViewport().getScreenHeight());
 
-
+            Vector2 target = new Vector2(trg.x, trg.y);
             fire(new AttackEvent((target)));
             return true;
         }

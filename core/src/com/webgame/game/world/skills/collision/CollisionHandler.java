@@ -1,10 +1,6 @@
 package com.webgame.game.world.skills.collision;
 
-import java.util.List;
-
-import com.webgame.game.entities.Player;
-import com.webgame.game.world.skills.Skill;
-import com.webgame.game.world.skills.cooldown.SkillContainer;
+import com.webgame.game.entities.player.Player;
 
 public class CollisionHandler {
 
@@ -25,7 +21,7 @@ public class CollisionHandler {
             if (skillContainer.isEmpty())
                 continue;
 
-            for (Skill<?> skill : skillContainer)
+            for (SkillOrig<?> skill : skillContainer)
                 skill.skillCollision(enemy);
         }
 
@@ -37,7 +33,7 @@ public class CollisionHandler {
             if (skillContainer2.isEmpty())
                 continue;
 
-            for (Skill<?> skill : skillContainer2)
+            for (SkillOrig<?> skill : skillContainer2)
                 skill.skillCollision(player);
         }
         */

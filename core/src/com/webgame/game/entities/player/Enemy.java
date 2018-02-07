@@ -1,6 +1,4 @@
-package com.webgame.game.entities;
-
-import com.webgame.game.entities.Player;
+package com.webgame.game.entities.player;
 
 public abstract class Enemy extends Player {
 

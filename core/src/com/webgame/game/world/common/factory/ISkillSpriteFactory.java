@@ -1,10 +1,7 @@
 package com.webgame.game.world.common.factory;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.GameAnimation;
-import com.webgame.game.world.skills.Skill;
 import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
 public interface ISkillSpriteFactory {

@@ -3,10 +3,11 @@ package com.webgame.game.world.skills;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.webgame.game.entities.skill.SkillOrig;
 import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
-public abstract class SingleSkill<T extends SkillSprite> extends Skill<T> {
-    public SingleSkill(SpriteBatch batch, Texture spriteTexture) throws Exception {
+public abstract class SingleSkillOrig<T extends SkillSprite> extends SkillOrig<T> {
+    public SingleSkillOrig(SpriteBatch batch, Texture spriteTexture) throws Exception {
         super(batch, spriteTexture, 1);
         getSkillState().setAOE(false);
 
