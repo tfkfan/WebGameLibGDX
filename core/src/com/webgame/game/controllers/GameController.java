@@ -38,6 +38,7 @@ public class GameController extends AbstractController {
     private Vector3 target = new Vector3();
 
     private PlayerController pController;
+    private SkillController sController;
 
     public GameController(OrthographicCamera camera, Viewport viewport) {
         this.camera = camera;
@@ -55,7 +56,11 @@ public class GameController extends AbstractController {
         pController = new PlayerController();
         pController.init(player, enemies);
 
+        sController = new SkillController();
+        sController.init(player, enemies);
+
         this.addActor(pController);
+        this.addActor(sController);
     }
 
     @Override

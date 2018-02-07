@@ -1,11 +1,11 @@
 package com.webgame.game.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.entities.attributes.PlayerAttributes;
-import com.webgame.game.enums.Direction;
+import com.webgame.game.enums.DirectionState;
+import com.webgame.game.enums.PlayerAnimationState;
 import com.webgame.game.enums.PlayerState;
 import com.webgame.game.enums.State;
 import com.webgame.game.world.common.IUpdatable;
@@ -17,15 +17,17 @@ public abstract class Player extends WorldEntity implements IUpdatable{
 
     protected float stateTimer;
 
-    protected Direction direction;
-    protected Direction oldDirection;
+    protected DirectionState directionState;
+    protected DirectionState oldDirectionState;
 
-    protected State currState;
-    protected State prevState;
+    protected PlayerState playerState;
 
-    protected Array<Animation<TextureRegion>> animations;
-    protected Array<Animation<TextureRegion>> attackAnimations;
-    protected TextureRegion[] standRegions;
+    protected PlayerAnimationState currAnimationState;
+    protected PlayerAnimationState prevAnimationState;
+
+    protected transient Array<Animation<TextureRegion>> animations;
+    protected transient Array<Animation<TextureRegion>> attackAnimations;
+    protected transient  TextureRegion[] standRegions;
 
     protected PlayerAttributes attributes;
 
@@ -40,11 +42,13 @@ public abstract class Player extends WorldEntity implements IUpdatable{
 
         isAlive = true;
 
-        direction = Direction.UP;
-        oldDirection = direction;
+        directionState = DirectionState.UP;
+        oldDirectionState = directionState;
 
-        currState = PlayerState.STAND;
-        prevState = currState;
+        playerState = PlayerState.ALIVE;
+
+        currAnimationState = PlayerAnimationState.STAND;
+        prevAnimationState = currAnimationState;
 
         getAttributes().setHealthPoints(1000);
         getAttributes().setMaxHealthPoints(1000);
@@ -53,24 +57,32 @@ public abstract class Player extends WorldEntity implements IUpdatable{
         setBounds(0, 0, 60 / PPM, 60 / PPM);
     }
 
+    public PlayerState getPlayerState() {
+        return playerState;
+    }
+
+    public void setPlayerState(PlayerState playerState) {
+        this.playerState = playerState;
+    }
+
     public PlayerAttributes getAttributes() {
         return attributes;
     }
 
-    public Direction getDirection() {
-        return direction;
+    public DirectionState getDirectionState() {
+        return directionState;
     }
 
-    public void setDirection(Direction direction) {
-        this.direction = direction;
+    public void setDirectionState(DirectionState directionState) {
+        this.directionState = directionState;
     }
 
-    public Direction getOldDirection() {
-        return oldDirection;
+    public DirectionState getOldDirectionState() {
+        return oldDirectionState;
     }
 
-    public void setOldDirection(Direction oldDirection) {
-        this.oldDirection = oldDirection;
+    public void setOldDirectionState(DirectionState oldDirectionState) {
+        this.oldDirectionState = oldDirectionState;
     }
 
     public Array<Animation<TextureRegion>> getAnimations() {
@@ -89,20 +101,20 @@ public abstract class Player extends WorldEntity implements IUpdatable{
         this.attackAnimations = attackAnimations;
     }
 
-    public void setState(State state) {
-        this.currState = state;
+    public void setCurrAnimationState(PlayerAnimationState state) {
+        this.currAnimationState = state;
     }
 
-    public State getState() {
-        return currState;
+    public State getCurrAnimationState() {
+        return currAnimationState;
     }
 
-    public State getPrevState() {
-        return prevState;
+    public State getPrevAnimationState() {
+        return prevAnimationState;
     }
 
-    public void setPrevState(State prevState) {
-        this.prevState = prevState;
+    public void setPrevAnimationState(PlayerAnimationState prevAnimationState) {
+        this.prevAnimationState = prevAnimationState;
     }
 
     @Override
@@ -122,7 +134,7 @@ public abstract class Player extends WorldEntity implements IUpdatable{
 
 
     public boolean isAttackFinished(){
-        Integer index = direction.getDirIndex();
+        Integer index = directionState.getDirIndex();
         return attackAnimations.get(index).isAnimationFinished(stateTimer);
     }
 
@@ -134,9 +146,9 @@ public abstract class Player extends WorldEntity implements IUpdatable{
     public TextureRegion getFrame() {
         TextureRegion region = null;
 
-        PlayerState currState = (PlayerState) getState();
+        PlayerAnimationState currState = (PlayerAnimationState) getCurrAnimationState();
 
-        Integer index = direction.getDirIndex();
+        Integer index = directionState.getDirIndex();
 
         switch (currState) {
             case WALK:
@@ -147,7 +159,7 @@ public abstract class Player extends WorldEntity implements IUpdatable{
                 break;
             case STAND:
             default:
-                region = standRegions[this.direction.getDirIndex()];
+                region = standRegions[this.directionState.getDirIndex()];
                 break;
         }
 
@@ -156,12 +168,12 @@ public abstract class Player extends WorldEntity implements IUpdatable{
 
     @Override
     public void update(float dt){
-        if(!getState().equals(PlayerState.ATTACK)
-                || getState().equals(PlayerState.ATTACK) && isAttackFinished()) {
+        if(!getCurrAnimationState().equals(PlayerAnimationState.ATTACK)
+                || getCurrAnimationState().equals(PlayerAnimationState.ATTACK) && isAttackFinished()) {
             if (getVelocity().isZero())
-                setState(PlayerState.STAND);
+                setCurrAnimationState(PlayerAnimationState.STAND);
             else
-                setState(PlayerState.WALK);
+                setCurrAnimationState(PlayerAnimationState.WALK);
         }
 
         stateTimer += dt;

@@ -7,16 +7,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.sun.xml.internal.bind.v2.runtime.AttributeAccessor;
-import com.webgame.game.Configs;
 import com.webgame.game.entities.Enemy;
 import com.webgame.game.entities.Player;
-import com.webgame.game.enums.Direction;
-import com.webgame.game.enums.PlayerState;
+import com.webgame.game.enums.DirectionState;
+import com.webgame.game.enums.PlayerAnimationState;
 import com.webgame.game.events.AttackEvent;
 import com.webgame.game.events.MoveEvent;
 import com.webgame.game.stages.GameStage;
-import com.webgame.game.world.player.impl.Mage;
 
 import java.util.List;
 
@@ -38,14 +35,14 @@ public class PlayerController extends AbstractController implements InputProcess
     public boolean handle(Event event) {
         if (event instanceof MoveEvent) {
             Vector2 vec = ((MoveEvent) event).getVector();
-            player.setOldDirection(player.getDirection());
-            player.setDirection(((MoveEvent) event).getDirection());
+            player.setOldDirectionState(player.getDirectionState());
+            player.setDirectionState(((MoveEvent) event).getDirectionState());
             player.setVelocity(vec);
             player.applyVelocity();
         } else if (event instanceof AttackEvent) {
-            if (!player.getState().equals(PlayerState.ATTACK)) {
+            if (!player.getCurrAnimationState().equals(PlayerAnimationState.ATTACK)) {
                 player.clearTimers();
-                player.setState(PlayerState.ATTACK);
+                player.setCurrAnimationState(PlayerAnimationState.ATTACK);
             }
         }
         return true;
@@ -60,7 +57,7 @@ public class PlayerController extends AbstractController implements InputProcess
 
     private void handleInput() {
         float d = 5f;
-        Direction direction = player.getOldDirection();
+        DirectionState directionState = player.getOldDirectionState();
 
         if (Gdx.input.isKeyPressed(Input.Keys.Z))
             ((GameStage) this.getStage()).camera.zoom += 0.1;
@@ -70,31 +67,31 @@ public class PlayerController extends AbstractController implements InputProcess
         Vector2 velocity = new Vector2(0, 0);
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             velocity.x = -d;
-            direction = Direction.LEFT;
+            directionState = DirectionState.LEFT;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             velocity.x = d;
-            direction = Direction.RIGHT;
+            directionState = DirectionState.RIGHT;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             velocity.y = -d;
-            direction = Direction.DOWN;
+            directionState = DirectionState.DOWN;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             velocity.y = d;
-            direction = Direction.UP;
+            directionState = DirectionState.UP;
         }
 
         if (velocity.x > 0 && velocity.y > 0)
-            direction = Direction.UPRIGHT;
+            directionState = DirectionState.UPRIGHT;
         else if (velocity.x > 0 && velocity.y < 0)
-            direction = Direction.RIGHTDOWN;
+            directionState = DirectionState.RIGHTDOWN;
         else if (velocity.x < 0 && velocity.y > 0)
-            direction = Direction.UPLEFT;
+            directionState = DirectionState.UPLEFT;
         else if (velocity.x < 0 && velocity.y < 0)
-            direction = Direction.LEFTDOWN;
+            directionState = DirectionState.LEFTDOWN;
 
-        fire(new MoveEvent(velocity, direction));
+        fire(new MoveEvent(velocity, directionState));
     }
 
     @Override

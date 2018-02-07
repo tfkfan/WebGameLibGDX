@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.webgame.game.enums.Direction;
+import com.webgame.game.enums.DirectionState;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.entities.Player;
 import com.webgame.game.world.skills.Skill;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class DeadKnight extends Player {
 	public DeadKnight(SpriteBatch batch, String spritePath) {
 		super();
-		int dirs = Direction.values().length;
+		int dirs = DirectionState.values().length;
 		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
 		try {
 			ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();

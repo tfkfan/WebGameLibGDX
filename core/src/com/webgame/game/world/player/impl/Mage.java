@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.Configs;
 import com.webgame.game.animation.impl.*;
-import com.webgame.game.enums.Direction;
+import com.webgame.game.enums.DirectionState;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.world.common.factory.ISkillFactory;
 import com.webgame.game.world.common.factory.impl.SkillFactory;
@@ -22,7 +22,7 @@ public class Mage extends Player {
 
     public Mage(SpriteBatch batch, String spritePath) {
         super();
-        int dirs = Direction.values().length;
+        int dirs = DirectionState.values().length;
         try {
             ArrayList<Skill<?>> skills = new ArrayList<Skill<?>>();
 
