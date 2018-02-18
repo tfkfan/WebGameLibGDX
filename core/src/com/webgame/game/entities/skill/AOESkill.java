@@ -24,7 +24,10 @@ public abstract class AOESkill extends Skill{
     @Override
     public void cast(Vector2 targetPosition){
         super.cast(targetPosition);
-        getArea().setPosition(targetPosition);
+        Vector2 newPos = new Vector2();
+        newPos.x = targetPosition.x - getArea().getWidth()/2;
+        newPos.y = targetPosition.y - getArea().getHeight()/2;
+        getArea().setPosition(newPos);
     }
 
     public Rectangle getArea() {

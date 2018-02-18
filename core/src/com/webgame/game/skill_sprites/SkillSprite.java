@@ -1,6 +1,5 @@
-package com.webgame.game.skill_animations;
+package com.webgame.game.skill_sprites;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -11,7 +10,7 @@ import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.SkillAnimationState;
 
-public class SkillAnimation extends AnimatedEntity {
+public class SkillSprite extends AnimatedEntity {
     protected float stateTimer;
 
     protected TextureRegion standTexture;
@@ -22,11 +21,11 @@ public class SkillAnimation extends AnimatedEntity {
 
     private Vector2 distance;
 
-    public SkillAnimation() {
+    public SkillSprite() {
         init();
     }
 
-    public SkillAnimation(TextureRegion standTexture, GameAnimation animation) {
+    public SkillSprite(TextureRegion standTexture, GameAnimation animation) {
         setStandTexture(standTexture);
         setAnimation(animation);
         init();

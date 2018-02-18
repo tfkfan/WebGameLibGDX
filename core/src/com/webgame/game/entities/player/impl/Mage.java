@@ -1,4 +1,4 @@
-package com.webgame.game.world.player.impl;
+package com.webgame.game.entities.player.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -6,14 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.Configs;
-import com.webgame.game.animation.GameAnimation;
 import com.webgame.game.animation.impl.*;
 import com.webgame.game.entities.skill.FallingSkill;
-import com.webgame.game.entities.skill.SkillOrig;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.utils.SpriteTextureLoader;
-import com.webgame.game.world.common.factory.ISkillFactory;
-import com.webgame.game.world.common.factory.impl.SkillFactory;
 import com.webgame.game.entities.player.Player;
 
 import static com.webgame.game.Configs.PPM;
@@ -39,6 +35,8 @@ public class Mage extends Player {
 
             */
             /////////////////////
+            /*
+
             ArrayList<SkillOrig<?>> skillOrigs = new ArrayList<SkillOrig<?>>();
 
             ISkillFactory skillFactory = new SkillFactory();
@@ -96,7 +94,7 @@ public class Mage extends Player {
             s.getSkillState().setHeal(true);
             s.getSkillState().setHealHP(50d);
             skillOrigs.add(s);
-
+            */
             /*
             skillOrigs.add(skillFactory.createStaticSingleAOESkill(MagicSourceAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s9.png")));

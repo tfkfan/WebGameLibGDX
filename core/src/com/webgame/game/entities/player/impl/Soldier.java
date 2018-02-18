@@ -1,4 +1,4 @@
-package com.webgame.game.world.player.impl;
+package com.webgame.game.entities.player.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -8,32 +8,19 @@ import com.badlogic.gdx.utils.Array;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.entities.player.Player;
-import com.webgame.game.entities.skill.SkillOrig;
-
 import static com.webgame.game.Configs.PPM;
 
-import java.util.ArrayList;
-
-public class DeadKnight extends Player {
-	public DeadKnight(SpriteBatch batch, String spritePath) {
+@Deprecated
+public class Soldier extends Player {
+	public Soldier(SpriteBatch batch, String spritePath) {
 		super();
-		int dirs = DirectionState.values().length;
-		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
-		try {
-			ArrayList<SkillOrig<?>> skillOrigs = new ArrayList<SkillOrig<?>>();
-			//skillOrigs.add(new Blizzard(batch, skillTexture, 10));
 
-			//this.setSkills(skillOrigs);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		int dirs = DirectionState.values().length;
+		//this.setSkillOrig(new IceRain(batch, "skills.png"));
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
-
 		Texture spriteTexture = SpriteTextureLoader.loadSprite(spritePath);
-
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		TextureRegion[][] attackFrames = new TextureRegion[dirs][5];
@@ -41,16 +28,16 @@ public class DeadKnight extends Player {
 		Array<Animation<TextureRegion>> attackAnimations = new Array<Animation<TextureRegion>>();
 		TextureRegion[] standRegions = new TextureRegion[dirs];
 
-		int h = 67;
-		int w = 67;
+		int h =52;
+		int w = 75;
 
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++)
-				frames[i][j] = new TextureRegion(spriteTexture, 5 + w * i, h * j, w, h);
+				frames[i][j] = new TextureRegion(spriteTexture, w * i, 5 + h * j, w, h);
 			for (int j = 5; j < 9; j++)
-				attackFrames[i][j - 5] = new TextureRegion(spriteTexture, 5 + w * i, h * j, w, h);
-
-			standRegions[i] = new TextureRegion(spriteTexture, 5 + w * i, 0, w, h);
+				attackFrames[i][j - 5] = new TextureRegion(spriteTexture,  w * i, h * j, w, h);
+			
+			standRegions[i] = new TextureRegion(spriteTexture,  w * i, 0, w, h);
 			attackFrames[i][4] = standRegions[i];
 		}
 
@@ -103,7 +90,7 @@ public class DeadKnight extends Player {
 		tr = new TextureRegion(spriteTexture, w * 3, 0, w, h);
 		tr.flip(true, false);
 		attackFrames[5][4] = tr;
-
+		
 		for (int i = 0; i < dirs; i++) {
 			Animation<TextureRegion> anim = new Animation<TextureRegion>(0.2f, frames[i]);
 			Animation<TextureRegion> attackAnim = new Animation<TextureRegion>(0.2f, attackFrames[i]);
@@ -112,11 +99,10 @@ public class DeadKnight extends Player {
 			frames[i] = null;
 			attackFrames[i] = null;
 		}
-
+		
 		this.setAnimations(attackAnimations);
 		this.setAttackAnimations(attackAnimations);
 		this.setStandRegions(standRegions);
-
-		//setRegion(standRegions[0]);
 	}
+
 }

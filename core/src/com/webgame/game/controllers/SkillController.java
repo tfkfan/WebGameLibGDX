@@ -42,13 +42,13 @@ public class SkillController extends AbstractController {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (skill.getEntityState().equals(EntityState.ACTIVE)) {
-            skill.draw(batch, parentAlpha);
+        skill.draw(batch, parentAlpha);
 
-            batch.end();
-            sr.setColor(Color.BLUE);
-            sr.begin(ShapeRenderer.ShapeType.Line);
-            /*
+        /*
+        batch.end();
+        sr.setColor(Color.BLUE);
+        sr.begin(ShapeRenderer.ShapeType.Line);
+
             if(skill.getSkillZone() instanceof Rectangle) {
                 Rectangle shape = (Rectangle) skill.getSkillZone();
                 sr.rect(shape.x, shape.y, shape.width, shape.height);
@@ -56,9 +56,11 @@ public class SkillController extends AbstractController {
                 Circle shape = (Circle) skill.getSkillZone();
                 sr.circle(shape.x, shape.y, shape.radius);
             }
-            */
-            sr.end();
-            batch.begin();
-        }
+
+        sr.end();
+        batch.begin();
+
+        */
+
     }
 }

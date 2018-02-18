@@ -1,46 +1,36 @@
-package com.webgame.game.world.player.impl;
+package com.webgame.game.entities.player.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.webgame.game.Configs;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.entities.player.Player;
-import com.webgame.game.entities.skill.SkillOrig;
 
 import static com.webgame.game.Configs.PPM;
 
 import java.util.ArrayList;
 
-public class Knight extends Player {
-
-	public Knight(SpriteBatch batch, String spritePath) {
+public class DeadKnight extends Player {
+	public DeadKnight(SpriteBatch batch, String spritePath) {
 		super();
-
 		int dirs = DirectionState.values().length;
-		Texture skillTexture = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/skillOrigs.png");
-		ArrayList<SkillOrig<?>> skillOrigs = new ArrayList<SkillOrig<?>>();
+		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
 		try {
-			//Blizzard b = new Blizzard(batch, skillTexture, 30);
 
-			//b.setDamage(5d);
-			//skillOrigs.add(b);
-
-			
+			//this.setSkills(skillOrigs);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		//this.setSkills(skillOrigs);
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
 
-		Texture spriteTexture =SpriteTextureLoader.loadSprite(spritePath);
+		Texture spriteTexture = SpriteTextureLoader.loadSprite(spritePath);
+
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		TextureRegion[][] attackFrames = new TextureRegion[dirs][5];
@@ -48,8 +38,8 @@ public class Knight extends Player {
 		Array<Animation<TextureRegion>> attackAnimations = new Array<Animation<TextureRegion>>();
 		TextureRegion[] standRegions = new TextureRegion[dirs];
 
-		int h = 75;
-		int w = 75;
+		int h = 67;
+		int w = 67;
 
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++)
@@ -123,5 +113,7 @@ public class Knight extends Player {
 		this.setAnimations(attackAnimations);
 		this.setAttackAnimations(attackAnimations);
 		this.setStandRegions(standRegions);
+
+		//setRegion(standRegions[0]);
 	}
 }

@@ -6,8 +6,7 @@ import com.webgame.game.animation.GameAnimation;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MoveState;
-import com.webgame.game.enums.SkillAnimationState;
-import com.webgame.game.skill_animations.SkillAnimation;
+import com.webgame.game.skill_sprites.SkillSprite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +23,11 @@ public class FallingSkill extends AOESkill {
     protected final Vector2 fallOffsetVec = new Vector2(fallVelocity.x * 10, (-fallVelocity.y) * 10);
     protected final float tmp = 0.1f;
 
-    public FallingSkill(Player player, TextureRegion st, GameAnimation gameAnimation) {
+    public FallingSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation) {
         super(player);
-        List<SkillAnimation> animations = new ArrayList<SkillAnimation>();
+        List<SkillSprite> animations = new ArrayList<SkillSprite>();
         for(int i = 0; i < 50; i++)
-            animations.add(new SkillAnimation(st, gameAnimation));
+            animations.add(new SkillSprite(standTexture, gameAnimation));
         setAnimations(animations);
     }
 
@@ -47,7 +46,7 @@ public class FallingSkill extends AOESkill {
         fallTimer = 0;
     }
 
-    protected void initFrame(SkillAnimation frame) {
+    protected void initFrame(SkillSprite frame) {
         float x = getRandomPos(getArea().getX(), getArea().getX() + getArea().getWidth());
         float y = getRandomPos(getArea().getY(), getArea().getY() + getArea().getHeight());
         frame.init();
@@ -62,7 +61,7 @@ public class FallingSkill extends AOESkill {
         if (index != -1) {
             fallTimer += dt;
             if (fallTimer >= tmp) {
-                SkillAnimation animation = animations.get(index);
+                SkillSprite animation = animations.get(index);
                 initFrame(animation);
                 if (index < animations.size() - 1)
                     index++;
@@ -73,7 +72,7 @@ public class FallingSkill extends AOESkill {
         }
 
 
-        for (SkillAnimation animation : animations) {
+        for (SkillSprite animation : animations) {
             if (animation.getEntityState().equals(EntityState.INACTIVE))
                 continue;
             if (animation.getDistance().y > fallOffsetVec.y)

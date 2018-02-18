@@ -14,7 +14,7 @@ import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Enemy;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.world.WorldRenderer;
-import com.webgame.game.world.player.impl.Mage;
+import com.webgame.game.entities.player.impl.Mage;
 
 import java.util.List;
 

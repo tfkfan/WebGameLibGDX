@@ -6,7 +6,7 @@ import com.webgame.game.entities.Entity;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.enums.EntityState;
-import com.webgame.game.skill_animations.SkillAnimation;
+import com.webgame.game.skill_sprites.SkillSprite;
 import com.webgame.game.world.common.IUpdatable;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public abstract class Skill extends Entity implements IUpdatable {
     protected Vector2 target;
 
     protected transient Player player;
-    protected List<SkillAnimation> animations;
+    protected List<SkillSprite> animations;
 
     public Skill(Player player) {
         super();
@@ -77,16 +77,16 @@ public abstract class Skill extends Entity implements IUpdatable {
     public void draw(Batch batch, float parentAlpha) {
         if (animations == null || animations.isEmpty() || getEntityState().equals(EntityState.INACTIVE))
             return;
-        for (SkillAnimation animation : animations)
+        for (SkillSprite animation : animations)
             if (animation.getEntityState().equals(EntityState.ACTIVE))
                 animation.draw(batch, parentAlpha);
     }
 
-    public List<SkillAnimation> getAnimations() {
+    public List<SkillSprite> getAnimations() {
         return animations;
     }
 
-    public void setAnimations(List<SkillAnimation> animations) {
+    public void setAnimations(List<SkillSprite> animations) {
         this.animations = animations;
     }
 

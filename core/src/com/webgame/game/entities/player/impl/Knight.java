@@ -1,34 +1,45 @@
-package com.webgame.game.world.player.impl;
+package com.webgame.game.entities.player.impl;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
+import com.webgame.game.Configs;
+import com.webgame.game.enums.DirectionState;
+import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.entities.player.Player;
 
-@Deprecated
-public class Archer extends Player {
-	public Archer(SpriteBatch batch, String spritePath) {
+import static com.webgame.game.Configs.PPM;
+
+import java.util.ArrayList;
+
+public class Knight extends Player {
+
+	public Knight(SpriteBatch batch, String spritePath) {
 		super();
-		/*
-		this.setSpriteBatch(batch);
-		this.setSpriteTexture(spritePath);
 
-		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
-
+		int dirs = DirectionState.values().length;
+		Texture skillTexture = SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER +"/skillOrigs.png");
 
 		try {
-			ArrayList<SkillOrig<?>> skills = new ArrayList<SkillOrig<?>>();
-			skills.add(new Blizzard(batch, skillTexture, 10));
+			//Blizzard b = new Blizzard(batch, skillTexture, 30);
 
-			this.setSkills(skills);
+			//b.setDamage(5d);
+			//skillOrigs.add(b);
+
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+		//this.setSkills(skillOrigs);
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);
 
-		Texture spriteTexture = getSpriteTexture();
+		Texture spriteTexture =SpriteTextureLoader.loadSprite(spritePath);
 
 		TextureRegion[][] frames = new TextureRegion[dirs][5];
 		TextureRegion[][] attackFrames = new TextureRegion[dirs][5];
@@ -37,15 +48,15 @@ public class Archer extends Player {
 		TextureRegion[] standRegions = new TextureRegion[dirs];
 
 		int h = 75;
-		int w = 60;
+		int w = 75;
 
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++)
-				frames[i][j] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
+				frames[i][j] = new TextureRegion(spriteTexture, 5 + w * i, h * j, w, h);
 			for (int j = 5; j < 9; j++)
-				attackFrames[i][j - 5] = new TextureRegion(spriteTexture, w * i, h * j, w, h);
+				attackFrames[i][j - 5] = new TextureRegion(spriteTexture, 5 + w * i, h * j, w, h);
 
-			standRegions[i] = new TextureRegion(spriteTexture, w * i, 0, w, h);
+			standRegions[i] = new TextureRegion(spriteTexture, 5 + w * i, 0, w, h);
 			attackFrames[i][4] = standRegions[i];
 		}
 
@@ -111,8 +122,5 @@ public class Archer extends Player {
 		this.setAnimations(attackAnimations);
 		this.setAttackAnimations(attackAnimations);
 		this.setStandRegions(standRegions);
-
-		setRegion(standRegions[0]);
-		*/
 	}
 }
