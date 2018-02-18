@@ -58,7 +58,7 @@ public abstract class Player extends WorldEntity implements IUpdatable {
         getAttributes().setHealthPoints(1000);
         getAttributes().setMaxHealthPoints(1000);
 
-        skill = new FallingSkill(this);
+
 
         clearTimers();
         setBounds(0, 0, 60 / PPM, 60 / PPM);

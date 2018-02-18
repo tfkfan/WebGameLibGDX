@@ -7,8 +7,8 @@ import com.webgame.game.animation.GameAnimation;
 
 public class BlizzardFragmentAnimation extends GameAnimation {
 
-    public BlizzardFragmentAnimation(Texture spriteTexture, Float animationDuration){
-        super(spriteTexture, animationDuration);
+    public BlizzardFragmentAnimation(Texture spriteTexture){
+        super(spriteTexture, 0.1f);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.webgame.game.Configs;
 import com.webgame.game.animation.GameAnimation;
 import com.webgame.game.entities.AnimatedEntity;
 import com.webgame.game.enums.EntityState;
@@ -17,7 +18,6 @@ public class SkillAnimation extends AnimatedEntity {
     protected GameAnimation animation;
     protected SkillAnimationState animationState;
     protected MoveState moveState;
-    protected boolean finalAnimated;
     protected boolean looping;
 
     private Vector2 distance;
@@ -34,30 +34,33 @@ public class SkillAnimation extends AnimatedEntity {
 
     public void init() {
         setAnimationState(SkillAnimationState.FULL_ANIMATION);
-        setFinalAnimated(false);
+        setEntityState(EntityState.INACTIVE);
+        setMoveState(MoveState.STATIC);
         setLooping(false);
         stateTimer = 0;
         distance = new Vector2(0, 0);
+        //TODO change size depending from standTexture/animation size
+        setSize(20 / Configs.PPM, 30 / Configs.PPM);
     }
 
     @Override
     public TextureRegion getFrame() {
         TextureRegion region = null;
-        if (SkillAnimationState.ANIMATION_ONLY.equals(getAnimationState()) ||
-                (SkillAnimationState.FULL_ANIMATION.equals(getAnimationState()) && isFinalAnimated()))
+        if ((SkillAnimationState.ANIMATION_ONLY.equals(getAnimationState()) ||
+                (SkillAnimationState.FULL_ANIMATION.equals(getAnimationState()))) && getMoveState().equals(MoveState.STATIC))
             region = animation.getAnimation().getKeyFrame(stateTimer, isLooping());
         else if (SkillAnimationState.STAND_TEXTURE.equals(getAnimationState()) ||
-                (SkillAnimationState.FULL_ANIMATION.equals(getAnimationState()) && !isFinalAnimated()))
+                (SkillAnimationState.FULL_ANIMATION.equals(getAnimationState())))
             region = standTexture;
 
         return region;
     }
 
-    //TODO change size depending from standTexture/animation size
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        TextureRegion frame = getFrame();
         if (getEntityState().equals(EntityState.ACTIVE))
-            batch.draw(getFrame(), position.x - getXOffset(), position.y - getYOffset(), getWidth(), getHeight());
+            batch.draw(frame, position.x - getXOffset(), position.y - getYOffset(), getWidth(), getHeight());
     }
 
     public void update(float dt) {
@@ -66,6 +69,10 @@ public class SkillAnimation extends AnimatedEntity {
             distance.x += Math.abs(getVelocity().x);
             distance.y += Math.abs(getVelocity().y);
         }
+    }
+
+    public boolean isAnimationFinished(){
+        return animation.getAnimation().isAnimationFinished(stateTimer);
     }
 
     public float getStateTimer() {
@@ -94,14 +101,6 @@ public class SkillAnimation extends AnimatedEntity {
 
     public void setAnimationState(SkillAnimationState animationState) {
         this.animationState = animationState;
-    }
-
-    public boolean isFinalAnimated() {
-        return finalAnimated;
-    }
-
-    public void setFinalAnimated(boolean finalAnimated) {
-        this.finalAnimated = finalAnimated;
     }
 
     public TextureRegion getStandTexture() {

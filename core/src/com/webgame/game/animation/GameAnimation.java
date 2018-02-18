@@ -1,5 +1,6 @@
 package com.webgame.game.animation;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,6 +18,12 @@ public abstract class GameAnimation{
         setSpriteTexture(spriteTexture);
         setAnimationDuration(animationDuration);
         initAnimation();
+    }
+
+    public GameAnimation(GameAnimation gameAnimation){
+        setSpriteTexture(gameAnimation.getSpriteTexture());
+        setAnimationDuration(gameAnimation.getAnimationDuration());
+        setAnimation(gameAnimation.getAnimation());
     }
 
     public Texture getSpriteTexture() {
