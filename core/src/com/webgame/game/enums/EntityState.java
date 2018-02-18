@@ -1,5 +1,5 @@
 package com.webgame.game.enums;
 
-public enum SkillState {
+public enum EntityState {
     ACTIVE, INACTIVE
 }

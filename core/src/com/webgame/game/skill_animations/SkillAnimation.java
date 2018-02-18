@@ -1,44 +1,52 @@
-package com.webgame.game.animation.skill;
+package com.webgame.game.skill_animations;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.webgame.game.animation.GameAnimation;
 import com.webgame.game.entities.AnimatedEntity;
+import com.webgame.game.enums.EntityState;
+import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.SkillAnimationState;
 
-public class SkillAnimation extends AnimatedEntity{
+public class SkillAnimation extends AnimatedEntity {
     protected float stateTimer;
 
     protected TextureRegion standTexture;
-    protected Animation<TextureRegion> animation;
+    protected GameAnimation animation;
     protected SkillAnimationState animationState;
+    protected MoveState moveState;
     protected boolean finalAnimated;
     protected boolean looping;
 
-    public SkillAnimation(){
+    private Vector2 distance;
+
+    public SkillAnimation() {
         init();
     }
 
-    public SkillAnimation(TextureRegion standTexture, Animation<TextureRegion> animation){
+    public SkillAnimation(TextureRegion standTexture, GameAnimation animation) {
         setStandTexture(standTexture);
         setAnimation(animation);
         init();
     }
 
-    public void init(){
+    public void init() {
         setAnimationState(SkillAnimationState.FULL_ANIMATION);
         setFinalAnimated(false);
         setLooping(false);
         stateTimer = 0;
+        distance = new Vector2(0, 0);
     }
 
     @Override
-    public TextureRegion getFrame(){
+    public TextureRegion getFrame() {
         TextureRegion region = null;
-        if(SkillAnimationState.ANIMATION_ONLY.equals(getAnimationState()) ||
+        if (SkillAnimationState.ANIMATION_ONLY.equals(getAnimationState()) ||
                 (SkillAnimationState.FULL_ANIMATION.equals(getAnimationState()) && isFinalAnimated()))
-            region = animation.getKeyFrame(stateTimer, isLooping());
-        else if(SkillAnimationState.STAND_TEXTURE.equals(getAnimationState()) ||
+            region = animation.getAnimation().getKeyFrame(stateTimer, isLooping());
+        else if (SkillAnimationState.STAND_TEXTURE.equals(getAnimationState()) ||
                 (SkillAnimationState.FULL_ANIMATION.equals(getAnimationState()) && !isFinalAnimated()))
             region = standTexture;
 
@@ -47,12 +55,29 @@ public class SkillAnimation extends AnimatedEntity{
 
     //TODO change size depending from standTexture/animation size
     @Override
-    public void draw(Batch batch, float parentAlpha){
-        batch.draw(getFrame(), position.x - getXOffset(), position.y - getYOffset(), getWidth(), getHeight());
+    public void draw(Batch batch, float parentAlpha) {
+        if (getEntityState().equals(EntityState.ACTIVE))
+            batch.draw(getFrame(), position.x - getXOffset(), position.y - getYOffset(), getWidth(), getHeight());
     }
 
-    public void update(float dt){
-        stateTimer += dt;
+    public void update(float dt) {
+        if (getMoveState().equals(MoveState.MOVING)) {
+            setPosition(getPosition().x + getVelocity().x - xOffset, getPosition().y + getVelocity().y - yOffset);
+            distance.x += Math.abs(getVelocity().x);
+            distance.y += Math.abs(getVelocity().y);
+        }
+    }
+
+    public float getStateTimer() {
+        return stateTimer;
+    }
+
+    public void setStateTimer(float stateTimer) {
+        this.stateTimer = stateTimer;
+    }
+
+    public Vector2 getDistance() {
+        return distance;
     }
 
     public boolean isLooping() {
@@ -87,12 +112,20 @@ public class SkillAnimation extends AnimatedEntity{
         this.standTexture = standTexture;
     }
 
-    public Animation<TextureRegion> getAnimation() {
+    public GameAnimation getAnimation() {
         return animation;
     }
 
-    public void setAnimation(Animation<TextureRegion> animation) {
+    public void setAnimation(GameAnimation animation) {
         this.animation = animation;
+    }
+
+    public MoveState getMoveState() {
+        return moveState;
+    }
+
+    public void setMoveState(MoveState moveState) {
+        this.moveState = moveState;
     }
 
 }

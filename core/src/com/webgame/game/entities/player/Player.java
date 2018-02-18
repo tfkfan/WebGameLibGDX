@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.entities.WorldEntity;
 import com.webgame.game.entities.attributes.PlayerAttributes;
+import com.webgame.game.entities.skill.FallingSkill;
 import com.webgame.game.entities.skill.Skill;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.enums.PlayerAnimationState;
@@ -57,13 +58,7 @@ public abstract class Player extends WorldEntity implements IUpdatable {
         getAttributes().setHealthPoints(1000);
         getAttributes().setMaxHealthPoints(1000);
 
-        skill = new Skill(this){
-
-            @Override
-            public TextureRegion getFrame() {
-                return null;
-            }
-        };
+        skill = new FallingSkill(this);
 
         clearTimers();
         setBounds(0, 0, 60 / PPM, 60 / PPM);

@@ -1,35 +1,22 @@
 package com.webgame.game.entities.skill;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import com.webgame.game.entities.AnimatedEntity;
 import com.webgame.game.entities.Entity;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.enums.DirectionState;
-import com.webgame.game.enums.SkillState;
+import com.webgame.game.enums.EntityState;
+import com.webgame.game.skill_animations.SkillAnimation;
 import com.webgame.game.world.common.IUpdatable;
-import com.webgame.game.world.skills.collision.SkillCollision;
-import com.webgame.game.world.skills.skillsprites.SkillSprite;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static com.webgame.game.Configs.PPM;
 
-public abstract class Skill extends AnimatedEntity implements IUpdatable{
-    protected static final float SKILL_WIDTH = 50/PPM;
-    protected static final float SKILL_HEIGHT = 50/PPM;
-    protected static final float SKILL_RADIUS = 30/PPM;
+public abstract class Skill extends Entity implements IUpdatable {
+    protected static final float SKILL_WIDTH = 50 / PPM;
+    protected static final float SKILL_HEIGHT = 50 / PPM;
+    protected static final float SKILL_RADIUS = 30 / PPM;
 
     protected Long level;
     protected String title;
@@ -38,13 +25,14 @@ public abstract class Skill extends AnimatedEntity implements IUpdatable{
     protected float heal;
     protected float stateTimer;
 
-    protected SkillState skillState;
     protected DirectionState directionState;
 
     protected Vector2 target;
 
     protected transient Player player;
-    public Skill(Player player)  {
+    protected List<SkillAnimation> animations;
+
+    public Skill(Player player) {
         super();
         init(player);
     }
@@ -54,34 +42,55 @@ public abstract class Skill extends AnimatedEntity implements IUpdatable{
 
         damage = 0f;
         heal = 0f;
-        stateTimer = 0f;
 
+        clearTimers();
 
-        skillState = SkillState.INACTIVE;
+        entityState = EntityState.INACTIVE;
 
         setPlayer(player);
     }
 
     public void cast(Vector2 targetPosition) {
         setTarget(targetPosition);
-        setSkillState(SkillState.ACTIVE);
+        setEntityState(EntityState.ACTIVE);
         setPosition(new Vector2(player.getPosition()));
     }
 
+    public abstract void updateAnimations(float dt);
+
     @Override
-    public void update(float dt){
+    public void update(float dt) {
+        if (getEntityState().equals(EntityState.INACTIVE)) {
+            clearTimers();
+            return;
+        }
+
+        updateAnimations(dt);
+
         stateTimer += dt;
 
-        if (stateTimer >= 10)
+        if (stateTimer >= 50)
             clearTimers();
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha){
-
+    public void draw(Batch batch, float parentAlpha) {
+        if (animations == null || animations.isEmpty() || getEntityState().equals(EntityState.INACTIVE))
+            return;
+        for (SkillAnimation animation : animations)
+            if (animation.getEntityState().equals(EntityState.ACTIVE))
+                animation.draw(batch, parentAlpha);
     }
 
-    public void clearTimers(){
+    public List<SkillAnimation> getAnimations() {
+        return animations;
+    }
+
+    public void setAnimations(List<SkillAnimation> animations) {
+        this.animations = animations;
+    }
+
+    public void clearTimers() {
         stateTimer = 0;
     }
 
@@ -139,14 +148,6 @@ public abstract class Skill extends AnimatedEntity implements IUpdatable{
 
     public void setStateTimer(float stateTimer) {
         this.stateTimer = stateTimer;
-    }
-
-    public SkillState getSkillState() {
-        return skillState;
-    }
-
-    public void setSkillState(SkillState skillState) {
-        this.skillState = skillState;
     }
 
     public DirectionState getDirectionState() {

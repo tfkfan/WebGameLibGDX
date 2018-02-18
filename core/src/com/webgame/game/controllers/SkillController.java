@@ -3,12 +3,10 @@ package com.webgame.game.controllers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Rectangle;
 import com.webgame.game.entities.player.Enemy;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.entities.skill.Skill;
-import com.webgame.game.enums.SkillState;
+import com.webgame.game.enums.EntityState;
 
 import java.util.List;
 
@@ -44,7 +42,7 @@ public class SkillController extends AbstractController {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (skill.getSkillState().equals(SkillState.ACTIVE)) {
+        if (skill.getEntityState().equals(EntityState.ACTIVE)) {
             skill.draw(batch, parentAlpha);
 
             batch.end();

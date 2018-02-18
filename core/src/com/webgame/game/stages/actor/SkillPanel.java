@@ -63,7 +63,7 @@ public class SkillPanel extends Group {
 
             textButtonStyle.downFontColor = Color.BLACK;
             //textButtonStyle.checkedFontColor = Color.GREEN;
-            SkillButton btn = new SkillButton(cont.getSkillOrig().getSkillState().getTitle(), textButtonStyle, i);
+            SkillButton btn = new SkillButton(cont.getSkillOrig().getEntityState().getTitle(), textButtonStyle, i);
             btn.addListener(new ClickListener() {
 
                 @Override
