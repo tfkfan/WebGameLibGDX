@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.webgame.game.entities.AnimatedEntity;
 import com.webgame.game.entities.Entity;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.enums.DirectionState;
@@ -25,9 +26,10 @@ import java.util.ArrayList;
 
 import static com.webgame.game.Configs.PPM;
 
-public abstract class Skill extends Entity implements IUpdatable{
+public abstract class Skill extends AnimatedEntity implements IUpdatable{
     protected static final float SKILL_WIDTH = 50/PPM;
     protected static final float SKILL_HEIGHT = 50/PPM;
+    protected static final float SKILL_RADIUS = 30/PPM;
 
     protected Long level;
     protected String title;
@@ -36,16 +38,12 @@ public abstract class Skill extends Entity implements IUpdatable{
     protected float heal;
     protected float stateTimer;
 
-    protected Rectangle skillZone;
     protected SkillState skillState;
     protected DirectionState directionState;
 
     protected Vector2 target;
 
     protected transient Player player;
-    protected transient Animation<TextureRegion> animation;
-    protected transient TextureRegion standRegion;
-
     public Skill(Player player)  {
         super();
         init(player);
@@ -58,7 +56,6 @@ public abstract class Skill extends Entity implements IUpdatable{
         heal = 0f;
         stateTimer = 0f;
 
-        skillZone = new Rectangle(getPosition().x, getPosition().y, SKILL_WIDTH, SKILL_HEIGHT);
 
         skillState = SkillState.INACTIVE;
 
@@ -69,25 +66,10 @@ public abstract class Skill extends Entity implements IUpdatable{
         setTarget(targetPosition);
         setSkillState(SkillState.ACTIVE);
         setPosition(new Vector2(player.getPosition()));
-        getSkillZone().setPosition(new Vector2(player.getPosition()));
     }
 
     @Override
     public void update(float dt){
-        if(skillState.equals(SkillState.ACTIVE)){
-            Vector2 v = new Vector2(target.x -getSkillZone().width/2 - player.getPosition().x, target.y -getSkillZone().height/2- player.getPosition().y);
-            v = v.nor();
-            float absVel = 10/PPM;
-            v.scl(absVel);
-
-            getPosition().set(new Vector2(getPosition()).add(v));
-            getSkillZone().setPosition(new Vector2(getPosition()));
-
-            if(getSkillZone().contains(target)){
-                setSkillState(SkillState.INACTIVE);
-                clearTimers();
-            }
-        }
         stateTimer += dt;
 
         if (stateTimer >= 10)
@@ -159,14 +141,6 @@ public abstract class Skill extends Entity implements IUpdatable{
         this.stateTimer = stateTimer;
     }
 
-    public Rectangle getSkillZone() {
-        return skillZone;
-    }
-
-    public void setSkillZone(Rectangle skillZone) {
-        this.skillZone = skillZone;
-    }
-
     public SkillState getSkillState() {
         return skillState;
     }
@@ -181,21 +155,5 @@ public abstract class Skill extends Entity implements IUpdatable{
 
     public void setDirectionState(DirectionState directionState) {
         this.directionState = directionState;
-    }
-
-    public Animation<TextureRegion> getAnimation() {
-        return animation;
-    }
-
-    public void setAnimation(Animation<TextureRegion> animation) {
-        this.animation = animation;
-    }
-
-    public TextureRegion getStandRegion() {
-        return standRegion;
-    }
-
-    public void setStandRegion(TextureRegion standRegion) {
-        this.standRegion = standRegion;
     }
 }

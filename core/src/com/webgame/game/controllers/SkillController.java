@@ -3,6 +3,8 @@ package com.webgame.game.controllers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.webgame.game.entities.player.Enemy;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.entities.skill.Skill;
@@ -18,7 +20,7 @@ public class SkillController extends AbstractController {
 
     private ShapeRenderer sr;
 
-    public SkillController(){
+    public SkillController() {
 
     }
 
@@ -31,7 +33,7 @@ public class SkillController extends AbstractController {
 
 
     @Override
-    public void act(float dt){
+    public void act(float dt) {
         super.act(dt);
         if (sr == null)
             sr = new ShapeRenderer();
@@ -42,13 +44,21 @@ public class SkillController extends AbstractController {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if(skill.getSkillState().equals(SkillState.ACTIVE)) {
+        if (skill.getSkillState().equals(SkillState.ACTIVE)) {
             skill.draw(batch, parentAlpha);
 
             batch.end();
             sr.setColor(Color.BLUE);
             sr.begin(ShapeRenderer.ShapeType.Line);
-            sr.rect(skill.getSkillZone().x, skill.getSkillZone().y,skill.getSkillZone().width, skill.getSkillZone().height);
+            /*
+            if(skill.getSkillZone() instanceof Rectangle) {
+                Rectangle shape = (Rectangle) skill.getSkillZone();
+                sr.rect(shape.x, shape.y, shape.width, shape.height);
+            }else if(skill.getSkillZone() instanceof Circle){
+                Circle shape = (Circle) skill.getSkillZone();
+                sr.circle(shape.x, shape.y, shape.radius);
+            }
+            */
             sr.end();
             batch.begin();
         }

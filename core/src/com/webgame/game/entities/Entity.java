@@ -7,7 +7,7 @@ import com.webgame.game.world.common.IFramed;
 
 import java.io.Serializable;
 
-public abstract class Entity implements IFramed, Serializable {
+public abstract class Entity implements Serializable {
     protected Long id;
 
     protected Vector2 position;
@@ -94,7 +94,5 @@ public abstract class Entity implements IFramed, Serializable {
         this.id = id;
     }
 
-    public void draw(Batch batch, float parentAlpha) {
-        batch.draw(getFrame(), position.x - getXOffset(), position.y - getYOffset(), getWidth(), getHeight());
-    }
+    public abstract void draw(Batch batch, float parentAlpha);
 }

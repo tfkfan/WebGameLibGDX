@@ -6,7 +6,7 @@ import com.webgame.game.entities.Entity;
 
 import static com.webgame.game.Configs.PPM;
 
-public abstract class WorldEntity extends Entity {
+public abstract class WorldEntity extends AnimatedEntity {
     transient protected World world;
     transient protected Body b2body;
     protected float defaultRadius = 20 / PPM;
