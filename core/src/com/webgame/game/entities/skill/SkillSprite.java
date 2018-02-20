@@ -1,4 +1,4 @@
-package com.webgame.game.skill_sprites;
+package com.webgame.game.entities.skill;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -28,6 +28,21 @@ public class SkillSprite extends AnimatedEntity {
     public SkillSprite(TextureRegion standTexture, GameAnimation animation) {
         setStandTexture(standTexture);
         setAnimation(animation);
+        init();
+    }
+
+    public SkillSprite(TextureRegion standTexture, GameAnimation animation,  SkillAnimationState animationState) {
+        setStandTexture(standTexture);
+        setAnimation(animation);
+        setAnimationState(animationState);
+        init();
+    }
+
+    public SkillSprite(TextureRegion standTexture, GameAnimation animation,  SkillAnimationState animationState, Boolean looping) {
+        setStandTexture(standTexture);
+        setAnimation(animation);
+        setAnimationState(animationState);
+        setLooping(looping);
         init();
     }
 
@@ -70,6 +85,9 @@ public class SkillSprite extends AnimatedEntity {
         }
     }
 
+    public void clearTimers(){
+        stateTimer = 0;
+    }
     public boolean isAnimationFinished(){
         return animation.getAnimation().isAnimationFinished(stateTimer);
     }

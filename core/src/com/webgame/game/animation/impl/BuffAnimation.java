@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.animation.GameAnimation;
 
 public class BuffAnimation extends GameAnimation {
-    public BuffAnimation(Texture spriteTexture, Float animationDuration) {
-        super(spriteTexture, animationDuration);
+    public BuffAnimation(Texture spriteTexture) {
+        super(spriteTexture, 0.05f);
     }
 
     @Override

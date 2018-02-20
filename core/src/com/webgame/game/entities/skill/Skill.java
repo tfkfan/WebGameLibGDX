@@ -1,14 +1,17 @@
 package com.webgame.game.entities.skill;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.webgame.game.animation.GameAnimation;
 import com.webgame.game.entities.Entity;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.enums.EntityState;
-import com.webgame.game.skill_sprites.SkillSprite;
+import com.webgame.game.enums.SkillAnimationState;
 import com.webgame.game.world.common.IUpdatable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.webgame.game.Configs.PPM;
@@ -17,6 +20,8 @@ public abstract class Skill extends Entity implements IUpdatable {
     protected static final float SKILL_WIDTH = 50 / PPM;
     protected static final float SKILL_HEIGHT = 50 / PPM;
     protected static final float SKILL_RADIUS = 30 / PPM;
+
+    protected int animationsNum;
 
     protected Long level;
     protected String title;
@@ -51,12 +56,27 @@ public abstract class Skill extends Entity implements IUpdatable {
     }
 
     public void cast(Vector2 targetPosition) {
+        resetSkill();
         setTarget(targetPosition);
         setEntityState(EntityState.ACTIVE);
         setPosition(new Vector2(player.getPosition()));
     }
 
     public abstract void updateAnimations(float dt);
+
+    public void initAnimations(TextureRegion standTexture, GameAnimation gameAnimation, Integer numFrames, SkillAnimationState animationState, Boolean looping) {
+        List<SkillSprite> animations = new ArrayList<SkillSprite>();
+        this.animationsNum = numFrames;
+        for (int i = 0; i < numFrames; i++) {
+            SkillSprite animation = new SkillSprite(standTexture, gameAnimation, animationState, looping);
+            initAnimation(animation);
+            animations.add(animation);
+        }
+        setAnimations(animations);
+    }
+
+    public void initAnimation(SkillSprite animation) {
+    }
 
     @Override
     public void update(float dt) {
@@ -80,6 +100,15 @@ public abstract class Skill extends Entity implements IUpdatable {
         for (SkillSprite animation : animations)
             if (animation.getEntityState().equals(EntityState.ACTIVE))
                 animation.draw(batch, parentAlpha);
+    }
+
+    public void resetSkill() {
+        setEntityState(EntityState.INACTIVE);
+        clearTimers();
+        for (SkillSprite animation : animations) {
+            animation.clearTimers();
+            animation.setEntityState(EntityState.INACTIVE);
+        }
     }
 
     public List<SkillSprite> getAnimations() {

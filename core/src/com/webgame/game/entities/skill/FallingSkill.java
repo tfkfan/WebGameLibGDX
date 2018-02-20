@@ -6,10 +6,7 @@ import com.webgame.game.animation.GameAnimation;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MoveState;
-import com.webgame.game.skill_sprites.SkillSprite;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.webgame.game.enums.SkillAnimationState;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -23,12 +20,13 @@ public class FallingSkill extends AOESkill {
     protected final Vector2 fallOffsetVec = new Vector2(fallVelocity.x * 10, (-fallVelocity.y) * 10);
     protected final float tmp = 0.1f;
 
+    public FallingSkill(Player player) {
+        super(player);
+    }
+
     public FallingSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation) {
         super(player);
-        List<SkillSprite> animations = new ArrayList<SkillSprite>();
-        for(int i = 0; i < 50; i++)
-            animations.add(new SkillSprite(standTexture, gameAnimation));
-        setAnimations(animations);
+        initAnimations(standTexture, gameAnimation, 50, SkillAnimationState.FULL_ANIMATION, false);
     }
 
     @Override
@@ -36,8 +34,6 @@ public class FallingSkill extends AOESkill {
         super.init(player);
         index = 0;
         setVelocity(fallVelocity);
-
-
     }
 
     @Override
@@ -77,9 +73,9 @@ public class FallingSkill extends AOESkill {
                 continue;
             if (animation.getDistance().y > fallOffsetVec.y)
                 animation.setMoveState(MoveState.STATIC);
-            if(animation.getMoveState().equals(MoveState.STATIC)){
+            if (animation.getMoveState().equals(MoveState.STATIC)) {
                 animation.setStateTimer(animation.getStateTimer() + dt);
-                if(animation.isAnimationFinished())
+                if (animation.isAnimationFinished())
                     initFrame(animation);
             }
 

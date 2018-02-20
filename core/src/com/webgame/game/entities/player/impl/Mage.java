@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.webgame.game.Configs;
 import com.webgame.game.animation.impl.*;
 import com.webgame.game.entities.skill.FallingSkill;
+import com.webgame.game.entities.skill.StaticSkill;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.utils.SpriteTextureLoader;
 import com.webgame.game.entities.player.Player;
@@ -22,9 +23,9 @@ public class Mage extends Player {
         super();
         int dirs = DirectionState.values().length;
         try {
-            Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png");
-            TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);
-            skill = new FallingSkill(this, blizzardStandTexture, new BlizzardFragmentAnimation(skillsTexture));
+            Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_006.png");
+           // TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);
+            skill = new StaticSkill(this, null, new BuffAnimation(skillsTexture));
 
             /*
             Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png");
