@@ -25,8 +25,7 @@ public class FallingSkill extends AOESkill {
     }
 
     public FallingSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation) {
-        super(player);
-        initAnimations(standTexture, gameAnimation, 50, SkillAnimationState.FULL_ANIMATION, false);
+        super(player, standTexture, gameAnimation, 50, SkillAnimationState.FULL_ANIMATION, false);
     }
 
     @Override

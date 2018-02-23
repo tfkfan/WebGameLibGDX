@@ -8,20 +8,13 @@ import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.SkillAnimationState;
 
 public class BuffSkill extends StaticSkill {
+
     public BuffSkill(Player player) {
         super(player);
     }
 
     public BuffSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation) {
         super(player, standTexture, gameAnimation);
-    }
-
-    public BuffSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, Boolean looping) {
-        super(player, standTexture, gameAnimation, looping);
-    }
-
-    public BuffSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState, Boolean looping) {
-        super(player, standTexture, gameAnimation, animationState, looping);
     }
 
     @Override

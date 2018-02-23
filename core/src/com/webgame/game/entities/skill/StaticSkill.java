@@ -10,23 +10,29 @@ import com.webgame.game.enums.SkillAnimationState;
 
 public class StaticSkill extends Skill {
 
+
     public StaticSkill(Player player) {
         super(player);
     }
 
     public StaticSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation) {
-        super(player);
-        initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.ANIMATION_ONLY, false);
+        super(player, standTexture, gameAnimation);
     }
 
     public StaticSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, Boolean looping) {
-        super(player);
-        initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.ANIMATION_ONLY, looping);
+        super(player, standTexture, gameAnimation, looping);
+    }
+
+    public StaticSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState) {
+        super(player, standTexture, gameAnimation, animationState);
     }
 
     public StaticSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState, Boolean looping) {
-        super(player);
-        initAnimations(standTexture, gameAnimation, 1, animationState, looping);
+        super(player, standTexture, gameAnimation, animationState, looping);
+    }
+
+    public StaticSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, Integer numFrames, SkillAnimationState animationState, Boolean looping) {
+        super(player, standTexture, gameAnimation, numFrames, animationState, looping);
     }
 
     @Override
