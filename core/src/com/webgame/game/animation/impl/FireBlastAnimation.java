@@ -7,8 +7,8 @@ import com.webgame.game.animation.GameAnimation;
 
 public class FireBlastAnimation extends GameAnimation {
 
-    public FireBlastAnimation(Texture spriteTexture, Float animationDuration) {
-        super(spriteTexture, animationDuration);
+    public FireBlastAnimation(Texture spriteTexture) {
+        super(spriteTexture, 0.1f);
     }
 
     @Override

@@ -26,9 +26,10 @@ public class Mage extends Player {
         int dirs = DirectionState.values().length;
         try {
 
-            Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png");
-            TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);
-            skill = new SingleSkill(this, blizzardStandTexture, new BlizzardFragmentAnimation(skillsTexture));
+            Texture standSkillTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/fire_002.png");
+            Texture animSkillTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s001.png");
+            TextureRegion standTexture = new TextureRegion(standSkillTexture, 0, 0,  standSkillTexture.getWidth(),  standSkillTexture.getHeight());
+            currentSkill = new SingleSkill(this, standTexture, new FlameAnimation(animSkillTexture));
               /*
             Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_006.png");
             TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);

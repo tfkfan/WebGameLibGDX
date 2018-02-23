@@ -9,6 +9,10 @@ import com.webgame.game.enums.SkillAnimationState;
 
 public class BuffSkill extends StaticSkill {
 
+    public BuffSkill(BuffSkill skill){
+        super(skill);
+    }
+
     public BuffSkill(Player player) {
         super(player);
     }

@@ -14,7 +14,6 @@ public class SkillController extends AbstractController {
     private Player player;
     private List<Enemy> enemies;
 
-    private Skill skill;
 
     private ShapeRenderer sr;
 
@@ -26,7 +25,7 @@ public class SkillController extends AbstractController {
         this.player = player;
         this.enemies = enemies;
 
-        skill = player.getSkill();
+
     }
 
 
@@ -37,12 +36,16 @@ public class SkillController extends AbstractController {
             sr = new ShapeRenderer();
         sr.setProjectionMatrix(this.getStage().getCamera().combined);
 
-        skill.update(dt);
+        List<Skill> skills = player.getSkills();
+        for (Skill skill : skills)
+            skill.update(dt);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        skill.draw(batch, parentAlpha);
+        List<Skill> skills = player.getSkills();
+        for (Skill skill : skills)
+            skill.draw(batch, parentAlpha);
 
         /*
         batch.end();

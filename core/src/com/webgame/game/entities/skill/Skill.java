@@ -8,18 +8,16 @@ import com.webgame.game.animation.GameAnimation;
 import com.webgame.game.entities.AnimatedEntity;
 import com.webgame.game.entities.Entity;
 import com.webgame.game.entities.player.Player;
-import com.webgame.game.enums.DirectionState;
-import com.webgame.game.enums.EntityState;
-import com.webgame.game.enums.MoveState;
-import com.webgame.game.enums.SkillAnimationState;
+import com.webgame.game.enums.*;
 import com.webgame.game.world.common.IUpdatable;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.webgame.game.Configs.PPM;
 
-public abstract class Skill extends Entity implements IUpdatable {
+public abstract class Skill extends Entity implements IUpdatable, Cloneable {
     protected static final float SKILL_WIDTH = 50 / PPM;
     protected static final float SKILL_HEIGHT = 50 / PPM;
     protected static final float SKILL_RADIUS = 30 / PPM;
@@ -64,7 +62,6 @@ public abstract class Skill extends Entity implements IUpdatable {
         initAnimations(standTexture, gameAnimation, 1, animationState, false);
     }
 
-
     public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState, Boolean looping) {
         super();
         init(player);
@@ -75,6 +72,32 @@ public abstract class Skill extends Entity implements IUpdatable {
         super();
         init(player);
         initAnimations(standTexture, gameAnimation, numFrames, animationState, looping);
+    }
+
+    public Skill(Skill skill) {
+        super();
+        init(skill.getPlayer());
+        copyAnimations(skill.getAnimations());
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Class<?> clazz = this.getClass();
+
+        try {
+            return clazz.getDeclaredConstructor(Skill.class).newInstance(this);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
     }
 
     protected void init(Player player) {
@@ -105,6 +128,16 @@ public abstract class Skill extends Entity implements IUpdatable {
             animations.add(animation);
         }
         setAnimations(animations);
+    }
+
+    public void copyAnimations(List<SkillSprite> animations) {
+        if (animations == null || animations.isEmpty())
+            return;
+        List<SkillSprite> newAnimations = new ArrayList<SkillSprite>();
+        for (SkillSprite animation : animations) {
+            newAnimations.add(new SkillSprite(animation));
+        }
+        setAnimations(newAnimations);
     }
 
     public void initAnimation(SkillSprite animation) {
@@ -240,6 +273,16 @@ public abstract class Skill extends Entity implements IUpdatable {
 
         private Vector2 distance;
 
+        public SkillSprite(SkillSprite animation) {
+            init();
+            setStandTexture(animation.getStandTexture());
+            setAnimation(animation.getAnimation());
+            setAnimationState(animation.getAnimationState());
+            setMoveState(animation.getMoveState());
+            setLooping(animation.isLooping());
+            setSize(animation.getWidth(), animation.getHeight());
+        }
+
         public SkillSprite() {
             init();
         }
@@ -272,19 +315,21 @@ public abstract class Skill extends Entity implements IUpdatable {
             setLooping(false);
             stateTimer = 0;
             distance = new Vector2(0, 0);
-            //TODO change size depending from standTexture/animation size
-            setSize(20 / Configs.PPM, 30 / Configs.PPM);
+            setSize(FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH());
         }
 
         @Override
         public TextureRegion getFrame() {
             TextureRegion region = null;
             if ((SkillAnimationState.ANIMATION_ONLY.equals(getAnimationState()) ||
-                    (SkillAnimationState.FULL_ANIMATION.equals(getAnimationState()))) && getMoveState().equals(MoveState.STATIC))
+                    (SkillAnimationState.FULL_ANIMATION.equals(getAnimationState()))) && getMoveState().equals(MoveState.STATIC)) {
                 region = animation.getAnimation().getKeyFrame(stateTimer, isLooping());
-            else if (SkillAnimationState.STAND_TEXTURE.equals(getAnimationState()) ||
-                    (SkillAnimationState.FULL_ANIMATION.equals(getAnimationState())))
+                setSize(FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH());
+            } else if (SkillAnimationState.STAND_TEXTURE.equals(getAnimationState()) ||
+                    (SkillAnimationState.FULL_ANIMATION.equals(getAnimationState()))) {
                 region = standTexture;
+                setSize(FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH());
+            }
 
             return region;
         }
@@ -363,6 +408,7 @@ public abstract class Skill extends Entity implements IUpdatable {
         public void setMoveState(MoveState moveState) {
             this.moveState = moveState;
         }
+
 
     }
 

@@ -13,6 +13,10 @@ import static com.webgame.game.Configs.PPM;
 public abstract class AOESkill extends Skill{
     protected Rectangle area;
 
+    public AOESkill(AOESkill skill){
+        super(skill);
+    }
+
     public AOESkill(Player player) {
         super(player);
     }

@@ -20,6 +20,10 @@ public class FallingSkill extends AOESkill {
     protected final Vector2 fallOffsetVec = new Vector2(fallVelocity.x * 10, (-fallVelocity.y) * 10);
     protected final float tmp = 0.1f;
 
+    public FallingSkill(FallingSkill skill) {
+        super(skill);
+    }
+
     public FallingSkill(Player player) {
         super(player);
     }

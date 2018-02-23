@@ -13,6 +13,11 @@ import sun.security.krb5.Config;
 public class SingleSkill extends Skill {
     protected static final float absVel = 15;
     protected static final float dl = 0.1f;
+
+    public SingleSkill(Skill skill) {
+        super(skill);
+    }
+
     public SingleSkill(Player player) {
         super(player);
     }

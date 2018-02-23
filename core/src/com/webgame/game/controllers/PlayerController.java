@@ -43,9 +43,9 @@ public class PlayerController extends AbstractController implements InputProcess
             //Casting skill
             if (!player.getCurrAnimationState().equals(PlayerAnimationState.ATTACK)) {
                 player.clearTimers();
-                player.getSkill().cast(((AttackEvent) event).getTargetVector());
                 player.setCurrAnimationState(PlayerAnimationState.ATTACK);
             }
+            player.castSkill(((AttackEvent) event).getTargetVector());
         }
         return true;
     }
