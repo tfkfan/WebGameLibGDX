@@ -74,7 +74,7 @@ public class SkillSprite extends AnimatedEntity {
     public void draw(Batch batch, float parentAlpha) {
         TextureRegion frame = getFrame();
         if (getEntityState().equals(EntityState.ACTIVE))
-            batch.draw(frame, position.x - getXOffset(), position.y - getYOffset(), getWidth(), getHeight());
+            batch.draw(frame, position.x - getXOffset() - getWidth()/2, position.y - getYOffset() - getHeight()/2, getWidth(), getHeight());
     }
 
     public void update(float dt) {
