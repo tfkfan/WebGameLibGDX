@@ -55,6 +55,7 @@ public class SingleSkill extends Skill {
 
         for (SkillSprite animation : getAnimations()) {
             animation.setEntityState(EntityState.ACTIVE);
+            animation.setMoveState(MoveState.MOVING);
         }
     }
 

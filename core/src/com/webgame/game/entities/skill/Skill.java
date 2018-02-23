@@ -311,7 +311,7 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
         public void init() {
             setAnimationState(SkillAnimationState.FULL_ANIMATION);
             setEntityState(EntityState.INACTIVE);
-            setMoveState(MoveState.MOVING);
+            setMoveState(MoveState.STATIC);
             setLooping(false);
             stateTimer = 0;
             distance = new Vector2(0, 0);
