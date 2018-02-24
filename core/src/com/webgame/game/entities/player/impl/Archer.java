@@ -11,14 +11,14 @@ public class Archer extends Player {
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spritePath);
 
-		Texture skillTexture = SpriteTextureLoader.loadSprite("skills.png");
+		Texture skillTexture = SpriteTextureLoader.loadSprite("activeSkills.png");
 
 
 		try {
-			ArrayList<SkillOrig<?>> skills = new ArrayList<SkillOrig<?>>();
-			skills.add(new Blizzard(batch, skillTexture, 10));
+			ArrayList<SkillOrig<?>> activeSkills = new ArrayList<SkillOrig<?>>();
+			activeSkills.add(new Blizzard(batch, skillTexture, 10));
 
-			this.setSkills(skills);
+			this.setSkills(activeSkills);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

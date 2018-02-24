@@ -6,16 +6,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.entities.WorldEntity;
 import com.webgame.game.entities.attributes.PlayerAttributes;
-import com.webgame.game.entities.skill.FallingSkill;
 import com.webgame.game.entities.skill.Skill;
 import com.webgame.game.enums.*;
-import com.webgame.game.events.AttackEvent;
 import com.webgame.game.world.common.IUpdatable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sun.jmx.mbeanserver.Util.cast;
 import static com.webgame.game.Configs.PPM;
 
 public abstract class Player extends WorldEntity implements IUpdatable {
@@ -37,7 +34,8 @@ public abstract class Player extends WorldEntity implements IUpdatable {
 
     protected PlayerAttributes attributes;
 
-    protected List<Skill> skills;
+    protected List<Skill> activeSkills;
+    protected List<Skill> allSkills;
     protected Skill currentSkill;
 
     public Player() {
@@ -62,7 +60,7 @@ public abstract class Player extends WorldEntity implements IUpdatable {
         getAttributes().setHealthPoints(1000);
         getAttributes().setMaxHealthPoints(1000);
 
-        skills = new ArrayList<>();
+        activeSkills = new ArrayList<>();
 
         clearTimers();
         setBounds(0, 0, 60 / PPM, 60 / PPM);
@@ -71,17 +69,17 @@ public abstract class Player extends WorldEntity implements IUpdatable {
 
     public void castSkill(Vector2 target) {
         try {
-            //checking inactive skills
+            //checking inactive activeSkills
             List<Skill> skillsToRemove = new ArrayList<Skill>();
-            for(Skill skill : skills)
+            for(Skill skill : activeSkills)
                 if(skill.getEntityState().equals(EntityState.INACTIVE))
                     skillsToRemove.add(skill);
-            skills.removeAll(skillsToRemove);
+            activeSkills.removeAll(skillsToRemove);
 
 
             Skill skill = (Skill) currentSkill.clone();
             skill.cast(target);
-            skills.add(skill);
+            activeSkills.add(skill);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -145,8 +143,8 @@ public abstract class Player extends WorldEntity implements IUpdatable {
             clearTimers();
     }
 
-    public List<Skill> getSkills(){
-        return skills;
+    public List<Skill> getActiveSkills(){
+        return activeSkills;
     }
 
     public PlayerState getPlayerState() {

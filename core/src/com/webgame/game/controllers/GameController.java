@@ -29,7 +29,7 @@ public class GameController extends AbstractController {
     private Player player;
     private List<Enemy> enemies;
 
-    private Vector3 target = new Vector3();
+
 
     private PlayerController pController;
     private SkillController sController;

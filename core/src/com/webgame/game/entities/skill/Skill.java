@@ -80,6 +80,23 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
         copyAnimations(skill.getAnimations());
     }
 
+    protected void init(Player player) {
+        setTitle("Skill");
+        setDamage(0f);
+        setHeal(0f);
+        clearTimers();
+        setEntityState(EntityState.INACTIVE);
+        setMoveState(MoveState.MOVING);
+        setPlayer(player);
+    }
+
+    public void cast(Vector2 targetPosition) {
+        resetSkill();
+        setTarget(targetPosition);
+        setEntityState(EntityState.ACTIVE);
+        setPosition(new Vector2(player.getPosition()));
+    }
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         Class<?> clazz = this.getClass();
@@ -98,23 +115,6 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
 
         return null;
 
-    }
-
-    protected void init(Player player) {
-        setTitle("Skill");
-        setDamage(0f);
-        setHeal(0f);
-        clearTimers();
-        setEntityState(EntityState.INACTIVE);
-        setMoveState(MoveState.MOVING);
-        setPlayer(player);
-    }
-
-    public void cast(Vector2 targetPosition) {
-        resetSkill();
-        setTarget(targetPosition);
-        setEntityState(EntityState.ACTIVE);
-        setPosition(new Vector2(player.getPosition()));
     }
 
     public abstract void updateAnimations(float dt);

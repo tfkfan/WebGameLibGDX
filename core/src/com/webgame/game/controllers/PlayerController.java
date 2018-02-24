@@ -17,12 +17,12 @@ import com.webgame.game.stages.GameStage;
 
 import java.util.List;
 
-public class PlayerController extends AbstractController implements InputProcessor, EventListener {
+public class PlayerController extends AbstractController implements  EventListener {
     private Player player;
     private List<Enemy> enemies;
 
     public PlayerController() {
-        Gdx.input.setInputProcessor(this);
+
     }
 
     public void init(Player player, List<Enemy> enemies) {
@@ -39,13 +39,6 @@ public class PlayerController extends AbstractController implements InputProcess
             player.setDirectionState(((MoveEvent) event).getDirectionState());
             player.setVelocity(vec);
             player.applyVelocity();
-        } else if (event instanceof AttackEvent) {
-            //Casting skill
-            if (!player.getCurrAnimationState().equals(PlayerAnimationState.ATTACK)) {
-                player.clearTimers();
-                player.setCurrAnimationState(PlayerAnimationState.ATTACK);
-            }
-            player.castSkill(((AttackEvent) event).getTargetVector());
         }
         return true;
     }
@@ -100,56 +93,5 @@ public class PlayerController extends AbstractController implements InputProcess
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         player.draw(batch, parentAlpha);
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int x, int y, int pointer, int button) {
-
-        if (button == Input.Buttons.LEFT) {
-
-            Vector3 trg = this.getStage().getCamera().unproject(new Vector3(x, y, 0), getStage().getViewport().getScreenX(), getStage().getViewport().getScreenY(),
-                    getStage().getViewport().getScreenWidth(), getStage().getViewport().getScreenHeight());
-
-            Vector2 target = new Vector2(trg.x, trg.y);
-            fire(new AttackEvent((target)));
-            return true;
-        }
-        return true;
-
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
     }
 }

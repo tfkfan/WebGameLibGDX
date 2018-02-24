@@ -25,25 +25,26 @@ public class Mage extends Player {
         super();
         int dirs = DirectionState.values().length;
         try {
-            /*
-            Texture standSkillTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/ice_003.png");
-            Texture animSkillTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/water_005.png");
+
+
+            Texture standSkillTexture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/fire_002.png");
+            Texture animSkillTexture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s001.png");
             TextureRegion standTexture = new TextureRegion(standSkillTexture, 0, 0,  standSkillTexture.getWidth(),  standSkillTexture.getHeight());
-            currentSkill = new SingleSkill(this, standTexture, new GeyserAnimation(animSkillTexture));
-            */
+            currentSkill = new SingleSkill(this, standTexture, new FlameAnimation(animSkillTexture));
 
-            Texture skillsTexture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_006.png");
-            currentSkill = new StaticSkill(this, null, new BuffAnimation(skillsTexture));
+
+           // Texture skillsTexture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");
+           // currentSkill = new StaticSkill(this, null, new BuffAnimation(skillsTexture));
 
             /*
-             Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png");
+             Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/activeSkills.png");
             TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);
             skill = new FallingSkill(this, blizzardStandTexture, new BlizzardFragmentAnimation(skillsTexture));
 
              */
 
             /*
-            Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png");
+            Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/activeSkills.png");
             TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);
             SkillOrig s6 = skillFactory.createFallingAOESkill(BlizzardFragmentAnimation.class, batch,
                     skillsTexture, blizzardStandTexture, 30);
@@ -72,7 +73,7 @@ public class Mage extends Player {
 
             TextureRegion fireStandTexture = new TextureRegion(SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/fire_002.png"));
             SkillOrig ss3 = skillFactory.createSingleSkill(FireBlastAnimation.class, batch,
-                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png"),
+                    SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/activeSkills.png"),
                     fireStandTexture);
             ss3.getSkillState().setDamage(50d);
             skillOrigs.add(ss3);

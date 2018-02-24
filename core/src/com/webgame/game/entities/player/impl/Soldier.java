@@ -16,7 +16,7 @@ public class Soldier extends Player {
 		super();
 
 		int dirs = DirectionState.values().length;
-		//this.setSkillOrig(new IceRain(batch, "skills.png"));
+		//this.setSkillOrig(new IceRain(batch, "activeSkills.png"));
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);

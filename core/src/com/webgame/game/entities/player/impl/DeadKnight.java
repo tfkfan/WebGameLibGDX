@@ -17,7 +17,7 @@ public class DeadKnight extends Player {
 	public DeadKnight(SpriteBatch batch, String spritePath) {
 		super();
 		int dirs = DirectionState.values().length;
-		Texture skillTexture = GameUtils.loadSprite("skills.png");
+		Texture skillTexture = GameUtils.loadSprite("activeSkills.png");
 		try {
 
 			//this.setSkills(skillOrigs);
