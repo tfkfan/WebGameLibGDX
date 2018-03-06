@@ -36,6 +36,7 @@ public abstract class Player extends WorldEntity implements IUpdatable {
 
     protected List<Skill> activeSkills;
     protected List<Skill> allSkills;
+
     protected Skill currentSkill;
 
     public Player() {
@@ -145,6 +146,22 @@ public abstract class Player extends WorldEntity implements IUpdatable {
 
     public List<Skill> getActiveSkills(){
         return activeSkills;
+    }
+
+    public List<Skill> getAllSkills() {
+        return allSkills;
+    }
+
+    public void setAllSkills(List<Skill> allSkills) {
+        this.allSkills = allSkills;
+    }
+
+    public Skill getCurrentSkill() {
+        return currentSkill;
+    }
+
+    public void setCurrentSkill(Skill currentSkill) {
+        this.currentSkill = currentSkill;
     }
 
     public PlayerState getPlayerState() {

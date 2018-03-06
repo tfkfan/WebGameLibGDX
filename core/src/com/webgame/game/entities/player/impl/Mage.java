@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.Configs;
 import com.webgame.game.animation.impl.*;
-import com.webgame.game.entities.skill.BuffSkill;
-import com.webgame.game.entities.skill.FallingSkill;
-import com.webgame.game.entities.skill.SingleSkill;
-import com.webgame.game.entities.skill.StaticSkill;
+import com.webgame.game.entities.skill.*;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.utils.GameUtils;
 import com.webgame.game.entities.player.Player;
@@ -18,6 +15,7 @@ import com.webgame.game.entities.player.Player;
 import static com.webgame.game.Configs.PPM;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Mage extends Player {
 
@@ -25,16 +23,21 @@ public class Mage extends Player {
         super();
         int dirs = DirectionState.values().length;
         try {
+            List<Skill> allSkills = new ArrayList<Skill>();
+
+            Texture standSkillTexture = GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/fire_002.png");
+            Texture animSkillTexture = GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s001.png");
+            TextureRegion standTexture = new TextureRegion(standSkillTexture, 0, 0, standSkillTexture.getWidth(), standSkillTexture.getHeight());
+            Skill skill1 = new SingleSkill(this, standTexture, new FlameAnimation(animSkillTexture));
+            setCurrentSkill(skill1);
+            allSkills.add(skill1);
 
 
-            Texture standSkillTexture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/fire_002.png");
-            Texture animSkillTexture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s001.png");
-            TextureRegion standTexture = new TextureRegion(standSkillTexture, 0, 0,  standSkillTexture.getWidth(),  standSkillTexture.getHeight());
-            currentSkill = new SingleSkill(this, standTexture, new FlameAnimation(animSkillTexture));
 
 
-           // Texture skillsTexture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");
-           // currentSkill = new StaticSkill(this, null, new BuffAnimation(skillsTexture));
+
+            // Texture skillsTexture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");
+            // currentSkill = new StaticSkill(this, null, new BuffAnimation(skillsTexture));
 
             /*
              Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/activeSkills.png");
@@ -42,6 +45,8 @@ public class Mage extends Player {
             skill = new FallingSkill(this, blizzardStandTexture, new BlizzardFragmentAnimation(skillsTexture));
 
              */
+
+            setAllSkills(allSkills);
 
             /*
             Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/activeSkills.png");
@@ -126,7 +131,7 @@ public class Mage extends Player {
             skillOrigs.add(skillFactory.createStaticTimedAOESkill(TornadoAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skillOrigs.png")));
                     */
-           // this.setSkills(skillOrigs);
+            // this.setSkills(skillOrigs);
         } catch (Exception e2) {
             // TODO Auto-generated catch block
             e2.printStackTrace();
