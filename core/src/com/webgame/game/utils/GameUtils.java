@@ -18,7 +18,7 @@ public class GameUtils {
 		return (long)(seconds*second + minutes*minute);
 	}
 
-	public static float calcCurrentHealth(Integer HP, Integer maxHP){
-		return 100 - (float)(maxHP - HP)/100;
+	public static float calcHealthLineWidth(float width, Integer HP, Integer maxHP){
+		return (width * 100 - (float)(maxHP - HP)/100)/100f;
 	}
 }

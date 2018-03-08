@@ -20,7 +20,7 @@ public class Knight extends Player {
 		super();
 
 		int dirs = DirectionState.values().length;
-		Texture skillTexture =GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER +"/skillOrigs.png");
+	//	Texture skillTexture =GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER +"/skillOrigs.png");
 
 		try {
 			//Blizzard b = new Blizzard(batch, skillTexture, 30);

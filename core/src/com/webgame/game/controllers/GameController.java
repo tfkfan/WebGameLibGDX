@@ -16,11 +16,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Enemy;
 import com.webgame.game.entities.player.Player;
+import com.webgame.game.entities.player.impl.Knight;
 import com.webgame.game.events.AttackEvent;
 import com.webgame.game.ui.PlayerPanel;
 import com.webgame.game.world.WorldRenderer;
 import com.webgame.game.entities.player.impl.Mage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameController extends AbstractController implements InputProcessor {
@@ -33,7 +35,7 @@ public class GameController extends AbstractController implements InputProcessor
     private Viewport viewport;
 
     private Player player;
-    private List<Enemy> enemies;
+    private List<Player> enemies;
 
     private PlayerController pController;
     private SkillController sController;
@@ -42,25 +44,27 @@ public class GameController extends AbstractController implements InputProcessor
     public GameController(OrthographicCamera camera, Viewport viewport) {
         Gdx.input.setInputProcessor(this);
 
+        this.enemies = new ArrayList<Player>();
+
         this.camera = camera;
         this.viewport = viewport;
 
-        batch = new SpriteBatch();
+        this.batch = new SpriteBatch();
 
+        this.world = new World(new Vector2(0, 0), true);
+        this.worldRenderer = new WorldRenderer(world, camera);
 
-        world = new World(new Vector2(0, 0), true);
-        worldRenderer = new WorldRenderer(world, camera);
+        this.player = new Mage(batch, Configs.PLAYERSHEETS_FOLDER + "/mage.png");
+        this.player.createObject(world);
+        this.player.setPosition(2f, 2f);
 
-        player = new Mage(batch, Configs.PLAYERSHEETS_FOLDER + "/mage.png");
-        player.createObject(world);
+        this.enemies.add(new Knight(batch, Configs.PLAYERSHEETS_FOLDER + "/knight.png"));
 
-        enemies = null;
+        this.pController = new PlayerController();
+        this.pController.init(player, enemies);
 
-        pController = new PlayerController();
-        pController.init(player, enemies);
-
-        sController = new SkillController();
-        sController.init(player, enemies);
+        this.sController = new SkillController();
+        this.sController.init(player, enemies);
 
         this.addActor(pController);
         this.addActor(sController);

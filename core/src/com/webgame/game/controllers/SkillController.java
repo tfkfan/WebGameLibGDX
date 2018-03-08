@@ -20,14 +20,14 @@ import java.util.List;
 
 public class SkillController extends AbstractController implements  EventListener {
     private Player player;
-    private List<Enemy> enemies;
+    private List<Player> enemies;
 
     private ShapeRenderer sr;
 
     public SkillController() {
     }
 
-    public void init(Player player, List<Enemy> enemies) {
+    public void init(Player player, List<Player> enemies) {
         this.player = player;
         this.enemies = enemies;
         this.addListener(this);

@@ -17,9 +17,9 @@ import com.webgame.game.utils.GameUtils;
 
 import java.util.List;
 
-public class PlayerController extends AbstractController implements  EventListener {
+public class PlayerController extends AbstractController implements EventListener {
     private Player player;
-    private List<Enemy> enemies;
+    private List<Player> enemies;
 
     protected ShapeRenderer shapeRenderer;
 
@@ -27,7 +27,7 @@ public class PlayerController extends AbstractController implements  EventListen
         shapeRenderer = new ShapeRenderer();
     }
 
-    public void init(Player player, List<Enemy> enemies) {
+    public void init(Player player, List<Player> enemies) {
         this.player = player;
         this.enemies = enemies;
         this.addListener(this);
@@ -97,6 +97,9 @@ public class PlayerController extends AbstractController implements  EventListen
         super.draw(batch, parentAlpha);
         player.draw(batch, parentAlpha);
 
+        if (enemies != null)
+            for (Player enemy : enemies)
+                enemy.draw(batch, parentAlpha);
         //drawing figures(hp)
         batch.end();
 
@@ -104,14 +107,23 @@ public class PlayerController extends AbstractController implements  EventListen
         shapeRenderer.setColor(Color.GREEN);
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.rect(player.getPosition().x - player.getWidth()/2, player.getPosition().y + player.getHeight() - 20/ Configs.PPM,
-                (player.getWidth()* GameUtils.calcCurrentHealth(player.getAttributes().getHealthPoints(), player.getAttributes().getMaxHealthPoints()))/100f, 5/ Configs.PPM);
+
+        drawPlayerHealthLine(player);
+        if (enemies != null)
+            for (Player enemy : enemies)
+                drawPlayerHealthLine(enemy);
         shapeRenderer.end();
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.circle(player.getPosition().x, player.getPosition().y,player.getRadius(),50);
+        shapeRenderer.circle(player.getPosition().x, player.getPosition().y, player.getRadius(), 50);
         shapeRenderer.end();
 
         batch.begin();
     }
+
+    public void drawPlayerHealthLine(Player player) {
+        shapeRenderer.rect(player.getPosition().x - player.getWidth() / 2, player.getPosition().y + player.getHeight() - 20 / Configs.PPM,
+                GameUtils.calcHealthLineWidth(player.getWidth(), player.getAttributes().getHealthPoints(), player.getAttributes().getMaxHealthPoints()), 5 / Configs.PPM);
+    }
+
 }
