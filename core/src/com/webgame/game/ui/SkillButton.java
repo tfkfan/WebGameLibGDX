@@ -22,7 +22,7 @@ public class SkillButton extends TextButton{
 
         SkillButton btn = new SkillButton(title, textButtonStyle);
 
-        //btn.setSize(1 / Configs.PPM, 1/ Configs.PPM);
+       // btn.setSize(0,0);
         btn.setTransform(true);
 
         btn.setScale(1/Configs.PPM);
@@ -30,7 +30,6 @@ public class SkillButton extends TextButton{
         btn.setDebug(true);
 
         btn.addListener(listener);
-        btn.setPosition(0,0);
         return btn;
     }
 }

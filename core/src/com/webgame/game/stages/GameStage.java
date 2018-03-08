@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.Configs;
 import com.webgame.game.controllers.GameController;
+import com.webgame.game.controllers.WidgetsController;
 
 import static com.webgame.game.Configs.VIEW_WIDTH;
 
@@ -18,24 +19,22 @@ public class GameStage extends Stage {
 
 
     public GameController gc;
+    public WidgetsController wc;
     public OrthographicCamera camera;
     public Viewport viewport;
 
     public GameStage() {
         camera = new OrthographicCamera();
-        camera.position.set(0, 0, 0);
-        camera.update();
 
         viewport = new StretchViewport(VIEW_WIDTH / PPM, VIEW_HEIGHT / PPM, camera);
         setViewport(viewport);
 
         gc = new GameController(camera, viewport);
-
+        //wc = new WidgetsController(camera, viewport, gc.getPlayer());
         this.addActor(gc);
-
+       // this.addActor(wc);
 
     }
-
 
 
 }

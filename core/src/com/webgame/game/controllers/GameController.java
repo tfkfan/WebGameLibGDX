@@ -11,15 +11,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Enemy;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.events.AttackEvent;
 import com.webgame.game.ui.PlayerPanel;
-import com.webgame.game.ui.SkillButton;
 import com.webgame.game.world.WorldRenderer;
 import com.webgame.game.entities.player.impl.Mage;
 
@@ -27,19 +25,20 @@ import java.util.List;
 
 public class GameController extends AbstractController implements InputProcessor {
     private SpriteBatch batch;
+
     private World world;
     private WorldRenderer worldRenderer;
-    protected ShapeRenderer sr;
+    protected ShapeRenderer shapeRenderer;
+
     private OrthographicCamera camera;
     private Viewport viewport;
 
     private Player player;
     private List<Enemy> enemies;
 
-    private PlayerPanel playerPanel;
-
     private PlayerController pController;
     private SkillController sController;
+
 
     public GameController(OrthographicCamera camera, Viewport viewport) {
         Gdx.input.setInputProcessor(this);
@@ -48,6 +47,7 @@ public class GameController extends AbstractController implements InputProcessor
         this.viewport = viewport;
 
         batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
 
         world = new World(new Vector2(0, 0), true);
         worldRenderer = new WorldRenderer(world, camera);
@@ -65,8 +65,6 @@ public class GameController extends AbstractController implements InputProcessor
 
         this.addActor(pController);
         this.addActor(sController);
-
-        this.addActor(new PlayerPanel(player));
     }
 
     @Override
@@ -145,5 +143,9 @@ public class GameController extends AbstractController implements InputProcessor
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

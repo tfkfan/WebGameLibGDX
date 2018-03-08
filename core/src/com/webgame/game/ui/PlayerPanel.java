@@ -1,5 +1,6 @@
 package com.webgame.game.ui;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -18,7 +19,6 @@ import java.util.List;
 
 public class PlayerPanel extends Table {
     protected Player player;
-
 
     protected BitmapFont font = new BitmapFont();
     protected TextButton[] buttons;
@@ -47,12 +47,12 @@ public class PlayerPanel extends Table {
         this.player = player;
     }
 
-
     public void init() {
         List<Skill> allSkills = player.getAllSkills();
         buttons = new TextButton[allSkills.size()];
 
 
+        setPosition(-Configs.VIEW_WIDTH/(2*Configs.PPM), -Configs.VIEW_HEIGHT/(2*Configs.PPM));
         setSize(Configs.VIEW_WIDTH/Configs.PPM, Configs.VIEW_HEIGHT/Configs.PPM);
 
         //setFillParent(true);
@@ -79,7 +79,7 @@ public class PlayerPanel extends Table {
                 // player.setCurrentSkill(skill);
             }
         });
-        add(btn2).size(btn2.getWidth()/ Configs.PPM, btn2.getHeight()/ Configs.PPM).expand().left();
+        add(btn2).size(btn2.getWidth()/ Configs.PPM, btn2.getHeight()/ Configs.PPM).expand();
         SkillButton btn = SkillButton.createButton("dsfd", new ClickListener() {
 
             @Override
@@ -89,7 +89,7 @@ public class PlayerPanel extends Table {
             }
         });
 
-        add(btn).size(btn.getWidth()/ Configs.PPM, btn.getHeight()/ Configs.PPM).expand().left();
+        add(btn).center().size(btn.getWidth()/ Configs.PPM, btn.getHeight()/ Configs.PPM).expand();
         /*
         row();
         for (int i = 0; i < allSkills.size(); i++) {
