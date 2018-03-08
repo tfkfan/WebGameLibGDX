@@ -47,31 +47,49 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
     public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation) {
         super();
         init(player);
-        initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, false);
+        initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, false, null, null);
+    }
+
+    public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, float standSizeX, float standSizeY, float animSizeX, float animSizeY) {
+        super();
+        init(player);
+
+        float[] standSizes = {standSizeX, standSizeY};
+        float[] animSizes = {animSizeX, animSizeY};
+
+        initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, false, standSizes, animSizes);
+    }
+
+    public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, float[] standSizes, float[] animSizes) {
+        super();
+        init(player);
+
+        initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, false, standSizes, animSizes);
     }
 
     public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, Boolean looping) {
         super();
         init(player);
-        initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, looping);
+        initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, looping, null, null);
     }
 
     public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState) {
         super();
         init(player);
-        initAnimations(standTexture, gameAnimation, 1, animationState, false);
+        initAnimations(standTexture, gameAnimation, 1, animationState, false, null, null);
     }
 
     public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState, Boolean looping) {
         super();
         init(player);
-        initAnimations(standTexture, gameAnimation, 1, animationState, looping);
+        initAnimations(standTexture, gameAnimation, 1, animationState, looping, null, null);
     }
 
-    public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, Integer numFrames, SkillAnimationState animationState, Boolean looping) {
+    public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation,
+                 Integer numFrames, SkillAnimationState animationState, Boolean looping, float[] standSizes, float[] animSizes) {
         super();
         init(player);
-        initAnimations(standTexture, gameAnimation, numFrames, animationState, looping);
+        initAnimations(standTexture, gameAnimation, numFrames, animationState, looping, standSizes, animSizes);
     }
 
     public Skill(Skill skill) {
@@ -121,18 +139,23 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
 
     public abstract void updateAnimations(float dt);
 
-    public void initAnimations(TextureRegion standTexture, GameAnimation gameAnimation, Integer numFrames, SkillAnimationState animationState, Boolean looping) {
+    protected void initAnimations(TextureRegion standTexture, GameAnimation gameAnimation, Integer numFrames,
+                                  SkillAnimationState animationState, Boolean looping, float[] standSizes, float[] animSizes) {
         List<SkillSprite> animations = new ArrayList<SkillSprite>();
         this.animationsNum = numFrames;
         for (int i = 0; i < numFrames; i++) {
             SkillSprite animation = new SkillSprite(standTexture, gameAnimation, animationState, looping);
+
+            if (standSizes != null && animSizes != null)
+                animation.setSizes(animSizes, standSizes);
+
             initAnimation(animation);
             animations.add(animation);
         }
         setAnimations(animations);
     }
 
-    public void copyAnimations(List<SkillSprite> animations) {
+    protected void copyAnimations(List<SkillSprite> animations) {
         if (animations == null || animations.isEmpty())
             return;
         List<SkillSprite> newAnimations = new ArrayList<SkillSprite>();
@@ -291,6 +314,9 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
 
         private Vector2 distance;
 
+        private float[] standSizes = {FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH()};
+        private float[] animSizes = {FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH()};
+
         public SkillSprite(SkillSprite animation) {
             init();
             setStandTexture(animation.getStandTexture());
@@ -298,7 +324,7 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
             setAnimationState(animation.getAnimationState());
             setMoveState(animation.getMoveState());
             setLooping(animation.isLooping());
-            setSize(animation.getWidth(), animation.getHeight());
+            setSizes(animation.getAnimSizes(), animation.getStandSizes());
         }
 
         public SkillSprite() {
@@ -333,7 +359,7 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
             setLooping(false);
             stateTimer = 0;
             distance = new Vector2(0, 0);
-            setSize(FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH());
+            //setSize(FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH());
         }
 
         @Override
@@ -342,14 +368,37 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
             if ((SkillAnimationState.ANIMATION_ONLY.equals(getAnimationState()) ||
                     (SkillAnimationState.FULL_ANIMATION.equals(getAnimationState()))) && getMoveState().equals(MoveState.STATIC)) {
                 region = animation.getAnimation().getKeyFrame(stateTimer, isLooping());
-                setSize(FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH());
+                setSize(animSizes[0], animSizes[1]);
             } else if (SkillAnimationState.STAND_TEXTURE.equals(getAnimationState()) ||
                     (SkillAnimationState.FULL_ANIMATION.equals(getAnimationState()))) {
                 region = standTexture;
-                setSize(FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH());
+                setSize(standSizes[0], standSizes[1]);
             }
 
             return region;
+        }
+
+        public void setSizes(float[] animSizes, float[] standSizes) {
+            setStandSizes(standSizes[0], standSizes[1]);
+            setAnimSizes(animSizes[0], animSizes[1]);
+        }
+
+        public void setStandSizes(float w, float h) {
+            standSizes[0] = w;
+            standSizes[1] = h;
+        }
+
+        public void setAnimSizes(float w, float h) {
+            animSizes[0] = w;
+            animSizes[1] = h;
+        }
+
+        public float[] getAnimSizes() {
+            return animSizes;
+        }
+
+        public float[] getStandSizes() {
+            return standSizes;
         }
 
         @Override

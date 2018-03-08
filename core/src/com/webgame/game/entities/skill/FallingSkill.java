@@ -11,16 +11,16 @@ import com.webgame.game.enums.SkillAnimationState;
 import static com.webgame.game.Configs.PPM;
 
 public class FallingSkill extends AOESkill {
+    protected final static int numFrames = 50;
+
     protected float fallTimer;
-    protected final float fallDuration = 10;
     protected int index;
 
-    protected final float fallOffset = 1f / PPM;
     protected final Vector2 fallVelocity = new Vector2(4 / PPM, -8 / PPM);
     protected final Vector2 fallOffsetVec = new Vector2(fallVelocity.x * 10, (-fallVelocity.y) * 10);
     protected final float tmp = 0.1f;
 
-    public FallingSkill(FallingSkill skill) {
+    public FallingSkill(Skill skill) {
         super(skill);
     }
 
@@ -29,7 +29,11 @@ public class FallingSkill extends AOESkill {
     }
 
     public FallingSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation) {
-        super(player, standTexture, gameAnimation, 50, SkillAnimationState.FULL_ANIMATION, false);
+        super(player, standTexture, gameAnimation, numFrames, SkillAnimationState.FULL_ANIMATION, false,null, null);
+    }
+
+    public FallingSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, float[] standSizes, float[] animSizes) {
+        super(player, standTexture, gameAnimation, numFrames, SkillAnimationState.FULL_ANIMATION, false, standSizes, animSizes);
     }
 
     @Override

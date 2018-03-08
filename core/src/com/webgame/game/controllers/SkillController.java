@@ -58,6 +58,9 @@ public class SkillController extends AbstractController implements  EventListene
         if (event instanceof AttackEvent) {
             //cooldown
             Skill currentSkill = player.getCurrentSkill();
+            if(currentSkill == null)
+                return false;
+
             Long end = currentSkill.getStart() + currentSkill.getCooldown();
             Long currentTime = System.currentTimeMillis();
             //Gdx.app.log("", "end:" + new Date(end) + " / curr:" + new Date(currentTime));

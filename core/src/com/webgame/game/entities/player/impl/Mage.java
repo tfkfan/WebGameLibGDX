@@ -9,6 +9,7 @@ import com.webgame.game.Configs;
 import com.webgame.game.animation.impl.*;
 import com.webgame.game.entities.skill.*;
 import com.webgame.game.enums.DirectionState;
+import com.webgame.game.enums.FrameSizes;
 import com.webgame.game.utils.GameUtils;
 import com.webgame.game.entities.player.Player;
 
@@ -23,17 +24,29 @@ public class Mage extends Player {
         super();
         int dirs = DirectionState.values().length;
         try {
+            float[] animSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
+            float[] standSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
+
             List<Skill> allSkills = new ArrayList<Skill>();
 
             Texture standSkillTexture = GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/fire_002.png");
             Texture animSkillTexture = GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s001.png");
             TextureRegion standTexture = new TextureRegion(standSkillTexture, 0, 0, standSkillTexture.getWidth(), standSkillTexture.getHeight());
             Skill skill1 = new SingleSkill(this, standTexture, new FlameAnimation(animSkillTexture));
-            skill1.setCooldown(GameUtils.calcTime(10,0));
-            setCurrentSkill(skill1);
+            skill1.setCooldown(GameUtils.calcTime(3,0));
+
             allSkills.add(skill1);
 
+             Texture skillsTexture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png");
+            TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);
+            Skill skill2 = new FallingSkill(this, blizzardStandTexture, new BlizzardFragmentAnimation(skillsTexture), standSizes1, animSizes1);
+            skill2.setCooldown(GameUtils.calcTime(10,0));
 
+            allSkills.add(skill2);
+            /*
+             Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/activeSkills.png");
+            TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);
+            skill = new FallingSkill(this, blizzardStandTexture, new BlizzardFragmentAnimation(skillsTexture));
 
 
 

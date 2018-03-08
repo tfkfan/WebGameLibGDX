@@ -10,10 +10,10 @@ import com.webgame.game.enums.SkillAnimationState;
 
 import static com.webgame.game.Configs.PPM;
 
-public abstract class AOESkill extends Skill{
+public abstract class AOESkill extends Skill {
     protected Rectangle area;
 
-    public AOESkill(Skill skill){
+    public AOESkill(Skill skill) {
         super(skill);
     }
 
@@ -37,23 +37,23 @@ public abstract class AOESkill extends Skill{
         super(player, standTexture, gameAnimation, animationState, looping);
     }
 
-    public AOESkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, Integer numFrames, SkillAnimationState animationState, Boolean looping) {
-        super(player, standTexture, gameAnimation, numFrames, animationState, looping);
+    public AOESkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation,
+                    Integer numFrames, SkillAnimationState animationState, Boolean looping, float[] standSizes, float[] animSizes) {
+        super(player, standTexture, gameAnimation, numFrames, SkillAnimationState.FULL_ANIMATION, false, standSizes, animSizes);
     }
 
-
     @Override
-    protected void init(Player player){
+    protected void init(Player player) {
         super.init(player);
         setArea(new Rectangle(0, 0, 100 / PPM, 100 / PPM));
     }
 
     @Override
-    public void cast(Vector2 targetPosition){
+    public void cast(Vector2 targetPosition) {
         super.cast(targetPosition);
         Vector2 newPos = new Vector2();
-        newPos.x = targetPosition.x - getArea().getWidth()/2;
-        newPos.y = targetPosition.y - getArea().getHeight()/2;
+        newPos.x = targetPosition.x - getArea().getWidth() / 2;
+        newPos.y = targetPosition.y - getArea().getHeight() / 2;
         getArea().setPosition(newPos);
     }
 

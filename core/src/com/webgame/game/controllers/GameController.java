@@ -97,6 +97,11 @@ public class GameController extends AbstractController implements InputProcessor
 
     @Override
     public boolean keyDown(int keycode) {
+        if(keycode >=8 && keycode <=16){
+            int skillIndex = keycode - 8;
+            player.setCurrentSkill(skillIndex);
+        }
+
         return false;
     }
 

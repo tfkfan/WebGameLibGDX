@@ -39,7 +39,7 @@ public class SingleSkill extends Skill {
     }
 
     public SingleSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, Integer numFrames, SkillAnimationState animationState, Boolean looping) {
-        super(player, standTexture, gameAnimation, numFrames, animationState, looping);
+        super(player, standTexture, gameAnimation, numFrames, animationState, looping, null, null);
     }
 
     @Override

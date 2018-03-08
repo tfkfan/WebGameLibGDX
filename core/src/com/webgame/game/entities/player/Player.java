@@ -37,7 +37,7 @@ public abstract class Player extends WorldEntity implements IUpdatable {
     protected List<Skill> activeSkills;
     protected List<Skill> allSkills;
 
-    protected Skill currentSkill;
+    protected int currentSkill;
 
     public Player() {
         super();
@@ -63,6 +63,8 @@ public abstract class Player extends WorldEntity implements IUpdatable {
 
         activeSkills = new ArrayList<>();
 
+        currentSkill = 0;
+
         clearTimers();
         setBounds(0, 0, 60 / PPM, 60 / PPM);
     }
@@ -72,15 +74,19 @@ public abstract class Player extends WorldEntity implements IUpdatable {
         try {
             //checking inactive activeSkills
             List<Skill> skillsToRemove = new ArrayList<Skill>();
-            for(Skill skill : activeSkills)
-                if(skill.getEntityState().equals(EntityState.INACTIVE))
+            for (Skill skill : activeSkills)
+                if (skill.getEntityState().equals(EntityState.INACTIVE))
                     skillsToRemove.add(skill);
             activeSkills.removeAll(skillsToRemove);
 
 
-            currentSkill.setStart(System.currentTimeMillis());
+            Skill currSkill = allSkills.get(currentSkill);
+            if (currSkill == null)
+                return;
 
-            Skill skill = (Skill) currentSkill.clone();
+            currSkill.setStart(System.currentTimeMillis());
+
+            Skill skill = (Skill) currSkill.clone();
             skill.cast(target);
             activeSkills.add(skill);
         } catch (CloneNotSupportedException e) {
@@ -146,7 +152,7 @@ public abstract class Player extends WorldEntity implements IUpdatable {
             clearTimers();
     }
 
-    public List<Skill> getActiveSkills(){
+    public List<Skill> getActiveSkills() {
         return activeSkills;
     }
 
@@ -159,10 +165,12 @@ public abstract class Player extends WorldEntity implements IUpdatable {
     }
 
     public Skill getCurrentSkill() {
-        return currentSkill;
+        if (currentSkill >= 0 && currentSkill < allSkills.size())
+            return allSkills.get(currentSkill);
+        return null;
     }
 
-    public void setCurrentSkill(Skill currentSkill) {
+    public void setCurrentSkill(int currentSkill) {
         this.currentSkill = currentSkill;
     }
 
