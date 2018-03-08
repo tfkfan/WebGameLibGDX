@@ -33,6 +33,7 @@ public class Mage extends Player {
             Texture animSkillTexture = GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s001.png");
             TextureRegion standTexture = new TextureRegion(standSkillTexture, 0, 0, standSkillTexture.getWidth(), standSkillTexture.getHeight());
             Skill skill1 = new SingleSkill(this, standTexture, new FlameAnimation(animSkillTexture));
+            skill1.setDamage(150);
             skill1.setCooldown(GameUtils.calcTime(3,0));
 
             allSkills.add(skill1);
@@ -41,6 +42,7 @@ public class Mage extends Player {
             TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);
             Skill skill2 = new FallingSkill(this, blizzardStandTexture, new BlizzardFragmentAnimation(skillsTexture), standSizes1, animSizes1);
             skill2.setCooldown(GameUtils.calcTime(10,0));
+            skill2.setDamage(1);
             allSkills.add(skill2);
 
             Texture skill3Texture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");

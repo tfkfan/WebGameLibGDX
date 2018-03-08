@@ -2,6 +2,7 @@ package com.webgame.game.entities.skill;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.Configs;
 import com.webgame.game.animation.GameAnimation;
@@ -24,8 +25,9 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
     protected Long level;
     protected String title;
 
-    protected float damage;
-    protected float heal;
+    protected Integer damage;
+    protected Integer heal;
+
     protected float stateTimer;
 
     protected DirectionState directionState;
@@ -38,6 +40,8 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
 
     protected Long cooldown;
     protected Long start;
+
+    protected boolean marked;
 
     public Skill(Player player) {
         super();
@@ -95,19 +99,21 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
     public Skill(Skill skill) {
         super();
         init(skill.getPlayer());
+        copy(skill);
         copyAnimations(skill.getAnimations());
     }
 
     protected void init(Player player) {
         setTitle("Skill");
-        setDamage(0f);
-        setHeal(0f);
+        setDamage(0);
+        setHeal(0);
         clearTimers();
         setEntityState(EntityState.INACTIVE);
         setMoveState(MoveState.MOVING);
         setPlayer(player);
         setStart(0L);
         setCooldown(0L);
+        setMarked(false);
     }
 
     public void cast(Vector2 targetPosition) {
@@ -153,6 +159,12 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
             animations.add(animation);
         }
         setAnimations(animations);
+    }
+
+    protected void copy(Skill skill){
+        this.setDamage(skill.getDamage());
+        this.setHeal(skill.getHeal());
+
     }
 
     protected void copyAnimations(List<SkillSprite> animations) {
@@ -201,6 +213,18 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
             animation.init();
             animation.setEntityState(EntityState.INACTIVE);
         }
+    }
+
+    public Circle getShape(){
+        return new Circle(getPosition().x, getPosition().y, getWidth() > getHeight() ? getHeight()/2 : getWidth()/2);
+    }
+
+    public boolean isMarked() {
+        return marked;
+    }
+
+    public void setMarked(boolean marked) {
+        this.marked = marked;
     }
 
     public List<SkillSprite> getAnimations() {
@@ -271,19 +295,19 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
         this.title = title;
     }
 
-    public float getDamage() {
+    public Integer getDamage() {
         return damage;
     }
 
-    public void setDamage(float damage) {
+    public void setDamage(Integer damage) {
         this.damage = damage;
     }
 
-    public float getHeal() {
+    public Integer getHeal() {
         return heal;
     }
 
-    public void setHeal(float heal) {
+    public void setHeal(Integer heal) {
         this.heal = heal;
     }
 

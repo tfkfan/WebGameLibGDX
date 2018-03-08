@@ -58,7 +58,9 @@ public class GameController extends AbstractController implements InputProcessor
         this.player.createObject(world);
         this.player.setPosition(2f, 2f);
 
-        this.enemies.add(new Knight(batch, Configs.PLAYERSHEETS_FOLDER + "/knight.png"));
+        Player enemy1 = new Knight(batch, Configs.PLAYERSHEETS_FOLDER + "/knight.png");
+        enemy1.createObject(world);
+        this.enemies.add(enemy1);
 
         this.pController = new PlayerController();
         this.pController.init(player, enemies);

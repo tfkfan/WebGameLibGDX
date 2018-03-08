@@ -19,6 +19,6 @@ public class GameUtils {
 	}
 
 	public static float calcHealthLineWidth(float width, Integer HP, Integer maxHP){
-		return (width * 100 - (float)(maxHP - HP)/100)/100f;
+		return width*((float)HP/maxHP);
 	}
 }
