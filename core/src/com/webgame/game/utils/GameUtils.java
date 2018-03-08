@@ -17,4 +17,8 @@ public class GameUtils {
 	public static long calcTime(int seconds, int minutes){
 		return (long)(seconds*second + minutes*minute);
 	}
+
+	public static float calcCurrentHealth(Integer HP, Integer maxHP){
+		return 100 - (float)(maxHP - HP)/100;
+	}
 }

@@ -2,18 +2,18 @@ package com.webgame.game.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
+import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Enemy;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.enums.DirectionState;
-import com.webgame.game.enums.PlayerAnimationState;
-import com.webgame.game.events.AttackEvent;
 import com.webgame.game.events.MoveEvent;
 import com.webgame.game.stages.GameStage;
+import com.webgame.game.utils.GameUtils;
 
 import java.util.List;
 
@@ -21,8 +21,10 @@ public class PlayerController extends AbstractController implements  EventListen
     private Player player;
     private List<Enemy> enemies;
 
-    public PlayerController() {
+    protected ShapeRenderer shapeRenderer;
 
+    public PlayerController() {
+        shapeRenderer = new ShapeRenderer();
     }
 
     public void init(Player player, List<Enemy> enemies) {
@@ -48,6 +50,7 @@ public class PlayerController extends AbstractController implements  EventListen
         super.act(dt);
         handleInput();
         player.update(dt);
+        shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
     }
 
     private void handleInput() {
@@ -93,5 +96,22 @@ public class PlayerController extends AbstractController implements  EventListen
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         player.draw(batch, parentAlpha);
+
+        //drawing figures(hp)
+        batch.end();
+
+        shapeRenderer.setAutoShapeType(true);
+        shapeRenderer.setColor(Color.GREEN);
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.rect(player.getPosition().x - player.getWidth()/2, player.getPosition().y + player.getHeight() - 20/ Configs.PPM,
+                (player.getWidth()* GameUtils.calcCurrentHealth(player.getAttributes().getHealthPoints(), player.getAttributes().getMaxHealthPoints()))/100f, 5/ Configs.PPM);
+        shapeRenderer.end();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.circle(player.getPosition().x, player.getPosition().y,player.getRadius(),50);
+        shapeRenderer.end();
+
+        batch.begin();
     }
 }

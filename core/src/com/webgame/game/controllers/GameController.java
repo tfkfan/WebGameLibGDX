@@ -28,7 +28,6 @@ public class GameController extends AbstractController implements InputProcessor
 
     private World world;
     private WorldRenderer worldRenderer;
-    protected ShapeRenderer shapeRenderer;
 
     private OrthographicCamera camera;
     private Viewport viewport;
@@ -47,7 +46,7 @@ public class GameController extends AbstractController implements InputProcessor
         this.viewport = viewport;
 
         batch = new SpriteBatch();
-        shapeRenderer = new ShapeRenderer();
+
 
         world = new World(new Vector2(0, 0), true);
         worldRenderer = new WorldRenderer(world, camera);
@@ -75,7 +74,7 @@ public class GameController extends AbstractController implements InputProcessor
         camera.update();
 
         batch.setProjectionMatrix(camera.combined);
-        // sr.setProjectionMatrix(camera.combined);
+
         world.step(0.01f, 6, 2);
 
     }
@@ -100,6 +99,7 @@ public class GameController extends AbstractController implements InputProcessor
         if(keycode >=8 && keycode <=16){
             int skillIndex = keycode - 8;
             player.setCurrentSkill(skillIndex);
+            Gdx.app.log("CurrentSkill","" + skillIndex);
         }
 
         return false;

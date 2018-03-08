@@ -37,28 +37,16 @@ public class Mage extends Player {
 
             allSkills.add(skill1);
 
-             Texture skillsTexture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png");
+            Texture skillsTexture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png");
             TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);
             Skill skill2 = new FallingSkill(this, blizzardStandTexture, new BlizzardFragmentAnimation(skillsTexture), standSizes1, animSizes1);
             skill2.setCooldown(GameUtils.calcTime(10,0));
-
             allSkills.add(skill2);
-            /*
-             Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/activeSkills.png");
-            TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);
-            skill = new FallingSkill(this, blizzardStandTexture, new BlizzardFragmentAnimation(skillsTexture));
 
+            Texture skill3Texture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");
+            Skill skill3 = new BuffSkill(this, null, new BuffAnimation(skill3Texture));
+            allSkills.add(skill3);
 
-
-            // Texture skillsTexture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");
-            // currentSkill = new StaticSkill(this, null, new BuffAnimation(skillsTexture));
-
-            /*
-             Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/activeSkills.png");
-            TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);
-            skill = new FallingSkill(this, blizzardStandTexture, new BlizzardFragmentAnimation(skillsTexture));
-
-             */
 
             setAllSkills(allSkills);
 
