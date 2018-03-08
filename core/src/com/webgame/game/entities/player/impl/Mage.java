@@ -29,6 +29,7 @@ public class Mage extends Player {
             Texture animSkillTexture = GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s001.png");
             TextureRegion standTexture = new TextureRegion(standSkillTexture, 0, 0, standSkillTexture.getWidth(), standSkillTexture.getHeight());
             Skill skill1 = new SingleSkill(this, standTexture, new FlameAnimation(animSkillTexture));
+            skill1.setCooldown(GameUtils.calcTime(10,0));
             setCurrentSkill(skill1);
             allSkills.add(skill1);
 

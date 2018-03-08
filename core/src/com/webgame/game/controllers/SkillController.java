@@ -15,6 +15,7 @@ import com.webgame.game.entities.skill.Skill;
 import com.webgame.game.enums.PlayerAnimationState;
 import com.webgame.game.events.AttackEvent;
 
+import java.util.Date;
 import java.util.List;
 
 public class SkillController extends AbstractController implements  EventListener {
@@ -55,11 +56,21 @@ public class SkillController extends AbstractController implements  EventListene
     @Override
     public boolean handle(Event event) {
         if (event instanceof AttackEvent) {
+            //cooldown
+            Skill currentSkill = player.getCurrentSkill();
+            Long end = currentSkill.getStart() + currentSkill.getCooldown();
+            Long currentTime = System.currentTimeMillis();
+            //Gdx.app.log("", "end:" + new Date(end) + " / curr:" + new Date(currentTime));
+
+            if(currentTime < end)
+                return false;
+
             //Casting skill
             if (!player.getCurrAnimationState().equals(PlayerAnimationState.ATTACK)) {
                 player.clearTimers();
                 player.setCurrAnimationState(PlayerAnimationState.ATTACK);
             }
+
             player.castSkill(((AttackEvent) event).getTargetVector());
         }
         return true;

@@ -78,6 +78,8 @@ public abstract class Player extends WorldEntity implements IUpdatable {
             activeSkills.removeAll(skillsToRemove);
 
 
+            currentSkill.setStart(System.currentTimeMillis());
+
             Skill skill = (Skill) currentSkill.clone();
             skill.cast(target);
             activeSkills.add(skill);

@@ -18,9 +18,6 @@ import java.util.List;
 import static com.webgame.game.Configs.PPM;
 
 public abstract class Skill extends Entity implements IUpdatable, Cloneable {
-    protected static final float SKILL_WIDTH = 50 / PPM;
-    protected static final float SKILL_HEIGHT = 50 / PPM;
-    protected static final float SKILL_RADIUS = 30 / PPM;
 
     protected int animationsNum;
 
@@ -38,6 +35,9 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
 
     protected transient Player player;
     protected List<SkillSprite> animations;
+
+    protected Long cooldown;
+    protected Long start;
 
     public Skill(Player player) {
         super();
@@ -88,6 +88,8 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
         setEntityState(EntityState.INACTIVE);
         setMoveState(MoveState.MOVING);
         setPlayer(player);
+        setStart(0L);
+        setCooldown(0L);
     }
 
     public void cast(Vector2 targetPosition) {
@@ -184,6 +186,22 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
 
     public void setAnimations(List<SkillSprite> animations) {
         this.animations = animations;
+    }
+
+    public Long getCooldown() {
+        return cooldown;
+    }
+
+    public void setCooldown(Long cooldown) {
+        this.cooldown = cooldown;
+    }
+
+    public Long getStart() {
+        return start;
+    }
+
+    public void setStart(Long start) {
+        this.start = start;
     }
 
     public void clearTimers() {
