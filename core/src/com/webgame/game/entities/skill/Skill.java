@@ -39,7 +39,9 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
     protected List<SkillSprite> animations;
 
     protected Long cooldown;
+    protected Long duration;
     protected Long start;
+
 
     protected boolean marked;
 
@@ -225,6 +227,14 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
 
     public void setMarked(boolean marked) {
         this.marked = marked;
+    }
+
+    public Long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Long duration) {
+        this.duration = duration;
     }
 
     public List<SkillSprite> getAnimations() {

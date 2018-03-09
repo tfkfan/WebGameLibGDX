@@ -19,15 +19,16 @@ import com.webgame.game.entities.skill.StaticSkill;
 import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.PlayerAnimationState;
 import com.webgame.game.events.AttackEvent;
+import com.webgame.game.events.PlayerDamagedEvent;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class SkillController extends AbstractController implements EventListener {
     private Player player;
     private List<Player> enemies;
-
-    private ShapeRenderer sr;
+    private List<Player> allPlayers;
 
     public SkillController() {
     }
@@ -35,45 +36,47 @@ public class SkillController extends AbstractController implements EventListener
     public void init(Player player, List<Player> enemies) {
         this.player = player;
         this.enemies = enemies;
+
+        this.allPlayers = new ArrayList<>();
+        this.allPlayers.addAll(enemies);
+        this.allPlayers.add(player);
         this.addListener(this);
     }
-
 
     @Override
     public void act(float dt) {
         super.act(dt);
-        if (sr == null)
-            sr = new ShapeRenderer();
-        sr.setProjectionMatrix(this.getStage().getCamera().combined);
 
-        List<Skill> skills = player.getActiveSkills();
-        for (Skill skill : skills) {
-            skill.update(dt);
+        for (Player currentPlayer : allPlayers) {
+            List<Skill> skills = currentPlayer.getActiveSkills();
+            for (Skill skill : skills) {
+                skill.update(dt);
 
-            if (!(skill instanceof AOESkill) && skill.isMarked())
-                continue;
+                if (!(skill instanceof AOESkill) && skill.isMarked())
+                    continue;
 
-            //handling collision
-            for (Player enemy : enemies) {
-                if (skill instanceof AOESkill) {
-                    if (Intersector.overlaps(enemy.getShape(), ((AOESkill) skill).getArea())) {
-                        Gdx.app.log("damaged#1", enemy.getAttributes().getName());
-                        getPlayerDamaged(enemy, skill.getDamage());
-                    }
-                } else {
-                    if (Intersector.overlaps(skill.getShape(), enemy.getShape())) {
-                        if (skill instanceof SingleSkill || skill instanceof StaticSkill) {
-                            if (skill.getMoveState().equals(MoveState.STATIC)) {
-                                Gdx.app.log("damaged#2", enemy.getAttributes().getName());
-                                getPlayerDamaged(enemy, skill.getDamage());
-                                skill.setMarked(true);
-                            }
+                for (Player anotherPlayer : allPlayers) {
+                    if (anotherPlayer == currentPlayer)
+                        continue;
+
+                    //handling collision
+                    if (skill instanceof AOESkill) {
+                        if (Intersector.overlaps(anotherPlayer.getShape(), ((AOESkill) skill).getArea())) {
+                            this.fire(new PlayerDamagedEvent(anotherPlayer, skill.getDamage()));
                         }
+                    } else {
+                        if (Intersector.overlaps(skill.getShape(), anotherPlayer.getShape())) {
+                            if (skill instanceof SingleSkill || skill instanceof StaticSkill) {
+                                if (skill.getMoveState().equals(MoveState.STATIC)) {
+                                    this.fire(new PlayerDamagedEvent(anotherPlayer, skill.getDamage()));
+                                    skill.setMarked(true);
+                                }
+                            }
 
+                        }
                     }
                 }
             }
-
         }
     }
 
@@ -106,6 +109,8 @@ public class SkillController extends AbstractController implements EventListener
             }
 
             player.castSkill(((AttackEvent) event).getTargetVector());
+        } else if (event instanceof PlayerDamagedEvent) {
+            getPlayerDamaged(((PlayerDamagedEvent) event).getPlayer(), ((PlayerDamagedEvent) event).getDamage());
         }
         return true;
     }
