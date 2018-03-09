@@ -52,6 +52,11 @@ public class StaticSkill extends Skill {
     }
 
     @Override
+    public Skill createSkill() {
+        return new StaticSkill(this);
+    }
+
+    @Override
     public void updateAnimations(float dt) {
         for (SkillSprite animation : getAnimations()) {
             if (animation.getEntityState().equals(EntityState.INACTIVE))

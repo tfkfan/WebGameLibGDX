@@ -7,6 +7,9 @@
 	<inherits name='Box2DLights' />
 
 	<inherits name='WebGame' />
+
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.maps.objects.RectangleMapObject" />
+
 	<entry-point class='com.webgame.game.client.HtmlLauncher' />
 	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
 	<set-configuration-property name="gdx.assetpath" value="../core/assets" />

@@ -18,7 +18,7 @@ import java.util.List;
 
 import static com.webgame.game.Configs.PPM;
 
-public abstract class Skill extends Entity implements IUpdatable, Cloneable {
+public abstract class Skill extends Entity implements IUpdatable {
 
     protected int animationsNum;
 
@@ -125,25 +125,9 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
         setPosition(new Vector2(player.getPosition()));
     }
 
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        Class<?> clazz = this.getClass();
 
-        try {
-            return clazz.getDeclaredConstructor(Skill.class).newInstance(this);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+    public abstract Skill createSkill();
 
-        return null;
-
-    }
 
     public abstract void updateAnimations(float dt);
 
@@ -163,7 +147,7 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
         setAnimations(animations);
     }
 
-    protected void copy(Skill skill){
+    protected void copy(Skill skill) {
         this.setDamage(skill.getDamage());
         this.setHeal(skill.getHeal());
 
@@ -217,8 +201,8 @@ public abstract class Skill extends Entity implements IUpdatable, Cloneable {
         }
     }
 
-    public Circle getShape(){
-        return new Circle(getPosition().x, getPosition().y, getWidth() > getHeight() ? getHeight()/2 : getWidth()/2);
+    public Circle getShape() {
+        return new Circle(getPosition().x, getPosition().y, getWidth() > getHeight() ? getHeight() / 2 : getWidth() / 2);
     }
 
     public boolean isMarked() {

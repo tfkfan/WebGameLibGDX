@@ -71,28 +71,23 @@ public abstract class Player extends WorldEntity implements IUpdatable {
 
 
     public void castSkill(Vector2 target) {
-        try {
-            //checking inactive activeSkills
-            List<Skill> skillsToRemove = new ArrayList<Skill>();
-            for (Skill skill : activeSkills)
-                if (skill.getEntityState().equals(EntityState.INACTIVE))
-                    skillsToRemove.add(skill);
-            activeSkills.removeAll(skillsToRemove);
+        //checking inactive activeSkills
+        List<Skill> skillsToRemove = new ArrayList<Skill>();
+        for (Skill skill : activeSkills)
+            if (skill.getEntityState().equals(EntityState.INACTIVE))
+                skillsToRemove.add(skill);
+        activeSkills.removeAll(skillsToRemove);
 
 
-            Skill currSkill = allSkills.get(currentSkill);
-            if (currSkill == null)
-                return;
+        Skill currSkill = allSkills.get(currentSkill);
+        if (currSkill == null)
+            return;
 
-            currSkill.setStart(System.currentTimeMillis());
+        currSkill.setStart(System.currentTimeMillis());
 
-            Skill skill = (Skill) currSkill.clone();
-            skill.cast(target);
-            activeSkills.add(skill);
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-
+        Skill skill = (Skill) currSkill.createSkill();
+        skill.cast(target);
+        activeSkills.add(skill);
     }
 
     @Override

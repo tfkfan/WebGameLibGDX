@@ -60,6 +60,11 @@ public class SingleSkill extends Skill {
     }
 
     @Override
+    public Skill createSkill() {
+        return new SingleSkill(this);
+    }
+
+    @Override
     public void updateAnimations(float dt) {
         if(getMoveState().equals(MoveState.MOVING))
          getPosition().add(getVelocity());

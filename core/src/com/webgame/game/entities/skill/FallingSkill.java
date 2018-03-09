@@ -44,6 +44,11 @@ public class FallingSkill extends AOESkill {
     }
 
     @Override
+    public Skill createSkill() {
+        return new FallingSkill(this);
+    }
+
+    @Override
     public void clearTimers() {
         super.clearTimers();
         fallTimer = 0;
