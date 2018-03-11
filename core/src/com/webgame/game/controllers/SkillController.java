@@ -1,28 +1,21 @@
 package com.webgame.game.controllers;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.webgame.game.entities.player.Enemy;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.entities.skill.AOESkill;
 import com.webgame.game.entities.skill.SingleSkill;
 import com.webgame.game.entities.skill.Skill;
 import com.webgame.game.entities.skill.StaticSkill;
 import com.webgame.game.enums.MoveState;
-import com.webgame.game.enums.PlayerAnimationState;
 import com.webgame.game.events.AttackEvent;
 import com.webgame.game.events.PlayerDamagedEvent;
+import com.webgame.game.events.listeners.AttackListener;
+import com.webgame.game.events.listeners.PlayerDamagedListener;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class SkillController extends AbstractController implements EventListener {
@@ -30,10 +23,16 @@ public class SkillController extends AbstractController implements EventListener
     private List<Player> enemies;
     private List<Player> allPlayers;
 
+    private List<EventListener> attackListeners = new ArrayList<>();
+    private List<EventListener> playerDamagedListeners = new ArrayList<>();
+
     public SkillController() {
     }
 
     public void init(Player player, List<Player> enemies) {
+        addAttackListener(new AttackListener());
+        addPlayerDamagedListener(new PlayerDamagedListener());
+
         this.player = player;
         this.enemies = enemies;
 
@@ -41,6 +40,14 @@ public class SkillController extends AbstractController implements EventListener
         this.allPlayers.addAll(enemies);
         this.allPlayers.add(player);
         this.addListener(this);
+    }
+
+    public void addAttackListener(EventListener listener) {
+        attackListeners.add(listener);
+    }
+
+    public void addPlayerDamagedListener(EventListener listener) {
+        playerDamagedListeners.add(listener);
     }
 
     @Override
@@ -91,35 +98,14 @@ public class SkillController extends AbstractController implements EventListener
     public boolean handle(Event event) {
         if (event instanceof AttackEvent) {
             //cooldown
-            Skill currentSkill = player.getCurrentSkill();
-            if (currentSkill == null)
-                return false;
-
-            Long end = currentSkill.getStart() + currentSkill.getCooldown();
-            Long currentTime = System.currentTimeMillis();
-            //Gdx.app.log("", "end:" + new Date(end) + " / curr:" + new Date(currentTime));
-
-            if (currentTime < end)
-                return false;
-
-            //Casting skill
-            if (!player.getCurrAnimationState().equals(PlayerAnimationState.ATTACK)) {
-                player.clearTimers();
-                player.setCurrAnimationState(PlayerAnimationState.ATTACK);
-            }
-
-            player.castSkill(((AttackEvent) event).getTargetVector());
+            for (EventListener listener : attackListeners)
+                listener.handle(event);
         } else if (event instanceof PlayerDamagedEvent) {
-            getPlayerDamaged(((PlayerDamagedEvent) event).getPlayer(), ((PlayerDamagedEvent) event).getDamage());
+            for (EventListener listener : playerDamagedListeners)
+                listener.handle(event);
         }
         return true;
     }
 
-    protected void getPlayerDamaged(Player target, Integer damage) {
-        if (target.getAttributes().getHealthPoints() > 0)
-            target.getAttributes().setHealthPoints(target.getAttributes().getHealthPoints() - damage);
-        else
-            target.getAttributes().setHealthPoints(0);
-    }
 
 }

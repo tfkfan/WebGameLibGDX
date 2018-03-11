@@ -130,7 +130,7 @@ public class GameController extends AbstractController implements InputProcessor
                     getStage().getViewport().getScreenWidth(), getStage().getViewport().getScreenHeight());
 
             Vector2 target = new Vector2(trg.x, trg.y);
-            sController.fire(new AttackEvent((target)));
+            sController.fire(new AttackEvent(target, player));
             return true;
         }
         return false;
