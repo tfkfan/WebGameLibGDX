@@ -85,7 +85,7 @@ public abstract class Player extends WorldEntity implements IUpdatable {
 
         currSkill.setStart(System.currentTimeMillis());
 
-        Skill skill = (Skill) currSkill.createSkill();
+        Skill skill = currSkill.createCopy();
         skill.cast(target);
         activeSkills.add(skill);
     }

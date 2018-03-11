@@ -52,7 +52,7 @@ public class StaticSkill extends Skill {
     }
 
     @Override
-    public Skill createSkill() {
+    public Skill createCopy() {
         return new StaticSkill(this);
     }
 

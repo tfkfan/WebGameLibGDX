@@ -126,7 +126,7 @@ public abstract class Skill extends Entity implements IUpdatable {
     }
 
 
-    public abstract Skill createSkill();
+    public abstract Skill createCopy();
 
 
     public abstract void updateAnimations(float dt);

@@ -44,7 +44,7 @@ public class FallingSkill extends AOESkill {
     }
 
     @Override
-    public Skill createSkill() {
+    public Skill createCopy() {
         return new FallingSkill(this);
     }
 
