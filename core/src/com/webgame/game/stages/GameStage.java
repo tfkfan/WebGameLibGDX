@@ -32,9 +32,15 @@ public class GameStage extends Stage {
         gc = new GameController(camera, viewport);
         //wc = new WidgetsController(camera, viewport, gc.getPlayer());
         this.addActor(gc);
-       // this.addActor(wc);
+        // this.addActor(wc);
 
     }
 
-
+    public void login(String username, String password) {
+        try {
+            gc.playerLogin(username, password);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }

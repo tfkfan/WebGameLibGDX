@@ -5,16 +5,17 @@ import com.badlogic.gdx.Screen;
 import com.webgame.game.stages.GameStage;
 
 public class MainScreen implements Screen {
-
 	private String title = "WebGame";
-
-
 	private GameStage stage;
 
 	@Override
 	public void show() {
 		Gdx.app.log(title, "Starting...");
+	}
+
+	public void login(String username, String password){
 		stage = new GameStage();
+		stage.login(username, password);
 	}
 
 	@Override

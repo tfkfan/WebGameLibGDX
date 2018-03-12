@@ -21,7 +21,7 @@ import java.util.List;
 public class SkillController extends AbstractController implements EventListener {
     private Player player;
     private List<Player> enemies;
-    private List<Player> allPlayers;
+    private List<Player> allPlayers = new ArrayList<>();
 
     private List<EventListener> attackListeners = new ArrayList<>();
     private List<EventListener> playerDamagedListeners = new ArrayList<>();
@@ -35,8 +35,6 @@ public class SkillController extends AbstractController implements EventListener
 
         this.player = player;
         this.enemies = enemies;
-
-        this.allPlayers = new ArrayList<>();
         this.allPlayers.addAll(enemies);
         this.allPlayers.add(player);
         this.addListener(this);

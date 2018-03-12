@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
@@ -22,9 +23,13 @@ public class PlayerController extends AbstractController implements EventListene
     private List<Player> enemies;
 
     protected ShapeRenderer shapeRenderer;
+    protected BitmapFont font;
 
     public PlayerController() {
         shapeRenderer = new ShapeRenderer();
+
+        font = new BitmapFont();
+        font.getData().setScale(9/Configs.PPM);
     }
 
     public void init(Player player, List<Player> enemies) {
@@ -48,8 +53,10 @@ public class PlayerController extends AbstractController implements EventListene
     @Override
     public void act(float dt) {
         super.act(dt);
-        handleInput();
-        player.update(dt);
+        if (player != null) {
+            handleInput();
+            player.update(dt);
+        }
         shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
     }
 
@@ -95,7 +102,12 @@ public class PlayerController extends AbstractController implements EventListene
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        player.draw(batch, parentAlpha);
+
+        if (player != null) {
+            player.draw(batch, parentAlpha);
+            font.draw(batch, player.getAttributes().getName(), -1, 0 );
+
+        }
 
         if (enemies != null)
             for (Player enemy : enemies)
@@ -106,17 +118,22 @@ public class PlayerController extends AbstractController implements EventListene
         shapeRenderer.setAutoShapeType(true);
         shapeRenderer.setColor(Color.GREEN);
 
+
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        drawPlayerHealthLine(player);
+        if (player != null)
+            drawPlayerHealthLine(player);
+
         if (enemies != null)
             for (Player enemy : enemies)
                 drawPlayerHealthLine(enemy);
         shapeRenderer.end();
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.circle(player.getPosition().x, player.getPosition().y, player.getRadius(), 50);
-        shapeRenderer.end();
+        if (player != null) {
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.circle(player.getPosition().x, player.getPosition().y, player.getRadius(), 50);
+            shapeRenderer.end();
+        }
 
         batch.begin();
     }

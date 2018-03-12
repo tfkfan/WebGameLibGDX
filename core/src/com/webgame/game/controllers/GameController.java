@@ -54,22 +54,25 @@ public class GameController extends AbstractController implements InputProcessor
         this.world = new World(new Vector2(0, 0), true);
         this.worldRenderer = new WorldRenderer(world, camera);
 
-        this.player = new Mage(batch, Configs.PLAYERSHEETS_FOLDER + "/mage.png");
-        this.player.createObject(world);
-        this.player.setPosition(2f, 2f);
+        this.pController = new PlayerController();
+        this.sController = new SkillController();
 
         Player enemy1 = new Knight(batch, Configs.PLAYERSHEETS_FOLDER + "/knight.png");
         enemy1.createObject(world);
         this.enemies.add(enemy1);
 
-        this.pController = new PlayerController();
-        this.pController.init(player, enemies);
-
-        this.sController = new SkillController();
-        this.sController.init(player, enemies);
-
         this.addActor(pController);
         this.addActor(sController);
+    }
+
+    public void playerLogin(String username, String password){
+        this.player = new Mage(batch, Configs.PLAYERSHEETS_FOLDER + "/mage.png");
+        this.player.getAttributes().setName(username);
+        this.player.createObject(world);
+        this.player.setPosition(2f, 2f);
+
+        this.pController.init(player, enemies);
+        this.sController.init(player, enemies);
     }
 
     @Override
