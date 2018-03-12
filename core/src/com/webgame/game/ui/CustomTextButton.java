@@ -6,12 +6,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.webgame.game.Configs;
 
-public class SkillButton extends TextButton{
-    public SkillButton(String text, TextButtonStyle style){
+public class CustomTextButton extends TextButton{
+    public CustomTextButton(String text, TextButtonStyle style){
         super(text, style);
     }
 
-    public static SkillButton createButton(String title, ClickListener listener){
+    public static CustomTextButton createButton(String title, Boolean isScaled, ClickListener listener){
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = new BitmapFont();
 
@@ -20,16 +20,22 @@ public class SkillButton extends TextButton{
         textButtonStyle.downFontColor = Color.BLACK;
         textButtonStyle.checkedFontColor = Color.GREEN;
 
-        SkillButton btn = new SkillButton(title, textButtonStyle);
+        CustomTextButton btn = new CustomTextButton(title, textButtonStyle);
 
        // btn.setSize(0,0);
-        btn.setTransform(true);
+        if(isScaled) {
+            btn.setTransform(true);
 
-        btn.setScale(1/Configs.PPM);
+            btn.setScale(1 / Configs.PPM);
+        }
 
         btn.setDebug(true);
 
         btn.addListener(listener);
         return btn;
+    }
+
+    public static CustomTextButton createButton(String title, ClickListener listener){
+        return createButton(title, false, listener);
     }
 }

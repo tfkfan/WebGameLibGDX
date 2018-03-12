@@ -1,19 +1,13 @@
 package com.webgame.game.ui;
 
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.entities.skill.Skill;
-import sun.awt.ConstrainableGraphics;
 
 import java.util.List;
 
@@ -71,7 +65,7 @@ public class PlayerPanel extends Table {
         add().expand();
         row();
 
-        SkillButton btn2 = SkillButton.createButton("dsfdsdgfsdgsdg", new ClickListener() {
+        CustomTextButton btn2 = CustomTextButton.createButton("dsfdsdgfsdgsdg", true, new ClickListener() {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -80,7 +74,7 @@ public class PlayerPanel extends Table {
             }
         });
         add(btn2).size(btn2.getWidth()/ Configs.PPM, btn2.getHeight()/ Configs.PPM).expand();
-        SkillButton btn = SkillButton.createButton("dsfd", new ClickListener() {
+        CustomTextButton btn = CustomTextButton.createButton("dsfd", true, new ClickListener() {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -101,7 +95,7 @@ public class PlayerPanel extends Table {
 
             textButtonStyle.downFontColor = Color.BLACK;
             textButtonStyle.checkedFontColor = Color.GREEN;
-            SkillButton btn = new SkillButton(skill.getTitle(), textButtonStyle, i);
+            CustomTextButton btn = new CustomTextButton(skill.getTitle(), textButtonStyle, i);
             btn.addListener(new ClickListener() {
 
                 @Override
