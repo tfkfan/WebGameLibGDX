@@ -18,11 +18,12 @@ allprojects {
     version = '1.0'
     ext {
         appName = "WebGameLibGDX"
-        gdxVersion = '1.9.7'
+        gdxVersion = '1.9.6'
         roboVMVersion = '2.3.1'
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
+        libVersion = '1.9'
     }
 
     repositories {
@@ -85,6 +86,10 @@ project(":core") {
 
 
     dependencies {
+        compile "com.github.czyzby:gdx-websocket-common:$libVersion.$gdxVersion"
+        compile "com.github.czyzby:gdx-websocket:$libVersion.$gdxVersion"
+        compile "com.github.czyzby:gdx-websocket-gwt:$libVersion.$gdxVersion"
+        compile "com.github.czyzby:gdx-websocket-gwt:$libVersion.$gdxVersion:sources"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"

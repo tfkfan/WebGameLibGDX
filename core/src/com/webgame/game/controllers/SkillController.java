@@ -32,28 +32,25 @@ public class SkillController extends AbstractController implements EventListener
 
     public void init(Player player, List<Player> enemies) {
         addAttackListener(new AttackListener() {
-                              @Override
-                              public void customHandle(AttackEvent event) {
-                                  Player plr = event.getPlayer();
-                                  Skill currentSkill = plr.getCurrentSkill();
-                                  if (currentSkill == null)
-                                      return;
+            @Override
+            public void customHandle(AttackEvent event) {
+                  Player plr = event.getPlayer();
+                  Skill currentSkill = plr.getCurrentSkill();
+                  if (currentSkill == null)
+                      return;
 
-                                  Long end = currentSkill.getStart() + currentSkill.getCooldown();
-                                  Long currentTime = System.currentTimeMillis();
+                  Long end = currentSkill.getStart() + currentSkill.getCooldown();
+                  Long currentTime = System.currentTimeMillis();
 
-                                  if (currentTime < end)
-                                      return;
+                  if (currentTime < end)
+                      return;
 
-                                  //Casting skill
-                                  if (!plr.getCurrAnimationState().equals(PlayerAnimationState.ATTACK)) {
-                                      plr.clearTimers();
-                                      plr.setCurrAnimationState(PlayerAnimationState.ATTACK);
-                                  }
+                  plr.clearTimers();
+                  plr.setCurrAnimationState(PlayerAnimationState.ATTACK);
 
-                                  plr.castSkill(event.getTargetVector());
-                              }
-                          }
+                  plr.castSkill(event.getTargetVector());
+                }
+            }
         );
         addPlayerDamagedListener(new PlayerDamagedListener() {
 
