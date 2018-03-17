@@ -29,7 +29,8 @@ public class PlayerController extends AbstractController implements EventListene
         shapeRenderer = new ShapeRenderer();
 
         font = new BitmapFont();
-        font.getData().setScale(9/Configs.PPM);
+        font.setUseIntegerPositions(false);
+        font.getData().setScale(1/Configs.PPM);
     }
 
     public void init(Player player, List<Player> enemies) {
@@ -105,8 +106,7 @@ public class PlayerController extends AbstractController implements EventListene
 
         if (player != null) {
             player.draw(batch, parentAlpha);
-            font.draw(batch, player.getAttributes().getName(), -1, 0 );
-
+            font.draw(batch, player.getAttributes().getName(), player.getPosition().x - player.getWidth()/2, player.getPosition().y + player.getHeight() + 5/Configs.PPM );
         }
 
         if (enemies != null)

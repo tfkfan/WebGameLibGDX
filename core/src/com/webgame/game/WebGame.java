@@ -13,16 +13,20 @@ public class WebGame extends Game {
 
     @Override
     public void create() {
-        loginScreen.addLoginListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                LoginEvent loginEvent = (LoginEvent) event;
+        loginScreen.addLoginListener(event -> {
+            LoginEvent loginEvent = (LoginEvent) event;
+            try {
                 mainScreen.login(loginEvent.getUsername(), loginEvent.getPassword());
+            } catch (Exception e) {
+
+                //loginScreen.setMessage(e.getMessage());
+                return false;
+            } finally {
                 WebGame.this.setScreen(mainScreen);
                 return true;
             }
+
         });
         this.setScreen(loginScreen);
-
     }
 }
