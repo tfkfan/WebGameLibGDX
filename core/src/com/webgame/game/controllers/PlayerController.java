@@ -13,14 +13,18 @@ import com.webgame.game.entities.player.Enemy;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.events.MoveEvent;
+import com.webgame.game.events.listeners.PlayerMoveListener;
 import com.webgame.game.stages.GameStage;
 import com.webgame.game.utils.GameUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerController extends AbstractController implements EventListener {
     private Player player;
     private List<Player> enemies;
+
+    private List<PlayerMoveListener> playerMoveListeners = new ArrayList<>();
 
     protected ShapeRenderer shapeRenderer;
     protected BitmapFont font;
@@ -30,7 +34,23 @@ public class PlayerController extends AbstractController implements EventListene
 
         font = new BitmapFont();
         font.setUseIntegerPositions(false);
-        font.getData().setScale(1/Configs.PPM);
+        font.getData().setScale(1 / Configs.PPM);
+
+        addPlayerMoveListener(new PlayerMoveListener() {
+            @Override
+            public void customHandle(MoveEvent event) {
+                Player plr = event.getPlayer();
+                Vector2 vec = event.getVector();
+                plr.setOldDirectionState(plr.getDirectionState());
+                plr.setDirectionState(event.getDirectionState());
+                plr.setVelocity(vec);
+                plr.applyVelocity();
+            }
+        });
+    }
+
+    public void addPlayerMoveListener(PlayerMoveListener listener) {
+        playerMoveListeners.add(listener);
     }
 
     public void init(Player player, List<Player> enemies) {
@@ -42,11 +62,9 @@ public class PlayerController extends AbstractController implements EventListene
     @Override
     public boolean handle(Event event) {
         if (event instanceof MoveEvent) {
-            Vector2 vec = ((MoveEvent) event).getVector();
-            player.setOldDirectionState(player.getDirectionState());
-            player.setDirectionState(((MoveEvent) event).getDirectionState());
-            player.setVelocity(vec);
-            player.applyVelocity();
+            for(PlayerMoveListener listener : playerMoveListeners){
+                listener.customHandle((MoveEvent) event);
+            }
         }
         return true;
     }
@@ -97,7 +115,7 @@ public class PlayerController extends AbstractController implements EventListene
         else if (velocity.x < 0 && velocity.y < 0)
             directionState = DirectionState.LEFTDOWN;
 
-        fire(new MoveEvent(velocity, directionState));
+        fire(new MoveEvent(velocity, directionState, player));
     }
 
     @Override
@@ -106,7 +124,7 @@ public class PlayerController extends AbstractController implements EventListene
 
         if (player != null) {
             player.draw(batch, parentAlpha);
-            font.draw(batch, player.getAttributes().getName(), player.getPosition().x - player.getWidth()/2, player.getPosition().y + player.getHeight() + 5/Configs.PPM );
+            font.draw(batch, player.getAttributes().getName(), player.getPosition().x - player.getWidth() / 2, player.getPosition().y + player.getHeight() + 5 / Configs.PPM);
         }
 
         if (enemies != null)
