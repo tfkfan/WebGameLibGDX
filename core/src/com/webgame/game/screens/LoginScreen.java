@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.webgame.game.Configs;
 import com.webgame.game.events.LoginEvent;
+import com.webgame.game.events.listeners.LoginListener;
 import com.webgame.game.stages.GameStage;
 import com.webgame.game.ui.CustomLabel;
 import com.webgame.game.ui.CustomTextButton;
@@ -23,7 +24,7 @@ public class LoginScreen implements Screen {
     private String title = "WebGame";
     private Stage stage;
 
-    private List<EventListener> loginListeners = new ArrayList<EventListener>();
+    private List<LoginListener> loginListeners = new ArrayList<LoginListener>();
 
     @Override
     public void show() {
@@ -42,7 +43,7 @@ public class LoginScreen implements Screen {
 
     }
 
-    public void addLoginListener(EventListener listener) {
+    public void addLoginListener(LoginListener listener) {
         loginListeners.add(listener);
     }
 
@@ -60,8 +61,8 @@ public class LoginScreen implements Screen {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                for (EventListener listener : loginListeners) {
-                    listener.handle(new LoginEvent(usernameField.getText(), passwordField.getText()));
+                for (LoginListener listener : loginListeners) {
+                    listener.customHandle(new LoginEvent(usernameField.getText(), passwordField.getText()));
                 }
             }
         });
