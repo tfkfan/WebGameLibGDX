@@ -2,6 +2,8 @@ package com.webgame.game;
 
 
 public class Configs {
+	public static final String SERVER_HOST = "localhost";
+	public static final Integer SERVER_PORT = 8000;
 	public static final Integer pSizeX = 33;
 	public static final Integer pSizeY = 33;
 	

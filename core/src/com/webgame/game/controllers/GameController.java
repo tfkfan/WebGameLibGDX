@@ -13,6 +13,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.github.czyzby.websocket.WebSocket;
+import com.github.czyzby.websocket.WebSocketAdapter;
+import com.github.czyzby.websocket.data.WebSocketCloseCode;
+import com.github.czyzby.websocket.net.ExtendedNet;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Enemy;
 import com.webgame.game.entities.player.Player;
@@ -39,6 +43,8 @@ public class GameController extends AbstractController implements InputProcessor
 
     private PlayerController pController;
     private SkillController sController;
+
+    private WebSocket socket;
 
 
     public GameController(OrthographicCamera camera, Viewport viewport) {
@@ -73,7 +79,35 @@ public class GameController extends AbstractController implements InputProcessor
 
         this.pController.init(player, enemies);
         this.sController.init(player, enemies);
+
+        socket = ExtendedNet.getNet().newWebSocket(Configs.SERVER_HOST, Configs.SERVER_PORT);
+        socket.addListener(getListener());
+        socket.connect();
     }
+
+    private static WebSocketAdapter getListener() {
+        return new WebSocketAdapter() {
+            @Override
+            public boolean onOpen(final WebSocket webSocket) {
+                Gdx.app.log("WS", "Connected!");
+                webSocket.send("Hello from client!");
+                return FULLY_HANDLED;
+            }
+
+            @Override
+            public boolean onClose(final WebSocket webSocket, final WebSocketCloseCode code, final String reason) {
+                Gdx.app.log("WS", "Disconnected - status: " + code + ", reason: " + reason);
+                return FULLY_HANDLED;
+            }
+
+            @Override
+            public boolean onMessage(final WebSocket webSocket, final String packet) {
+                Gdx.app.log("WS", "Got message: " + packet);
+                return FULLY_HANDLED;
+            }
+        };
+    }
+
 
     @Override
     public void act(float dt) {
