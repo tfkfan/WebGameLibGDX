@@ -25,6 +25,7 @@ allprojects {
         aiVersion = '1.8.0'
         libVersion = '1.9'
         vertxVersion= '3.4.1'
+        visVersion= '1.3.0'
     }
 
     repositories {
@@ -89,6 +90,7 @@ project(":server") {
     dependencies {
         compile project(":core")
         compile "io.vertx:vertx-core:$vertxVersion"
+        compile "com.github.czyzby:gdx-websocket-serialization:$libVersion"
     }
 }
 
@@ -97,6 +99,8 @@ project(":core") {
 
 
     dependencies {
+        compile "com.github.czyzby:gdx-kiwi:$libVersion:sources"
+        compile "com.github.czyzby:gdx-lml-vis:$libVersion"
         compile "com.github.czyzby:gdx-websocket-common:$libVersion.$gdxVersion"
         compile "com.github.czyzby:gdx-websocket:$libVersion.$gdxVersion"
         compile "com.github.czyzby:gdx-websocket-gwt:$libVersion.$gdxVersion"

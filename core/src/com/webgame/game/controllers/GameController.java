@@ -7,29 +7,28 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.czyzby.websocket.WebSocket;
-import com.github.czyzby.websocket.WebSocketAdapter;
+import com.github.czyzby.websocket.WebSocketHandler;
+import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketCloseCode;
-import com.github.czyzby.websocket.net.ExtendedNet;
 import com.webgame.game.Configs;
-import com.webgame.game.entities.player.Enemy;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.entities.player.impl.Knight;
 import com.webgame.game.events.AttackEvent;
-import com.webgame.game.ui.PlayerPanel;
 import com.webgame.game.world.WorldRenderer;
 import com.webgame.game.entities.player.impl.Mage;
+import com.webgame.game.ws.IWebSocket;
+import com.webgame.game.ws.JsonWebSocket;
+import com.webgame.game.ws.server.ServerResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameController extends AbstractController implements InputProcessor {
+public class GameController extends AbstractController implements InputProcessor, WebSocketListener {
     private SpriteBatch batch;
 
     private World world;
@@ -44,7 +43,7 @@ public class GameController extends AbstractController implements InputProcessor
     private PlayerController pController;
     private SkillController sController;
 
-    private WebSocket socket;
+    private IWebSocket socketService;
 
 
     public GameController(OrthographicCamera camera, Viewport viewport) {
@@ -71,7 +70,7 @@ public class GameController extends AbstractController implements InputProcessor
         this.addActor(sController);
     }
 
-    public void playerLogin(String username, String password){
+    public void playerLogin(String username, String password) {
         this.player = new Mage(batch, Configs.PLAYERSHEETS_FOLDER + "/mage.png");
         this.player.getAttributes().setName(username);
         this.player.createObject(world);
@@ -80,30 +79,45 @@ public class GameController extends AbstractController implements InputProcessor
         this.pController.init(player, enemies);
         this.sController.init(player, enemies);
 
-        socket = ExtendedNet.getNet().newWebSocket(Configs.SERVER_HOST, Configs.SERVER_PORT);
-        socket.addListener(getListener());
-        socket.connect();
+        socketService = getSocketService();
+        socketService.connect();
+        socketService.send("hi");
     }
 
-    private static WebSocketAdapter getListener() {
-        return new WebSocketAdapter() {
-            @Override
-            public boolean onOpen(final WebSocket webSocket) {
-                Gdx.app.log("WS", "Connected!");
-                webSocket.send("Hello from client!");
-                return FULLY_HANDLED;
-            }
+    @Override
+    public boolean onOpen(WebSocket webSocket) {
+        return false;
+    }
+
+    @Override
+    public boolean onClose(WebSocket webSocket, WebSocketCloseCode code, String reason) {
+        return false;
+    }
+
+    @Override
+    public boolean onMessage(WebSocket webSocket, String packet) {
+        Gdx.app.log("websocket", "MSG from server: " + packet);
+        return false;
+    }
+
+    @Override
+    public boolean onMessage(WebSocket webSocket, byte[] packet) {
+        Gdx.app.log("websocket", "MSG from server: " + packet);
+        return false;
+    }
+
+    @Override
+    public boolean onError(WebSocket webSocket, Throwable error) {
+        return false;
+    }
+
+
+    private IWebSocket getSocketService() {
+        return new JsonWebSocket() {
 
             @Override
-            public boolean onClose(final WebSocket webSocket, final WebSocketCloseCode code, final String reason) {
-                Gdx.app.log("WS", "Disconnected - status: " + code + ", reason: " + reason);
-                return FULLY_HANDLED;
-            }
-
-            @Override
-            public boolean onMessage(final WebSocket webSocket, final String packet) {
-                Gdx.app.log("WS", "Got message: " + packet);
-                return FULLY_HANDLED;
+            protected WebSocketListener createListener() {
+                return GameController.this;
             }
         };
     }
@@ -139,10 +153,10 @@ public class GameController extends AbstractController implements InputProcessor
 
     @Override
     public boolean keyDown(int keycode) {
-        if(keycode >=8 && keycode <=16){
+        if (keycode >= 8 && keycode <= 16) {
             int skillIndex = keycode - 8;
             player.setCurrentSkill(skillIndex);
-            Gdx.app.log("CurrentSkill","" + skillIndex);
+            Gdx.app.log("CurrentSkill", "" + skillIndex);
         }
 
         return false;
@@ -196,4 +210,5 @@ public class GameController extends AbstractController implements InputProcessor
     public Player getPlayer() {
         return player;
     }
+
 }
