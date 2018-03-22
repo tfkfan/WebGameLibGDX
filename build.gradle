@@ -89,7 +89,10 @@ project(":server") {
 
     dependencies {
         compile project(":core")
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "io.vertx:vertx-core:$vertxVersion"
+        compile "com.github.czyzby:gdx-websocket-common:$libVersion.$gdxVersion"
+        compile "com.github.czyzby:gdx-websocket:$libVersion.$gdxVersion"
         compile "com.github.czyzby:gdx-websocket-serialization:$libVersion"
     }
 }
@@ -99,17 +102,13 @@ project(":core") {
 
 
     dependencies {
+        compile project(":server")
         compile "com.github.czyzby:gdx-kiwi:$libVersion:sources"
         compile "com.github.czyzby:gdx-lml-vis:$libVersion"
-        compile "com.github.czyzby:gdx-websocket-common:$libVersion.$gdxVersion"
-        compile "com.github.czyzby:gdx-websocket:$libVersion.$gdxVersion"
-        compile "com.github.czyzby:gdx-websocket-gwt:$libVersion.$gdxVersion"
-        compile "com.github.czyzby:gdx-websocket-gwt:$libVersion.$gdxVersion:sources"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-        
     }
 }
 

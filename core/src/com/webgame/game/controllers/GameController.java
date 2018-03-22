@@ -15,6 +15,8 @@ import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketHandler;
 import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketCloseCode;
+import com.github.czyzby.websocket.serialization.impl.Base64Serializer;
+import com.github.czyzby.websocket.serialization.impl.JsonSerializer;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.entities.player.impl.Knight;
@@ -23,10 +25,14 @@ import com.webgame.game.world.WorldRenderer;
 import com.webgame.game.entities.player.impl.Mage;
 import com.webgame.game.ws.IWebSocket;
 import com.webgame.game.ws.JsonWebSocket;
-import com.webgame.game.ws.server.ServerResponse;
 
+import java.lang.instrument.ClassDefinition;
+import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.Instrumentation;
+import java.lang.instrument.UnmodifiableClassException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.JarFile;
 
 public class GameController extends AbstractController implements InputProcessor, WebSocketListener {
     private SpriteBatch batch;
@@ -81,7 +87,9 @@ public class GameController extends AbstractController implements InputProcessor
 
         socketService = getSocketService();
         socketService.connect();
-        socketService.send("hi");
+
+
+        socketService.send(player);
     }
 
     @Override
@@ -96,13 +104,16 @@ public class GameController extends AbstractController implements InputProcessor
 
     @Override
     public boolean onMessage(WebSocket webSocket, String packet) {
-        Gdx.app.log("websocket", "MSG from server: " + packet);
+        Gdx.app.log("websocket", "String MSG from server: " + packet);
         return false;
     }
 
     @Override
     public boolean onMessage(WebSocket webSocket, byte[] packet) {
-        Gdx.app.log("websocket", "MSG from server: " + packet);
+        final JsonSerializer jsonSerializer = new JsonSerializer();
+        Object res = jsonSerializer.deserialize(packet);
+
+        Gdx.app.log("websocket", " Object MSG from server: " + res.toString());
         return false;
     }
 
@@ -110,7 +121,6 @@ public class GameController extends AbstractController implements InputProcessor
     public boolean onError(WebSocket webSocket, Throwable error) {
         return false;
     }
-
 
     private IWebSocket getSocketService() {
         return new JsonWebSocket() {
@@ -121,7 +131,6 @@ public class GameController extends AbstractController implements InputProcessor
             }
         };
     }
-
 
     @Override
     public void act(float dt) {

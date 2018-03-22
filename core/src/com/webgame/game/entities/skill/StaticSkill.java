@@ -10,6 +10,10 @@ import com.webgame.game.enums.SkillAnimationState;
 
 public class StaticSkill extends Skill {
 
+    public StaticSkill(){
+
+    }
+
     public StaticSkill(Skill skill){
         super(skill);
     }

@@ -6,9 +6,6 @@ import com.github.czyzby.websocket.WebSocketHandler;
 import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketCloseCode;
 import com.webgame.game.Configs;
-import com.webgame.game.ws.json.JsonClientArrayMessage;
-import com.webgame.game.ws.json.JsonClientMessage;
-import com.webgame.game.ws.server.ServerResponse;
 
 import java.lang.reflect.Array;
 

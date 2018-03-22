@@ -20,6 +20,9 @@ import java.util.List;
 
 public class Mage extends Player {
 
+    public Mage(){
+
+    }
     public Mage(SpriteBatch batch, String spritePath) {
         super();
         int dirs = DirectionState.values().length;
