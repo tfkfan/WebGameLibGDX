@@ -20,37 +20,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SkillController extends AbstractController implements EventListener {
-    private Player player;
-    private List<Player> enemies;
-    private List<Player> allPlayers = new ArrayList<>();
-
     private List<AttackListener> attackListeners = new ArrayList<>();
     private List<PlayerDamagedListener> playerDamagedListeners = new ArrayList<>();
 
     public SkillController() {
+        addListener(this);
+        init();
     }
 
-    public void init(Player player, List<Player> enemies) {
+    public void init() {
         addAttackListener(new AttackListener() {
-            @Override
-            public void customHandle(AttackEvent event) {
-                  Player plr = event.getPlayer();
-                  Skill currentSkill = plr.getCurrentSkill();
-                  if (currentSkill == null)
-                      return;
+                              @Override
+                              public void customHandle(AttackEvent event) {
+                                  Player plr = event.getPlayer();
+                                  Skill currentSkill = plr.getCurrentSkill();
+                                  if (currentSkill == null)
+                                      return;
 
-                  Long end = currentSkill.getStart() + currentSkill.getCooldown();
-                  Long currentTime = System.currentTimeMillis();
+                                  Long end = currentSkill.getStart() + currentSkill.getCooldown();
+                                  Long currentTime = System.currentTimeMillis();
 
-                  if (currentTime < end)
-                      return;
+                                  if (currentTime < end)
+                                      return;
 
-                  plr.clearTimers();
-                  plr.setCurrAnimationState(PlayerAnimationState.ATTACK);
+                                  plr.clearTimers();
+                                  plr.setCurrAnimationState(PlayerAnimationState.ATTACK);
 
-                  plr.castSkill(event.getTargetVector());
-                }
-            }
+                                  plr.castSkill(event.getTargetVector());
+                              }
+                          }
         );
         addPlayerDamagedListener(new PlayerDamagedListener() {
 
@@ -67,10 +65,7 @@ public class SkillController extends AbstractController implements EventListener
             }
         });
 
-        this.player = player;
-        this.enemies = enemies;
-        this.allPlayers.addAll(enemies);
-        this.allPlayers.add(player);
+
         this.addListener(this);
     }
 
@@ -86,7 +81,7 @@ public class SkillController extends AbstractController implements EventListener
     public void act(float dt) {
         super.act(dt);
 
-        for (Player currentPlayer : allPlayers) {
+        for (Player currentPlayer : getPlayers().values()) {
             List<Skill> skills = currentPlayer.getActiveSkills();
             for (Skill skill : skills) {
                 skill.update(dt);
@@ -94,7 +89,7 @@ public class SkillController extends AbstractController implements EventListener
                 if (!(skill instanceof AOESkill) && skill.isMarked())
                     continue;
 
-                for (Player anotherPlayer : allPlayers) {
+                for (Player anotherPlayer : getPlayers().values()) {
                     if (anotherPlayer == currentPlayer)
                         continue;
 
@@ -121,6 +116,8 @@ public class SkillController extends AbstractController implements EventListener
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        if (player == null)
+            return;
         List<Skill> skills = player.getActiveSkills();
         for (Skill skill : skills)
             skill.draw(batch, parentAlpha);

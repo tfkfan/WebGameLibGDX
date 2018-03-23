@@ -1,6 +1,10 @@
 package com.webgame.game.server.handlers;
 
+import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.entities.player.Player;
+import com.webgame.game.server.serialization.dto.player.LoginDTO;
+import com.webgame.game.server.serialization.dto.player.PlayerConnectedDTO;
+import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 import io.vertx.core.http.ServerWebSocket;
 
 import java.util.ArrayList;
@@ -10,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class CustomWebSocketHandler extends AbstractWebSocketHandler {
 
-    private final ConcurrentHashMap<Long, Player> players = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Long, PlayerDTO> players = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Long, ServerWebSocket> sessions = new ConcurrentHashMap<>();
 
     public CustomWebSocketHandler() {
@@ -21,23 +25,37 @@ public class CustomWebSocketHandler extends AbstractWebSocketHandler {
         if (obj == null)
             return;
 
-        if (obj instanceof Player) {
-            Player player = (Player) obj;
+        if (obj instanceof LoginDTO) {
+            LoginDTO player = (LoginDTO) obj;
             if (!sessions.containsKey(player)) {
-                sessions.put(player.getId(), webSocket);
-                players.put(player.getId(), player);
+
+                PlayerDTO playerDTO = new PlayerDTO();
+                playerDTO.setName(player.getUsername());
+                playerDTO.setId(sessions.size());
+                playerDTO.setPosition(new Vector2(2, 2));
+
+                PlayerConnectedDTO playerConnectedDTO = new PlayerConnectedDTO();
+                playerConnectedDTO.setId(playerDTO.getId());
+                playerConnectedDTO.setConnected(true);
+                playerConnectedDTO.setName(playerDTO.getName());
+                playerConnectedDTO.setPosition(playerDTO.getPosition());
+
+                sessions.put(playerDTO.getId(), webSocket);
+                players.put(playerDTO.getId(), playerDTO);
+                writeResponse(webSocket, playerConnectedDTO);
             }
-            playerHandler(player);
+
+
         }
     }
 
-    public void playerHandler(Player player) {
+    public void playerHandler(PlayerDTO player) {
         //if (!players.contains(player))
         //  players.add(player);
 
     }
 
-    public void sendToAll(final ServerWebSocket webSocket, final Object obj) {
+    public void writeResponseToAll(final ServerWebSocket webSocket, final Object obj) {
         for (ServerWebSocket session : sessions.values()) {
             this.writeResponse(session, obj);
         }

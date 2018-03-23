@@ -8,9 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractController extends Group {
     protected IWebSocket socketService;
-
-
-
     protected ConcurrentHashMap<Long, Player> players;
     protected  Player player;
 

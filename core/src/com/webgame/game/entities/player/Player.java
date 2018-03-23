@@ -8,6 +8,8 @@ import com.webgame.game.entities.WorldEntity;
 import com.webgame.game.entities.attributes.PlayerAttributes;
 import com.webgame.game.entities.skill.Skill;
 import com.webgame.game.enums.*;
+import com.webgame.game.server.serialization.dto.HasDTO;
+import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 import com.webgame.game.world.common.IUpdatable;
 
 import java.util.ArrayList;
@@ -15,9 +17,7 @@ import java.util.List;
 
 import static com.webgame.game.Configs.PPM;
 
-public abstract class Player extends WorldEntity implements IUpdatable {
-    protected boolean isAlive;
-
+public abstract class Player extends WorldEntity implements IUpdatable, HasDTO<PlayerDTO> {
     protected float stateTimer;
 
     protected DirectionState directionState;
@@ -48,8 +48,6 @@ public abstract class Player extends WorldEntity implements IUpdatable {
         super.init();
         attributes = new PlayerAttributes();
 
-        isAlive = true;
-
         directionState = DirectionState.UP;
         oldDirectionState = directionState;
 
@@ -67,6 +65,14 @@ public abstract class Player extends WorldEntity implements IUpdatable {
 
         clearTimers();
         setBounds(0, 0, 60 / PPM, 60 / PPM);
+    }
+
+    @Override
+    public PlayerDTO createDTO() {
+        PlayerDTO dto = new PlayerDTO();
+        dto.setId(getId());
+        dto.setPosition(getPosition());
+        return dto;
     }
 
     public void castSkill(Vector2 target) {

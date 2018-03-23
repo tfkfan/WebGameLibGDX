@@ -6,7 +6,9 @@ import com.webgame.game.server.serialization.dto.UpdatableDTO;
 
 public class PlayerDTO implements UpdatableDTO<Player> {
     protected long id;
+    protected String name;
     protected Vector2 position;
+
 
 
     public PlayerDTO(){
@@ -29,11 +31,19 @@ public class PlayerDTO implements UpdatableDTO<Player> {
         this.position = position;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Override
     public void updateBy(Player entity) {
         setId(entity.getId());
         setPosition(entity.getPosition());
+        setName(entity.getAttributes().getName());
     }
 
 }

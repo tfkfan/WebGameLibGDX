@@ -12,6 +12,7 @@ import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Enemy;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.enums.DirectionState;
+import com.webgame.game.enums.PlayerAnimationState;
 import com.webgame.game.events.MoveEvent;
 import com.webgame.game.events.listeners.PlayerMoveListener;
 import com.webgame.game.stages.GameStage;
@@ -36,6 +37,7 @@ public class PlayerController extends AbstractController implements EventListene
         font.setUseIntegerPositions(false);
         font.getData().setScale(1 / Configs.PPM);
 
+        addListener(this);
         addPlayerMoveListener(new PlayerMoveListener() {
             @Override
             public void customHandle(MoveEvent event) {
@@ -62,7 +64,7 @@ public class PlayerController extends AbstractController implements EventListene
     @Override
     public boolean handle(Event event) {
         if (event instanceof MoveEvent) {
-            for(PlayerMoveListener listener : playerMoveListeners){
+            for (PlayerMoveListener listener : playerMoveListeners) {
                 listener.customHandle((MoveEvent) event);
             }
         }
@@ -115,21 +117,26 @@ public class PlayerController extends AbstractController implements EventListene
         else if (velocity.x < 0 && velocity.y < 0)
             directionState = DirectionState.LEFTDOWN;
 
-        fire(new MoveEvent(velocity, directionState, player));
+        if (velocity.x != 0 || velocity.y != 0 || player.getCurrAnimationState().equals(PlayerAnimationState.WALK)
+                || player.getCurrAnimationState().equals(PlayerAnimationState.ATTACK))
+            fire(new MoveEvent(velocity, directionState, player));
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        if (player != null) {
+        if (player != null && player.getAttributes().getName() != null) {
             player.draw(batch, parentAlpha);
             font.draw(batch, player.getAttributes().getName(), player.getPosition().x - player.getWidth() / 2, player.getPosition().y + player.getHeight() + 5 / Configs.PPM);
         }
 
-        if (players. != null)
-            for (Player enemy : enemies)
+        if (players != null)
+            for (Player enemy : players.values()) {
+                if (enemy.equals(player))
+                    continue;
                 enemy.draw(batch, parentAlpha);
+            }
         //drawing figures(hp)
         batch.end();
 
@@ -142,9 +149,13 @@ public class PlayerController extends AbstractController implements EventListene
         if (player != null)
             drawPlayerHealthLine(player);
 
-        if (enemies != null)
-            for (Player enemy : enemies)
+        if (players != null)
+            for (Player enemy : players.values()) {
+                if (enemy.equals(player))
+                    continue;
+
                 drawPlayerHealthLine(enemy);
+            }
         shapeRenderer.end();
 
         if (player != null) {

@@ -19,6 +19,9 @@ import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.entities.player.impl.Knight;
 import com.webgame.game.events.AttackEvent;
+import com.webgame.game.server.serialization.dto.player.LoginDTO;
+import com.webgame.game.server.serialization.dto.player.PlayerConnectedDTO;
+import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 import com.webgame.game.world.WorldRenderer;
 import com.webgame.game.entities.player.impl.Mage;
 import com.webgame.game.ws.IWebSocket;
@@ -38,13 +41,8 @@ public class GameController extends AbstractController implements InputProcessor
     private OrthographicCamera camera;
     private Viewport viewport;
 
-
-
     private PlayerController pController;
     private SkillController sController;
-
-    private IWebSocket socketService;
-
 
     public GameController(OrthographicCamera camera, Viewport viewport) {
         Gdx.input.setInputProcessor(this);
@@ -68,25 +66,21 @@ public class GameController extends AbstractController implements InputProcessor
         pController.setSocketService(getSocketService());
         sController.setSocketService(getSocketService());
 
-       // Player enemy1 = new Knight(batch, Configs.PLAYERSHEETS_FOLDER + "/knight.png");
-      //  enemy1.createObject(world);
-       // this.players.put(enemy1);
+        // Player enemy1 = new Knight(batch, Configs.PLAYERSHEETS_FOLDER + "/knight.png");
+        //  enemy1.createObject(world);
+        // this.players.put(enemy1);
 
         this.addActor(pController);
         this.addActor(sController);
     }
 
     public void playerLogin(String username, String password) {
-        Player player = new Mage(batch, Configs.PLAYERSHEETS_FOLDER + "/mage.png");
-        player.getAttributes().setName(username);
-        player.createObject(world);
-        player.setPosition(2f, 2f);
-
-
-      
 
         socketService.connect();
-        socketService.send(player);
+
+        LoginDTO dto = new LoginDTO();
+        dto.setUsername(username);
+        socketService.send(dto);
     }
 
     @Override
@@ -108,13 +102,37 @@ public class GameController extends AbstractController implements InputProcessor
     @Override
     public boolean onMessage(WebSocket webSocket, byte[] packet) {
         final JsonSerializer jsonSerializer = new JsonSerializer();
-        Object res = jsonSerializer.deserialize(packet);
+        final Object res = jsonSerializer.deserialize(packet);
 
-        if(res instanceof Player){
-            Player plr = (Player)res;
-
-        }
         Gdx.app.log("websocket", " Object MSG from server: " + res.toString());
+
+
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                if (res instanceof PlayerConnectedDTO) {
+
+                    PlayerConnectedDTO playerConnectedDTO = (PlayerConnectedDTO) res;
+
+                    Gdx.app.log("websocket", "Player created " + playerConnectedDTO.getId());
+
+
+                    Player player = new Mage(batch, Configs.PLAYERSHEETS_FOLDER + "/mage.png");
+                    player.getAttributes().setName(playerConnectedDTO.getName());
+                    player.createObject(world);
+                    player.setPosition(playerConnectedDTO.getPosition());
+                    player.setId(playerConnectedDTO.getId());
+                    setPlayer(player);
+                    GameController.this.sController.setPlayer(player);
+                    GameController.this.pController.setPlayer(player);
+
+                    GameController.this.getPlayers().put(player.getId(), player);
+
+
+                }
+            }
+        });
+
         return false;
     }
 
@@ -126,17 +144,20 @@ public class GameController extends AbstractController implements InputProcessor
     private void initSocketService() {
         setSocketService(new JsonWebSocket() {
 
-                             @Override
-                             protected WebSocketListener createListener() {
-                                 return GameController.this;
-                             }
-                         }
-        );
+            @Override
+            protected WebSocketListener createListener() {
+                return GameController.this;
+            }
+        });
     }
 
     @Override
     public void act(float dt) {
         super.act(dt);
+
+        if (player == null)
+            return;
+
         camera.position.x = player.getPosition().x;
         camera.position.y = player.getPosition().y;
         camera.update();
