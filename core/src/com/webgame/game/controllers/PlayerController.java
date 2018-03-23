@@ -16,13 +16,13 @@ import com.webgame.game.events.MoveEvent;
 import com.webgame.game.events.listeners.PlayerMoveListener;
 import com.webgame.game.stages.GameStage;
 import com.webgame.game.utils.GameUtils;
+import com.webgame.game.ws.IWebSocket;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerController extends AbstractController implements EventListener {
-    private Player player;
-    private List<Player> enemies;
+
 
     private List<PlayerMoveListener> playerMoveListeners = new ArrayList<>();
 
@@ -49,13 +49,13 @@ public class PlayerController extends AbstractController implements EventListene
         });
     }
 
+
     public void addPlayerMoveListener(PlayerMoveListener listener) {
         playerMoveListeners.add(listener);
     }
 
-    public void init(Player player, List<Player> enemies) {
+    public void init(Player player) {
         this.player = player;
-        this.enemies = enemies;
         this.addListener(this);
     }
 
@@ -127,7 +127,7 @@ public class PlayerController extends AbstractController implements EventListene
             font.draw(batch, player.getAttributes().getName(), player.getPosition().x - player.getWidth() / 2, player.getPosition().y + player.getHeight() + 5 / Configs.PPM);
         }
 
-        if (enemies != null)
+        if (players. != null)
             for (Player enemy : enemies)
                 enemy.draw(batch, parentAlpha);
         //drawing figures(hp)

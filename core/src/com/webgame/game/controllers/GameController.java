@@ -12,10 +12,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.czyzby.websocket.WebSocket;
-import com.github.czyzby.websocket.WebSocketHandler;
 import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketCloseCode;
-import com.github.czyzby.websocket.serialization.impl.Base64Serializer;
 import com.github.czyzby.websocket.serialization.impl.JsonSerializer;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Player;
@@ -26,13 +24,10 @@ import com.webgame.game.entities.player.impl.Mage;
 import com.webgame.game.ws.IWebSocket;
 import com.webgame.game.ws.JsonWebSocket;
 
-import java.lang.instrument.ClassDefinition;
-import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.Instrumentation;
-import java.lang.instrument.UnmodifiableClassException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.jar.JarFile;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GameController extends AbstractController implements InputProcessor, WebSocketListener {
     private SpriteBatch batch;
@@ -43,8 +38,7 @@ public class GameController extends AbstractController implements InputProcessor
     private OrthographicCamera camera;
     private Viewport viewport;
 
-    private Player player;
-    private List<Player> enemies;
+
 
     private PlayerController pController;
     private SkillController sController;
@@ -55,8 +49,6 @@ public class GameController extends AbstractController implements InputProcessor
     public GameController(OrthographicCamera camera, Viewport viewport) {
         Gdx.input.setInputProcessor(this);
 
-        this.enemies = new ArrayList<Player>();
-
         this.camera = camera;
         this.viewport = viewport;
 
@@ -65,30 +57,35 @@ public class GameController extends AbstractController implements InputProcessor
         this.world = new World(new Vector2(0, 0), true);
         this.worldRenderer = new WorldRenderer(world, camera);
 
+        initSocketService();
+        setPlayers(new ConcurrentHashMap<Long, Player>());
+
         this.pController = new PlayerController();
         this.sController = new SkillController();
 
-        Player enemy1 = new Knight(batch, Configs.PLAYERSHEETS_FOLDER + "/knight.png");
-        enemy1.createObject(world);
-        this.enemies.add(enemy1);
+        pController.setPlayers(getPlayers());
+        sController.setPlayers(getPlayers());
+        pController.setSocketService(getSocketService());
+        sController.setSocketService(getSocketService());
+
+       // Player enemy1 = new Knight(batch, Configs.PLAYERSHEETS_FOLDER + "/knight.png");
+      //  enemy1.createObject(world);
+       // this.players.put(enemy1);
 
         this.addActor(pController);
         this.addActor(sController);
     }
 
     public void playerLogin(String username, String password) {
-        this.player = new Mage(batch, Configs.PLAYERSHEETS_FOLDER + "/mage.png");
-        this.player.getAttributes().setName(username);
-        this.player.createObject(world);
-        this.player.setPosition(2f, 2f);
+        Player player = new Mage(batch, Configs.PLAYERSHEETS_FOLDER + "/mage.png");
+        player.getAttributes().setName(username);
+        player.createObject(world);
+        player.setPosition(2f, 2f);
 
-        this.pController.init(player, enemies);
-        this.sController.init(player, enemies);
 
-        socketService = getSocketService();
+      
+
         socketService.connect();
-
-
         socketService.send(player);
     }
 
@@ -113,6 +110,10 @@ public class GameController extends AbstractController implements InputProcessor
         final JsonSerializer jsonSerializer = new JsonSerializer();
         Object res = jsonSerializer.deserialize(packet);
 
+        if(res instanceof Player){
+            Player plr = (Player)res;
+
+        }
         Gdx.app.log("websocket", " Object MSG from server: " + res.toString());
         return false;
     }
@@ -122,14 +123,15 @@ public class GameController extends AbstractController implements InputProcessor
         return false;
     }
 
-    private IWebSocket getSocketService() {
-        return new JsonWebSocket() {
+    private void initSocketService() {
+        setSocketService(new JsonWebSocket() {
 
-            @Override
-            protected WebSocketListener createListener() {
-                return GameController.this;
-            }
-        };
+                             @Override
+                             protected WebSocketListener createListener() {
+                                 return GameController.this;
+                             }
+                         }
+        );
     }
 
     @Override

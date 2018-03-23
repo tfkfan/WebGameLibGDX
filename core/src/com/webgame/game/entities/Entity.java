@@ -2,9 +2,7 @@ package com.webgame.game.entities;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.webgame.game.enums.EntityState;
-import com.webgame.game.world.common.IFramed;
 
 import java.io.Serializable;
 
@@ -13,11 +11,11 @@ public abstract class Entity implements Serializable {
 
     protected Vector2 position;
     protected Vector2 velocity;
-    protected float xOffset;
-    protected float yOffset;
+    protected transient float xOffset;
+    protected transient float yOffset;
 
-    protected float width;
-    protected float height;
+    protected transient float width;
+    protected transient float height;
 
     protected EntityState entityState;
 

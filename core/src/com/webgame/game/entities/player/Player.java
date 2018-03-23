@@ -69,7 +69,6 @@ public abstract class Player extends WorldEntity implements IUpdatable {
         setBounds(0, 0, 60 / PPM, 60 / PPM);
     }
 
-
     public void castSkill(Vector2 target) {
         //checking inactive activeSkills
         List<Skill> skillsToRemove = new ArrayList<Skill>();
@@ -235,5 +234,27 @@ public abstract class Player extends WorldEntity implements IUpdatable {
 
     public void setStandRegions(TextureRegion[] standRegions) {
         this.standRegions = standRegions;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Player))
+            return false;
+        if (((Player) obj).getId() != null)
+            return ((Player) obj).getId().equals(getId());
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = 17;
+        result = 31 * result + hashCode();
+
+        if (getId() != null)
+            result = 31 * result + getId().intValue();
+
+        return result;
     }
 }

@@ -9,8 +9,8 @@ import static com.webgame.game.Configs.PPM;
 public abstract class WorldEntity extends AnimatedEntity {
     transient protected World world;
     transient protected Body b2body;
-    protected float defaultRadius = 20 / PPM;
-    protected Circle objectShape;
+    transient protected float defaultRadius = 20 / PPM;
+    transient protected Circle objectShape;
 
     public WorldEntity() {
         init();
