@@ -45,7 +45,11 @@ public class CustomWebSocketHandler extends AbstractWebSocketHandler {
                 writeResponse(webSocket, playerConnectedDTO);
                 writeResponseToAllExcept(webSocket, playerDTO);
             }
+        }else if(obj instanceof PlayerDTO){
+            PlayerDTO playerDTO = (PlayerDTO) obj;
+            writeResponseToAll(playerDTO);
         }
+
     }
 
     public void playerHandler(PlayerDTO player) {

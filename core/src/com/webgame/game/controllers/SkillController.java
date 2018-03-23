@@ -106,7 +106,6 @@ public class SkillController extends AbstractController implements EventListener
                                     skill.setMarked(true);
                                 }
                             }
-
                         }
                     }
                 }

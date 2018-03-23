@@ -47,6 +47,8 @@ public class PlayerController extends AbstractController implements EventListene
                 plr.setDirectionState(event.getDirectionState());
                 plr.setVelocity(vec);
                 plr.applyVelocity();
+
+                getSocketService().send(plr.createDTO());
             }
         });
     }
