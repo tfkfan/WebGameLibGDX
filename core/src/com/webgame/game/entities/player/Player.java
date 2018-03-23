@@ -20,7 +20,7 @@ import java.util.List;
 
 import static com.webgame.game.Configs.PPM;
 
-public abstract class Player extends WorldEntity implements IUpdatable, HasDTO<PlayerDTO> {
+public abstract class Player extends WorldEntity implements IUpdatable {
     protected float stateTimer;
 
     protected DirectionState directionState;
@@ -70,13 +70,6 @@ public abstract class Player extends WorldEntity implements IUpdatable, HasDTO<P
         setBounds(0, 0, 60 / PPM, 60 / PPM);
     }
 
-    @Override
-    public PlayerDTO createDTO() {
-        PlayerDTO dto = new PlayerDTO();
-        dto.setId(getId());
-        dto.setPosition(getPosition());
-        return dto;
-    }
 
     public static Player createPlayer(World world){
         Player player = new Mage(Configs.PLAYERSHEETS_FOLDER + "/mage.png");

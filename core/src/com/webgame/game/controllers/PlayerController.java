@@ -15,6 +15,7 @@ import com.webgame.game.enums.DirectionState;
 import com.webgame.game.enums.PlayerAnimationState;
 import com.webgame.game.events.MoveEvent;
 import com.webgame.game.events.listeners.PlayerMoveListener;
+import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 import com.webgame.game.stages.GameStage;
 import com.webgame.game.utils.GameUtils;
 import com.webgame.game.ws.IWebSocket;
@@ -48,7 +49,10 @@ public class PlayerController extends AbstractController implements EventListene
                 plr.setVelocity(vec);
                 plr.applyVelocity();
 
-                getSocketService().send(plr.createDTO());
+                PlayerDTO playerDTO = new PlayerDTO();
+                playerDTO.updateBy(plr);
+
+                getSocketService().send(playerDTO);
             }
         });
     }

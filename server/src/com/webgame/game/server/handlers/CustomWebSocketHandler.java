@@ -1,21 +1,17 @@
 package com.webgame.game.server.handlers;
 
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.entities.player.Player;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerConnectedDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
+import com.webgame.game.server.sessions.SessionContainer;
 import io.vertx.core.http.ServerWebSocket;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CustomWebSocketHandler extends AbstractWebSocketHandler {
 
-    private final ConcurrentHashMap<Long, PlayerDTO> players = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<Long, ServerWebSocket> sessions = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Long, SessionContainer> sessions = new ConcurrentHashMap<>();
 
     public CustomWebSocketHandler() {
     }
@@ -40,36 +36,30 @@ public class CustomWebSocketHandler extends AbstractWebSocketHandler {
                 playerConnectedDTO.setName(playerDTO.getName());
                 playerConnectedDTO.setPosition(playerDTO.getPosition());
 
-                sessions.put(playerDTO.getId(), webSocket);
-                players.put(playerDTO.getId(), playerDTO);
+                sessions.put(playerDTO.getId(), new SessionContainer(playerDTO, webSocket));
+
                 writeResponse(webSocket, playerConnectedDTO);
                 writeResponseToAllExcept(webSocket, playerDTO);
             }
-        }else if(obj instanceof PlayerDTO){
+        } else if (obj instanceof PlayerDTO) {
             PlayerDTO playerDTO = (PlayerDTO) obj;
             writeResponseToAll(playerDTO);
         }
 
     }
 
-    public void playerHandler(PlayerDTO player) {
-        //if (!players.contains(player))
-        //  players.add(player);
-
-    }
-
     public void writeResponseToAll(final Object obj) {
-        for (ServerWebSocket session : sessions.values()) {
-            this.writeResponse(session, obj);
+        for (SessionContainer sessionContainer : sessions.values()) {
+            this.writeResponse(sessionContainer.getSession(), obj);
         }
     }
 
-    public void writeResponseToAllExcept(final ServerWebSocket webSocket, final Object obj){
-        for (ServerWebSocket session : sessions.values()) {
-            if(session.equals(webSocket))
+    public void writeResponseToAllExcept(final ServerWebSocket webSocket, final Object obj) {
+        for (SessionContainer sessionContainer : sessions.values()) {
+            if (sessionContainer.getSession().equals(webSocket))
                 continue;
 
-            this.writeResponse(session, obj);
+            this.writeResponse(sessionContainer.getSession(), obj);
         }
     }
 }
