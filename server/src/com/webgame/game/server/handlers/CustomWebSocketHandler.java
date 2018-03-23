@@ -43,9 +43,8 @@ public class CustomWebSocketHandler extends AbstractWebSocketHandler {
                 sessions.put(playerDTO.getId(), webSocket);
                 players.put(playerDTO.getId(), playerDTO);
                 writeResponse(webSocket, playerConnectedDTO);
+                writeResponseToAllExcept(webSocket, playerDTO);
             }
-
-
         }
     }
 
@@ -55,8 +54,17 @@ public class CustomWebSocketHandler extends AbstractWebSocketHandler {
 
     }
 
-    public void writeResponseToAll(final ServerWebSocket webSocket, final Object obj) {
+    public void writeResponseToAll(final Object obj) {
         for (ServerWebSocket session : sessions.values()) {
+            this.writeResponse(session, obj);
+        }
+    }
+
+    public void writeResponseToAllExcept(final ServerWebSocket webSocket, final Object obj){
+        for (ServerWebSocket session : sessions.values()) {
+            if(session.equals(webSocket))
+                continue;
+
             this.writeResponse(session, obj);
         }
     }

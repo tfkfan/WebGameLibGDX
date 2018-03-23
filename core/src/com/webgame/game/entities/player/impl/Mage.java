@@ -23,7 +23,7 @@ public class Mage extends Player {
     public Mage(){
 
     }
-    public Mage(SpriteBatch batch, String spritePath) {
+    public Mage(String spritePath) {
         super();
         int dirs = DirectionState.values().length;
         try {

@@ -3,9 +3,12 @@ package com.webgame.game.entities.player;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.webgame.game.Configs;
 import com.webgame.game.entities.WorldEntity;
 import com.webgame.game.entities.attributes.PlayerAttributes;
+import com.webgame.game.entities.player.impl.Mage;
 import com.webgame.game.entities.skill.Skill;
 import com.webgame.game.enums.*;
 import com.webgame.game.server.serialization.dto.HasDTO;
@@ -73,6 +76,12 @@ public abstract class Player extends WorldEntity implements IUpdatable, HasDTO<P
         dto.setId(getId());
         dto.setPosition(getPosition());
         return dto;
+    }
+
+    public static Player createPlayer(World world){
+        Player player = new Mage(Configs.PLAYERSHEETS_FOLDER + "/mage.png");
+        player.createObject(world);
+        return player;
     }
 
     public void castSkill(Vector2 target) {

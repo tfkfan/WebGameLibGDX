@@ -117,17 +117,26 @@ public class GameController extends AbstractController implements InputProcessor
                     Gdx.app.log("websocket", "Player created " + playerConnectedDTO.getId());
 
 
-                    Player player = new Mage(batch, Configs.PLAYERSHEETS_FOLDER + "/mage.png");
+                    Player player = Player.createPlayer(world);
+
                     player.getAttributes().setName(playerConnectedDTO.getName());
-                    player.createObject(world);
                     player.setPosition(playerConnectedDTO.getPosition());
                     player.setId(playerConnectedDTO.getId());
                     setPlayer(player);
-                    GameController.this.sController.setPlayer(player);
-                    GameController.this.pController.setPlayer(player);
+                    sController.setPlayer(player);
+                    pController.setPlayer(player);
+                    getPlayers().put(player.getId(), player);
+                }
+                else if(res instanceof PlayerDTO){
+                    PlayerDTO playerDTO = (PlayerDTO) res;
+                    if(!getPlayers().containsKey(playerDTO.getId())){
+                        Player player = Player.createPlayer(world);
+                        player.getAttributes().setName(playerDTO.getName());
+                        player.setPosition(playerDTO.getPosition());
+                        player.setId(playerDTO.getId());
 
-                    GameController.this.getPlayers().put(player.getId(), player);
-
+                        getPlayers().put(player.getId(), player);
+                    }
 
                 }
             }
