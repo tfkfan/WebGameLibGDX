@@ -75,11 +75,10 @@ public class GameController extends AbstractController implements InputProcessor
     }
 
     public void playerLogin(String username, String password) {
-
         socketService.connect();
 
         LoginDTO dto = new LoginDTO();
-        dto.setUsername(username);
+        dto.setName(username);
         socketService.send(dto);
     }
 
@@ -104,41 +103,39 @@ public class GameController extends AbstractController implements InputProcessor
         final JsonSerializer jsonSerializer = new JsonSerializer();
         final Object res = jsonSerializer.deserialize(packet);
 
-       // Gdx.app.log("websocket", " Object MSG from server: " + res.toString());
+        // Gdx.app.log("websocket", " Object MSG from server: " + res.toString());
 
 
-        Gdx.app.postRunnable(() -> {
-            if (res instanceof PlayerConnectedDTO) {
+        if (res instanceof PlayerDTO) {
+            Gdx.app.postRunnable(() -> {
+                PlayerDTO playerDTO = (PlayerDTO) res;
 
-                PlayerConnectedDTO playerConnectedDTO = (PlayerConnectedDTO) res;
-
-                Gdx.app.log("websocket", "Player created " + playerConnectedDTO.getId());
+                Gdx.app.log("websocket", "Player created " + playerDTO.getId());
 
 
                 Player player = Player.createPlayer(world);
 
-                player.getAttributes().setName(playerConnectedDTO.getName());
-                player.setPosition(playerConnectedDTO.getPosition());
-                player.setId(playerConnectedDTO.getId());
+                player.getAttributes().setName(playerDTO.getName());
+                player.setPosition(playerDTO.getPosition());
+                player.setId(playerDTO.getId());
                 setPlayer(player);
                 sController.setPlayer(player);
                 pController.setPlayer(player);
                 getPlayers().put(player.getId(), player);
-            }
-            else if(res instanceof PlayerDTO){
-                PlayerDTO playerDTO = (PlayerDTO) res;
-                if(!getPlayers().containsKey(playerDTO.getId())){
-                    Player player = Player.createPlayer(world);
-                    player.getAttributes().setName(playerDTO.getName());
-                    player.setPosition(playerDTO.getPosition());
-                    player.setId(playerDTO.getId());
+            });
+        } else if (res instanceof PlayerDTO) {
+            PlayerDTO playerDTO = (PlayerDTO) res;
+            if (!getPlayers().containsKey(playerDTO.getId())) {
+                Player player = Player.createPlayer(world);
+                player.getAttributes().setName(playerDTO.getName());
+                player.setPosition(playerDTO.getPosition());
+                player.setId(playerDTO.getId());
 
-                    getPlayers().put(player.getId(), player);
-                }
-                else
-                    getPlayers().get(playerDTO.getId()).setPosition(playerDTO.getPosition());
-            }
-        });
+                getPlayers().put(player.getId(), player);
+            } else
+                getPlayers().get(playerDTO.getId()).setPosition(playerDTO.getPosition());
+        }
+
 
         return false;
     }

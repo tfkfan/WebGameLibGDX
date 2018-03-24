@@ -4,7 +4,7 @@ public class PlayerConnectedDTO extends PlayerDTO {
     private boolean isConnected;
 
     public PlayerConnectedDTO() {
-
+        setConnected(false);
     }
 
     public boolean isConnected() {

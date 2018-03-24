@@ -1,17 +1,13 @@
 package com.webgame.game.server.serialization.dto.player;
 
-import com.webgame.game.server.serialization.dto.DTO;
-
-public class LoginDTO extends PlayerDTO{
-
-    public LoginDTO(){
+public class EnemyDTO extends PlayerDTO{
+    public EnemyDTO(){
 
     }
 
-    public LoginDTO(PlayerDTO playerDTO){
+    public EnemyDTO(PlayerDTO playerDTO){
         setId(playerDTO.getId());
         setName(playerDTO.getName());
         setPosition(playerDTO.getPosition());
     }
-
 }
