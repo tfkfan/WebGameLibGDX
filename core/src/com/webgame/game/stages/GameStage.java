@@ -1,14 +1,10 @@
 package com.webgame.game.stages;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.webgame.game.Configs;
 import com.webgame.game.controllers.GameController;
-import com.webgame.game.controllers.WidgetsController;
 
 import static com.webgame.game.Configs.VIEW_WIDTH;
 

@@ -8,9 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractController extends Group {
     protected IWebSocket socketService;
-    protected ConcurrentHashMap<Long, Player> players;
+    protected final ConcurrentHashMap<Long, Player> players = new ConcurrentHashMap<Long, Player>();
     protected  Player player;
-
 
     public AbstractController() {
 
@@ -26,10 +25,6 @@ public abstract class AbstractController extends Group {
 
     public ConcurrentHashMap<Long, Player> getPlayers() {
         return players;
-    }
-
-    public void setPlayers(ConcurrentHashMap<Long, Player> players) {
-        this.players = players;
     }
 
     public Player getPlayer() {

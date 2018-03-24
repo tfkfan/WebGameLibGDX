@@ -11,8 +11,6 @@ import com.webgame.game.entities.attributes.PlayerAttributes;
 import com.webgame.game.entities.player.impl.Mage;
 import com.webgame.game.entities.skill.Skill;
 import com.webgame.game.enums.*;
-import com.webgame.game.server.serialization.dto.HasDTO;
-import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 import com.webgame.game.world.common.IUpdatable;
 
 import java.util.ArrayList;
