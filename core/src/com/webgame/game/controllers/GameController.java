@@ -1,49 +1,30 @@
 package com.webgame.game.controllers;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.github.czyzby.websocket.WebSocket;
-import com.github.czyzby.websocket.WebSocketListener;
-import com.github.czyzby.websocket.data.WebSocketCloseCode;
-import com.github.czyzby.websocket.serialization.impl.JsonSerializer;
-import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Player;
-import com.webgame.game.entities.player.impl.Knight;
+import com.webgame.game.entities.skill.Skill;
+import com.webgame.game.enums.PlayerAnimationState;
 import com.webgame.game.events.AttackEvent;
-import com.webgame.game.events.listeners.ws.LoginSuccessListener;
+import com.webgame.game.events.MoveEvent;
+import com.webgame.game.events.PlayerDamagedEvent;
+import com.webgame.game.events.listeners.AttackListener;
+import com.webgame.game.events.listeners.PlayerDamagedListener;
+import com.webgame.game.events.listeners.PlayerMoveListener;
+import com.webgame.game.events.listeners.ws.SuccesLoginWSListener;
+import com.webgame.game.events.listeners.ws.PlayerWSListener;
 import com.webgame.game.events.ws.LoginSuccessEvent;
-import com.webgame.game.server.serialization.dto.event.impl.LoginDTOEvent;
-import com.webgame.game.server.serialization.dto.event.listeners.impl.LoginDTOEventListener;
+import com.webgame.game.events.ws.PlayerWSEvent;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
-import com.webgame.game.server.serialization.dto.player.PlayerConnectedDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
-import com.webgame.game.world.WorldRenderer;
-import com.webgame.game.entities.player.impl.Mage;
-import com.webgame.game.ws.IWebSocket;
-import com.webgame.game.ws.JsonWebSocket;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class GameController extends AbstractGameController {
-
-
     public GameController(OrthographicCamera camera, Viewport viewport) {
-       super(camera, viewport);
+        super(camera, viewport);
 
-
-        addSuccessLoginListener(new LoginSuccessListener() {
+        addSuccessLoginWSListener(new SuccesLoginWSListener() {
             @Override
             public void customHandle(LoginSuccessEvent event) {
                 Gdx.app.postRunnable(() -> {
@@ -51,17 +32,84 @@ public class GameController extends AbstractGameController {
 
                     Gdx.app.log("websocket", "Player created " + playerDTO.getId());
 
-
                     Player player = Player.createPlayer(world);
 
                     player.getAttributes().setName(playerDTO.getName());
                     player.setPosition(playerDTO.getPosition());
                     player.setId(playerDTO.getId());
                     setPlayer(player);
-                    sController.setPlayer(player);
-                    pController.setPlayer(player);
                     getPlayers().put(player.getId(), player);
                 });
+            }
+        });
+
+        addPlayerMoveListener(new PlayerMoveListener() {
+            @Override
+            public void customHandle(MoveEvent event) {
+                Player plr = event.getPlayer();
+                Vector2 vec = event.getVector();
+                plr.setOldDirectionState(plr.getDirectionState());
+                plr.setDirectionState(event.getDirectionState());
+                plr.setVelocity(vec);
+                plr.applyVelocity();
+
+                PlayerDTO playerDTO = new PlayerDTO();
+                playerDTO.updateBy(plr);
+
+                getSocketService().send(playerDTO);
+            }
+        });
+
+        addAttackListener(new AttackListener() {
+                              @Override
+                              public void customHandle(AttackEvent event) {
+                                  Player plr = event.getPlayer();
+                                  Skill currentSkill = plr.getCurrentSkill();
+                                  if (currentSkill == null)
+                                      return;
+
+                                  Long end = currentSkill.getStart() + currentSkill.getCooldown();
+                                  Long currentTime = System.currentTimeMillis();
+
+                                  if (currentTime < end)
+                                      return;
+
+                                  plr.clearTimers();
+                                  plr.setCurrAnimationState(PlayerAnimationState.ATTACK);
+
+                                  plr.castSkill(event.getTargetVector());
+                              }
+                          }
+        );
+        addPlayerDamagedListener(new PlayerDamagedListener() {
+
+            @Override
+            public void customHandle(PlayerDamagedEvent event) {
+                getPlayerDamaged(event.getPlayer(), event.getDamage());
+            }
+
+            protected void getPlayerDamaged(Player target, Integer damage) {
+                if (target.getAttributes().getHealthPoints() > 0)
+                    target.getAttributes().setHealthPoints(target.getAttributes().getHealthPoints() - damage);
+                else
+                    target.getAttributes().setHealthPoints(0);
+            }
+        });
+        addPlayerWSListener(new PlayerWSListener() {
+            @Override
+            public void customHandle(PlayerWSEvent event) {
+                synchronized (world) {
+                    PlayerDTO playerDTO = event.getPlayerDTO();
+                    if (!getPlayers().containsKey(playerDTO.getId())) {
+                        Player player = Player.createPlayer(world);
+                        player.getAttributes().setName(playerDTO.getName());
+                        player.setPosition(playerDTO.getPosition());
+                        player.setId(playerDTO.getId());
+
+                        getPlayers().put(player.getId(), player);
+                    } else
+                        getPlayers().get(playerDTO.getId()).setPosition(playerDTO.getPosition());
+                }
             }
         });
     }

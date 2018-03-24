@@ -14,7 +14,6 @@ import java.util.List;
 public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocket> {
     private final JsonSerializer jsonSerializer = new JsonSerializer();
 
-
     public AbstractWebSocketHandler() {
 
     }

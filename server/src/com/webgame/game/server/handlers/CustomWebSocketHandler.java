@@ -33,7 +33,6 @@ public class CustomWebSocketHandler extends AbstractWebSocketHandler {
                     playerDTO.setId(sessions.size());
                     playerDTO.setPosition(new Vector2(2, 2));
 
-
                     EnemyDTO enemyDTO = new EnemyDTO(playerDTO);
                     LoginDTO succesLoginDTO = new LoginDTO(playerDTO);
                     sessions.put(playerDTO.getId(), new SessionContainer(playerDTO, event.getWebSocket()));
@@ -57,9 +56,10 @@ public class CustomWebSocketHandler extends AbstractWebSocketHandler {
                 loginDTOEventListener.handle(loginDTOEvent);
         } else if (obj instanceof PlayerDTO) {
             PlayerDTO playerDTO = (PlayerDTO) obj;
-            writeResponseToAll(playerDTO);
+            EnemyDTO enemyDTO = new EnemyDTO(playerDTO);
+            writeResponse(webSocket, playerDTO);
+            writeResponseToAllExcept(webSocket, enemyDTO);
         }
-
     }
 
     public void addLoginDTOListener(LoginDTOEventListener listener) {

@@ -36,8 +36,13 @@ import com.webgame.game.events.PlayerDamagedEvent;
 import com.webgame.game.events.listeners.AttackListener;
 import com.webgame.game.events.listeners.PlayerDamagedListener;
 import com.webgame.game.events.listeners.PlayerMoveListener;
-import com.webgame.game.events.listeners.ws.LoginSuccessListener;
+import com.webgame.game.events.listeners.ws.EnemyWSListener;
+import com.webgame.game.events.listeners.ws.SuccesLoginWSListener;
+import com.webgame.game.events.listeners.ws.PlayerWSListener;
+import com.webgame.game.events.ws.EnemyWSEvent;
 import com.webgame.game.events.ws.LoginSuccessEvent;
+import com.webgame.game.events.ws.PlayerWSEvent;
+import com.webgame.game.server.serialization.dto.player.EnemyDTO;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 import com.webgame.game.stages.GameStage;
@@ -48,10 +53,11 @@ import com.webgame.game.ws.JsonWebSocket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractGameController extends AbstractController implements InputProcessor, WebSocketListener, EventListener {
     protected SpriteBatch batch;
+    protected ShapeRenderer shapeRenderer;
+    protected BitmapFont font;
 
     protected World world;
     protected WorldRenderer worldRenderer;
@@ -59,15 +65,13 @@ public abstract class AbstractGameController extends AbstractController implemen
     protected OrthographicCamera camera;
     protected Viewport viewport;
 
-    protected ShapeRenderer shapeRenderer;
-    protected BitmapFont font;
+    protected final List<SuccesLoginWSListener> loginWSEventList = Collections.synchronizedList(new ArrayList<SuccesLoginWSListener>());
+    protected final List<PlayerWSListener> playerWSEventList = Collections.synchronizedList(new ArrayList<PlayerWSListener>());
+    protected final List<EnemyWSListener> enemyWSEventList = Collections.synchronizedList(new ArrayList<EnemyWSListener>());
 
-    protected final List<LoginSuccessListener> loginEventList = Collections.synchronizedList(new ArrayList<LoginSuccessListener>());
-
-    protected final List<PlayerMoveListener> playerMoveListeners = Collections.synchronizedList(new ArrayList<>());
-
-    protected final List<AttackListener> attackListeners = Collections.synchronizedList(new ArrayList<>());
-    protected final List<PlayerDamagedListener> playerDamagedListeners = Collections.synchronizedList(new ArrayList<>());
+    protected final List<PlayerMoveListener> playerMoveListeners = Collections.synchronizedList(new ArrayList<PlayerMoveListener>());
+    protected final List<AttackListener> attackListeners = Collections.synchronizedList(new ArrayList<AttackListener>());
+    protected final List<PlayerDamagedListener> playerDamagedListeners = Collections.synchronizedList(new ArrayList<PlayerDamagedListener>());
 
 
     public AbstractGameController(OrthographicCamera camera, Viewport viewport) {
@@ -88,60 +92,8 @@ public abstract class AbstractGameController extends AbstractController implemen
 
         initSocketService();
 
-
         addListener(this);
-        addPlayerMoveListener(new PlayerMoveListener() {
-            @Override
-            public void customHandle(MoveEvent event) {
-                Player plr = event.getPlayer();
-                Vector2 vec = event.getVector();
-                plr.setOldDirectionState(plr.getDirectionState());
-                plr.setDirectionState(event.getDirectionState());
-                plr.setVelocity(vec);
-                plr.applyVelocity();
 
-                PlayerDTO playerDTO = new PlayerDTO();
-                playerDTO.updateBy(plr);
-
-                getSocketService().send(playerDTO);
-            }
-        });
-
-        addAttackListener(new AttackListener() {
-                              @Override
-                              public void customHandle(AttackEvent event) {
-                                  Player plr = event.getPlayer();
-                                  Skill currentSkill = plr.getCurrentSkill();
-                                  if (currentSkill == null)
-                                      return;
-
-                                  Long end = currentSkill.getStart() + currentSkill.getCooldown();
-                                  Long currentTime = System.currentTimeMillis();
-
-                                  if (currentTime < end)
-                                      return;
-
-                                  plr.clearTimers();
-                                  plr.setCurrAnimationState(PlayerAnimationState.ATTACK);
-
-                                  plr.castSkill(event.getTargetVector());
-                              }
-                          }
-        );
-        addPlayerDamagedListener(new PlayerDamagedListener() {
-
-            @Override
-            public void customHandle(PlayerDamagedEvent event) {
-                getPlayerDamaged(event.getPlayer(), event.getDamage());
-            }
-
-            protected void getPlayerDamaged(Player target, Integer damage) {
-                if (target.getAttributes().getHealthPoints() > 0)
-                    target.getAttributes().setHealthPoints(target.getAttributes().getHealthPoints() - damage);
-                else
-                    target.getAttributes().setHealthPoints(0);
-            }
-        });
     }
 
     @Override
@@ -157,7 +109,13 @@ public abstract class AbstractGameController extends AbstractController implemen
             for (EventListener listener : playerDamagedListeners)
                 listener.handle(event);
         } else if (event instanceof LoginSuccessEvent) {
-            for (EventListener listener : loginEventList)
+            for (EventListener listener : loginWSEventList)
+                listener.handle(event);
+        } else if(event instanceof PlayerWSEvent){
+            for(EventListener listener : playerWSEventList)
+                listener.handle(event);
+        } else if(event instanceof EnemyWSEvent){
+            for(EventListener listener : enemyWSEventList)
                 listener.handle(event);
         }
         return true;
@@ -175,19 +133,15 @@ public abstract class AbstractGameController extends AbstractController implemen
             fire(event);
         } else if (res instanceof PlayerDTO) {
             PlayerDTO playerDTO = (PlayerDTO) res;
-            if (!getPlayers().containsKey(playerDTO.getId())) {
-                Player player = Player.createPlayer(world);
-                player.getAttributes().setName(playerDTO.getName());
-                player.setPosition(playerDTO.getPosition());
-                player.setId(playerDTO.getId());
-
-                getPlayers().put(player.getId(), player);
-            } else
-                getPlayers().get(playerDTO.getId()).setPosition(playerDTO.getPosition());
+            PlayerWSEvent event = new PlayerWSEvent(webSocket, playerDTO);
+            fire(event);
+        } else if(res instanceof EnemyDTO){
+            EnemyDTO enemyDTO = (EnemyDTO) res;
+            EnemyWSEvent event = new EnemyWSEvent(webSocket, enemyDTO);
+            fire(event);
         }
 
-
-        return false;
+        return true;
     }
 
     public void addAttackListener(AttackListener listener) {
@@ -202,8 +156,16 @@ public abstract class AbstractGameController extends AbstractController implemen
         playerMoveListeners.add(listener);
     }
 
-    public void addSuccessLoginListener(LoginSuccessListener loginEventListener) {
-        loginEventList.add(loginEventListener);
+    public void addPlayerWSListener(PlayerWSListener listener){
+        playerWSEventList.add(listener);
+    }
+
+    public void addSuccessLoginWSListener(SuccesLoginWSListener loginEventListener) {
+        loginWSEventList.add(loginEventListener);
+    }
+
+    public void addEnemyWSListener(EnemyWSListener listener){
+        enemyWSEventList.add(listener);
     }
 
     @Override
@@ -276,10 +238,13 @@ public abstract class AbstractGameController extends AbstractController implemen
             font.draw(batch, player.getAttributes().getName(), player.getPosition().x - player.getWidth() / 2, player.getPosition().y + player.getHeight() + 5 / Configs.PPM);
         }
 
-        if (players != null) {
+        if(player != null){
             List<Skill> skills = player.getActiveSkills();
             for (Skill skill : skills)
                 skill.draw(batch, parentAlpha);
+        }
+
+        if (players != null) {
 
             for (Player enemy : players.values()) {
                 if (enemy.equals(player))

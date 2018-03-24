@@ -15,7 +15,6 @@ public class GameStage extends Stage {
 
 
     public GameController gc;
-    public WidgetsController wc;
     public OrthographicCamera camera;
     public Viewport viewport;
 
