@@ -5,11 +5,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Player;
@@ -22,16 +20,8 @@ import com.webgame.game.enums.PlayerAnimationState;
 import com.webgame.game.events.AttackEvent;
 import com.webgame.game.events.MoveEvent;
 import com.webgame.game.events.PlayerDamagedEvent;
-import com.webgame.game.events.listeners.AttackListener;
-import com.webgame.game.events.listeners.PlayerDamagedListener;
-import com.webgame.game.events.listeners.PlayerMoveListener;
-import com.webgame.game.events.listeners.ws.EnemyWSListener;
-import com.webgame.game.events.listeners.ws.SuccesLoginWSListener;
-import com.webgame.game.events.listeners.ws.PlayerWSListener;
-import com.webgame.game.events.ws.EnemyWSEvent;
 import com.webgame.game.events.ws.LoginSuccessEvent;
 import com.webgame.game.events.ws.PlayerWSEvent;
-import com.webgame.game.server.serialization.dto.player.EnemyDTO;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 
@@ -107,34 +97,29 @@ public class GameController extends AbstractGameController {
             return true;
         });
 
-        addPlayerWSListener(event -> {
-            PlayerWSEvent playerWSEvent = (PlayerWSEvent) event;
-            PlayerDTO playerDTO = playerWSEvent.getPlayerDTO();
-            Player player = getPlayer();
-            player.setPosition(playerDTO.getPosition());
-            return true;
-        });
+        addPlayersWSListener(event -> {
+            final PlayerWSEvent playerWSEvent = (PlayerWSEvent) event;
+            final PlayerDTO playerDTO = playerWSEvent.getPlayerDTO();
 
-        addEnemyWSListener(event -> {
-            EnemyWSEvent enemyWSEvent = (EnemyWSEvent) event;
-            EnemyDTO enemyDTO = enemyWSEvent.getEnemyDTO();
-            if (!getPlayers().containsKey(enemyDTO.getId())) {
+            if (!getPlayers().containsKey(playerDTO.getId())) {
                 Gdx.app.postRunnable(() -> {
                     synchronized (world) {
                         Player player = Player.createPlayer(world);
-                        player.getAttributes().setName(enemyDTO.getName());
-                        player.setPosition(enemyDTO.getPosition());
-                        player.setId(enemyDTO.getId());
+                        player.getAttributes().setName(playerDTO.getName());
+                        player.setPosition(playerDTO.getPosition());
+                        player.setId(playerDTO.getId());
 
                         getPlayers().put(player.getId(), player);
                     }
                 });
             } else {
-                Gdx.app.log("WS", "Id: " + enemyDTO.getId() + " currPlayer: " + player.getId());
-                getPlayers().get(enemyDTO.getId()).setPosition(enemyDTO.getPosition());
+                Gdx.app.log("WS", "Id: " + playerDTO.getId() + " currPlayer: " + player.getId());
+                getPlayers().get(playerDTO.getId()).setPosition(playerDTO.getPosition());
             }
             return true;
         });
+
+
     }
 
     public void playerLogin(String username, String password) {

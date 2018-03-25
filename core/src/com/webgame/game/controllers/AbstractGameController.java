@@ -51,6 +51,7 @@ import com.webgame.game.world.WorldRenderer;
 import com.webgame.game.ws.JsonWebSocket;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -67,7 +68,6 @@ public abstract class AbstractGameController extends AbstractController implemen
 
     protected final List<EventListener> loginWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
     protected final List<EventListener> playerWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
-    protected final List<EventListener> enemyWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
 
     protected final List<EventListener> playerMoveListeners = Collections.synchronizedList(new ArrayList<EventListener>());
     protected final List<EventListener> attackListeners = Collections.synchronizedList(new ArrayList<EventListener>());
@@ -114,9 +114,6 @@ public abstract class AbstractGameController extends AbstractController implemen
         } else if (event instanceof PlayerWSEvent) {
             for (EventListener listener : playerWSEventList)
                 listener.handle(event);
-        } else if (event instanceof EnemyWSEvent) {
-            for (EventListener listener : enemyWSEventList)
-                listener.handle(event);
         }
         return true;
     }
@@ -141,8 +138,11 @@ public abstract class AbstractGameController extends AbstractController implemen
                 PlayerWSEvent event = new PlayerWSEvent(webSocket, playerDTO);
                 fire(event);
             }
+        } else if (res instanceof Collection){
+            Collection<PlayerDTO> serverPlayers = (Collection<PlayerDTO>) res;
+            Gdx.app.log("WS", "PLAYERS");
         }
-
+        Gdx.app.log("WS", "!" + res.getClass().getName());
         return true;
     }
 
@@ -158,7 +158,7 @@ public abstract class AbstractGameController extends AbstractController implemen
         playerMoveListeners.add(listener);
     }
 
-    public void addPlayerWSListener(PlayerWSListener listener) {
+    public void addPlayersWSListener(PlayerWSListener listener) {
         playerWSEventList.add(listener);
     }
 
@@ -166,9 +166,6 @@ public abstract class AbstractGameController extends AbstractController implemen
         loginWSEventList.add(loginEventListener);
     }
 
-    public void addEnemyWSListener(EnemyWSListener listener) {
-        enemyWSEventList.add(listener);
-    }
 
     protected void handleInput() {
         float d = 5f;
@@ -291,6 +288,8 @@ public abstract class AbstractGameController extends AbstractController implemen
 
     @Override
     public boolean onError(WebSocket webSocket, Throwable error) {
+        Gdx.app.log("WS", error.getMessage());
+
         return false;
     }
 

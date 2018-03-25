@@ -22,13 +22,20 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocket> {
     private final JsonSerializer jsonSerializer = new JsonSerializer();
-    private final ConcurrentHashMap<Long, SessionContainer> sessions = new ConcurrentHashMap<>();
+
+    private final ConcurrentHashMap<Long, ServerWebSocket> sessions;
+    private final ConcurrentHashMap<Long, PlayerDTO> players;
 
     private final List<DTOEventListener> loginEventList = Collections.synchronizedList(new ArrayList<DTOEventListener>());
     private final List<DTOEventListener> playerEventList = Collections.synchronizedList(new ArrayList<DTOEventListener>());
 
-    public AbstractWebSocketHandler() {
+    protected final Handler<Long> timerHandler;
 
+    public AbstractWebSocketHandler() {
+        sessions = new ConcurrentHashMap<>();
+        players = new ConcurrentHashMap<>();
+
+        timerHandler = new ServerTimerHandler(sessions, players);
     }
 
     @Override
@@ -39,26 +46,11 @@ public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocke
     private void handleJsonFrame(final ServerWebSocket webSocket, final WebSocketFrame frame) {
         try {
             final byte[] packet = frame.binaryData().getBytes();
-            final long start = System.nanoTime();
             final Object deserialized = jsonSerializer.deserialize(packet);
 
             afterDeserializationHandler(webSocket, deserialized);
-
-            final long time = System.nanoTime() - start;
-
-            //final String response = "Packet had " + packet.length + " bytes. Class: " + deserialized.getClass().getSimpleName()
-            //       + ", took " + time + " nanos to deserialize.";
-            // System.out.println("(" + deserialized.toString() + ") " + response);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    public void writeResponse(final ServerWebSocket webSocket, final Object obj) {
-        if (obj == null || webSocket == null)
-            return;
-        synchronized (webSocket) {
-            webSocket.writeFinalBinaryFrame(Buffer.buffer(jsonSerializer.serialize(obj)));
         }
     }
 
@@ -79,7 +71,6 @@ public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocke
         }
     }
 
-
     public void addPlayerDTOListener(PlayerDTOEventListener listener) {
         playerEventList.add(listener);
     }
@@ -88,28 +79,19 @@ public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocke
         loginEventList.add(listener);
     }
 
-    protected ConcurrentHashMap<Long, SessionContainer> getSessions() {
+    protected ConcurrentHashMap<Long, ServerWebSocket> getSessions() {
         return sessions;
     }
 
-    public void writeResponseToAll(final Object obj) {
-        for (SessionContainer sessionContainer : sessions.values()) {
-            ServerWebSocket session = sessionContainer.getSession();
-            synchronized (session) {
-                this.writeResponse(session, obj);
-            }
-        }
+    protected ConcurrentHashMap<Long, PlayerDTO> getPlayers(){
+        return players;
     }
 
-    public void writeResponseToAllExcept(final ServerWebSocket currentSession, final Object obj) {
-        for (SessionContainer sessionContainer : sessions.values()) {
-            ServerWebSocket session = sessionContainer.getSession();
-            synchronized (session) {
-                if (session.equals(currentSession))
-                    continue;
+    protected JsonSerializer getJsonSerializer(){
+        return jsonSerializer;
+    }
 
-                this.writeResponse(sessionContainer.getSession(), obj);
-            }
-        }
+    public Handler<Long> getTimerHandler(){
+        return timerHandler;
     }
 }

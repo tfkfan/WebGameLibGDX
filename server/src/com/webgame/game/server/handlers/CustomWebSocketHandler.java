@@ -5,34 +5,38 @@ import com.webgame.game.server.serialization.dto.player.EnemyDTO;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 import com.webgame.game.server.sessions.SessionContainer;
+import com.webgame.game.server.utils.ServerUtils;
 import io.vertx.core.http.ServerWebSocket;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CustomWebSocketHandler extends AbstractWebSocketHandler {
     public CustomWebSocketHandler() {
         addLoginDTOListener(event -> {
             LoginDTO loginDTO = event.getLoginDTO();
-            if (!getSessions().containsKey(loginDTO)) {
 
-                PlayerDTO playerDTO = new PlayerDTO();
-                playerDTO.setName(loginDTO.getName());
-                playerDTO.setId(getSessions().size());
-                playerDTO.setPosition(new Vector2(2, 2));
+            PlayerDTO playerDTO = new PlayerDTO();
+            playerDTO.setName(loginDTO.getName());
+            playerDTO.setId(getSessions().size());
+            playerDTO.setPosition(new Vector2(2, 2));
 
-                EnemyDTO enemyDTO = new EnemyDTO(playerDTO);
-                LoginDTO succesLoginDTO = new LoginDTO(playerDTO);
-                getSessions().put(playerDTO.getId(), new SessionContainer(playerDTO, event.getWebSocket()));
+            Long id = playerDTO.getId();
 
-                writeResponse(event.getWebSocket(), succesLoginDTO);
-                writeResponseToAllExcept(event.getWebSocket(), enemyDTO);
-            }
+            LoginDTO succesLoginDTO = new LoginDTO(playerDTO);
+
+            getSessions().put(id, event.getWebSocket());
+            getPlayers().put(id, playerDTO);
+
+            ServerUtils.writeResponse(event.getWebSocket(), succesLoginDTO, getJsonSerializer());
         });
 
         addPlayerDTOListener(event -> {
-            ServerWebSocket webSocket = event.getWebSocket();
             PlayerDTO playerDTO = event.getPlayerDTO();
-            EnemyDTO enemyDTO = new EnemyDTO(playerDTO);
-            writeResponse(webSocket, playerDTO);
-            writeResponseToAllExcept(webSocket, enemyDTO);
+
+            if(getPlayers().containsKey(playerDTO.getId()))
+                return;
+
+            getPlayers().put(playerDTO.getId(), playerDTO);
         });
     }
 }
