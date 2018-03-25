@@ -8,5 +8,5 @@ import com.webgame.game.enums.PlayerAnimationState;
 import com.webgame.game.events.AttackEvent;
 import com.webgame.game.events.MoveEvent;
 
-public abstract class PlayerMoveListener extends CustomListener<MoveEvent>{
+public interface PlayerMoveListener extends EventListener{
 }

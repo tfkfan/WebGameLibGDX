@@ -65,13 +65,13 @@ public abstract class AbstractGameController extends AbstractController implemen
     protected OrthographicCamera camera;
     protected Viewport viewport;
 
-    protected final List<SuccesLoginWSListener> loginWSEventList = Collections.synchronizedList(new ArrayList<SuccesLoginWSListener>());
-    protected final List<PlayerWSListener> playerWSEventList = Collections.synchronizedList(new ArrayList<PlayerWSListener>());
-    protected final List<EnemyWSListener> enemyWSEventList = Collections.synchronizedList(new ArrayList<EnemyWSListener>());
+    protected final List<EventListener> loginWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
+    protected final List<EventListener> playerWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
+    protected final List<EventListener> enemyWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
 
-    protected final List<PlayerMoveListener> playerMoveListeners = Collections.synchronizedList(new ArrayList<PlayerMoveListener>());
-    protected final List<AttackListener> attackListeners = Collections.synchronizedList(new ArrayList<AttackListener>());
-    protected final List<PlayerDamagedListener> playerDamagedListeners = Collections.synchronizedList(new ArrayList<PlayerDamagedListener>());
+    protected final List<EventListener> playerMoveListeners = Collections.synchronizedList(new ArrayList<EventListener>());
+    protected final List<EventListener> attackListeners = Collections.synchronizedList(new ArrayList<EventListener>());
+    protected final List<EventListener> playerDamagedListeners = Collections.synchronizedList(new ArrayList<EventListener>());
 
 
     public AbstractGameController(OrthographicCamera camera, Viewport viewport) {
@@ -99,8 +99,8 @@ public abstract class AbstractGameController extends AbstractController implemen
     @Override
     public boolean handle(Event event) {
         if (event instanceof MoveEvent) {
-            for (PlayerMoveListener listener : playerMoveListeners)
-                listener.customHandle((MoveEvent) event);
+            for (EventListener listener : playerMoveListeners)
+                listener.handle(event);
         } else if (event instanceof AttackEvent) {
             //cooldown
             for (EventListener listener : attackListeners)
@@ -111,11 +111,11 @@ public abstract class AbstractGameController extends AbstractController implemen
         } else if (event instanceof LoginSuccessEvent) {
             for (EventListener listener : loginWSEventList)
                 listener.handle(event);
-        } else if(event instanceof PlayerWSEvent){
-            for(EventListener listener : playerWSEventList)
+        } else if (event instanceof PlayerWSEvent) {
+            for (EventListener listener : playerWSEventList)
                 listener.handle(event);
-        } else if(event instanceof EnemyWSEvent){
-            for(EventListener listener : enemyWSEventList)
+        } else if (event instanceof EnemyWSEvent) {
+            for (EventListener listener : enemyWSEventList)
                 listener.handle(event);
         }
         return true;
@@ -131,13 +131,13 @@ public abstract class AbstractGameController extends AbstractController implemen
             LoginDTO loginDTO = (LoginDTO) res;
             LoginSuccessEvent event = new LoginSuccessEvent(webSocket, loginDTO);
             fire(event);
+        } else if (res instanceof EnemyDTO) {
+            EnemyDTO enemyDTO = (EnemyDTO) res;
+            EnemyWSEvent event = new EnemyWSEvent(webSocket, enemyDTO);
+            fire(event);
         } else if (res instanceof PlayerDTO) {
             PlayerDTO playerDTO = (PlayerDTO) res;
             PlayerWSEvent event = new PlayerWSEvent(webSocket, playerDTO);
-            fire(event);
-        } else if(res instanceof EnemyDTO){
-            EnemyDTO enemyDTO = (EnemyDTO) res;
-            EnemyWSEvent event = new EnemyWSEvent(webSocket, enemyDTO);
             fire(event);
         }
 
@@ -156,7 +156,7 @@ public abstract class AbstractGameController extends AbstractController implemen
         playerMoveListeners.add(listener);
     }
 
-    public void addPlayerWSListener(PlayerWSListener listener){
+    public void addPlayerWSListener(PlayerWSListener listener) {
         playerWSEventList.add(listener);
     }
 
@@ -164,7 +164,7 @@ public abstract class AbstractGameController extends AbstractController implemen
         loginWSEventList.add(loginEventListener);
     }
 
-    public void addEnemyWSListener(EnemyWSListener listener){
+    public void addEnemyWSListener(EnemyWSListener listener) {
         enemyWSEventList.add(listener);
     }
 
@@ -238,7 +238,7 @@ public abstract class AbstractGameController extends AbstractController implemen
             font.draw(batch, player.getAttributes().getName(), player.getPosition().x - player.getWidth() / 2, player.getPosition().y + player.getHeight() + 5 / Configs.PPM);
         }
 
-        if(player != null){
+        if (player != null) {
             List<Skill> skills = player.getActiveSkills();
             for (Skill skill : skills)
                 skill.draw(batch, parentAlpha);

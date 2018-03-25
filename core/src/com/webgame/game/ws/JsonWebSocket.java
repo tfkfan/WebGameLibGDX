@@ -29,7 +29,7 @@ public abstract class JsonWebSocket extends AbstractWebSocketAdapter {
         final long start = System.currentTimeMillis();
         final byte[] serialized = getSocket().getSerializer().serialize(packet);
         final long time = System.currentTimeMillis() - start;
-        Gdx.app.log("JSON", "Serialized packet in " + time + " millies.");
+        //Gdx.app.log("JSON", "Serialized packet in " + time + " millies.");
         getSocket().send(serialized);
     }
 }

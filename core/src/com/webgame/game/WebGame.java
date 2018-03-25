@@ -14,15 +14,15 @@ public class WebGame extends Game {
 
     @Override
     public void create() {
-        loginScreen.addLoginListener(new LoginListener() {
-            @Override
-            public void customHandle(LoginEvent event) {
-                try {
-                    mainScreen.login(event.getUsername(), event.getPassword());
-                    WebGame.this.setScreen(mainScreen);
-                } catch (Exception e) {
-                    //loginScreen.setMessage(e.getMessage());
-                }
+        loginScreen.addLoginListener(event -> {
+            try {
+                LoginEvent loginEvent = (LoginEvent) event;
+                mainScreen.login(loginEvent.getUsername(), loginEvent.getPassword());
+                WebGame.this.setScreen(mainScreen);
+            } catch (Exception e) {
+                //loginScreen.setMessage(e.getMessage());
+            } finally {
+                return true;
             }
         });
         this.setScreen(loginScreen);

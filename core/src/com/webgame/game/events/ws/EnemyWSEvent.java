@@ -12,7 +12,7 @@ public class EnemyWSEvent extends AbstractWSEvent {
         setEnemyDTO(enemyDTO);
     }
 
-    public PlayerDTO getEnemyDTO() {
+    public EnemyDTO getEnemyDTO() {
         return enemyDTO;
     }
 

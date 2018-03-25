@@ -7,5 +7,5 @@ import com.webgame.game.entities.skill.Skill;
 import com.webgame.game.enums.PlayerAnimationState;
 import com.webgame.game.events.AttackEvent;
 
-public abstract class AttackListener extends CustomListener<AttackEvent> {
+public interface AttackListener extends EventListener {
 }

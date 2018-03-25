@@ -1,7 +1,7 @@
 package com.webgame.game.events.listeners.ws;
 
-import com.webgame.game.events.listeners.CustomListener;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.webgame.game.events.ws.LoginSuccessEvent;
 
-public abstract class SuccesLoginWSListener extends CustomListener<LoginSuccessEvent> {
+public interface SuccesLoginWSListener extends EventListener {
 }

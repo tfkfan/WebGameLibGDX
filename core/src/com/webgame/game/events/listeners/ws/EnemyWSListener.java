@@ -1,8 +1,7 @@
 package com.webgame.game.events.listeners.ws;
 
-import com.webgame.game.events.listeners.CustomListener;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.webgame.game.events.ws.EnemyWSEvent;
-import com.webgame.game.events.ws.PlayerWSEvent;
 
-public abstract class EnemyWSListener extends CustomListener<EnemyWSEvent> {
+public interface EnemyWSListener extends EventListener{
 }

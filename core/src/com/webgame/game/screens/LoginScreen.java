@@ -62,7 +62,7 @@ public class LoginScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 for (LoginListener listener : loginListeners) {
-                    listener.customHandle(new LoginEvent(usernameField.getText(), passwordField.getText()));
+                    listener.handle(new LoginEvent(usernameField.getText(), passwordField.getText()));
                 }
             }
         });
