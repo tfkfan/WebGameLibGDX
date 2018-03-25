@@ -131,14 +131,16 @@ public abstract class AbstractGameController extends AbstractController implemen
             LoginDTO loginDTO = (LoginDTO) res;
             LoginSuccessEvent event = new LoginSuccessEvent(webSocket, loginDTO);
             fire(event);
-        } else if (res instanceof EnemyDTO) {
-            EnemyDTO enemyDTO = (EnemyDTO) res;
-            EnemyWSEvent event = new EnemyWSEvent(webSocket, enemyDTO);
-            fire(event);
         } else if (res instanceof PlayerDTO) {
-            PlayerDTO playerDTO = (PlayerDTO) res;
-            PlayerWSEvent event = new PlayerWSEvent(webSocket, playerDTO);
-            fire(event);
+            if (res instanceof EnemyDTO) {
+                EnemyDTO enemyDTO = (EnemyDTO) res;
+                EnemyWSEvent event = new EnemyWSEvent(webSocket, enemyDTO);
+                fire(event);
+            } else {
+                PlayerDTO playerDTO = (PlayerDTO) res;
+                PlayerWSEvent event = new PlayerWSEvent(webSocket, playerDTO);
+                fire(event);
+            }
         }
 
         return true;
@@ -168,122 +170,7 @@ public abstract class AbstractGameController extends AbstractController implemen
         enemyWSEventList.add(listener);
     }
 
-    @Override
-    public void act(float dt) {
-        super.act(dt);
-        if (player == null)
-            return;
-
-        if (player != null) {
-            handleInput();
-            player.update(dt);
-        }
-        shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
-
-        for (Player currentPlayer : getPlayers().values()) {
-            List<Skill> skills = currentPlayer.getActiveSkills();
-            for (Skill skill : skills) {
-                skill.update(dt);
-
-                if (!(skill instanceof AOESkill) && skill.isMarked())
-                    continue;
-
-                for (Player anotherPlayer : getPlayers().values()) {
-                    if (anotherPlayer == currentPlayer)
-                        continue;
-
-                    //handling collision
-                    if (skill instanceof AOESkill) {
-                        if (Intersector.overlaps(anotherPlayer.getShape(), ((AOESkill) skill).getArea())) {
-                            this.fire(new PlayerDamagedEvent(anotherPlayer, skill.getDamage()));
-                        }
-                    } else {
-                        if (Intersector.overlaps(skill.getShape(), anotherPlayer.getShape())) {
-                            if (skill instanceof SingleSkill || skill instanceof StaticSkill) {
-                                if (skill.getMoveState().equals(MoveState.STATIC)) {
-                                    this.fire(new PlayerDamagedEvent(anotherPlayer, skill.getDamage()));
-                                    skill.setMarked(true);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        camera.position.x = player.getPosition().x;
-        camera.position.y = player.getPosition().y;
-        camera.update();
-
-        batch.setProjectionMatrix(camera.combined);
-
-        world.step(0.01f, 6, 2);
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        worldRenderer.render();
-
-        //NOT REMOVE!
-        batch.end();
-        batch.begin();
-
-        super.draw(batch, parentAlpha);
-
-        if (player != null && player.getAttributes().getName() != null) {
-            player.draw(batch, parentAlpha);
-            font.draw(batch, player.getAttributes().getName(), player.getPosition().x - player.getWidth() / 2, player.getPosition().y + player.getHeight() + 5 / Configs.PPM);
-        }
-
-        if (player != null) {
-            List<Skill> skills = player.getActiveSkills();
-            for (Skill skill : skills)
-                skill.draw(batch, parentAlpha);
-        }
-
-        if (players != null) {
-
-            for (Player enemy : players.values()) {
-                if (enemy.equals(player))
-                    continue;
-                enemy.draw(batch, parentAlpha);
-            }
-        }
-        //drawing figures(hp)
-        batch.end();
-
-        shapeRenderer.setAutoShapeType(true);
-        shapeRenderer.setColor(Color.GREEN);
-
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        if (player != null)
-            drawPlayerHealthLine(player);
-
-        if (players != null)
-
-            for (Player enemy : players.values()) {
-                if (enemy.equals(player))
-                    continue;
-
-                drawPlayerHealthLine(enemy);
-            }
-        shapeRenderer.end();
-
-        if (player != null) {
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.circle(player.getPosition().x, player.getPosition().y, player.getRadius(), 50);
-            shapeRenderer.end();
-        }
-
-        batch.begin();
-    }
-
-    private void handleInput() {
+    protected void handleInput() {
         float d = 5f;
         DirectionState directionState = player.getOldDirectionState();
 
@@ -322,14 +209,6 @@ public abstract class AbstractGameController extends AbstractController implemen
         if (velocity.x != 0 || velocity.y != 0 || player.getCurrAnimationState().equals(PlayerAnimationState.WALK)
                 || player.getCurrAnimationState().equals(PlayerAnimationState.ATTACK))
             fire(new MoveEvent(velocity, directionState, player));
-    }
-
-    public void playerLogin(String username, String password) {
-        socketService.connect();
-
-        LoginDTO dto = new LoginDTO();
-        dto.setName(username);
-        socketService.send(dto);
     }
 
     @Override

@@ -1,12 +1,22 @@
 package com.webgame.game.controllers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Player;
+import com.webgame.game.entities.skill.AOESkill;
+import com.webgame.game.entities.skill.SingleSkill;
 import com.webgame.game.entities.skill.Skill;
+import com.webgame.game.entities.skill.StaticSkill;
+import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.PlayerAnimationState;
 import com.webgame.game.events.AttackEvent;
 import com.webgame.game.events.MoveEvent;
@@ -23,6 +33,8 @@ import com.webgame.game.events.ws.PlayerWSEvent;
 import com.webgame.game.server.serialization.dto.player.EnemyDTO;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
+
+import java.util.List;
 
 public class GameController extends AbstractGameController {
     public GameController(OrthographicCamera camera, Viewport viewport) {
@@ -95,34 +107,152 @@ public class GameController extends AbstractGameController {
         });
 
         addPlayerWSListener(event -> {
-            synchronized (world) {
-                PlayerWSEvent playerWSEvent = (PlayerWSEvent) event;
-                PlayerDTO playerDTO = playerWSEvent.getPlayerDTO();
-                Player player = getPlayer();
-                player.setPosition(playerDTO.getPosition());
-                return true;
-            }
+            PlayerWSEvent playerWSEvent = (PlayerWSEvent) event;
+            PlayerDTO playerDTO = playerWSEvent.getPlayerDTO();
+            Player player = getPlayer();
+            player.setPosition(playerDTO.getPosition());
+            return true;
         });
+
         addEnemyWSListener(event -> {
-            Gdx.app.postRunnable(() -> {
-                synchronized (world) {
-                    EnemyWSEvent enemyWSEvent = (EnemyWSEvent) event;
-                    EnemyDTO enemyDTO = enemyWSEvent.getEnemyDTO();
-                    if (!getPlayers().containsKey(enemyDTO.getId())) {
+            EnemyWSEvent enemyWSEvent = (EnemyWSEvent) event;
+            EnemyDTO enemyDTO = enemyWSEvent.getEnemyDTO();
+            if (!getPlayers().containsKey(enemyDTO.getId())) {
+                Gdx.app.postRunnable(() -> {
+                    synchronized (world) {
                         Player player = Player.createPlayer(world);
                         player.getAttributes().setName(enemyDTO.getName());
                         player.setPosition(enemyDTO.getPosition());
                         player.setId(enemyDTO.getId());
 
                         getPlayers().put(player.getId(), player);
-                    } else {
-                        Gdx.app.log("WS", "Id: " + enemyDTO.getId() + " currPlayer: " + player.getId());
-                        getPlayers().get(enemyDTO.getId()).setPosition(enemyDTO.getPosition());
                     }
-
-                }
-            });
+                });
+            } else {
+                Gdx.app.log("WS", "Id: " + enemyDTO.getId() + " currPlayer: " + player.getId());
+                getPlayers().get(enemyDTO.getId()).setPosition(enemyDTO.getPosition());
+            }
             return true;
         });
+    }
+
+    public void playerLogin(String username, String password) {
+        getSocketService().connect();
+        getSocketService().send(new LoginDTO(username));
+    }
+
+    @Override
+    public void act(float dt) {
+        super.act(dt);
+        if (player == null)
+            return;
+
+        if (player != null) {
+            handleInput();
+            player.update(dt);
+        }
+        shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
+
+        for (Player currentPlayer : getPlayers().values()) {
+            List<Skill> skills = currentPlayer.getActiveSkills();
+            for (Skill skill : skills) {
+                skill.update(dt);
+
+                if (!(skill instanceof AOESkill) && skill.isMarked())
+                    continue;
+
+                for (Player anotherPlayer : getPlayers().values()) {
+                    if (anotherPlayer == currentPlayer)
+                        continue;
+
+                    //handling collision
+                    if (skill instanceof AOESkill) {
+                        if (Intersector.overlaps(anotherPlayer.getShape(), ((AOESkill) skill).getArea())) {
+                            this.fire(new PlayerDamagedEvent(anotherPlayer, skill.getDamage()));
+                        }
+                    } else {
+                        if (Intersector.overlaps(skill.getShape(), anotherPlayer.getShape())) {
+                            if (skill instanceof SingleSkill || skill instanceof StaticSkill) {
+                                if (skill.getMoveState().equals(MoveState.STATIC)) {
+                                    this.fire(new PlayerDamagedEvent(anotherPlayer, skill.getDamage()));
+                                    skill.setMarked(true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        camera.position.x = player.getPosition().x;
+        camera.position.y = player.getPosition().y;
+        camera.update();
+
+        batch.setProjectionMatrix(camera.combined);
+
+        world.step(0.01f, 6, 2);
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        worldRenderer.render();
+
+        //NOT REMOVE!
+        batch.end();
+        batch.begin();
+
+        super.draw(batch, parentAlpha);
+
+        if (player != null && player.getAttributes().getName() != null) {
+            player.draw(batch, parentAlpha);
+            font.draw(batch, player.getAttributes().getName(), player.getPosition().x - player.getWidth() / 2, player.getPosition().y + player.getHeight() + 5 / Configs.PPM);
+        }
+
+        if (player != null) {
+            List<Skill> skills = player.getActiveSkills();
+            for (Skill skill : skills)
+                skill.draw(batch, parentAlpha);
+        }
+
+        if (players != null) {
+
+            for (Player enemy : players.values()) {
+                if (enemy.equals(player))
+                    continue;
+                enemy.draw(batch, parentAlpha);
+            }
+        }
+        //drawing figures(hp)
+        batch.end();
+
+        shapeRenderer.setAutoShapeType(true);
+        shapeRenderer.setColor(Color.GREEN);
+
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        if (player != null)
+            drawPlayerHealthLine(player);
+
+        if (players != null)
+
+            for (Player enemy : players.values()) {
+                if (enemy.equals(player))
+                    continue;
+
+                drawPlayerHealthLine(enemy);
+            }
+        shapeRenderer.end();
+
+        if (player != null) {
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.circle(player.getPosition().x, player.getPosition().y, player.getRadius(), 50);
+            shapeRenderer.end();
+        }
+
+        batch.begin();
     }
 }
