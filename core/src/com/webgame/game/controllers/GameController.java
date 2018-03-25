@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
@@ -206,9 +207,10 @@ public class GameController extends AbstractGameController {
 
         super.draw(batch, parentAlpha);
 
-        if (player != null && player.getAttributes().getName() != null) {
-            player.draw(batch, parentAlpha);
-            font.draw(batch, player.getAttributes().getName(), player.getPosition().x - player.getWidth() / 2, player.getPosition().y + player.getHeight() + 5 / Configs.PPM);
+        for(Player p : getPlayers().values()) {
+            p.draw(batch, parentAlpha);
+            if(p.getAttributes().getName() != null)
+                font.draw(batch, p.getAttributes().getName(), p.getPosition().x - p.getWidth() / 2, p.getPosition().y + p.getHeight() + 5 / Configs.PPM);
         }
 
         if (player != null) {
@@ -217,14 +219,6 @@ public class GameController extends AbstractGameController {
                 skill.draw(batch, parentAlpha);
         }
 
-        if (players != null) {
-
-            for (Player enemy : players.values()) {
-                if (enemy.equals(player))
-                    continue;
-                enemy.draw(batch, parentAlpha);
-            }
-        }
         //drawing figures(hp)
         batch.end();
 
@@ -255,4 +249,5 @@ public class GameController extends AbstractGameController {
 
         batch.begin();
     }
+
 }
