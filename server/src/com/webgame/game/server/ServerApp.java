@@ -1,39 +1,36 @@
 package com.webgame.game.server;
 
-import com.webgame.game.server.handlers.AbstractWebSocketHandler;
 import com.webgame.game.server.handlers.CustomWebSocketHandler;
-import com.webgame.game.server.handlers.ServerTimerHandler;
-import com.webgame.game.server.sessions.SessionContainer;
-import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
+import io.vertx.core.*;
 import io.vertx.core.http.*;
 
-import java.util.concurrent.ConcurrentHashMap;
-
-public class ServerApp {
-    private final Vertx vertx = Vertx.vertx();
+public class ServerApp extends AbstractVerticle {
+    public static final Vertx vertx = Vertx.vertx();
 
     public ServerApp() {
 
     }
 
     public static void main(final String... args) throws Exception {
-        new ServerApp().launch();
+       vertx.deployVerticle(new ServerApp());
+
     }
 
-    private void launch() {
+    @Override
+    public void start(Future<Void> future){
         System.out.println("Launching web socket server...");
-
-       CustomWebSocketHandler webSocketHandler = new CustomWebSocketHandler();
+        CustomWebSocketHandler webSocketHandler = new CustomWebSocketHandler();
 
         HttpServerOptions hso = new HttpServerOptions();
-        hso.setMaxWebsocketMessageSize(10000000);
-        hso.setMaxWebsocketFrameSize(10000000);
+        hso.setMaxWebsocketMessageSize(100000000);
+        hso.setMaxWebsocketFrameSize(100000000);
 
         HttpServer server = vertx.createHttpServer(hso);
 
-        server.websocketHandler( webSocketHandler).listen(8000);
+        server.websocketHandler(webSocketHandler).listen(8000);
 
-        vertx.setPeriodic(1000, webSocketHandler.getTimerHandler());
+        future.complete();
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.webgame.game.entities;
 
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.webgame.game.entities.Entity;
 
@@ -46,6 +47,13 @@ public abstract class WorldEntity extends AnimatedEntity {
     public void applyVelocity() {
         b2body.setLinearVelocity(velocity);
         setPosition(b2body.getPosition());
+    }
+
+    @Override
+    public void setPosition(Vector2 position) {
+        super.setPosition(position);
+        if (b2body != null)
+            b2body.getPosition().set(position);
     }
 
     public void createObject(World world) {

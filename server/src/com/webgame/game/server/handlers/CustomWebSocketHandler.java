@@ -8,6 +8,7 @@ import com.webgame.game.server.sessions.SessionContainer;
 import com.webgame.game.server.utils.ServerUtils;
 import io.vertx.core.http.ServerWebSocket;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CustomWebSocketHandler extends AbstractWebSocketHandler {
@@ -33,10 +34,12 @@ public class CustomWebSocketHandler extends AbstractWebSocketHandler {
         addPlayerDTOListener(event -> {
             PlayerDTO playerDTO = event.getPlayerDTO();
 
-            if(getPlayers().containsKey(playerDTO.getId()))
-                return;
+          //  if(!getPlayers().containsKey(playerDTO.getId()))
+              getPlayers().put(playerDTO.getId(), playerDTO);
 
-            getPlayers().put(playerDTO.getId(), playerDTO);
+            ServerUtils.writeResponseToAll(event.getWebSocket(), new ArrayList<>(getPlayers().values()), getJsonSerializer());
+            System.out.println("MSG has been sent");
+
         });
     }
 }

@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketListener;
@@ -37,11 +38,13 @@ import com.webgame.game.events.listeners.AttackListener;
 import com.webgame.game.events.listeners.PlayerDamagedListener;
 import com.webgame.game.events.listeners.PlayerMoveListener;
 import com.webgame.game.events.listeners.ws.EnemyWSListener;
+import com.webgame.game.events.listeners.ws.PlayersWSListener;
 import com.webgame.game.events.listeners.ws.SuccesLoginWSListener;
 import com.webgame.game.events.listeners.ws.PlayerWSListener;
 import com.webgame.game.events.ws.EnemyWSEvent;
 import com.webgame.game.events.ws.LoginSuccessEvent;
 import com.webgame.game.events.ws.PlayerWSEvent;
+import com.webgame.game.events.ws.PlayersWSEvent;
 import com.webgame.game.server.serialization.dto.player.EnemyDTO;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
@@ -50,6 +53,7 @@ import com.webgame.game.utils.GameUtils;
 import com.webgame.game.world.WorldRenderer;
 import com.webgame.game.ws.JsonWebSocket;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -68,6 +72,7 @@ public abstract class AbstractGameController extends AbstractController implemen
 
     protected final List<EventListener> loginWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
     protected final List<EventListener> playerWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
+    protected final List<EventListener> playersWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
 
     protected final List<EventListener> playerMoveListeners = Collections.synchronizedList(new ArrayList<EventListener>());
     protected final List<EventListener> attackListeners = Collections.synchronizedList(new ArrayList<EventListener>());
@@ -114,13 +119,16 @@ public abstract class AbstractGameController extends AbstractController implemen
         } else if (event instanceof PlayerWSEvent) {
             for (EventListener listener : playerWSEventList)
                 listener.handle(event);
+        } else if(event instanceof PlayersWSEvent){
+            for(EventListener listener : playersWSEventList)
+                listener.handle(event);
         }
         return true;
     }
 
 
     @Override
-    public boolean onMessage(WebSocket webSocket, byte[] packet) {
+    public boolean onMessage(WebSocket webSocket, final byte[] packet) {
         final JsonSerializer jsonSerializer = new JsonSerializer();
         final Object res = jsonSerializer.deserialize(packet);
 
@@ -138,11 +146,13 @@ public abstract class AbstractGameController extends AbstractController implemen
                 PlayerWSEvent event = new PlayerWSEvent(webSocket, playerDTO);
                 fire(event);
             }
-        } else if (res instanceof Collection){
-            Collection<PlayerDTO> serverPlayers = (Collection<PlayerDTO>) res;
-            Gdx.app.log("WS", "PLAYERS");
+        } else if (res instanceof Array){
+            Array<PlayerDTO> serverPlayers = (Array<PlayerDTO>) res;
+            PlayersWSEvent event = new PlayersWSEvent(webSocket, serverPlayers);
+            fire(event);
+            //Gdx.app.log("WS", "PLAYERS");
         }
-        Gdx.app.log("WS", "!" + res.getClass().getName());
+       // Gdx.app.log("WS", "!" + res.getClass().getName());
         return true;
     }
 
@@ -158,8 +168,12 @@ public abstract class AbstractGameController extends AbstractController implemen
         playerMoveListeners.add(listener);
     }
 
-    public void addPlayersWSListener(PlayerWSListener listener) {
+    public void addPlayerWSListener(PlayerWSListener listener) {
         playerWSEventList.add(listener);
+    }
+
+    public void addPlayersWSListener(PlayersWSListener listener) {
+        playersWSEventList.add(listener);
     }
 
     public void addSuccessLoginWSListener(SuccesLoginWSListener loginEventListener) {

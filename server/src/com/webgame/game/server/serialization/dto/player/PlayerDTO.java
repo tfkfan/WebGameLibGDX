@@ -15,6 +15,10 @@ public class PlayerDTO implements UpdatableDTO<Player> {
 
     }
 
+    public PlayerDTO(Player player){
+        updateBy(player);
+    }
+
 
     public long getId() {
         return id;

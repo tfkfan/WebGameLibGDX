@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Player;
@@ -20,8 +22,10 @@ import com.webgame.game.enums.PlayerAnimationState;
 import com.webgame.game.events.AttackEvent;
 import com.webgame.game.events.MoveEvent;
 import com.webgame.game.events.PlayerDamagedEvent;
+import com.webgame.game.events.listeners.ws.PlayersWSListener;
 import com.webgame.game.events.ws.LoginSuccessEvent;
 import com.webgame.game.events.ws.PlayerWSEvent;
+import com.webgame.game.events.ws.PlayersWSEvent;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 
@@ -30,25 +34,6 @@ import java.util.List;
 public class GameController extends AbstractGameController {
     public GameController(OrthographicCamera camera, Viewport viewport) {
         super(camera, viewport);
-
-        addSuccessLoginWSListener(event -> {
-            Gdx.app.postRunnable(() -> {
-                LoginSuccessEvent loginSuccessEvent = (LoginSuccessEvent) event;
-                LoginDTO playerDTO = loginSuccessEvent.getLoginDTO();
-
-                Gdx.app.log("websocket", "Player created " + playerDTO.getId());
-
-                Player player = Player.createPlayer(world);
-
-                player.getAttributes().setName(playerDTO.getName());
-                player.setPosition(playerDTO.getPosition());
-                player.setId(playerDTO.getId());
-                setPlayer(player);
-                getPlayers().put(player.getId(), player);
-
-            });
-            return true;
-        });
 
         addPlayerMoveListener(event -> {
             MoveEvent moveEvent = (MoveEvent) event;
@@ -59,10 +44,6 @@ public class GameController extends AbstractGameController {
             plr.setVelocity(vec);
             plr.applyVelocity();
 
-            PlayerDTO playerDTO = new PlayerDTO();
-            playerDTO.updateBy(plr);
-
-            getSocketService().send(playerDTO);
             return true;
         });
 
@@ -97,29 +78,53 @@ public class GameController extends AbstractGameController {
             return true;
         });
 
-        addPlayersWSListener(event -> {
-            final PlayerWSEvent playerWSEvent = (PlayerWSEvent) event;
-            final PlayerDTO playerDTO = playerWSEvent.getPlayerDTO();
 
-            if (!getPlayers().containsKey(playerDTO.getId())) {
-                Gdx.app.postRunnable(() -> {
-                    synchronized (world) {
-                        Player player = Player.createPlayer(world);
-                        player.getAttributes().setName(playerDTO.getName());
-                        player.setPosition(playerDTO.getPosition());
-                        player.setId(playerDTO.getId());
+        //WEBSOCKET EVENTS
+        addSuccessLoginWSListener(event -> {
+            Gdx.app.postRunnable(() -> {
+                LoginSuccessEvent loginSuccessEvent = (LoginSuccessEvent) event;
+                LoginDTO playerDTO = loginSuccessEvent.getLoginDTO();
 
-                        getPlayers().put(player.getId(), player);
-                    }
-                });
-            } else {
-                Gdx.app.log("WS", "Id: " + playerDTO.getId() + " currPlayer: " + player.getId());
-                getPlayers().get(playerDTO.getId()).setPosition(playerDTO.getPosition());
-            }
+                Gdx.app.log("websocket", "Player created " + playerDTO.getId());
+
+                Player player = Player.createPlayer(world);
+
+                player.getAttributes().setName(playerDTO.getName());
+                player.setPosition(playerDTO.getPosition());
+                player.setId(playerDTO.getId());
+                setPlayer(player);
+                getPlayers().put(player.getId(), player);
+
+            });
             return true;
         });
 
 
+        addPlayersWSListener(event -> {
+            Array<PlayerDTO> serverPlayers = ((PlayersWSEvent) event).getPlayers();
+
+            for (final PlayerDTO playerDTO : serverPlayers) {
+                final Player plr = getPlayers().get(playerDTO.getId());
+                if (plr == null) {
+                    Gdx.app.postRunnable(() -> {
+                        synchronized (world) {
+                            Gdx.app.log("websocket", "Player created " + playerDTO.getId());
+
+                            Player player = Player.createPlayer(world);
+
+                            player.getAttributes().setName(playerDTO.getName());
+                            player.setPosition(playerDTO.getPosition());
+                            player.setId(playerDTO.getId());
+
+                            getPlayers().put(player.getId(), player);
+                        }
+                    });
+                } else {
+                    plr.setPosition(playerDTO.getPosition());
+                }
+            }
+            return true;
+        });
     }
 
     public void playerLogin(String username, String password) {
@@ -133,10 +138,10 @@ public class GameController extends AbstractGameController {
         if (player == null)
             return;
 
-        if (player != null) {
-            handleInput();
-            player.update(dt);
-        }
+        handleInput();
+        player.update(dt);
+
+        getSocketService().send(new PlayerDTO(player));
         shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
 
         for (Player currentPlayer : getPlayers().values()) {
@@ -192,9 +197,9 @@ public class GameController extends AbstractGameController {
 
         super.draw(batch, parentAlpha);
 
-        for(Player p : getPlayers().values()) {
+        for (Player p : getPlayers().values()) {
             p.draw(batch, parentAlpha);
-            if(p.getAttributes().getName() != null)
+            if (p.getAttributes().getName() != null)
                 font.draw(batch, p.getAttributes().getName(), p.getPosition().x - p.getWidth() / 2, p.getPosition().y + p.getHeight() + 5 / Configs.PPM);
         }
 

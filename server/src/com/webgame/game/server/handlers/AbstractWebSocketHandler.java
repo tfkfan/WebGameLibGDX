@@ -2,6 +2,7 @@ package com.webgame.game.server.handlers;
 
 import com.github.czyzby.websocket.serialization.impl.JsonSerializer;
 import com.webgame.game.entities.player.Player;
+import com.webgame.game.server.ServerApp;
 import com.webgame.game.server.serialization.dto.event.impl.LoginDTOEvent;
 import com.webgame.game.server.serialization.dto.event.impl.PlayerDTOEvent;
 import com.webgame.game.server.serialization.dto.event.listeners.DTOEventListener;
@@ -29,13 +30,9 @@ public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocke
     private final List<DTOEventListener> loginEventList = Collections.synchronizedList(new ArrayList<DTOEventListener>());
     private final List<DTOEventListener> playerEventList = Collections.synchronizedList(new ArrayList<DTOEventListener>());
 
-    protected final Handler<Long> timerHandler;
-
     public AbstractWebSocketHandler() {
         sessions = new ConcurrentHashMap<>();
         players = new ConcurrentHashMap<>();
-
-        timerHandler = new ServerTimerHandler(sessions, players);
     }
 
     @Override
@@ -89,9 +86,5 @@ public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocke
 
     protected JsonSerializer getJsonSerializer(){
         return jsonSerializer;
-    }
-
-    public Handler<Long> getTimerHandler(){
-        return timerHandler;
     }
 }
