@@ -126,6 +126,21 @@ public abstract class AbstractGameController extends AbstractController implemen
         return true;
     }
 
+    @Override
+    public boolean onOpen(WebSocket webSocket) {
+        return false;
+    }
+
+    @Override
+    public boolean onClose(WebSocket webSocket, WebSocketCloseCode code, String reason) {
+        return false;
+    }
+
+    @Override
+    public boolean onMessage(WebSocket webSocket, String packet) {
+        Gdx.app.log("websocket", "String MSG from server: " + packet);
+        return false;
+    }
 
     @Override
     public boolean onMessage(WebSocket webSocket, final byte[] packet) {
@@ -154,6 +169,24 @@ public abstract class AbstractGameController extends AbstractController implemen
         }
        // Gdx.app.log("WS", "!" + res.getClass().getName());
         return true;
+    }
+
+    @Override
+    public boolean onError(WebSocket webSocket, Throwable error) {
+        Gdx.app.log("WS", error.getMessage());
+        int id = webSocket.getState().getId();
+
+        return false;
+    }
+
+    private void initSocketService() {
+        setSocketService(new JsonWebSocket() {
+
+            @Override
+            protected WebSocketListener createListener() {
+                return AbstractGameController.this;
+            }
+        });
     }
 
     public void addAttackListener(AttackListener listener) {
@@ -284,36 +317,4 @@ public abstract class AbstractGameController extends AbstractController implemen
         return false;
     }
 
-    @Override
-    public boolean onOpen(WebSocket webSocket) {
-        return false;
-    }
-
-    @Override
-    public boolean onClose(WebSocket webSocket, WebSocketCloseCode code, String reason) {
-        return false;
-    }
-
-    @Override
-    public boolean onMessage(WebSocket webSocket, String packet) {
-        Gdx.app.log("websocket", "String MSG from server: " + packet);
-        return false;
-    }
-
-    @Override
-    public boolean onError(WebSocket webSocket, Throwable error) {
-        Gdx.app.log("WS", error.getMessage());
-
-        return false;
-    }
-
-    private void initSocketService() {
-        setSocketService(new JsonWebSocket() {
-
-            @Override
-            protected WebSocketListener createListener() {
-                return AbstractGameController.this;
-            }
-        });
-    }
 }

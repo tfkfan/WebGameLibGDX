@@ -11,6 +11,7 @@ import com.webgame.game.server.serialization.dto.event.listeners.PlayerDTOEventL
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 import com.webgame.game.server.sessions.SessionContainer;
+import com.webgame.game.server.utils.ServerUtils;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.ServerWebSocket;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocket> {
+    public static final int delay = 20;
     private final JsonSerializer jsonSerializer = new JsonSerializer();
 
     private final ConcurrentHashMap<Long, ServerWebSocket> sessions;
@@ -30,19 +32,32 @@ public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocke
     private final List<DTOEventListener> loginEventList = Collections.synchronizedList(new ArrayList<DTOEventListener>());
     private final List<DTOEventListener> playerEventList = Collections.synchronizedList(new ArrayList<DTOEventListener>());
 
+    private Long threadNum = -1L;
+
     public AbstractWebSocketHandler() {
         sessions = new ConcurrentHashMap<>();
         players = new ConcurrentHashMap<>();
+
+        threadNum = ServerApp.vertx.setPeriodic(delay, event -> {
+            // System.out.println("#periodic#");
+            if(sessions.isEmpty())
+                return;
+
+            ServerUtils.writeResponseToAll(sessions.values(), new ArrayList<>(getPlayers().values()), getJsonSerializer());
+            System.out.println("MSG has been sent");
+
+        });
     }
 
     @Override
-    public void handle(ServerWebSocket webSocket) {
-        webSocket.frameHandler(frame -> handleJsonFrame(webSocket, frame));
+    public void handle(final ServerWebSocket webSocket) {
+        webSocket.binaryMessageHandler(event -> {
+            handleJsonFrame(webSocket, event.getBytes());
+        });
     }
 
-    private void handleJsonFrame(final ServerWebSocket webSocket, final WebSocketFrame frame) {
+    private void handleJsonFrame(final ServerWebSocket webSocket, final byte[] packet) {
         try {
-            final byte[] packet = frame.binaryData().getBytes();
             final Object deserialized = jsonSerializer.deserialize(packet);
 
             afterDeserializationHandler(webSocket, deserialized);

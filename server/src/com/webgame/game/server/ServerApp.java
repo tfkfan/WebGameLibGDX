@@ -13,7 +13,6 @@ public class ServerApp extends AbstractVerticle {
 
     public static void main(final String... args) throws Exception {
        vertx.deployVerticle(new ServerApp());
-
     }
 
     @Override
@@ -26,7 +25,6 @@ public class ServerApp extends AbstractVerticle {
         hso.setMaxWebsocketFrameSize(100000000);
 
         HttpServer server = vertx.createHttpServer(hso);
-
         server.websocketHandler(webSocketHandler).listen(8000);
 
         future.complete();

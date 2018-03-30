@@ -28,10 +28,14 @@ import com.webgame.game.events.ws.PlayerWSEvent;
 import com.webgame.game.events.ws.PlayersWSEvent;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
+import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
 
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class GameController extends AbstractGameController {
+    Long timerId;
     public GameController(OrthographicCamera camera, Viewport viewport) {
         super(camera, viewport);
 
@@ -44,6 +48,7 @@ public class GameController extends AbstractGameController {
             plr.setVelocity(vec);
             plr.applyVelocity();
 
+           // getSocketService().send(new PlayerDTO(getPlayer()));
             return true;
         });
 
@@ -81,6 +86,8 @@ public class GameController extends AbstractGameController {
 
         //WEBSOCKET EVENTS
         addSuccessLoginWSListener(event -> {
+            if (getPlayer() != null)
+                return true;
             Gdx.app.postRunnable(() -> {
                 LoginSuccessEvent loginSuccessEvent = (LoginSuccessEvent) event;
                 LoginDTO playerDTO = loginSuccessEvent.getLoginDTO();
@@ -91,6 +98,7 @@ public class GameController extends AbstractGameController {
 
                 player.getAttributes().setName(playerDTO.getName());
                 player.setPosition(playerDTO.getPosition());
+                player.getB2body().setTransform(playerDTO.getPosition(), 0);
                 player.setId(playerDTO.getId());
                 setPlayer(player);
                 getPlayers().put(player.getId(), player);
@@ -107,17 +115,17 @@ public class GameController extends AbstractGameController {
                 final Player plr = getPlayers().get(playerDTO.getId());
                 if (plr == null) {
                     Gdx.app.postRunnable(() -> {
-                        synchronized (world) {
-                            Gdx.app.log("websocket", "Player created " + playerDTO.getId());
+                        Gdx.app.log("websocket", "Enemy created " + playerDTO.getId());
 
-                            Player player = Player.createPlayer(world);
+                        Player player = Player.createPlayer(world);
 
-                            player.getAttributes().setName(playerDTO.getName());
-                            player.setPosition(playerDTO.getPosition());
-                            player.setId(playerDTO.getId());
+                        player.getAttributes().setName(playerDTO.getName());
+                        player.setPosition(playerDTO.getPosition());
+                        player.getB2body().setTransform(playerDTO.getPosition(), 0);
+                        player.setId(playerDTO.getId());
 
-                            getPlayers().put(player.getId(), player);
-                        }
+                        getPlayers().put(player.getId(), player);
+
                     });
                 } else {
                     plr.setPosition(playerDTO.getPosition());
@@ -125,6 +133,7 @@ public class GameController extends AbstractGameController {
             }
             return true;
         });
+
     }
 
     public void playerLogin(String username, String password) {
@@ -135,13 +144,14 @@ public class GameController extends AbstractGameController {
     @Override
     public void act(float dt) {
         super.act(dt);
-        if (player == null)
+        if (getPlayer() == null)
             return;
 
         handleInput();
-        player.update(dt);
+        getPlayer().update(dt);
 
-        getSocketService().send(new PlayerDTO(player));
+        getSocketService().send(new PlayerDTO(getPlayer()));
+
         shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
 
         for (Player currentPlayer : getPlayers().values()) {
@@ -189,24 +199,23 @@ public class GameController extends AbstractGameController {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        if (player == null)
+            return;
+
         worldRenderer.render();
 
         //NOT REMOVE!
         batch.end();
         batch.begin();
 
-        super.draw(batch, parentAlpha);
-
-        for (Player p : getPlayers().values()) {
-            p.draw(batch, parentAlpha);
-            if (p.getAttributes().getName() != null)
-                font.draw(batch, p.getAttributes().getName(), p.getPosition().x - p.getWidth() / 2, p.getPosition().y + p.getHeight() + 5 / Configs.PPM);
-        }
-
-        if (player != null) {
-            List<Skill> skills = player.getActiveSkills();
+        for (Player plr : getPlayers().values()) {
+            List<Skill> skills = plr.getActiveSkills();
             for (Skill skill : skills)
                 skill.draw(batch, parentAlpha);
+
+            plr.draw(batch, parentAlpha);
+            if (plr.getAttributes().getName() != null)
+                font.draw(batch, plr.getAttributes().getName(), plr.getPosition().x - plr.getWidth() / 2, plr.getPosition().y + plr.getHeight() + 5 / Configs.PPM);
         }
 
         //drawing figures(hp)
@@ -214,28 +223,15 @@ public class GameController extends AbstractGameController {
 
         shapeRenderer.setAutoShapeType(true);
         shapeRenderer.setColor(Color.GREEN);
-
-
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        if (player != null)
-            drawPlayerHealthLine(player);
+        for (Player plr : getPlayers().values())
+            drawPlayerHealthLine(plr);
 
-        if (players != null)
-
-            for (Player enemy : players.values()) {
-                if (enemy.equals(player))
-                    continue;
-
-                drawPlayerHealthLine(enemy);
-            }
         shapeRenderer.end();
-
-        if (player != null) {
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.circle(player.getPosition().x, player.getPosition().y, player.getRadius(), 50);
-            shapeRenderer.end();
-        }
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.circle(player.getPosition().x, player.getPosition().y, player.getRadius(), 50);
+        shapeRenderer.end();
 
         batch.begin();
     }

@@ -21,12 +21,7 @@ public class CustomWebSocketHandler extends AbstractWebSocketHandler {
             playerDTO.setId(getSessions().size());
             playerDTO.setPosition(new Vector2(2, 2));
 
-            Long id = playerDTO.getId();
-
             LoginDTO succesLoginDTO = new LoginDTO(playerDTO);
-
-            getSessions().put(id, event.getWebSocket());
-            getPlayers().put(id, playerDTO);
 
             ServerUtils.writeResponse(event.getWebSocket(), succesLoginDTO, getJsonSerializer());
         });
@@ -34,12 +29,9 @@ public class CustomWebSocketHandler extends AbstractWebSocketHandler {
         addPlayerDTOListener(event -> {
             PlayerDTO playerDTO = event.getPlayerDTO();
 
-          //  if(!getPlayers().containsKey(playerDTO.getId()))
-              getPlayers().put(playerDTO.getId(), playerDTO);
-
-            ServerUtils.writeResponseToAll(event.getWebSocket(), new ArrayList<>(getPlayers().values()), getJsonSerializer());
-            System.out.println("MSG has been sent");
-
+            Long id = playerDTO.getId();
+            getSessions().put(id, event.getWebSocket());
+            getPlayers().put(id, playerDTO);
         });
     }
 }
