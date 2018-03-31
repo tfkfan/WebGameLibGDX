@@ -49,11 +49,6 @@ public abstract class WorldEntity extends AnimatedEntity {
         setPosition(b2body.getPosition());
     }
 
-    @Override
-    public void setPosition(Vector2 position) {
-        super.setPosition(position);
-    }
-
     public void createObject(World world) {
         setWorld(world);
 

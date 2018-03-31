@@ -11,6 +11,8 @@ import com.webgame.game.entities.attributes.PlayerAttributes;
 import com.webgame.game.entities.player.impl.Mage;
 import com.webgame.game.entities.skill.Skill;
 import com.webgame.game.enums.*;
+import com.webgame.game.server.serialization.dto.player.PlayerDTO;
+import com.webgame.game.world.common.IDTOUpdatable;
 import com.webgame.game.world.common.IUpdatable;
 
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ import java.util.List;
 
 import static com.webgame.game.Configs.PPM;
 
-public abstract class Player extends WorldEntity implements IUpdatable {
+public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpdatable<PlayerDTO> {
     protected float stateTimer;
 
     protected DirectionState directionState;
@@ -26,8 +28,11 @@ public abstract class Player extends WorldEntity implements IUpdatable {
 
     protected PlayerState playerState;
 
-    protected PlayerAnimationState currAnimationState;
-    protected PlayerAnimationState prevAnimationState;
+    protected PlayerMoveState currAnimationState;
+
+    protected PlayerAttackState currentAttackState;
+
+    protected PlayerMoveState prevAnimationState;
 
     protected transient Array<Animation<TextureRegion>> animations;
     protected transient Array<Animation<TextureRegion>> attackAnimations;
@@ -54,7 +59,9 @@ public abstract class Player extends WorldEntity implements IUpdatable {
 
         playerState = PlayerState.ALIVE;
 
-        currAnimationState = PlayerAnimationState.STAND;
+        currentAttackState = PlayerAttackState.SAFE;
+
+        currAnimationState = PlayerMoveState.STAND;
         prevAnimationState = currAnimationState;
 
         getAttributes().setHealthPoints(1000);
@@ -67,7 +74,6 @@ public abstract class Player extends WorldEntity implements IUpdatable {
         clearTimers();
         setBounds(0, 0, 60 / PPM, 60 / PPM);
     }
-
 
     public static Player createPlayer(World world){
         Player player = new Mage(Configs.PLAYERSHEETS_FOLDER + "/mage.png");
@@ -102,7 +108,6 @@ public abstract class Player extends WorldEntity implements IUpdatable {
             getB2body().setTransform(x, y, 0);
     }
 
-
     public boolean isAttackFinished() {
         Integer index = directionState.getDirIndex();
         return attackAnimations.get(index).isAnimationFinished(stateTimer);
@@ -114,37 +119,52 @@ public abstract class Player extends WorldEntity implements IUpdatable {
 
     @Override
     public TextureRegion getFrame() {
-        TextureRegion region = null;
+        TextureRegion region;
 
-        PlayerAnimationState currState = (PlayerAnimationState) getCurrAnimationState();
+        PlayerMoveState currState = getCurrAnimationState();
+        PlayerAttackState attackState = getCurrentAttackState();
 
         Integer index = directionState.getDirIndex();
 
-        switch (currState) {
-            case WALK:
-                region = animations.get(index).getKeyFrame(stateTimer, true);
-                break;
-            case ATTACK:
-                region = attackAnimations.get(index).getKeyFrame(stateTimer, false);
-                break;
-            case STAND:
-            default:
-                region = standRegions[this.directionState.getDirIndex()];
-                break;
+        if(attackState.equals(PlayerAttackState.BATTLE))
+            region = attackAnimations.get(index).getKeyFrame(stateTimer, false);
+        else {
+            switch (currState) {
+                case WALK:
+                    region = animations.get(index).getKeyFrame(stateTimer, true);
+                    break;
+                case STAND:
+                default:
+                    region = standRegions[this.directionState.getDirIndex()];
+                    break;
+            }
         }
 
         return region;
     }
 
+
+    @Override
+    public void updateBy(PlayerDTO dto){
+        setPosition(dto.getPosition());
+        setVelocity(dto.getVelocity());
+        getAttributes().setName(dto.getName());
+        setId(dto.getId());
+        setCurrAnimationState(dto.getPlayerMoveState());
+        setOldDirectionState(getDirectionState());
+        setDirectionState(dto.getDirectionState());
+        setCurrentAttackState(dto.getPlayerAttackState());
+    }
+
     @Override
     public void update(float dt) {
-        if (!getCurrAnimationState().equals(PlayerAnimationState.ATTACK)
-                || getCurrAnimationState().equals(PlayerAnimationState.ATTACK) && isAttackFinished()) {
-            if (getVelocity().isZero())
-                setCurrAnimationState(PlayerAnimationState.STAND);
-            else
-                setCurrAnimationState(PlayerAnimationState.WALK);
-        }
+        if (getVelocity().isZero())
+            setCurrAnimationState(PlayerMoveState.STAND);
+        else
+            setCurrAnimationState(PlayerMoveState.WALK);
+
+        if (isAttackFinished())
+            setCurrentAttackState(PlayerAttackState.SAFE);
 
         stateTimer += dt;
 
@@ -218,20 +238,28 @@ public abstract class Player extends WorldEntity implements IUpdatable {
         this.attackAnimations = attackAnimations;
     }
 
-    public void setCurrAnimationState(PlayerAnimationState state) {
+    public void setCurrAnimationState(PlayerMoveState state) {
         this.currAnimationState = state;
     }
 
-    public State getCurrAnimationState() {
+    public PlayerMoveState getCurrAnimationState() {
         return currAnimationState;
     }
 
-    public State getPrevAnimationState() {
+    public PlayerMoveState getPrevAnimationState() {
         return prevAnimationState;
     }
 
-    public void setPrevAnimationState(PlayerAnimationState prevAnimationState) {
+    public void setPrevAnimationState(PlayerMoveState prevAnimationState) {
         this.prevAnimationState = prevAnimationState;
+    }
+
+    public PlayerAttackState getCurrentAttackState() {
+        return currentAttackState;
+    }
+
+    public void setCurrentAttackState(PlayerAttackState currentAttackState) {
+        this.currentAttackState = currentAttackState;
     }
 
     public TextureRegion[] getStandRegions() {

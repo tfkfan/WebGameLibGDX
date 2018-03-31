@@ -3,6 +3,8 @@ package com.webgame.game.server.handlers;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
+import io.vertx.core.TimeoutStream;
+
 import java.util.ArrayList;
 import static  com.webgame.game.server.utils.ServerUtils.writeResponseToAll;
 import static  com.webgame.game.server.utils.ServerUtils.writeResponse;
@@ -11,15 +13,16 @@ import static com.webgame.game.server.utils.ServerUtils.vertx;
 public class CustomWebSocketHandler extends AbstractWebSocketHandler {
     public static final int delay = 20;
 
-    private Long dispatcherThreadId;
+    private TimeoutStream timeoutStream;
 
     public CustomWebSocketHandler() {
-        dispatcherThreadId = vertx.setPeriodic(delay, event -> {
-            if(getSessions().isEmpty())
-                return;
+       timeoutStream =  vertx.periodicStream(delay);
+       timeoutStream.handler(event -> {
+           if(getSessions().isEmpty())
+               return;
 
-            writeResponseToAll(getSessions().values(), new ArrayList<>(getPlayers().values()), getJsonSerializer());
-        });
+           writeResponseToAll(getSessions().values(), new ArrayList<>(getPlayers().values()), getJsonSerializer());
+       });
 
         addLoginDTOListener(event -> {
             LoginDTO loginDTO = event.getLoginDTO();
@@ -42,4 +45,9 @@ public class CustomWebSocketHandler extends AbstractWebSocketHandler {
             getPlayers().put(id, playerDTO);
         });
     }
+
+    public void closeDispatcher(){
+        timeoutStream.cancel();
+    }
+
 }

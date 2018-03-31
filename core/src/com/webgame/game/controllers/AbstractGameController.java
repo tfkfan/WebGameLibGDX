@@ -3,14 +3,10 @@ package com.webgame.game.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
@@ -24,38 +20,28 @@ import com.github.czyzby.websocket.data.WebSocketCloseCode;
 import com.github.czyzby.websocket.serialization.impl.JsonSerializer;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Player;
-import com.webgame.game.entities.skill.AOESkill;
-import com.webgame.game.entities.skill.SingleSkill;
-import com.webgame.game.entities.skill.Skill;
-import com.webgame.game.entities.skill.StaticSkill;
 import com.webgame.game.enums.DirectionState;
-import com.webgame.game.enums.MoveState;
-import com.webgame.game.enums.PlayerAnimationState;
+import com.webgame.game.enums.PlayerAttackState;
+import com.webgame.game.enums.PlayerMoveState;
 import com.webgame.game.events.AttackEvent;
 import com.webgame.game.events.MoveEvent;
 import com.webgame.game.events.PlayerDamagedEvent;
 import com.webgame.game.events.listeners.AttackListener;
 import com.webgame.game.events.listeners.PlayerDamagedListener;
 import com.webgame.game.events.listeners.PlayerMoveListener;
-import com.webgame.game.events.listeners.ws.EnemyWSListener;
 import com.webgame.game.events.listeners.ws.PlayersWSListener;
 import com.webgame.game.events.listeners.ws.SuccesLoginWSListener;
 import com.webgame.game.events.listeners.ws.PlayerWSListener;
-import com.webgame.game.events.ws.EnemyWSEvent;
 import com.webgame.game.events.ws.LoginSuccessEvent;
 import com.webgame.game.events.ws.PlayerWSEvent;
 import com.webgame.game.events.ws.PlayersWSEvent;
-import com.webgame.game.server.serialization.dto.player.EnemyDTO;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 import com.webgame.game.stages.GameStage;
 import com.webgame.game.utils.GameUtils;
 import com.webgame.game.world.WorldRenderer;
 import com.webgame.game.ws.JsonWebSocket;
-
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -152,15 +138,9 @@ public abstract class AbstractGameController extends AbstractController implemen
             LoginSuccessEvent event = new LoginSuccessEvent(webSocket, loginDTO);
             fire(event);
         } else if (res instanceof PlayerDTO) {
-            if (res instanceof EnemyDTO) {
-                EnemyDTO enemyDTO = (EnemyDTO) res;
-                EnemyWSEvent event = new EnemyWSEvent(webSocket, enemyDTO);
-                fire(event);
-            } else {
-                PlayerDTO playerDTO = (PlayerDTO) res;
-                PlayerWSEvent event = new PlayerWSEvent(webSocket, playerDTO);
-                fire(event);
-            }
+            PlayerDTO playerDTO = (PlayerDTO) res;
+            PlayerWSEvent event = new PlayerWSEvent(webSocket, playerDTO);
+            fire(event);
         } else if (res instanceof Array){
             Array<PlayerDTO> serverPlayers = (Array<PlayerDTO>) res;
             PlayersWSEvent event = new PlayersWSEvent(webSocket, serverPlayers);
@@ -250,8 +230,8 @@ public abstract class AbstractGameController extends AbstractController implemen
         else if (velocity.x < 0 && velocity.y < 0)
             directionState = DirectionState.LEFTDOWN;
 
-        if (velocity.x != 0 || velocity.y != 0 || player.getCurrAnimationState().equals(PlayerAnimationState.WALK)
-                || player.getCurrAnimationState().equals(PlayerAnimationState.ATTACK))
+        if (velocity.x != 0 || velocity.y != 0 || player.getCurrAnimationState().equals(PlayerMoveState.WALK)
+                || player.getCurrentAttackState().equals(PlayerAttackState.BATTLE))
             fire(new MoveEvent(velocity, directionState, player));
     }
 

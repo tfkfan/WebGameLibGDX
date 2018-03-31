@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.Configs;
@@ -18,21 +17,17 @@ import com.webgame.game.entities.skill.SingleSkill;
 import com.webgame.game.entities.skill.Skill;
 import com.webgame.game.entities.skill.StaticSkill;
 import com.webgame.game.enums.MoveState;
-import com.webgame.game.enums.PlayerAnimationState;
+import com.webgame.game.enums.PlayerAttackState;
+import com.webgame.game.enums.PlayerMoveState;
 import com.webgame.game.events.AttackEvent;
 import com.webgame.game.events.MoveEvent;
 import com.webgame.game.events.PlayerDamagedEvent;
-import com.webgame.game.events.listeners.ws.PlayersWSListener;
 import com.webgame.game.events.ws.LoginSuccessEvent;
-import com.webgame.game.events.ws.PlayerWSEvent;
 import com.webgame.game.events.ws.PlayersWSEvent;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
-import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
 
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class GameController extends AbstractGameController {
     Long timerId;
@@ -66,7 +61,7 @@ public class GameController extends AbstractGameController {
                         return false;
 
                     plr.clearTimers();
-                    plr.setCurrAnimationState(PlayerAnimationState.ATTACK);
+                    plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
                     plr.castSkill(attackEvent.getTargetVector());
                     return true;
@@ -127,8 +122,8 @@ public class GameController extends AbstractGameController {
                         getPlayers().put(player.getId(), player);
 
                     });
-                } else {
-                    plr.setPosition(playerDTO.getPosition());
+                } else if(!plr.equals(getPlayer())){
+                    plr.updateBy(playerDTO);
                 }
             }
             return true;
@@ -148,14 +143,15 @@ public class GameController extends AbstractGameController {
             return;
 
         handleInput();
-        getPlayer().update(dt);
 
         getSocketService().send(new PlayerDTO(getPlayer()));
 
         shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
 
-        for (Player currentPlayer : getPlayers().values()) {
+        for (final Player currentPlayer : getPlayers().values()) {
+            currentPlayer.update(dt);
             List<Skill> skills = currentPlayer.getActiveSkills();
+
             for (Skill skill : skills) {
                 skill.update(dt);
 

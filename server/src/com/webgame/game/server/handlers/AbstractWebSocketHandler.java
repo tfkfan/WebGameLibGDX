@@ -32,25 +32,22 @@ public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocke
     @Override
     public void handle(final ServerWebSocket webSocket) {
         webSocket.binaryMessageHandler(event -> {
-            objectHandler(webSocket, jsonSerializer.deserialize(event.getBytes()));
+            Object obj = jsonSerializer.deserialize(event.getBytes());
+            if (obj == null)
+                return;
+
+            if (obj instanceof LoginDTO) {
+                LoginDTO loginDTO = (LoginDTO) obj;
+                LoginDTOEvent loginEvent = new LoginDTOEvent(webSocket, loginDTO);
+                for (DTOEventListener listener : loginEventList)
+                    listener.handle(loginEvent);
+            } else if (obj instanceof PlayerDTO) {
+                PlayerDTO playerDTO = (PlayerDTO) obj;
+                PlayerDTOEvent playerDTOEvent = new PlayerDTOEvent(webSocket, playerDTO);
+                for (DTOEventListener listener : playerEventList)
+                    listener.handle(playerDTOEvent);
+            }
         });
-    }
-
-    private void objectHandler(final ServerWebSocket webSocket, final Object obj) {
-        if (obj == null)
-            return;
-
-        if (obj instanceof LoginDTO) {
-            LoginDTO loginDTO = (LoginDTO) obj;
-            LoginDTOEvent event = new LoginDTOEvent(webSocket, loginDTO);
-            for (DTOEventListener listener : loginEventList)
-                listener.handle(event);
-        } else if (obj instanceof PlayerDTO) {
-            PlayerDTO playerDTO = (PlayerDTO) obj;
-            PlayerDTOEvent event = new PlayerDTOEvent(webSocket, playerDTO);
-            for (DTOEventListener listener : playerEventList)
-                listener.handle(event);
-        }
     }
 
     public void addPlayerDTOListener(PlayerDTOEventListener listener) {
