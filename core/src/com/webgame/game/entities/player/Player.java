@@ -22,6 +22,7 @@ import static com.webgame.game.Configs.PPM;
 
 public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpdatable<PlayerDTO> {
     protected float stateTimer;
+    protected float attackTimer;
 
     protected DirectionState directionState;
     protected DirectionState oldDirectionState;
@@ -75,7 +76,7 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
         setBounds(0, 0, 60 / PPM, 60 / PPM);
     }
 
-    public static Player createPlayer(World world){
+    public static Player createPlayer(World world) {
         Player player = new Mage(Configs.PLAYERSHEETS_FOLDER + "/mage.png");
         player.createObject(world);
         return player;
@@ -110,11 +111,12 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
 
     public boolean isAttackFinished() {
         Integer index = directionState.getDirIndex();
-        return attackAnimations.get(index).isAnimationFinished(stateTimer);
+        return attackAnimations.get(index).isAnimationFinished(attackTimer);
     }
 
     public void clearTimers() {
         stateTimer = 0;
+        attackTimer = 0;
     }
 
     @Override
@@ -126,8 +128,8 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
 
         Integer index = directionState.getDirIndex();
 
-        if(attackState.equals(PlayerAttackState.BATTLE))
-            region = attackAnimations.get(index).getKeyFrame(stateTimer, false);
+        if (attackState.equals(PlayerAttackState.BATTLE))
+            region = attackAnimations.get(index).getKeyFrame(attackTimer, false);
         else {
             switch (currState) {
                 case WALK:
@@ -143,9 +145,8 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
         return region;
     }
 
-
     @Override
-    public void updateBy(PlayerDTO dto){
+    public void updateBy(PlayerDTO dto) {
         setPosition(dto.getPosition());
         setVelocity(dto.getVelocity());
         getAttributes().setName(dto.getName());
@@ -163,8 +164,14 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
         else
             setCurrAnimationState(PlayerMoveState.WALK);
 
-        if (isAttackFinished())
-            setCurrentAttackState(PlayerAttackState.SAFE);
+        if (getCurrentAttackState().equals(PlayerAttackState.BATTLE)) {
+            if (isAttackFinished()) {
+                setCurrentAttackState(PlayerAttackState.SAFE);
+                attackTimer = 0;
+            } else
+                attackTimer += dt;
+        }
+
 
         stateTimer += dt;
 

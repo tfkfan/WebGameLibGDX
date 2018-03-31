@@ -123,6 +123,9 @@ public class GameController extends AbstractGameController {
 
                     });
                 } else if(!plr.equals(getPlayer())){
+                    if(playerDTO.getPlayerAttackState().equals(PlayerAttackState.BATTLE)){
+                        Gdx.app.log("WS", "ATTACK");
+                    }
                     plr.updateBy(playerDTO);
                 }
             }
