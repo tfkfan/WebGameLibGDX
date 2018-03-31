@@ -46,6 +46,18 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
 
     protected int currentSkill;
 
+    protected Vector2 target;
+
+    public boolean isAttackPressed() {
+        return isAttackPressed;
+    }
+
+    public void setAttackPressed(boolean attackPressed) {
+        isAttackPressed = attackPressed;
+    }
+
+    protected boolean isAttackPressed;
+
     public Player() {
         super();
     }
@@ -72,6 +84,8 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
 
         currentSkill = 0;
 
+        isAttackPressed = false;
+
         clearTimers();
         setBounds(0, 0, 60 / PPM, 60 / PPM);
     }
@@ -82,7 +96,7 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
         return player;
     }
 
-    public void castSkill(Vector2 target) {
+    public boolean castSkill(Vector2 target) {
         //checking inactive activeSkills
         List<Skill> skillsToRemove = new ArrayList<Skill>();
         for (Skill skill : activeSkills)
@@ -90,16 +104,24 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
                 skillsToRemove.add(skill);
         activeSkills.removeAll(skillsToRemove);
 
-
-        Skill currSkill = allSkills.get(currentSkill);
+        Skill currSkill = getCurrentSkill();
         if (currSkill == null)
-            return;
+            return false;
+
+        this.target = target;
+
+        Long end =  getCurrentSkill().getStart() + getCurrentSkill().getCooldown();
+        Long currentTime = System.currentTimeMillis();
+
+        if (currentTime < end)
+            return false;
 
         currSkill.setStart(System.currentTimeMillis());
 
         Skill skill = currSkill.createCopy();
         skill.cast(target);
         activeSkills.add(skill);
+        return true;
     }
 
     @Override
@@ -155,6 +177,7 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
         setOldDirectionState(getDirectionState());
         setDirectionState(dto.getDirectionState());
         setCurrentAttackState(dto.getPlayerAttackState());
+        setCurrentSkillIndex(dto.getCurrentSkillIndex());
     }
 
     @Override
@@ -179,6 +202,13 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
             clearTimers();
     }
 
+    public int getCurrentSkillIndex(){
+        return currentSkill;
+    }
+    public void setCurrentSkillIndex(int index){
+        this.currentSkill = index;
+    }
+
     public List<Skill> getActiveSkills() {
         return activeSkills;
     }
@@ -199,6 +229,14 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
 
     public void setCurrentSkill(int currentSkill) {
         this.currentSkill = currentSkill;
+    }
+
+    public Vector2 getTarget() {
+        return target;
+    }
+
+    public void setTarget(Vector2 target) {
+        this.target = target;
     }
 
     public PlayerState getPlayerState() {

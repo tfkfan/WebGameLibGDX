@@ -70,7 +70,7 @@ public class PlayerPanel extends Table {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("ok2 pressed");
-                // player.setCurrentSkill(skill);
+                // player.setCurrentSkillIndex(skill);
             }
         });
         add(btn2).size(btn2.getWidth()/ Configs.PPM, btn2.getHeight()/ Configs.PPM).expand();
@@ -79,7 +79,7 @@ public class PlayerPanel extends Table {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("ok pressed");
-                // player.setCurrentSkill(skill);
+                // player.setCurrentSkillIndex(skill);
             }
         });
 
@@ -100,7 +100,7 @@ public class PlayerPanel extends Table {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    player.setCurrentSkill(skill);
+                    player.setCurrentSkillIndex(skill);
                 }
             });
 

@@ -29,12 +29,16 @@ import com.webgame.game.events.PlayerDamagedEvent;
 import com.webgame.game.events.listeners.AttackListener;
 import com.webgame.game.events.listeners.PlayerDamagedListener;
 import com.webgame.game.events.listeners.PlayerMoveListener;
+import com.webgame.game.events.listeners.ws.AttackWSListener;
 import com.webgame.game.events.listeners.ws.PlayersWSListener;
 import com.webgame.game.events.listeners.ws.SuccesLoginWSListener;
 import com.webgame.game.events.listeners.ws.PlayerWSListener;
+import com.webgame.game.events.ws.AttackWSEvent;
 import com.webgame.game.events.ws.LoginSuccessEvent;
 import com.webgame.game.events.ws.PlayerWSEvent;
 import com.webgame.game.events.ws.PlayersWSEvent;
+import com.webgame.game.server.serialization.dto.event.impl.AttackDTOEvent;
+import com.webgame.game.server.serialization.dto.player.AttackDTO;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 import com.webgame.game.stages.GameStage;
@@ -59,6 +63,7 @@ public abstract class AbstractGameController extends AbstractController implemen
     protected final List<EventListener> loginWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
     protected final List<EventListener> playerWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
     protected final List<EventListener> playersWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
+    protected final List<EventListener> attackWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
 
     protected final List<EventListener> playerMoveListeners = Collections.synchronizedList(new ArrayList<EventListener>());
     protected final List<EventListener> attackListeners = Collections.synchronizedList(new ArrayList<EventListener>());
@@ -108,6 +113,9 @@ public abstract class AbstractGameController extends AbstractController implemen
         } else if(event instanceof PlayersWSEvent){
             for(EventListener listener : playersWSEventList)
                 listener.handle(event);
+        } else if(event instanceof  AttackWSEvent){
+            for(EventListener listener : attackWSEventList)
+                listener.handle(event);
         }
         return true;
     }
@@ -146,6 +154,10 @@ public abstract class AbstractGameController extends AbstractController implemen
             PlayersWSEvent event = new PlayersWSEvent(webSocket, serverPlayers);
             fire(event);
             //Gdx.app.log("WS", "PLAYERS");
+        } else if(res instanceof AttackDTO){
+            AttackDTO attackDTO = (AttackDTO) res;
+            AttackWSEvent attackWSEvent = new AttackWSEvent(webSocket, attackDTO);
+            fire(attackWSEvent);
         }
        // Gdx.app.log("WS", "!" + res.getClass().getName());
         return true;
@@ -167,6 +179,10 @@ public abstract class AbstractGameController extends AbstractController implemen
                 return AbstractGameController.this;
             }
         });
+    }
+
+    public void addAttackWSListener(AttackWSListener listener){
+        attackWSEventList.add(listener);
     }
 
     public void addAttackListener(AttackListener listener) {

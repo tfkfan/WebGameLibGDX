@@ -1,14 +1,15 @@
 package com.webgame.game.server.handlers;
 
 import com.badlogic.gdx.math.Vector2;
+import com.webgame.game.server.serialization.dto.event.impl.AttackDTOEvent;
+import com.webgame.game.server.serialization.dto.event.listeners.AttackDTOEventListener;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 import io.vertx.core.TimeoutStream;
 
 import java.util.ArrayList;
-import static  com.webgame.game.server.utils.ServerUtils.writeResponseToAll;
-import static  com.webgame.game.server.utils.ServerUtils.writeResponse;
-import static com.webgame.game.server.utils.ServerUtils.vertx;
+
+import static com.webgame.game.server.utils.ServerUtils.*;
 
 public class CustomWebSocketHandler extends AbstractWebSocketHandler {
     public static final int delay = 20;
@@ -43,6 +44,10 @@ public class CustomWebSocketHandler extends AbstractWebSocketHandler {
             Long id = playerDTO.getId();
             getSessions().put(id, event.getWebSocket());
             getPlayers().put(id, playerDTO);
+        });
+
+        addAttackDTOListener(event -> {
+            writeResponseToAllExcept(getSessions().values(), event.getWebSocket(), event.getDto(), getJsonSerializer());
         });
     }
 

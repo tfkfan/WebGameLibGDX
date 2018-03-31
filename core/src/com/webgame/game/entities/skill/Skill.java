@@ -10,6 +10,8 @@ import com.webgame.game.entities.AnimatedEntity;
 import com.webgame.game.entities.Entity;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.enums.*;
+import com.webgame.game.server.serialization.dto.skill.SkillDTO;
+import com.webgame.game.world.common.IDTOUpdatable;
 import com.webgame.game.world.common.IUpdatable;
 
 import java.lang.reflect.InvocationTargetException;
@@ -35,7 +37,7 @@ public abstract class Skill extends Entity implements IUpdatable {
     protected MoveState moveState;
     protected Vector2 target;
 
-    protected transient Player player;
+    protected Player player;
     protected List<SkillSprite> animations;
 
     protected Long cooldown;

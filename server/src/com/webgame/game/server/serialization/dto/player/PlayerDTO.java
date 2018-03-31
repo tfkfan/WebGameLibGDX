@@ -12,9 +12,12 @@ public class PlayerDTO implements UpdatableDTO<Player> {
     protected String name;
     protected Vector2 position;
     protected Vector2 velocity;
+    protected Vector2 target;
     protected PlayerMoveState playerMoveState;
     protected PlayerAttackState playerAttackState;
     protected DirectionState directionState;
+
+    protected int currentSkillIndex;
 
     public PlayerDTO(){
 
@@ -49,6 +52,14 @@ public class PlayerDTO implements UpdatableDTO<Player> {
         this.velocity = velocity;
     }
 
+    public Vector2 getTarget() {
+        return target;
+    }
+
+    public void setTarget(Vector2 target) {
+        this.target = target;
+    }
+
     public String getName() {
         return name;
     }
@@ -81,6 +92,14 @@ public class PlayerDTO implements UpdatableDTO<Player> {
         this.playerAttackState = playerAttackState;
     }
 
+    public int getCurrentSkillIndex() {
+        return currentSkillIndex;
+    }
+
+    public void setCurrentSkillIndex(int currentSkillIndex) {
+        this.currentSkillIndex = currentSkillIndex;
+    }
+
     @Override
     public void updateBy(Player entity) {
         setId(entity.getId());
@@ -90,6 +109,7 @@ public class PlayerDTO implements UpdatableDTO<Player> {
         setPlayerMoveState(entity.getCurrAnimationState());
         setDirectionState(entity.getDirectionState());
         setPlayerAttackState(entity.getCurrentAttackState());
+        setTarget(entity.getTarget());
+        setCurrentSkillIndex(entity.getCurrentSkillIndex());
     }
-
 }

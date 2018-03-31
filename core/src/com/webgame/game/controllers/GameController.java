@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.Configs;
@@ -22,8 +23,11 @@ import com.webgame.game.enums.PlayerMoveState;
 import com.webgame.game.events.AttackEvent;
 import com.webgame.game.events.MoveEvent;
 import com.webgame.game.events.PlayerDamagedEvent;
+import com.webgame.game.events.listeners.ws.AttackWSListener;
+import com.webgame.game.events.ws.AttackWSEvent;
 import com.webgame.game.events.ws.LoginSuccessEvent;
 import com.webgame.game.events.ws.PlayersWSEvent;
+import com.webgame.game.server.serialization.dto.player.AttackDTO;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 
@@ -31,6 +35,7 @@ import java.util.List;
 
 public class GameController extends AbstractGameController {
     Long timerId;
+
     public GameController(OrthographicCamera camera, Viewport viewport) {
         super(camera, viewport);
 
@@ -43,27 +48,21 @@ public class GameController extends AbstractGameController {
             plr.setVelocity(vec);
             plr.applyVelocity();
 
-           // getSocketService().send(new PlayerDTO(getPlayer()));
+            //getSocketService().send(new PlayerDTO(getPlayer()));
             return true;
         });
 
         addAttackListener(event -> {
                     AttackEvent attackEvent = (AttackEvent) event;
                     Player plr = attackEvent.getPlayer();
-                    Skill currentSkill = plr.getCurrentSkill();
-                    if (currentSkill == null)
-                        return false;
-
-                    Long end = currentSkill.getStart() + currentSkill.getCooldown();
-                    Long currentTime = System.currentTimeMillis();
-
-                    if (currentTime < end)
-                        return false;
 
                     plr.clearTimers();
                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
-                    plr.castSkill(attackEvent.getTargetVector());
+                    if(plr.castSkill(attackEvent.getTargetVector())){
+                        Gdx.app.log("attack", "attack has been sent");
+                        getSocketService().send(new AttackDTO(plr.getId(), attackEvent.getTargetVector()));
+                    }
                     return true;
                 }
         );
@@ -122,14 +121,25 @@ public class GameController extends AbstractGameController {
                         getPlayers().put(player.getId(), player);
 
                     });
-                } else if(!plr.equals(getPlayer())){
-                    if(playerDTO.getPlayerAttackState().equals(PlayerAttackState.BATTLE)){
-                        Gdx.app.log("WS", "ATTACK");
-                    }
+                } else if (!plr.equals(getPlayer())) {
                     plr.updateBy(playerDTO);
                 }
             }
             return true;
+        });
+
+        addAttackWSListener(event -> {
+            AttackDTO dto = ((AttackWSEvent)event).getAttackDTO();
+            Long id = dto.getId();
+            Player plr = getPlayers().get(id);
+            if(plr == null){
+                Gdx.app.log("WS", "Player " + id + " doesn't exist");
+                return true;
+            }
+            plr.clearTimers();
+            plr.setCurrentAttackState(PlayerAttackState.BATTLE);
+
+            return plr.castSkill(dto.getTarget());
         });
 
     }

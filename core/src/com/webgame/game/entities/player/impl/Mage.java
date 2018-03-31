@@ -16,6 +16,7 @@ import com.webgame.game.entities.player.Player;
 import static com.webgame.game.Configs.PPM;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Mage extends Player {
@@ -30,7 +31,7 @@ public class Mage extends Player {
             float[] animSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
             float[] standSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
 
-            List<Skill> allSkills = new ArrayList<Skill>();
+            List<Skill> allSkills = Collections.synchronizedList(new ArrayList<Skill>());
 
             Texture standSkillTexture = GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/fire_002.png");
             Texture animSkillTexture = GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s001.png");
