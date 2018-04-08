@@ -11,9 +11,10 @@ import com.webgame.game.enums.SkillAnimationState;
 import sun.security.krb5.Config;
 
 public class SingleSkill extends Skill {
-    public SingleSkill(){
+    public SingleSkill() {
 
     }
+
     public SingleSkill(Skill skill) {
         super(skill);
     }
@@ -61,11 +62,11 @@ public class SingleSkill extends Skill {
     public void updateAnimations(float dt) {
         for (SkillSprite animation : getAnimations()) {
             animation.setPosition(getPosition());
-            if(getMoveState().equals(MoveState.STATIC)){
+            if (getMoveState().equals(MoveState.STATIC)) {
                 animation.setMoveState(MoveState.STATIC);
-                if(!animation.isAnimationFinished()) {
+                if (!animation.isAnimationFinished()) {
                     animation.setStateTimer(animation.getStateTimer() + dt);
-                }else {
+                } else {
                     resetSkill();
                     return;
                 }

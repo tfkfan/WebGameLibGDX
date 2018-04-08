@@ -3,6 +3,7 @@ package com.webgame.game.server.serialization.dto.skill;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.entities.skill.Skill;
+import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MoveState;
 import com.webgame.game.server.serialization.dto.UpdatableDTO;
 
@@ -12,6 +13,7 @@ public class SkillDTO implements UpdatableDTO<Skill> {
     private Vector2 target;
     private Long id;
     private MoveState moveState;
+    private EntityState entityState;
 
 
     public SkillDTO() {
@@ -68,5 +70,11 @@ public class SkillDTO implements UpdatableDTO<Skill> {
         this.moveState = moveState;
     }
 
+    public EntityState getEntityState() {
+        return entityState;
+    }
 
+    public void setEntityState(EntityState entityState) {
+        this.entityState = entityState;
+    }
 }

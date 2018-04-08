@@ -13,6 +13,7 @@ import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 import io.vertx.core.Handler;
 import io.vertx.core.http.ServerWebSocket;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,16 +51,16 @@ public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocke
                 PlayerDTOEvent playerDTOEvent = new PlayerDTOEvent(webSocket, playerDTO);
                 for (DTOEventListener listener : playerEventList)
                     listener.handle(playerDTOEvent);
-            } else if(obj instanceof AttackDTO){
+            } else if (obj instanceof AttackDTO) {
                 AttackDTO attackDTO = (AttackDTO) obj;
                 AttackDTOEvent attackDTOEvent = new AttackDTOEvent(webSocket, attackDTO);
-                for(DTOEventListener listener : attackEventList)
+                for (DTOEventListener listener : attackEventList)
                     listener.handle(attackDTOEvent);
             }
         });
     }
 
-    public void addAttackDTOListener(AttackDTOEventListener listener){
+    public void addAttackDTOListener(AttackDTOEventListener listener) {
         attackEventList.add(listener);
     }
 

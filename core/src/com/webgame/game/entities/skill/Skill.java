@@ -47,7 +47,7 @@ public abstract class Skill extends Entity implements IUpdatable {
 
     protected boolean marked;
 
-    public Skill(){
+    public Skill() {
 
     }
 
@@ -326,7 +326,6 @@ public abstract class Skill extends Entity implements IUpdatable {
     public void setDirectionState(DirectionState directionState) {
         this.directionState = directionState;
     }
-
 
 
 }

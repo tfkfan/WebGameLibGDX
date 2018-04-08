@@ -3,6 +3,7 @@ package com.webgame.game.server.handlers;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.skill.Skill;
+import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MoveState;
 import com.webgame.game.server.serialization.dto.event.impl.AttackDTOEvent;
 import com.webgame.game.server.serialization.dto.event.listeners.AttackDTOEventListener;
@@ -64,17 +65,19 @@ public class CustomWebSocketHandler extends AbstractWebSocketHandler {
                         if (skillDTO.getMoveState().equals(MoveState.MOVING))
                             skillDTO.getPosition().add(skillDTO.getVelocity());
 
-                        if (isCollided(skillDTO.getPosition(), skillDTO.getTarget()))
+                        if (isCollided(skillDTO.getPosition(), skillDTO.getTarget())) {
                             skillDTO.setMoveState(MoveState.STATIC);
+                            skillDTO.setEntityState(EntityState.INACTIVE);
+                            //it.remove();
+                        }
 
                         playerDTO.getSkills().put(skillDTO.getId(), skillDTO);
                     }
                 }
-            }
-            else
+            } else
                 currentDTO = playerDTO;
 
-            if(currentDTO != null)
+            if (currentDTO != null)
                 getPlayers().put(id, currentDTO);
         });
 
@@ -95,6 +98,7 @@ public class CustomWebSocketHandler extends AbstractWebSocketHandler {
 
             SkillDTO skillDTO = new SkillDTO();
             skillDTO.setMoveState(MoveState.MOVING);
+            skillDTO.setEntityState(EntityState.ACTIVE);
             skillDTO.setTarget(target);
             skillDTO.setVelocity(vel);
             skillDTO.setPosition(playerPos);

@@ -101,7 +101,7 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
 
     public Skill castSkill(Vector2 target, Long id) {
         //checking inactive activeSkills
-        for(Iterator<Map.Entry<Long, Skill>> it = activeSkills.entrySet().iterator(); it.hasNext();){
+        for (Iterator<Map.Entry<Long, Skill>> it = activeSkills.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<Long, Skill> skillEntry = it.next();
             if (skillEntry.getValue().getEntityState().equals(EntityState.INACTIVE))
                 it.remove();
@@ -113,13 +113,13 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
 
         this.target = target;
 
-        Long end =  getCurrentSkill().getStart() + getCurrentSkill().getCooldown();
-        Long currentTime = System.currentTimeMillis();
+       // Long end = getCurrentSkill().getStart() + getCurrentSkill().getCooldown();
+        //Long currentTime = System.currentTimeMillis();
 
-        if (currentTime < end)
-            return null;
+        //if (currentTime < end)
+         //   return null;
 
-        currSkill.setStart(System.currentTimeMillis());
+      //  currSkill.setStart(System.currentTimeMillis());
 
         final Skill skill = currSkill.createCopy();
         skill.cast(target);
@@ -205,10 +205,11 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
             clearTimers();
     }
 
-    public int getCurrentSkillIndex(){
+    public int getCurrentSkillIndex() {
         return currentSkill;
     }
-    public void setCurrentSkillIndex(int index){
+
+    public void setCurrentSkillIndex(int index) {
         this.currentSkill = index;
     }
 

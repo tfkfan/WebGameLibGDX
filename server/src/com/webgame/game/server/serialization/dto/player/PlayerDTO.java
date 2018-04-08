@@ -26,15 +26,15 @@ public class PlayerDTO implements UpdatableDTO<Player> {
 
     protected Map<Long, SkillDTO> skills;
 
-    public PlayerDTO(){
+    public PlayerDTO() {
 
     }
 
-    public PlayerDTO(Player player){
+    public PlayerDTO(Player player) {
         updateBy(player);
     }
 
-    public void updateBy(PlayerDTO playerDTO){
+    public void updateBy(PlayerDTO playerDTO) {
         setPosition(playerDTO.getPosition());
         setVelocity(playerDTO.getVelocity());
         setTarget(playerDTO.getTarget());
@@ -42,6 +42,7 @@ public class PlayerDTO implements UpdatableDTO<Player> {
         setPlayerMoveState(playerDTO.getPlayerMoveState());
         setDirectionState(playerDTO.getDirectionState());
     }
+
     public long getId() {
         return id;
     }
@@ -107,7 +108,7 @@ public class PlayerDTO implements UpdatableDTO<Player> {
     }
 
     public Map<Long, SkillDTO> getSkills() {
-        if(skills == null)
+        if (skills == null)
             skills = new ConcurrentHashMap<>();
         return skills;
     }
