@@ -5,9 +5,12 @@ import com.webgame.game.server.serialization.dto.event.impl.AttackDTOEvent;
 import com.webgame.game.server.serialization.dto.event.listeners.AttackDTOEventListener;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
+import com.webgame.game.server.serialization.dto.skill.SkillDTO;
 import io.vertx.core.TimeoutStream;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.webgame.game.server.utils.ServerUtils.*;
 
@@ -43,11 +46,44 @@ public class CustomWebSocketHandler extends AbstractWebSocketHandler {
 
             Long id = playerDTO.getId();
             getSessions().put(id, event.getWebSocket());
-            getPlayers().put(id, playerDTO);
+
+            PlayerDTO currentDTO = getPlayers().get(id);
+            if(currentDTO != null) {
+                currentDTO.updateBy(playerDTO);
+                if (currentDTO.getSkills() != null)
+                    System.out.println("skills null");
+            }else
+                currentDTO = playerDTO;
+
+            getPlayers().put(id, currentDTO);
+
         });
 
         addAttackDTOListener(event -> {
-            writeResponseToAllExcept(getSessions().values(), event.getWebSocket(), event.getDto(), getJsonSerializer());
+            Long plrId = event.getDto().getId();
+            PlayerDTO playerDTO = getPlayers().get(plrId);
+            if(playerDTO == null)
+                return;
+
+            final Vector2 target = event.getDto().getTarget();
+            final Vector2 position = playerDTO.getPosition();
+
+            Map<Long, SkillDTO> skills = playerDTO.getSkills();
+            if(skills == null)
+                skills = new ConcurrentHashMap<>();
+
+            SkillDTO skillDTO = new SkillDTO();
+            skillDTO.setTarget(target);
+            skillDTO.setPosition(position);
+
+            final Long skillId = Long.valueOf(skills.values().size());
+            skillDTO.setId(skillId);
+
+            skills.put(skillId , skillDTO);
+
+            playerDTO.setSkills(skills);
+
+            getPlayers().put(plrId, playerDTO);
         });
     }
 

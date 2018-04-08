@@ -16,7 +16,10 @@ import com.webgame.game.world.common.IDTOUpdatable;
 import com.webgame.game.world.common.IUpdatable;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -41,7 +44,7 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
 
     protected PlayerAttributes attributes;
 
-    protected List<Skill> activeSkills;
+    protected Map<Long, Skill> activeSkills;
     protected List<Skill> allSkills;
 
     protected int currentSkill;
@@ -80,7 +83,7 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
         getAttributes().setHealthPoints(1000);
         getAttributes().setMaxHealthPoints(1000);
 
-        activeSkills = new ArrayList<>();
+        activeSkills = new ConcurrentHashMap<>();
 
         currentSkill = 0;
 
@@ -96,17 +99,17 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
         return player;
     }
 
-    public boolean castSkill(Vector2 target) {
+    public Skill castSkill(Vector2 target, Long id) {
         //checking inactive activeSkills
-        List<Skill> skillsToRemove = new ArrayList<Skill>();
-        for (Skill skill : activeSkills)
-            if (skill.getEntityState().equals(EntityState.INACTIVE))
-                skillsToRemove.add(skill);
-        activeSkills.removeAll(skillsToRemove);
+        for(Iterator<Map.Entry<Long, Skill>> it = activeSkills.entrySet().iterator(); it.hasNext();){
+            Map.Entry<Long, Skill> skillEntry = it.next();
+            if (skillEntry.getValue().getEntityState().equals(EntityState.INACTIVE))
+                it.remove();
+        }
 
         Skill currSkill = getCurrentSkill();
         if (currSkill == null)
-            return false;
+            return null;
 
         this.target = target;
 
@@ -114,14 +117,14 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
         Long currentTime = System.currentTimeMillis();
 
         if (currentTime < end)
-            return false;
+            return null;
 
         currSkill.setStart(System.currentTimeMillis());
 
-        Skill skill = currSkill.createCopy();
+        final Skill skill = currSkill.createCopy();
         skill.cast(target);
-        activeSkills.add(skill);
-        return true;
+        activeSkills.put(id, skill);
+        return skill;
     }
 
     @Override
@@ -209,7 +212,7 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
         this.currentSkill = index;
     }
 
-    public List<Skill> getActiveSkills() {
+    public Map<Long, Skill> getActiveSkills() {
         return activeSkills;
     }
 

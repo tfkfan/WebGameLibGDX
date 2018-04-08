@@ -6,6 +6,10 @@ import com.webgame.game.enums.DirectionState;
 import com.webgame.game.enums.PlayerAttackState;
 import com.webgame.game.enums.PlayerMoveState;
 import com.webgame.game.server.serialization.dto.UpdatableDTO;
+import com.webgame.game.server.serialization.dto.skill.SkillDTO;
+
+import java.util.List;
+import java.util.Map;
 
 public class PlayerDTO implements UpdatableDTO<Player> {
     protected long id;
@@ -19,6 +23,8 @@ public class PlayerDTO implements UpdatableDTO<Player> {
 
     protected int currentSkillIndex;
 
+    protected Map<Long, SkillDTO> skills;
+
     public PlayerDTO(){
 
     }
@@ -27,7 +33,14 @@ public class PlayerDTO implements UpdatableDTO<Player> {
         updateBy(player);
     }
 
-
+    public void updateBy(PlayerDTO playerDTO){
+        setPosition(playerDTO.getPosition());
+        setVelocity(playerDTO.getVelocity());
+        setTarget(playerDTO.getTarget());
+        setPlayerAttackState(playerDTO.getPlayerAttackState());
+        setPlayerMoveState(playerDTO.getPlayerMoveState());
+        setDirectionState(playerDTO.getDirectionState());
+    }
     public long getId() {
         return id;
     }
@@ -90,6 +103,14 @@ public class PlayerDTO implements UpdatableDTO<Player> {
 
     public void setPlayerAttackState(PlayerAttackState playerAttackState) {
         this.playerAttackState = playerAttackState;
+    }
+
+    public Map<Long, SkillDTO> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(Map<Long, SkillDTO> skills) {
+        this.skills = skills;
     }
 
     public int getCurrentSkillIndex() {

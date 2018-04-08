@@ -1,4 +1,6 @@
 package com.webgame.game.server.serialization.dto;
 
-public interface DTO {
+import java.io.Serializable;
+
+public interface DTO extends Serializable{
 }

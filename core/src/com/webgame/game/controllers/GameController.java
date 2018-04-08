@@ -30,8 +30,12 @@ import com.webgame.game.events.ws.PlayersWSEvent;
 import com.webgame.game.server.serialization.dto.player.AttackDTO;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
+import com.webgame.game.server.serialization.dto.skill.SkillDTO;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class GameController extends AbstractGameController {
     Long timerId;
@@ -59,10 +63,10 @@ public class GameController extends AbstractGameController {
                     plr.clearTimers();
                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
-                    if(plr.castSkill(attackEvent.getTargetVector())){
-                        Gdx.app.log("attack", "attack has been sent");
-                        getSocketService().send(new AttackDTO(plr.getId(), attackEvent.getTargetVector()));
-                    }
+                   // if(plr.castSkill(attackEvent.getTargetVector())){
+                    Gdx.app.log("attack", "attack has been sent");
+                    getSocketService().send(new AttackDTO(plr.getId(), attackEvent.getTargetVector()));
+                   // }
                     return true;
                 }
         );
@@ -121,27 +125,38 @@ public class GameController extends AbstractGameController {
                         getPlayers().put(player.getId(), player);
 
                     });
-                } else if (!plr.equals(getPlayer())) {
+                } else {
                     plr.updateBy(playerDTO);
+                    final Map<Long, SkillDTO> skills = playerDTO.getSkills();
+                    final Map<Long, Skill> plrSkills = plr.getActiveSkills();
+                    if(skills != null && !skills.isEmpty()){
+                        for(Iterator<Map.Entry<Long, SkillDTO>> it = skills.entrySet().iterator(); it.hasNext();) {
+                            Map.Entry<Long, SkillDTO> skillEntry = it.next();
+                            try {
+                                final Object objId = skillEntry.getKey();
+                                final Long id = Long.valueOf(objId.toString());
+                                final SkillDTO skillDTO = skillEntry.getValue();
+                                if (plrSkills.containsKey(skillEntry.getKey())) {
+                                    Skill skill = plrSkills.get(id);
+                                    skill.setPosition(skillDTO.getPosition());
+                                } else {
+                                    Gdx.app.log("WS", "Skill is initialized");
+
+                                    plr.clearTimers();
+                                    plr.setCurrentAttackState(PlayerAttackState.BATTLE);
+
+                                    Skill skill = plr.castSkill(skillDTO.getTarget(), skillDTO.getId());
+                                    skill.setPosition(skillDTO.getPosition());
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                 }
             }
             return true;
         });
-
-        addAttackWSListener(event -> {
-            AttackDTO dto = ((AttackWSEvent)event).getAttackDTO();
-            Long id = dto.getId();
-            Player plr = getPlayers().get(id);
-            if(plr == null){
-                Gdx.app.log("WS", "Player " + id + " doesn't exist");
-                return true;
-            }
-            plr.clearTimers();
-            plr.setCurrentAttackState(PlayerAttackState.BATTLE);
-
-            return plr.castSkill(dto.getTarget());
-        });
-
     }
 
     public void playerLogin(String username, String password) {
@@ -163,15 +178,16 @@ public class GameController extends AbstractGameController {
 
         for (final Player currentPlayer : getPlayers().values()) {
             currentPlayer.update(dt);
-            List<Skill> skills = currentPlayer.getActiveSkills();
 
-            for (Skill skill : skills) {
+            final Collection<Skill> skills = currentPlayer.getActiveSkills().values();
+            for(Iterator<Skill> it1 = skills.iterator(); it1.hasNext();) {
+                final Skill skill = it1.next();
                 skill.update(dt);
 
                 if (!(skill instanceof AOESkill) && skill.isMarked())
                     continue;
 
-                for (Player anotherPlayer : getPlayers().values()) {
+               /* for (Player anotherPlayer : getPlayers().values()) {
                     if (anotherPlayer == currentPlayer)
                         continue;
 
@@ -190,7 +206,7 @@ public class GameController extends AbstractGameController {
                             }
                         }
                     }
-                }
+                }*/
             }
         }
 
@@ -218,9 +234,11 @@ public class GameController extends AbstractGameController {
         batch.begin();
 
         for (Player plr : getPlayers().values()) {
-            List<Skill> skills = plr.getActiveSkills();
-            for (Skill skill : skills)
+            final Collection<Skill> skills = plr.getActiveSkills().values();
+            for(Iterator<Skill> it1 = skills.iterator(); it1.hasNext();) {
+                final Skill skill = it1.next();
                 skill.draw(batch, parentAlpha);
+            }
 
             plr.draw(batch, parentAlpha);
             if (plr.getAttributes().getName() != null)
