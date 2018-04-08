@@ -136,7 +136,7 @@ public class GameController extends AbstractGameController {
                                 final Object objId = skillEntry.getKey();
                                 final Long id = Long.valueOf(objId.toString());
                                 final SkillDTO skillDTO = skillEntry.getValue();
-                                if (plrSkills.containsKey(skillEntry.getKey())) {
+                                if (plrSkills.containsKey(id)) {
                                     Skill skill = plrSkills.get(id);
                                     skill.setPosition(skillDTO.getPosition());
                                 } else {
@@ -146,6 +146,7 @@ public class GameController extends AbstractGameController {
                                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
                                     Skill skill = plr.castSkill(skillDTO.getTarget(), skillDTO.getId());
+                                    if(skill != null)
                                     skill.setPosition(skillDTO.getPosition());
                                 }
                             }catch (Exception e){

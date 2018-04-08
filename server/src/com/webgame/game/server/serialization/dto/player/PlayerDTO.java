@@ -10,6 +10,7 @@ import com.webgame.game.server.serialization.dto.skill.SkillDTO;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerDTO implements UpdatableDTO<Player> {
     protected long id;
@@ -106,6 +107,8 @@ public class PlayerDTO implements UpdatableDTO<Player> {
     }
 
     public Map<Long, SkillDTO> getSkills() {
+        if(skills == null)
+            skills = new ConcurrentHashMap<>();
         return skills;
     }
 
