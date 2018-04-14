@@ -59,6 +59,17 @@ public class SingleSkill extends Skill {
     }
 
     @Override
+    public void setMoveState(MoveState moveState){
+        super.setMoveState(moveState);
+        if(getAnimations() == null)
+            return;
+
+        for (SkillSprite animation : getAnimations()) {
+            animation.setMoveState(moveState);
+        }
+    }
+
+    @Override
     public void updateAnimations(float dt) {
         for (SkillSprite animation : getAnimations()) {
             animation.setPosition(getPosition());

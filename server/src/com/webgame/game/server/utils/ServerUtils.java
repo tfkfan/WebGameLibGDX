@@ -27,10 +27,6 @@ public class ServerUtils {
             writeResponse(session, obj, jsonSerializer);
     }
 
-    public static void writeResponseToAll(ServerWebSocket session, final Object obj, final JsonSerializer jsonSerializer) {
-        writeResponse(session, obj, jsonSerializer);
-    }
-
     public static void writeResponseToAllExcept(Collection<ServerWebSocket> sessions, final ServerWebSocket currentSession, final Object obj, final JsonSerializer jsonSerializer) {
         for (ServerWebSocket session : sessions) {
             if (session.equals(currentSession))

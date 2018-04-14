@@ -17,6 +17,7 @@ import com.webgame.game.entities.skill.AOESkill;
 import com.webgame.game.entities.skill.SingleSkill;
 import com.webgame.game.entities.skill.Skill;
 import com.webgame.game.entities.skill.StaticSkill;
+import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.PlayerAttackState;
 import com.webgame.game.enums.PlayerMoveState;
@@ -128,7 +129,17 @@ public class GameController extends AbstractGameController {
                 } else {
                     plr.updateBy(playerDTO);
                     final Map<Long, SkillDTO> skills = playerDTO.getSkills();
+
+                    //checking inactive activeSkills
+                    for (Iterator<Map.Entry<Long, Skill>> it = plr.getActiveSkills().entrySet().iterator(); it.hasNext(); ) {
+                        Map.Entry<Long, Skill> skillEntry = it.next();
+                        if (skillEntry.getValue().getEntityState().equals(EntityState.INACTIVE)) {
+                            it.remove();
+                        }
+                    }
+
                     final Map<Long, Skill> plrSkills = plr.getActiveSkills();
+
                     if (skills != null && !skills.isEmpty()) {
                         for (Iterator<Map.Entry<Long, SkillDTO>> it = skills.entrySet().iterator(); it.hasNext(); ) {
                             Map.Entry<Long, SkillDTO> skillEntry = it.next();
@@ -140,6 +151,7 @@ public class GameController extends AbstractGameController {
                                     Skill skill = plrSkills.get(id);
                                     skill.setPosition(skillDTO.getPosition());
                                     skill.setEntityState(skillDTO.getEntityState());
+                                    skill.setMoveState(skillDTO.getMoveState());
                                 } else {
                                     Gdx.app.log("WS", "Skill is initialized");
 

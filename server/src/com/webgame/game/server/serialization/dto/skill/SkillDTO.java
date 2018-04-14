@@ -1,7 +1,6 @@
 package com.webgame.game.server.serialization.dto.skill;
 
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.entities.player.Player;
 import com.webgame.game.entities.skill.Skill;
 import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MoveState;

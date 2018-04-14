@@ -100,12 +100,7 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
     }
 
     public Skill castSkill(Vector2 target, Long id) {
-        //checking inactive activeSkills
-        for (Iterator<Map.Entry<Long, Skill>> it = activeSkills.entrySet().iterator(); it.hasNext(); ) {
-            Map.Entry<Long, Skill> skillEntry = it.next();
-            if (skillEntry.getValue().getEntityState().equals(EntityState.INACTIVE))
-                it.remove();
-        }
+
 
         Skill currSkill = getCurrentSkill();
         if (currSkill == null)
