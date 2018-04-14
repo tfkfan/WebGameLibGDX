@@ -255,7 +255,7 @@ public abstract class AbstractGameController extends AbstractController implemen
 
     public void drawPlayerHealthLine(Player player) {
         shapeRenderer.rect(player.getPosition().x - player.getWidth() / 2, player.getPosition().y + player.getHeight() - 20 / Configs.PPM,
-                GameUtils.calcHealthLineWidth(player.getWidth(), player.getAttributes().getHealthPoints(), player.getAttributes().getMaxHealthPoints()), 5 / Configs.PPM);
+                GameUtils.calcHealthLineWidth(player.getWidth(), player.getHealthPoints(), player.getMaxHealthPoints()), 5 / Configs.PPM);
     }
 
     @Override
@@ -298,5 +298,4 @@ public abstract class AbstractGameController extends AbstractController implemen
     public boolean scrolled(int amount) {
         return false;
     }
-
 }

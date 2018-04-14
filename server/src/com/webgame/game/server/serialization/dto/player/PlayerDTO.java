@@ -16,7 +16,6 @@ public class PlayerDTO extends EntityDTO implements UpdatableDTO<Player> {
     protected String name;
     protected Vector2 position;
     protected Vector2 velocity;
-    protected Vector2 target;
     protected PlayerMoveState playerMoveState;
     protected PlayerAttackState playerAttackState;
     protected DirectionState directionState;
@@ -42,7 +41,6 @@ public class PlayerDTO extends EntityDTO implements UpdatableDTO<Player> {
     public void updateBy(PlayerDTO playerDTO) {
         setPosition(playerDTO.getPosition());
         setVelocity(playerDTO.getVelocity());
-        setTarget(playerDTO.getTarget());
         setPlayerAttackState(playerDTO.getPlayerAttackState());
         setPlayerMoveState(playerDTO.getPlayerMoveState());
         setDirectionState(playerDTO.getDirectionState());
@@ -63,14 +61,6 @@ public class PlayerDTO extends EntityDTO implements UpdatableDTO<Player> {
 
     public void setVelocity(Vector2 velocity) {
         this.velocity = velocity;
-    }
-
-    public Vector2 getTarget() {
-        return target;
-    }
-
-    public void setTarget(Vector2 target) {
-        this.target = target;
     }
 
     public String getName() {
@@ -128,11 +118,10 @@ public class PlayerDTO extends EntityDTO implements UpdatableDTO<Player> {
         setId(entity.getId());
         setPosition(entity.getPosition());
         setVelocity(entity.getVelocity());
-        setName(entity.getAttributes().getName());
+        setName(entity.getName());
         setPlayerMoveState(entity.getCurrAnimationState());
         setDirectionState(entity.getDirectionState());
         setPlayerAttackState(entity.getCurrentAttackState());
-        setTarget(entity.getTarget());
         setCurrentSkillIndex(entity.getCurrentSkillIndex());
     }
 }

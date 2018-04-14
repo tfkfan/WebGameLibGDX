@@ -21,7 +21,6 @@ import java.util.List;
 import static com.webgame.game.Configs.PPM;
 
 public abstract class Skill extends Entity implements IUpdatable {
-
     protected int animationsNum;
 
     protected Long level;
@@ -33,8 +32,10 @@ public abstract class Skill extends Entity implements IUpdatable {
     protected float stateTimer;
 
     protected DirectionState directionState;
-
     protected MoveState moveState;
+    protected MarkState markState;
+    protected SkillTypeState skillType;
+
     protected Vector2 target;
 
     protected Player player;
@@ -43,9 +44,6 @@ public abstract class Skill extends Entity implements IUpdatable {
     protected Long cooldown;
     protected Long duration;
     protected Long start;
-
-
-    protected boolean marked;
 
     public Skill() {
 
@@ -121,7 +119,7 @@ public abstract class Skill extends Entity implements IUpdatable {
         setPlayer(player);
         setStart(0L);
         setCooldown(0L);
-        setMarked(false);
+        setMarkState(MarkState.UNMARKED);
     }
 
     public void cast(Vector2 targetPosition) {
@@ -130,7 +128,6 @@ public abstract class Skill extends Entity implements IUpdatable {
         setEntityState(EntityState.ACTIVE);
         setPosition(new Vector2(player.getPosition()));
     }
-
 
     public abstract Skill createCopy();
 
@@ -156,7 +153,7 @@ public abstract class Skill extends Entity implements IUpdatable {
     protected void copy(Skill skill) {
         this.setDamage(skill.getDamage());
         this.setHeal(skill.getHeal());
-
+        this.setSkillType(skill.getSkillType());
     }
 
     protected void copyAnimations(List<SkillSprite> animations) {
@@ -211,12 +208,12 @@ public abstract class Skill extends Entity implements IUpdatable {
         return new Circle(getPosition().x, getPosition().y, getWidth() > getHeight() ? getHeight() / 2 : getWidth() / 2);
     }
 
-    public boolean isMarked() {
-        return marked;
+    public MarkState getMarkState() {
+        return markState;
     }
 
-    public void setMarked(boolean marked) {
-        this.marked = marked;
+    public void setMarkState(MarkState markState) {
+        this.markState = markState;
     }
 
     public Long getDuration() {
@@ -261,6 +258,14 @@ public abstract class Skill extends Entity implements IUpdatable {
 
     public void setMoveState(MoveState moveState) {
         this.moveState = moveState;
+    }
+
+    public SkillTypeState getSkillType() {
+        return skillType;
+    }
+
+    public void setSkillType(SkillTypeState skillType) {
+        this.skillType = skillType;
     }
 
     public Player getPlayer() {

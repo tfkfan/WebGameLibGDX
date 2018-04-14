@@ -1,7 +1,6 @@
 package com.webgame.game.server.utils;
 
 import com.github.czyzby.websocket.serialization.impl.JsonSerializer;
-import com.webgame.game.server.sessions.SessionContainer;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.ServerWebSocket;

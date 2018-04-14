@@ -7,6 +7,7 @@ import com.webgame.game.entities.player.Player;
 import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.SkillAnimationState;
+import com.webgame.game.enums.SkillTypeState;
 
 import static com.webgame.game.Configs.PPM;
 

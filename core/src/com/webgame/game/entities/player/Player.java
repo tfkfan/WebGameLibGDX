@@ -26,27 +26,26 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
 
     protected DirectionState directionState;
     protected DirectionState oldDirectionState;
-
     protected PlayerState playerState;
-
     protected PlayerMoveState currAnimationState;
-
     protected PlayerAttackState currentAttackState;
-
     protected PlayerMoveState prevAnimationState;
 
-    protected transient Array<Animation<TextureRegion>> animations;
-    protected transient Array<Animation<TextureRegion>> attackAnimations;
-    protected transient TextureRegion[] standRegions;
+    protected Array<Animation<TextureRegion>> animations;
+    protected Array<Animation<TextureRegion>> attackAnimations;
+    protected TextureRegion[] standRegions;
 
-    protected PlayerAttributes attributes;
+    protected Integer healthPoints;
+    protected Integer manaPoints;
+    protected Integer maxHealthPoints;
+    protected Integer maxManaPoints;
+    protected String name;
+    protected Integer level;
 
     protected Map<String, Skill> activeSkills;
     protected List<Skill> allSkills;
 
     protected int currentSkill;
-
-    protected Vector2 target;
 
     public Player() {
         super();
@@ -55,7 +54,6 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
     @Override
     public void init() {
         super.init();
-        attributes = new PlayerAttributes();
 
         directionState = DirectionState.UP;
         oldDirectionState = directionState;
@@ -67,8 +65,8 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
         currAnimationState = PlayerMoveState.STAND;
         prevAnimationState = currAnimationState;
 
-        getAttributes().setHealthPoints(1000);
-        getAttributes().setMaxHealthPoints(1000);
+        setHealthPoints(1000);
+        setMaxHealthPoints(1000);
 
         activeSkills = new ConcurrentHashMap<>();
 
@@ -85,13 +83,9 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
     }
 
     public Skill castSkill(Vector2 target, String id) {
-
-
         Skill currSkill = getCurrentSkill();
         if (currSkill == null)
             return null;
-
-        this.target = target;
 
         // Long end = getCurrentSkill().getStart() + getCurrentSkill().getCooldown();
         //Long currentTime = System.currentTimeMillis();
@@ -154,7 +148,7 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
     public void updateBy(PlayerDTO dto) {
         setPosition(dto.getPosition());
         setVelocity(dto.getVelocity());
-        getAttributes().setName(dto.getName());
+        setName(dto.getName());
         setId(dto.getId());
         setCurrAnimationState(dto.getPlayerMoveState());
         setOldDirectionState(getDirectionState());
@@ -178,11 +172,58 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
                 attackTimer += dt;
         }
 
-
         stateTimer += dt;
 
         if (stateTimer >= 10)
             clearTimers();
+    }
+
+    public Integer getHealthPoints() {
+        return healthPoints;
+    }
+
+    public void setHealthPoints(Integer healthPoints) {
+        this.healthPoints = healthPoints;
+    }
+
+    public Integer getManaPoints() {
+        return manaPoints;
+    }
+
+    public void setManaPoints(Integer manaPoints) {
+        this.manaPoints = manaPoints;
+    }
+
+    public Integer getMaxHealthPoints() {
+        return maxHealthPoints;
+    }
+
+    public void setMaxHealthPoints(Integer maxHealthPoints) {
+        this.maxHealthPoints = maxHealthPoints;
+    }
+
+    public Integer getMaxManaPoints() {
+        return maxManaPoints;
+    }
+
+    public void setMaxManaPoints(Integer maxManaPoints) {
+        this.maxManaPoints = maxManaPoints;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
     public int getCurrentSkillIndex() {
@@ -215,24 +256,12 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
         this.currentSkill = currentSkill;
     }
 
-    public Vector2 getTarget() {
-        return target;
-    }
-
-    public void setTarget(Vector2 target) {
-        this.target = target;
-    }
-
     public PlayerState getPlayerState() {
         return playerState;
     }
 
     public void setPlayerState(PlayerState playerState) {
         this.playerState = playerState;
-    }
-
-    public PlayerAttributes getAttributes() {
-        return attributes;
     }
 
     public DirectionState getDirectionState() {
@@ -305,13 +334,11 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
             return false;
         if (((Player) obj).getId() != null)
             return ((Player) obj).getId().equals(getId());
-
         return false;
     }
 
     @Override
     public int hashCode() {
-
         int result = 17;
         result = 31 * result + hashCode();
 

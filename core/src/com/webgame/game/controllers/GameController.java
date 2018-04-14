@@ -17,10 +17,7 @@ import com.webgame.game.entities.skill.AOESkill;
 import com.webgame.game.entities.skill.SingleSkill;
 import com.webgame.game.entities.skill.Skill;
 import com.webgame.game.entities.skill.StaticSkill;
-import com.webgame.game.enums.EntityState;
-import com.webgame.game.enums.MoveState;
-import com.webgame.game.enums.PlayerAttackState;
-import com.webgame.game.enums.PlayerMoveState;
+import com.webgame.game.enums.*;
 import com.webgame.game.events.AttackEvent;
 import com.webgame.game.events.MoveEvent;
 import com.webgame.game.events.PlayerDamagedEvent;
@@ -58,7 +55,7 @@ public class GameController extends AbstractGameController {
                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
                     Gdx.app.log("attack", "attack has been sent");
-                    getSocketService().send(new AttackDTO(plr.getId(), attackEvent.getTargetVector()));
+                    getSocketService().send(new AttackDTO(plr.getId(), attackEvent.getTargetVector(), SkillTypeState.FALLING_AOE));
                     return true;
                 }
         );
@@ -67,10 +64,10 @@ public class GameController extends AbstractGameController {
             PlayerDamagedEvent playerDamagedEvent = (PlayerDamagedEvent) event;
             Player target = playerDamagedEvent.getPlayer();
             Integer damage = playerDamagedEvent.getDamage();
-            if (target.getAttributes().getHealthPoints() > 0)
-                target.getAttributes().setHealthPoints(target.getAttributes().getHealthPoints() - damage);
+            if (target.getHealthPoints() > 0)
+                target.setHealthPoints(target.getHealthPoints() - damage);
             else
-                target.getAttributes().setHealthPoints(0);
+                target.setHealthPoints(0);
             return true;
         });
 
@@ -87,7 +84,7 @@ public class GameController extends AbstractGameController {
 
                 Player player = Player.createPlayer(world);
 
-                player.getAttributes().setName(playerDTO.getName());
+                player.setName(playerDTO.getName());
                 player.setPosition(playerDTO.getPosition());
                 player.getB2body().setTransform(playerDTO.getPosition(), 0);
                 player.setId(playerDTO.getId());
@@ -110,7 +107,7 @@ public class GameController extends AbstractGameController {
 
                         Player player = Player.createPlayer(world);
 
-                        player.getAttributes().setName(playerDTO.getName());
+                        player.setName(playerDTO.getName());
                         player.setPosition(playerDTO.getPosition());
                         player.getB2body().setTransform(playerDTO.getPosition(), 0);
                         player.setId(playerDTO.getId());
@@ -190,8 +187,8 @@ public class GameController extends AbstractGameController {
                 final Skill skill = it1.next();
                 skill.update(dt);
 
-                if (!(skill instanceof AOESkill) && skill.isMarked())
-                    continue;
+                //if (!(skill instanceof AOESkill) && skill.isMarked())
+                //    continue;
 
                /* for (Player anotherPlayer : getPlayers().values()) {
                     if (anotherPlayer == currentPlayer)
@@ -247,8 +244,8 @@ public class GameController extends AbstractGameController {
             }
 
             plr.draw(batch, parentAlpha);
-            if (plr.getAttributes().getName() != null)
-                font.draw(batch, plr.getAttributes().getName(), plr.getPosition().x - plr.getWidth() / 2, plr.getPosition().y + plr.getHeight() + 5 / Configs.PPM);
+            if (plr.getName() != null)
+                font.draw(batch, plr.getName(), plr.getPosition().x - plr.getWidth() / 2, plr.getPosition().y + plr.getHeight() + 5 / Configs.PPM);
         }
 
         //drawing figures(hp)

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.Configs;
 import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MoveState;
+import com.webgame.game.enums.SkillTypeState;
 import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 import com.webgame.game.server.serialization.dto.skill.SkillDTO;
@@ -41,11 +42,15 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
                 if (skills != null) {
                     for (Iterator<SkillDTO> it = skills.values().iterator(); it.hasNext(); ) {
                         final SkillDTO skillDTO = it.next();
-
+                        final SkillTypeState skillType = skillDTO.getSkillType();
                         if (skillDTO.getMoveState().equals(MoveState.MOVING))
                             skillDTO.getPosition().add(skillDTO.getVelocity());
 
-                        if (skillDTO.getEntityState().equals(EntityState.ACTIVE) && isCollided(skillDTO.getPosition(), skillDTO.getTarget())) {
+                        boolean finalAction = !(skillType.equals(SkillTypeState.FALLING_AOE) ||
+                        skillType.equals(SkillTypeState.TIMED_AOE) || skillType.equals(SkillTypeState.TIMED_BUFF)
+                        || skillType.equals(SkillTypeState.TIMED_SINGLE));
+
+                        if (finalAction && skillDTO.getEntityState().equals(EntityState.ACTIVE) && isCollided(skillDTO.getPosition(), skillDTO.getTarget())) {
                             skillDTO.setMoveState(MoveState.STATIC);
                             skillIdsToRemove.add(skillDTO.getId());
                         }
@@ -105,7 +110,7 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             vel.scl(absVel / Configs.PPM);
 
             SkillDTO skillDTO = new SkillDTO(newUUID(),
-                    MoveState.MOVING, EntityState.ACTIVE, target, playerPos, vel);
+                    MoveState.MOVING, EntityState.ACTIVE, event.getDto().getSkillType(), target, playerPos, vel);
 
             skills.put(skillDTO.getId(), skillDTO);
             playerDTO.setSkills(skills);

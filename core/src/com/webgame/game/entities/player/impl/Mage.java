@@ -10,6 +10,7 @@ import com.webgame.game.animation.impl.*;
 import com.webgame.game.entities.skill.*;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.enums.FrameSizes;
+import com.webgame.game.enums.SkillTypeState;
 import com.webgame.game.utils.GameUtils;
 import com.webgame.game.entities.player.Player;
 
@@ -38,6 +39,7 @@ public class Mage extends Player {
             TextureRegion standTexture = new TextureRegion(standSkillTexture, 0, 0, standSkillTexture.getWidth(), standSkillTexture.getHeight());
             Skill skill1 = new SingleSkill(this, standTexture, new FlameAnimation(animSkillTexture));
             skill1.setDamage(150);
+            skill1.setSkillType(SkillTypeState.INSTANT_SINGLE);
             skill1.setCooldown(GameUtils.calcTime(3,0));
 
             allSkills.add(skill1);
@@ -47,12 +49,13 @@ public class Mage extends Player {
             Skill skill2 = new FallingSkill(this, blizzardStandTexture, new BlizzardFragmentAnimation(skillsTexture), standSizes1, animSizes1);
             skill2.setCooldown(GameUtils.calcTime(10,0));
             skill2.setDamage(1);
+            skill2.setSkillType(SkillTypeState.FALLING_AOE);
             allSkills.add(skill2);
 
             Texture skill3Texture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");
             Skill skill3 = new BuffSkill(this, null, new BuffAnimation(skill3Texture));
+            skill3.setSkillType(SkillTypeState.TIMED_BUFF);
             allSkills.add(skill3);
-
 
             setAllSkills(allSkills);
 
