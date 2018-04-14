@@ -5,15 +5,16 @@ import com.webgame.game.entities.player.Player;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.enums.PlayerAttackState;
 import com.webgame.game.enums.PlayerMoveState;
+import com.webgame.game.server.serialization.dto.EntityDTO;
 import com.webgame.game.server.serialization.dto.UpdatableDTO;
 import com.webgame.game.server.serialization.dto.skill.SkillDTO;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class PlayerDTO implements UpdatableDTO<Player> {
-    protected long id;
+public class PlayerDTO extends EntityDTO implements UpdatableDTO<Player> {
     protected String name;
     protected Vector2 position;
     protected Vector2 velocity;
@@ -24,7 +25,7 @@ public class PlayerDTO implements UpdatableDTO<Player> {
 
     protected int currentSkillIndex;
 
-    protected Map<Long, SkillDTO> skills;
+    protected Map<String, SkillDTO> skills;
 
     public PlayerDTO() {
 
@@ -41,14 +42,7 @@ public class PlayerDTO implements UpdatableDTO<Player> {
         setPlayerAttackState(playerDTO.getPlayerAttackState());
         setPlayerMoveState(playerDTO.getPlayerMoveState());
         setDirectionState(playerDTO.getDirectionState());
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        setCurrentSkillIndex(playerDTO.getCurrentSkillIndex());
     }
 
     public Vector2 getPosition() {
@@ -107,13 +101,13 @@ public class PlayerDTO implements UpdatableDTO<Player> {
         this.playerAttackState = playerAttackState;
     }
 
-    public Map<Long, SkillDTO> getSkills() {
+    public Map<String, SkillDTO> getSkills() {
         if (skills == null)
             skills = new ConcurrentHashMap<>();
         return skills;
     }
 
-    public void setSkills(Map<Long, SkillDTO> skills) {
+    public void setSkills(Map<String, SkillDTO> skills) {
         this.skills = skills;
     }
 

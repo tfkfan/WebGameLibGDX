@@ -5,9 +5,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.enums.EntityState;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public abstract class Entity implements Serializable {
-    protected Long id;
+    protected String id;
 
     protected Vector2 position;
     protected Vector2 velocity;
@@ -95,11 +96,11 @@ public abstract class Entity implements Serializable {
         this.yOffset = yOffset;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

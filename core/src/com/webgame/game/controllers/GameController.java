@@ -33,14 +33,9 @@ import com.webgame.game.server.serialization.dto.player.LoginDTO;
 import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 import com.webgame.game.server.serialization.dto.skill.SkillDTO;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GameController extends AbstractGameController {
-    Long timerId;
-
     public GameController(OrthographicCamera camera, Viewport viewport) {
         super(camera, viewport);
 
@@ -52,8 +47,6 @@ public class GameController extends AbstractGameController {
             plr.setDirectionState(moveEvent.getDirectionState());
             plr.setVelocity(vec);
             plr.applyVelocity();
-
-            //getSocketService().send(new PlayerDTO(getPlayer()));
             return true;
         });
 
@@ -64,10 +57,8 @@ public class GameController extends AbstractGameController {
                     plr.clearTimers();
                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
-                    // if(plr.castSkill(attackEvent.getTargetVector())){
                     Gdx.app.log("attack", "attack has been sent");
                     getSocketService().send(new AttackDTO(plr.getId(), attackEvent.getTargetVector()));
-                    // }
                     return true;
                 }
         );
@@ -128,24 +119,24 @@ public class GameController extends AbstractGameController {
                     });
                 } else {
                     plr.updateBy(playerDTO);
-                    final Map<Long, SkillDTO> skills = playerDTO.getSkills();
+                    final Map<String, SkillDTO> skills = playerDTO.getSkills();
 
                     //checking inactive activeSkills
-                    for (Iterator<Map.Entry<Long, Skill>> it = plr.getActiveSkills().entrySet().iterator(); it.hasNext(); ) {
-                        Map.Entry<Long, Skill> skillEntry = it.next();
+                    for (Iterator<Map.Entry<String, Skill>> it = plr.getActiveSkills().entrySet().iterator(); it.hasNext(); ) {
+                        Map.Entry<String, Skill> skillEntry = it.next();
                         if (skillEntry.getValue().getEntityState().equals(EntityState.INACTIVE)) {
                             it.remove();
                         }
                     }
 
-                    final Map<Long, Skill> plrSkills = plr.getActiveSkills();
+                    final Map<String, Skill> plrSkills = plr.getActiveSkills();
 
                     if (skills != null && !skills.isEmpty()) {
-                        for (Iterator<Map.Entry<Long, SkillDTO>> it = skills.entrySet().iterator(); it.hasNext(); ) {
-                            Map.Entry<Long, SkillDTO> skillEntry = it.next();
+                        for (Iterator<Map.Entry<String, SkillDTO>> it = skills.entrySet().iterator(); it.hasNext(); ) {
+                            Map.Entry<String, SkillDTO> skillEntry = it.next();
                             try {
                                 final Object objId = skillEntry.getKey();
-                                final Long id = Long.valueOf(objId.toString());
+                                final String id = (String) objId;
                                 final SkillDTO skillDTO = skillEntry.getValue();
                                 if (plrSkills.containsKey(id)) {
                                     Skill skill = plrSkills.get(id);

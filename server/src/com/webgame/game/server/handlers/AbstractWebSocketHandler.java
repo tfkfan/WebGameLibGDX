@@ -17,21 +17,17 @@ import io.vertx.core.http.ServerWebSocket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocket> {
     private final JsonSerializer jsonSerializer = new JsonSerializer();
-
-    private final ConcurrentHashMap<Long, ServerWebSocket> sessions;
-    private final ConcurrentHashMap<Long, PlayerDTO> players;
 
     private final List<DTOEventListener> loginEventList = Collections.synchronizedList(new ArrayList<DTOEventListener>());
     private final List<DTOEventListener> playerEventList = Collections.synchronizedList(new ArrayList<DTOEventListener>());
     private final List<DTOEventListener> attackEventList = Collections.synchronizedList(new ArrayList<DTOEventListener>());
 
     public AbstractWebSocketHandler() {
-        sessions = new ConcurrentHashMap<>();
-        players = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -70,14 +66,6 @@ public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocke
 
     public void addLoginDTOListener(LoginDTOEventListener listener) {
         loginEventList.add(listener);
-    }
-
-    protected ConcurrentHashMap<Long, ServerWebSocket> getSessions() {
-        return sessions;
-    }
-
-    protected ConcurrentHashMap<Long, PlayerDTO> getPlayers() {
-        return players;
     }
 
     protected JsonSerializer getJsonSerializer() {

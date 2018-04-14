@@ -15,10 +15,7 @@ import com.webgame.game.server.serialization.dto.player.PlayerDTO;
 import com.webgame.game.world.common.IDTOUpdatable;
 import com.webgame.game.world.common.IUpdatable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.webgame.game.Configs.PPM;
@@ -44,22 +41,12 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
 
     protected PlayerAttributes attributes;
 
-    protected Map<Long, Skill> activeSkills;
+    protected Map<String, Skill> activeSkills;
     protected List<Skill> allSkills;
 
     protected int currentSkill;
 
     protected Vector2 target;
-
-    public boolean isAttackPressed() {
-        return isAttackPressed;
-    }
-
-    public void setAttackPressed(boolean attackPressed) {
-        isAttackPressed = attackPressed;
-    }
-
-    protected boolean isAttackPressed;
 
     public Player() {
         super();
@@ -87,8 +74,6 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
 
         currentSkill = 0;
 
-        isAttackPressed = false;
-
         clearTimers();
         setBounds(0, 0, 60 / PPM, 60 / PPM);
     }
@@ -99,7 +84,7 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
         return player;
     }
 
-    public Skill castSkill(Vector2 target, Long id) {
+    public Skill castSkill(Vector2 target, String id) {
 
 
         Skill currSkill = getCurrentSkill();
@@ -108,13 +93,13 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
 
         this.target = target;
 
-       // Long end = getCurrentSkill().getStart() + getCurrentSkill().getCooldown();
+        // Long end = getCurrentSkill().getStart() + getCurrentSkill().getCooldown();
         //Long currentTime = System.currentTimeMillis();
 
         //if (currentTime < end)
-         //   return null;
+        //   return null;
 
-      //  currSkill.setStart(System.currentTimeMillis());
+        //  currSkill.setStart(System.currentTimeMillis());
 
         final Skill skill = currSkill.createCopy();
         skill.cast(target);
@@ -208,7 +193,7 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
         this.currentSkill = index;
     }
 
-    public Map<Long, Skill> getActiveSkills() {
+    public Map<String, Skill> getActiveSkills() {
         return activeSkills;
     }
 
@@ -331,7 +316,7 @@ public abstract class Player extends WorldEntity implements IUpdatable, IDTOUpda
         result = 31 * result + hashCode();
 
         if (getId() != null)
-            result = 31 * result + getId().intValue();
+            result = 31 * result + getId().hashCode();
 
         return result;
     }

@@ -2,25 +2,19 @@ package com.webgame.game.server.serialization.dto.player;
 
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.server.serialization.dto.DTO;
+import com.webgame.game.server.serialization.dto.EntityDTO;
 
-public class AttackDTO implements DTO {
-    Long id;
+import java.util.UUID;
+
+public class AttackDTO extends EntityDTO implements DTO {
     Vector2 target;
     
     public  AttackDTO(){
 
     }
-    public AttackDTO(Long id, Vector2 target){
+    public AttackDTO(String id, Vector2 target){
         setId(id);
         setTarget(target);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Vector2 getTarget() {
