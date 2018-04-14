@@ -1,6 +1,8 @@
-package com.webgame.game.server.serialization.dto;
+package com.webgame.game.server.serialization.dto.entity;
 
-public class EntityDTO implements  DTO {
+import com.webgame.game.server.serialization.dto.DTO;
+
+public class EntityDTO implements DTO {
     protected String id;
 
     public EntityDTO(){

@@ -5,13 +5,11 @@ import com.webgame.game.entities.player.Player;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.enums.PlayerAttackState;
 import com.webgame.game.enums.PlayerMoveState;
-import com.webgame.game.server.serialization.dto.EntityDTO;
+import com.webgame.game.server.serialization.dto.entity.EntityDTO;
 import com.webgame.game.server.serialization.dto.UpdatableDTO;
 import com.webgame.game.server.serialization.dto.skill.SkillDTO;
 
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerDTO extends EntityDTO implements UpdatableDTO<Player> {
@@ -29,6 +27,12 @@ public class PlayerDTO extends EntityDTO implements UpdatableDTO<Player> {
 
     public PlayerDTO() {
 
+    }
+
+    public PlayerDTO(String id, String name, Vector2 position) {
+        setId(id);
+        setName(name);
+        setPosition(position);
     }
 
     public PlayerDTO(Player player) {

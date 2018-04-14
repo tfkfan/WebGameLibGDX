@@ -45,6 +45,7 @@ import com.webgame.game.stages.GameStage;
 import com.webgame.game.utils.GameUtils;
 import com.webgame.game.world.WorldRenderer;
 import com.webgame.game.ws.JsonWebSocket;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -61,7 +62,6 @@ public abstract class AbstractGameController extends AbstractController implemen
     protected Viewport viewport;
 
     protected final List<EventListener> loginWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
-    protected final List<EventListener> playerWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
     protected final List<EventListener> playersWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
     protected final List<EventListener> attackWSEventList = Collections.synchronizedList(new ArrayList<EventListener>());
 
@@ -107,14 +107,11 @@ public abstract class AbstractGameController extends AbstractController implemen
         } else if (event instanceof LoginSuccessEvent) {
             for (EventListener listener : loginWSEventList)
                 listener.handle(event);
-        } else if (event instanceof PlayerWSEvent) {
-            for (EventListener listener : playerWSEventList)
+        } else if (event instanceof PlayersWSEvent) {
+            for (EventListener listener : playersWSEventList)
                 listener.handle(event);
-        } else if(event instanceof PlayersWSEvent){
-            for(EventListener listener : playersWSEventList)
-                listener.handle(event);
-        } else if(event instanceof  AttackWSEvent){
-            for(EventListener listener : attackWSEventList)
+        } else if (event instanceof AttackWSEvent) {
+            for (EventListener listener : attackWSEventList)
                 listener.handle(event);
         }
         return true;
@@ -145,21 +142,17 @@ public abstract class AbstractGameController extends AbstractController implemen
             LoginDTO loginDTO = (LoginDTO) res;
             LoginSuccessEvent event = new LoginSuccessEvent(webSocket, loginDTO);
             fire(event);
-        } else if (res instanceof PlayerDTO) {
-            PlayerDTO playerDTO = (PlayerDTO) res;
-            PlayerWSEvent event = new PlayerWSEvent(webSocket, playerDTO);
-            fire(event);
-        } else if (res instanceof Array){
+        } else if (res instanceof Array) {
             Array<PlayerDTO> serverPlayers = (Array<PlayerDTO>) res;
             PlayersWSEvent event = new PlayersWSEvent(webSocket, serverPlayers);
             fire(event);
             //Gdx.app.log("WS", "PLAYERS");
-        } else if(res instanceof AttackDTO){
+        } else if (res instanceof AttackDTO) {
             AttackDTO attackDTO = (AttackDTO) res;
             AttackWSEvent attackWSEvent = new AttackWSEvent(webSocket, attackDTO);
             fire(attackWSEvent);
         }
-       // Gdx.app.log("WS", "!" + res.getClass().getName());
+        // Gdx.app.log("WS", "!" + res.getClass().getName());
         return true;
     }
 
@@ -181,7 +174,7 @@ public abstract class AbstractGameController extends AbstractController implemen
         });
     }
 
-    public void addAttackWSListener(AttackWSListener listener){
+    public void addAttackWSListener(AttackWSListener listener) {
         attackWSEventList.add(listener);
     }
 
@@ -197,10 +190,6 @@ public abstract class AbstractGameController extends AbstractController implemen
         playerMoveListeners.add(listener);
     }
 
-    public void addPlayerWSListener(PlayerWSListener listener) {
-        playerWSEventList.add(listener);
-    }
-
     public void addPlayersWSListener(PlayersWSListener listener) {
         playersWSEventList.add(listener);
     }
@@ -208,7 +197,6 @@ public abstract class AbstractGameController extends AbstractController implemen
     public void addSuccessLoginWSListener(SuccesLoginWSListener loginEventListener) {
         loginWSEventList.add(loginEventListener);
     }
-
 
     protected void handleInput() {
         float d = 5f;
@@ -253,9 +241,7 @@ public abstract class AbstractGameController extends AbstractController implemen
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
         if (button == Input.Buttons.LEFT) {
-
             Vector3 trg = this.getStage().getCamera().unproject(new Vector3(screenX, screenY, 0), getStage().getViewport().getScreenX(), getStage().getViewport().getScreenY(),
                     getStage().getViewport().getScreenWidth(), getStage().getViewport().getScreenHeight());
 

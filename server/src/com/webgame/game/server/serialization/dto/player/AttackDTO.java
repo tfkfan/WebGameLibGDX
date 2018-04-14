@@ -2,11 +2,9 @@ package com.webgame.game.server.serialization.dto.player;
 
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.server.serialization.dto.DTO;
-import com.webgame.game.server.serialization.dto.EntityDTO;
+import com.webgame.game.server.serialization.dto.entity.EntityDTO;
 
-import java.util.UUID;
-
-public class AttackDTO extends EntityDTO implements DTO {
+public final class AttackDTO extends EntityDTO implements DTO {
     Vector2 target;
     
     public  AttackDTO(){

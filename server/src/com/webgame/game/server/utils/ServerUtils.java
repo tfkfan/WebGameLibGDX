@@ -7,6 +7,7 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.ServerWebSocket;
 
 import java.util.Collection;
+import java.util.UUID;
 
 public class ServerUtils {
     public static final Vertx vertx = Vertx.vertx();
@@ -33,5 +34,9 @@ public class ServerUtils {
                 continue;
             writeResponse(session, obj, jsonSerializer);
         }
+    }
+
+    public static String newUUID(){
+        return UUID.randomUUID().toString();
     }
 }

@@ -62,6 +62,7 @@ public class GameController extends AbstractGameController {
                     return true;
                 }
         );
+
         addPlayerDamagedListener(event -> {
             PlayerDamagedEvent playerDamagedEvent = (PlayerDamagedEvent) event;
             Player target = playerDamagedEvent.getPlayer();
@@ -121,7 +122,7 @@ public class GameController extends AbstractGameController {
                     plr.updateBy(playerDTO);
                     final Map<String, SkillDTO> skills = playerDTO.getSkills();
 
-                    //checking inactive activeSkills
+                    //checking inactive skills
                     for (Iterator<Map.Entry<String, Skill>> it = plr.getActiveSkills().entrySet().iterator(); it.hasNext(); ) {
                         Map.Entry<String, Skill> skillEntry = it.next();
                         if (skillEntry.getValue().getEntityState().equals(EntityState.INACTIVE)) {
