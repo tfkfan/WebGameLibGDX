@@ -4,21 +4,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.Configs;
 import com.webgame.game.animation.GameAnimation;
-import com.webgame.game.entities.AnimatedEntity;
 import com.webgame.game.entities.Entity;
 import com.webgame.game.entities.player.Player;
 import com.webgame.game.enums.*;
-import com.webgame.game.server.serialization.dto.skill.SkillDTO;
-import com.webgame.game.world.common.IDTOUpdatable;
 import com.webgame.game.world.common.IUpdatable;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.webgame.game.Configs.PPM;
 
 public abstract class Skill extends Entity implements IUpdatable {
     protected int animationsNum;
@@ -34,7 +27,7 @@ public abstract class Skill extends Entity implements IUpdatable {
     protected DirectionState directionState;
     protected MoveState moveState;
     protected MarkState markState;
-    protected SkillTypeState skillType;
+    protected SkillKind skillType;
 
     protected Vector2 target;
 
@@ -260,11 +253,11 @@ public abstract class Skill extends Entity implements IUpdatable {
         this.moveState = moveState;
     }
 
-    public SkillTypeState getSkillType() {
+    public SkillKind getSkillType() {
         return skillType;
     }
 
-    public void setSkillType(SkillTypeState skillType) {
+    public void setSkillType(SkillKind skillType) {
         this.skillType = skillType;
     }
 

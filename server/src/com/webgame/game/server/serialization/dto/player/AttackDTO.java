@@ -1,18 +1,18 @@
 package com.webgame.game.server.serialization.dto.player;
 
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.enums.SkillTypeState;
+import com.webgame.game.enums.SkillKind;
 import com.webgame.game.server.serialization.dto.DTO;
 import com.webgame.game.server.serialization.dto.entity.EntityDTO;
 
 public final class AttackDTO extends EntityDTO implements DTO {
     Vector2 target;
-    SkillTypeState skillType;
+    SkillKind skillType;
     
     public  AttackDTO(){
 
     }
-    public AttackDTO(String id, Vector2 target, SkillTypeState skillType){
+    public AttackDTO(String id, Vector2 target, SkillKind skillType){
         setId(id);
         setTarget(target);
         setSkillType(skillType);
@@ -26,11 +26,11 @@ public final class AttackDTO extends EntityDTO implements DTO {
         this.target = target;
     }
 
-    public SkillTypeState getSkillType() {
+    public SkillKind getSkillType() {
         return skillType;
     }
 
-    public void setSkillType(SkillTypeState skillType) {
+    public void setSkillType(SkillKind skillType) {
         this.skillType = skillType;
     }
 }

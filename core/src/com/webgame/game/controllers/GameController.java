@@ -6,23 +6,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.player.Player;
-import com.webgame.game.entities.skill.AOESkill;
-import com.webgame.game.entities.skill.SingleSkill;
 import com.webgame.game.entities.skill.Skill;
-import com.webgame.game.entities.skill.StaticSkill;
 import com.webgame.game.enums.*;
 import com.webgame.game.events.AttackEvent;
 import com.webgame.game.events.MoveEvent;
 import com.webgame.game.events.PlayerDamagedEvent;
-import com.webgame.game.events.listeners.ws.AttackWSListener;
-import com.webgame.game.events.ws.AttackWSEvent;
 import com.webgame.game.events.ws.LoginSuccessEvent;
 import com.webgame.game.events.ws.PlayersWSEvent;
 import com.webgame.game.server.serialization.dto.player.AttackDTO;
@@ -55,7 +48,7 @@ public class GameController extends AbstractGameController {
                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
                     Gdx.app.log("attack", "attack has been sent");
-                    getSocketService().send(new AttackDTO(plr.getId(), attackEvent.getTargetVector(), SkillTypeState.FALLING_AOE));
+                    getSocketService().send(new AttackDTO(plr.getId(), attackEvent.getTargetVector(), SkillKind.FALLING_AOE));
                     return true;
                 }
         );
@@ -202,7 +195,7 @@ public class GameController extends AbstractGameController {
                     } else {
                         if (Intersector.overlaps(skill.getShape(), anotherPlayer.getShape())) {
                             if (skill instanceof SingleSkill || skill instanceof StaticSkill) {
-                                if (skill.getMoveState().equals(MoveState.STATIC)) {
+                                if (skill.getStatic().equals(MoveState.STATIC)) {
                                     this.fire(new PlayerDamagedEvent(anotherPlayer, skill.getDamage()));
                                     skill.setMarked(true);
                                 }
