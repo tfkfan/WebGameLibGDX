@@ -259,7 +259,7 @@ public abstract class AbstractGameController extends AbstractController implemen
     public boolean keyDown(int keycode) {
         if (keycode >= 8 && keycode <= 16) {
             int skillIndex = keycode - 8;
-            clientPlayer.setCurrentSkill(skillIndex);
+            clientPlayer.setCurrentSkillIndex(skillIndex);
             Gdx.app.log("CurrentSkill", "" + skillIndex);
         }
 

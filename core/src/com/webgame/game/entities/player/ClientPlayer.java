@@ -29,11 +29,7 @@ public abstract class ClientPlayer extends Player implements IUpdatable {
         clearTimers();
     }
 
-    public static ClientPlayer createPlayer(World world) {
-        ClientPlayer clientPlayer = new Mage(Configs.PLAYERSHEETS_FOLDER + "/mage.png");
-        clientPlayer.createObject(world);
-        return clientPlayer;
-    }
+    public abstract void initPlayer(String spritePath);
 
     public Skill castSkill(Vector2 target, String id) {
         Skill currSkill = getCurrentSkill();

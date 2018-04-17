@@ -2,6 +2,7 @@ package com.webgame.game.server.handlers;
 
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.Configs;
+import com.webgame.game.entities.player.impl.Mage;
 import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.SkillKind;
@@ -10,8 +11,10 @@ import com.webgame.game.server.entities.Player;
 import com.webgame.game.server.entities.Skill;
 import io.vertx.core.TimeoutStream;
 import io.vertx.core.http.ServerWebSocket;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+
 import static com.webgame.game.server.utils.ServerUtils.*;
 
 public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
@@ -71,9 +74,16 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
 
         addLoginDTOListener(event -> {
             Login loginDTO = event.getLoginDTO();
-            Login succesLoginDTO = new Login(new Player(newUUID(), loginDTO.getName(), new Vector2(2, 2)));
 
-            writeResponse(event.getWebSocket(), succesLoginDTO, getJsonSerializer());
+            final Player player = new Mage();
+            player.init();
+            player.setId(newUUID());
+            player.setName(loginDTO.getName());
+            player.setPosition(new Vector2(2, 2));
+
+            loginDTO.setPlayer(player);
+
+            writeResponse(event.getWebSocket(), loginDTO, getJsonSerializer());
         });
 
         addPlayerDTOListener(event -> {
@@ -94,7 +104,7 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
         });
 
         addAttackDTOListener(event -> {
-            final String plrId = event.getDto().getId();
+         /*   final String plrId = event.getDto().getId();
             final Player playerDTO = getPlayers().get(plrId);
 
             if (playerDTO == null)
@@ -114,7 +124,7 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
 
             skills.put(skillDTO.getId(), skillDTO);
             playerDTO.setSkills(skills);
-            getPlayers().put(plrId, playerDTO);
+            getPlayers().put(plrId, playerDTO);*/
         });
     }
 

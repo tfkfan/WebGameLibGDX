@@ -13,11 +13,14 @@ import static com.webgame.game.Configs.PPM;
 
 public class Knight extends ClientPlayer {
 
-	public Knight(SpriteBatch batch, String spritePath) {
+	public Knight() {
 		super();
+	}
 
+	@Override
+	public void initPlayer(String spritePath) {
 		int dirs = DirectionState.values().length;
-	//	Texture skillTexture =GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER +"/skillOrigs.png");
+		//	Texture skillTexture =GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER +"/skillOrigs.png");
 
 		try {
 			//Blizzard b = new Blizzard(batch, skillTexture, 30);
@@ -25,12 +28,12 @@ public class Knight extends ClientPlayer {
 			//b.setDamage(5d);
 			//skillOrigs.add(b);
 
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		//this.setSkills(skillOrigs);
 
 		setXOffset(30 / PPM);

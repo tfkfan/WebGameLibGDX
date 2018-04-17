@@ -8,9 +8,10 @@ import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.FrameSizes;
 import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.SkillAnimationState;
+import com.webgame.game.server.entities.AnimatedEntity;
 import com.webgame.game.server.entities.Entity;
 
-public class SkillSprite extends Entity {
+public class SkillSprite extends AnimatedEntity {
     protected transient float stateTimer;
 
     protected transient TextureRegion standTexture;

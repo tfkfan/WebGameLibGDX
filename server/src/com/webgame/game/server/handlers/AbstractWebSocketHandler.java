@@ -41,8 +41,8 @@ public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocke
                 for (DTOEventListener listener : loginEventList)
                     listener.handle(loginEvent);
             } else if (obj instanceof Player) {
-                Player playerDTO = (Player) obj;
-                PlayerDTOEvent playerDTOEvent = new PlayerDTOEvent(webSocket, playerDTO);
+                Player player = (Player) obj;
+                PlayerDTOEvent playerDTOEvent = new PlayerDTOEvent(webSocket, player);
                 for (DTOEventListener listener : playerEventList)
                     listener.handle(playerDTOEvent);
             } else if (obj instanceof Attack) {

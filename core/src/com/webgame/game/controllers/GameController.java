@@ -48,7 +48,7 @@ public class GameController extends AbstractGameController {
                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
                     Gdx.app.log("attack", "attack has been sent");
-                    getSocketService().send(new Attack(plr.getId(), attackEvent.getTargetVector(), SkillKind.FALLING_AOE));
+                    getSocketService().send(new Attack(plr.getId(), attackEvent.getTargetVector(), SkillKind.FIRE_BALL));
                     return true;
                 }
         );
@@ -71,18 +71,16 @@ public class GameController extends AbstractGameController {
                 return true;
             Gdx.app.postRunnable(() -> {
                 LoginSuccessEvent loginSuccessEvent = (LoginSuccessEvent) event;
-                Login playerDTO = loginSuccessEvent.getLoginDTO();
+                Login loginDTO = loginSuccessEvent.getLoginDTO();
 
-                Gdx.app.log("websocket", "ClientPlayer created " + playerDTO.getId());
+                ClientPlayer clientPlayer = (ClientPlayer) loginDTO.getPlayer();
+                clientPlayer.initPlayer( Configs.PLAYERSHEETS_FOLDER + "/mage.png");
+                clientPlayer.createObject(world);
 
-                ClientPlayer clientPlayer = ClientPlayer.createPlayer(world);
-
-                clientPlayer.setName(playerDTO.getName());
-                clientPlayer.setPosition(playerDTO.getPosition());
-                clientPlayer.getB2body().setTransform(playerDTO.getPosition(), 0);
-                clientPlayer.setId(playerDTO.getId());
                 setClientPlayer(clientPlayer);
                 getPlayers().put(clientPlayer.getId(), clientPlayer);
+
+                Gdx.app.log("websocket", "ClientPlayer created " + clientPlayer.getId());
 
             });
             return true;
@@ -93,23 +91,19 @@ public class GameController extends AbstractGameController {
             Array<Player> serverPlayers = ((PlayersWSEvent) event).getPlayers();
 
             for (final Player playerDTO : serverPlayers) {
-                final ClientPlayer plr = getPlayers().get(playerDTO.getId());
-                if (plr == null) {
+                if (!getPlayers().containsKey(playerDTO.getId())) {
                     Gdx.app.postRunnable(() -> {
+                        ClientPlayer clientPlayer = (ClientPlayer) playerDTO;
+                        clientPlayer.initPlayer( Configs.PLAYERSHEETS_FOLDER + "/mage.png");
+                        clientPlayer.createObject(world);
+
                         Gdx.app.log("websocket", "Enemy created " + playerDTO.getId());
-
-                        ClientPlayer clientPlayer = ClientPlayer.createPlayer(world);
-
-                        clientPlayer.setName(playerDTO.getName());
-                        clientPlayer.setPosition(playerDTO.getPosition());
-                        clientPlayer.getB2body().setTransform(playerDTO.getPosition(), 0);
-                        clientPlayer.setId(playerDTO.getId());
 
                         getPlayers().put(clientPlayer.getId(), clientPlayer);
 
                     });
                 } else {
-                    plr.updateBy(playerDTO);
+                  /*  plr.updateBy(playerDTO);
                     final Map<String, Skill> skills = playerDTO.getSkills();
 
                     //checking inactive skills
@@ -148,7 +142,7 @@ public class GameController extends AbstractGameController {
                                 e.printStackTrace();
                             }
                         }
-                    }
+                    }*/
                 }
             }
             return true;
@@ -168,14 +162,14 @@ public class GameController extends AbstractGameController {
 
         handleInput();
 
-        getSocketService().send(new Player(getClientPlayer()));
+        getSocketService().send(getClientPlayer());
 
         shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
 
         for (final ClientPlayer currentClientPlayer : getPlayers().values()) {
             currentClientPlayer.update(dt);
 
-            final Collection<ClientSkill> clientSkills = currentClientPlayer.getActiveSkills().values();
+          /*  final Collection<ClientSkill> clientSkills = currentClientPlayer.getActiveSkills().values();
             for (Iterator<ClientSkill> it1 = clientSkills.iterator(); it1.hasNext(); ) {
                 final ClientSkill clientSkill = it1.next();
                 clientSkill.update(dt);
@@ -183,7 +177,7 @@ public class GameController extends AbstractGameController {
                 //if (!(clientSkill instanceof AOEClientSkill) && clientSkill.isMarked())
                 //    continue;
 
-               /* for (ClientPlayer anotherPlayer : getPlayers().values()) {
+               *//* for (ClientPlayer anotherPlayer : getPlayers().values()) {
                     if (anotherPlayer == currentClientPlayer)
                         continue;
 
@@ -202,8 +196,8 @@ public class GameController extends AbstractGameController {
                             }
                         }
                     }
-                }*/
-            }
+                }*//*
+            }*/
         }
 
         camera.position.x = clientPlayer.getPosition().x;
@@ -230,11 +224,11 @@ public class GameController extends AbstractGameController {
         batch.begin();
 
         for (ClientPlayer plr : getPlayers().values()) {
-            final Collection<ClientSkill> clientSkills = plr.getActiveSkills().values();
+           /* final Collection<ClientSkill> clientSkills = plr.getActiveSkills().values();
             for (Iterator<ClientSkill> it1 = clientSkills.iterator(); it1.hasNext(); ) {
                 final ClientSkill clientSkill = it1.next();
                 clientSkill.draw(batch, parentAlpha);
-            }
+            }*/
 
             plr.draw(batch, parentAlpha);
             if (plr.getName() != null)

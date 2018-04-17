@@ -5,8 +5,13 @@ import com.webgame.game.entities.player.ClientPlayer;
 
 @Deprecated
 public class Archer extends ClientPlayer {
-	public Archer(SpriteBatch batch, String spritePath) {
+	public Archer() {
 		super();
+
+	}
+
+	@Override
+	public void initPlayer(String spritePath) {
 		/*
 		this.setSpriteBatch(batch);
 		this.setSpriteTexture(spritePath);
@@ -23,7 +28,7 @@ public class Archer extends ClientPlayer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 
 		setXOffset(30 / PPM);
 		setYOffset(15 / PPM);

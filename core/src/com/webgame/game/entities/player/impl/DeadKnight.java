@@ -12,8 +12,12 @@ import com.webgame.game.entities.player.ClientPlayer;
 import static com.webgame.game.Configs.PPM;
 
 public class DeadKnight extends ClientPlayer {
-	public DeadKnight(SpriteBatch batch, String spritePath) {
+	public DeadKnight() {
 		super();
+	}
+
+	@Override
+	public void initPlayer(String spritePath) {
 		int dirs = DirectionState.values().length;
 		Texture skillTexture = GameUtils.loadSprite("activeSkills.png");
 		try {

@@ -20,12 +20,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class Mage extends ClientPlayer {
-
-    public Mage(){
-
-    }
-    public Mage(String spritePath) {
+    public Mage() {
         super();
+    }
+
+    @Override
+    public void initPlayer(String spritePath) {
         int dirs = DirectionState.values().length;
         try {
             float[] animSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
@@ -56,7 +56,7 @@ public class Mage extends ClientPlayer {
             clientSkill3.setSkillType(SkillKind.MAGIC_DEFENCE);
             allClientSkills.add(clientSkill3);
 
-           // setAllSkills(allClientSkills);
+            // setAllSkills(allClientSkills);
 
             /*
             Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/activeSkills.png");

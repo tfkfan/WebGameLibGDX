@@ -42,7 +42,7 @@ public class PlayerPanel extends Table {
     }
 
     public void init() {
-        List<ClientSkill> allClientSkills = clientPlayer.getAllSkills();
+       /* List<ClientSkill> allClientSkills = clientPlayer.getAllSkills();
         buttons = new TextButton[allClientSkills.size()];
 
 
@@ -83,7 +83,7 @@ public class PlayerPanel extends Table {
             }
         });
 
-        add(btn).center().size(btn.getWidth()/ Configs.PPM, btn.getHeight()/ Configs.PPM).expand();
+        add(btn).center().size(btn.getWidth()/ Configs.PPM, btn.getHeight()/ Configs.PPM).expand();*/
         /*
         row();
         for (int i = 0; i < allClientSkills.size(); i++) {

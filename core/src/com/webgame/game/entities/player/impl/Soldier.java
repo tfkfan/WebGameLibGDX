@@ -12,9 +12,12 @@ import static com.webgame.game.Configs.PPM;
 
 @Deprecated
 public class Soldier extends ClientPlayer {
-	public Soldier(SpriteBatch batch, String spritePath) {
+	public Soldier() {
 		super();
+	}
 
+	@Override
+	public void initPlayer(String spritePath) {
 		int dirs = DirectionState.values().length;
 		//this.setSkillOrig(new IceRain(batch, "activeSkills.png"));
 
@@ -36,7 +39,7 @@ public class Soldier extends ClientPlayer {
 				frames[i][j] = new TextureRegion(spriteTexture, w * i, 5 + h * j, w, h);
 			for (int j = 5; j < 9; j++)
 				attackFrames[i][j - 5] = new TextureRegion(spriteTexture,  w * i, h * j, w, h);
-			
+
 			standRegions[i] = new TextureRegion(spriteTexture,  w * i, 0, w, h);
 			attackFrames[i][4] = standRegions[i];
 		}
@@ -90,7 +93,7 @@ public class Soldier extends ClientPlayer {
 		tr = new TextureRegion(spriteTexture, w * 3, 0, w, h);
 		tr.flip(true, false);
 		attackFrames[5][4] = tr;
-		
+
 		for (int i = 0; i < dirs; i++) {
 			Animation<TextureRegion> anim = new Animation<TextureRegion>(0.2f, frames[i]);
 			Animation<TextureRegion> attackAnim = new Animation<TextureRegion>(0.2f, attackFrames[i]);
@@ -99,7 +102,7 @@ public class Soldier extends ClientPlayer {
 			frames[i] = null;
 			attackFrames[i] = null;
 		}
-		
+
 		this.setAnimations(attackAnimations);
 		this.setAttackAnimations(attackAnimations);
 		this.setStandRegions(standRegions);
