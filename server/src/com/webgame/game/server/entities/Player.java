@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.webgame.game.Configs.PPM;
 
-public abstract class Player extends AnimatedEntity {
+public abstract class Player<T extends Skill>  extends AnimatedEntity {
     protected PlayerMoveState playerMoveState;
     protected PlayerAttackState playerAttackState;
     protected DirectionState directionState;
@@ -32,8 +32,8 @@ public abstract class Player extends AnimatedEntity {
     protected Integer maxHealthPoints;
     protected Integer maxManaPoints;
 
-    protected List<Skill> allSkills;
-    protected Map<String, Skill> skills;
+    protected List<T> allSkills;
+    protected Map<String, T> skills;
 
     protected float radius = 20 / PPM;
     protected Circle shape;
@@ -91,7 +91,7 @@ public abstract class Player extends AnimatedEntity {
         setCurrentSkillIndex(entity.getCurrentSkillIndex());
     }
 
-    public Skill getCurrentSkill() {
+    public T getCurrentSkill() {
         if (getCurrentSkillIndex() >= 0 && getCurrentSkillIndex() < allSkills.size())
             return allSkills.get(getCurrentSkillIndex());
         return null;
@@ -137,13 +137,13 @@ public abstract class Player extends AnimatedEntity {
         this.playerAttackState = playerAttackState;
     }
 
-    public Map<String, Skill> getSkills() {
+    public Map<String, T> getSkills() {
         if (skills == null)
             skills = new ConcurrentHashMap<>();
         return skills;
     }
 
-    public void setSkills(Map<String, Skill> skills) {
+    public void setSkills(Map<String, T> skills) {
         this.skills = skills;
     }
 
@@ -227,11 +227,11 @@ public abstract class Player extends AnimatedEntity {
         this.maxManaPoints = maxManaPoints;
     }
 
-    public List<Skill> getAllSkills() {
+    public List<T> getAllSkills() {
         return allSkills;
     }
 
-    public void setAllSkills(List<Skill> allSkills) {
+    public void setAllSkills(List<T> allSkills) {
         this.allSkills = allSkills;
     }
 

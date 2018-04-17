@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.player.impl.Mage;
+import com.webgame.game.entities.skill.ClientSkill;
 import com.webgame.game.enums.*;
 import com.webgame.game.server.entities.Player;
 import com.webgame.game.server.entities.Skill;
@@ -32,7 +33,7 @@ public abstract class ClientPlayer extends Player implements IUpdatable {
     public abstract void initPlayer(String spritePath);
 
     public Skill castSkill(Vector2 target, String id) {
-        Skill currSkill = getCurrentSkill();
+        ClientSkill currSkill = (ClientSkill) getCurrentSkill();
         if (currSkill == null)
             return null;
 
@@ -44,9 +45,9 @@ public abstract class ClientPlayer extends Player implements IUpdatable {
 
         //  currSkill.setStart(System.currentTimeMillis());
 
-       // final ClientSkill skill = currSkill.createCopy();
-        //skill.cast(target);
-       // activeSkills.put(id, skill);
+        final ClientSkill skill = currSkill.createCopy();
+        skill.cast(target);
+        skills.put(id, skill);
         return null;
     }
 

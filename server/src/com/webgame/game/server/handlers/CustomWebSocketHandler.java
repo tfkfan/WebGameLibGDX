@@ -104,7 +104,7 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
         });
 
         addAttackDTOListener(event -> {
-         /*   final String plrId = event.getDto().getId();
+            final String plrId = event.getDto().getId();
             final Player playerDTO = getPlayers().get(plrId);
 
             if (playerDTO == null)
@@ -119,12 +119,12 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             vel.nor();
             vel.scl(absVel / Configs.PPM);
 
-            Skill skillDTO = new Skill(newUUID(),
+            Skill skillDTO = Skill.createSkill(newUUID(),
                     MoveState.MOVING, EntityState.ACTIVE, event.getDto().getSkillType(), target, playerPos, vel);
 
             skills.put(skillDTO.getId(), skillDTO);
             playerDTO.setSkills(skills);
-            getPlayers().put(plrId, playerDTO);*/
+            getPlayers().put(plrId, playerDTO);
         });
     }
 

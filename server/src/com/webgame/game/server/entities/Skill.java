@@ -1,5 +1,6 @@
 package com.webgame.game.server.entities;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MarkState;
@@ -23,6 +24,15 @@ public abstract class Skill extends Entity {
 
     public Skill() {
 
+    }
+
+    public static Skill createSkill(String id, MoveState moveState, EntityState entityState, SkillKind skillType, Vector2 target, Vector2 position, Vector2 velocity){
+        return new Skill(id, moveState, entityState, skillType, target, position, velocity) {
+            @Override
+            public void draw(Batch batch, float parentAlpha) {
+
+            }
+        };
     }
 
     public Skill(String id, MoveState moveState, EntityState entityState, SkillKind skillType, Vector2 target, Vector2 position, Vector2 velocity) {

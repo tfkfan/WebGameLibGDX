@@ -103,18 +103,19 @@ public class GameController extends AbstractGameController {
 
                     });
                 } else {
-                  /*  plr.updateBy(playerDTO);
+                    ClientPlayer plr = getPlayers().get(playerDTO.getId());
+                    plr.updateBy(playerDTO);
                     final Map<String, Skill> skills = playerDTO.getSkills();
 
                     //checking inactive skills
-                    for (Iterator<Map.Entry<String, ClientSkill>> it = plr.getActiveSkills().entrySet().iterator(); it.hasNext(); ) {
-                        Map.Entry<String, ClientSkill> skillEntry = it.next();
+                    for (Iterator<Map.Entry<String, Skill>> it = plr.getSkills().entrySet().iterator(); it.hasNext(); ) {
+                        Map.Entry<String, Skill> skillEntry = it.next();
                         if (skillEntry.getValue().getEntityState().equals(EntityState.INACTIVE)) {
                             it.remove();
                         }
                     }
 
-                    final Map<String, ClientSkill> plrSkills = plr.getActiveSkills();
+                    final Map<String,Skill> plrSkills = plr.getSkills();
 
                     if (skills != null && !skills.isEmpty()) {
                         for (Iterator<Map.Entry<String, Skill>> it = skills.entrySet().iterator(); it.hasNext(); ) {
@@ -124,7 +125,7 @@ public class GameController extends AbstractGameController {
                                 final String id = (String) objId;
                                 final Skill skillDTO = skillEntry.getValue();
                                 if (plrSkills.containsKey(id)) {
-                                    ClientSkill clientSkill = plrSkills.get(id);
+                                    ClientSkill clientSkill = (ClientSkill) plrSkills.get(id);
                                     clientSkill.setPosition(skillDTO.getPosition());
                                     clientSkill.setEntityState(skillDTO.getEntityState());
                                     clientSkill.setMoveState(skillDTO.getMoveState());
@@ -134,7 +135,7 @@ public class GameController extends AbstractGameController {
                                     plr.clearTimers();
                                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
-                                    ClientSkill clientSkill = plr.castSkill(skillDTO.getTarget(), skillDTO.getId());
+                                    Skill clientSkill = plr.castSkill(skillDTO.getTarget(), skillDTO.getId());
                                     if (clientSkill != null)
                                         clientSkill.setPosition(skillDTO.getPosition());
                                 }
@@ -142,7 +143,7 @@ public class GameController extends AbstractGameController {
                                 e.printStackTrace();
                             }
                         }
-                    }*/
+                    }
                 }
             }
             return true;
@@ -169,7 +170,7 @@ public class GameController extends AbstractGameController {
         for (final ClientPlayer currentClientPlayer : getPlayers().values()) {
             currentClientPlayer.update(dt);
 
-          /*  final Collection<ClientSkill> clientSkills = currentClientPlayer.getActiveSkills().values();
+            final Collection<ClientSkill> clientSkills = currentClientPlayer.getSkills().values();
             for (Iterator<ClientSkill> it1 = clientSkills.iterator(); it1.hasNext(); ) {
                 final ClientSkill clientSkill = it1.next();
                 clientSkill.update(dt);
@@ -177,7 +178,7 @@ public class GameController extends AbstractGameController {
                 //if (!(clientSkill instanceof AOEClientSkill) && clientSkill.isMarked())
                 //    continue;
 
-               *//* for (ClientPlayer anotherPlayer : getPlayers().values()) {
+               /* for (ClientPlayer anotherPlayer : getPlayers().values()) {
                     if (anotherPlayer == currentClientPlayer)
                         continue;
 
@@ -196,8 +197,8 @@ public class GameController extends AbstractGameController {
                             }
                         }
                     }
-                }*//*
-            }*/
+                }*/
+            }
         }
 
         camera.position.x = clientPlayer.getPosition().x;
@@ -224,11 +225,11 @@ public class GameController extends AbstractGameController {
         batch.begin();
 
         for (ClientPlayer plr : getPlayers().values()) {
-           /* final Collection<ClientSkill> clientSkills = plr.getActiveSkills().values();
+            final Collection<ClientSkill> clientSkills = plr.getSkills().values();
             for (Iterator<ClientSkill> it1 = clientSkills.iterator(); it1.hasNext(); ) {
                 final ClientSkill clientSkill = it1.next();
                 clientSkill.draw(batch, parentAlpha);
-            }*/
+            }
 
             plr.draw(batch, parentAlpha);
             if (plr.getName() != null)
