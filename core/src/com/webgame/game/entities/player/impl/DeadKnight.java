@@ -7,13 +7,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.utils.GameUtils;
-import com.webgame.game.entities.player.Player;
+import com.webgame.game.entities.player.ClientPlayer;
 
 import static com.webgame.game.Configs.PPM;
 
-import java.util.ArrayList;
-
-public class DeadKnight extends Player {
+public class DeadKnight extends ClientPlayer {
 	public DeadKnight(SpriteBatch batch, String spritePath) {
 		super();
 		int dirs = DirectionState.values().length;

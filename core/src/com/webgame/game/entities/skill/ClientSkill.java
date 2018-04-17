@@ -5,57 +5,38 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.animation.GameAnimation;
-import com.webgame.game.entities.Entity;
-import com.webgame.game.entities.player.Player;
+import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.enums.*;
+import com.webgame.game.server.entities.Skill;
 import com.webgame.game.world.common.IUpdatable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Skill extends Entity implements IUpdatable {
-    protected int animationsNum;
+public abstract class ClientSkill extends Skill implements IUpdatable {
+    protected transient int animationsNum;
+    protected transient float stateTimer;
+    protected transient ClientPlayer clientPlayer;
+    protected transient List<SkillSprite> animations;
 
-    protected Long level;
-    protected String title;
-
-    protected Integer damage;
-    protected Integer heal;
-
-    protected float stateTimer;
-
-    protected DirectionState directionState;
-    protected MoveState moveState;
-    protected MarkState markState;
-    protected SkillKind skillType;
-
-    protected Vector2 target;
-
-    protected Player player;
-    protected List<SkillSprite> animations;
-
-    protected Long cooldown;
-    protected Long duration;
-    protected Long start;
-
-    public Skill() {
+    public ClientSkill() {
 
     }
 
-    public Skill(Player player) {
+    public ClientSkill(ClientPlayer clientPlayer) {
         super();
-        init(player);
+        init(clientPlayer);
     }
 
-    public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation) {
+    public ClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation) {
         super();
-        init(player);
+        init(clientPlayer);
         initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, false, null, null);
     }
 
-    public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, float standSizeX, float standSizeY, float animSizeX, float animSizeY) {
+    public ClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, float standSizeX, float standSizeY, float animSizeX, float animSizeY) {
         super();
-        init(player);
+        init(clientPlayer);
 
         float[] standSizes = {standSizeX, standSizeY};
         float[] animSizes = {animSizeX, animSizeY};
@@ -63,53 +44,53 @@ public abstract class Skill extends Entity implements IUpdatable {
         initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, false, standSizes, animSizes);
     }
 
-    public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, float[] standSizes, float[] animSizes) {
+    public ClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, float[] standSizes, float[] animSizes) {
         super();
-        init(player);
+        init(clientPlayer);
 
         initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, false, standSizes, animSizes);
     }
 
-    public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, Boolean looping) {
+    public ClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, Boolean looping) {
         super();
-        init(player);
+        init(clientPlayer);
         initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, looping, null, null);
     }
 
-    public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState) {
+    public ClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState) {
         super();
-        init(player);
+        init(clientPlayer);
         initAnimations(standTexture, gameAnimation, 1, animationState, false, null, null);
     }
 
-    public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState, Boolean looping) {
+    public ClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState, Boolean looping) {
         super();
-        init(player);
+        init(clientPlayer);
         initAnimations(standTexture, gameAnimation, 1, animationState, looping, null, null);
     }
 
-    public Skill(Player player, TextureRegion standTexture, GameAnimation gameAnimation,
-                 Integer numFrames, SkillAnimationState animationState, Boolean looping, float[] standSizes, float[] animSizes) {
+    public ClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation,
+                       Integer numFrames, SkillAnimationState animationState, Boolean looping, float[] standSizes, float[] animSizes) {
         super();
-        init(player);
+        init(clientPlayer);
         initAnimations(standTexture, gameAnimation, numFrames, animationState, looping, standSizes, animSizes);
     }
 
-    public Skill(Skill skill) {
+    public ClientSkill(ClientSkill clientSkill) {
         super();
-        init(skill.getPlayer());
-        copy(skill);
-        copyAnimations(skill.getAnimations());
+        init(clientSkill.getClientPlayer());
+        copy(clientSkill);
+        copyAnimations(clientSkill.getAnimations());
     }
 
-    protected void init(Player player) {
-        setTitle("Skill");
+    protected void init(ClientPlayer clientPlayer) {
+        setName("ClientSkill");
         setDamage(0);
         setHeal(0);
         clearTimers();
         setEntityState(EntityState.INACTIVE);
         setMoveState(MoveState.MOVING);
-        setPlayer(player);
+        setClientPlayer(clientPlayer);
         setStart(0L);
         setCooldown(0L);
         setMarkState(MarkState.UNMARKED);
@@ -119,10 +100,10 @@ public abstract class Skill extends Entity implements IUpdatable {
         resetSkill();
         setTarget(targetPosition);
         setEntityState(EntityState.ACTIVE);
-        setPosition(new Vector2(player.getPosition()));
+        setPosition(new Vector2(clientPlayer.getPosition()));
     }
 
-    public abstract Skill createCopy();
+    public abstract ClientSkill createCopy();
 
 
     public abstract void updateAnimations(float dt);
@@ -143,10 +124,10 @@ public abstract class Skill extends Entity implements IUpdatable {
         setAnimations(animations);
     }
 
-    protected void copy(Skill skill) {
-        this.setDamage(skill.getDamage());
-        this.setHeal(skill.getHeal());
-        this.setSkillType(skill.getSkillType());
+    protected void copy(ClientSkill clientSkill) {
+        this.setDamage(clientSkill.getDamage());
+        this.setHeal(clientSkill.getHeal());
+        this.setSkillType(clientSkill.getSkillType());
     }
 
     protected void copyAnimations(List<SkillSprite> animations) {
@@ -245,69 +226,15 @@ public abstract class Skill extends Entity implements IUpdatable {
         stateTimer = 0;
     }
 
-    public MoveState getMoveState() {
-        return moveState;
+
+    public ClientPlayer getClientPlayer() {
+        return clientPlayer;
     }
 
-    public void setMoveState(MoveState moveState) {
-        this.moveState = moveState;
+    public void setClientPlayer(ClientPlayer clientPlayer) {
+        this.clientPlayer = clientPlayer;
     }
 
-    public SkillKind getSkillType() {
-        return skillType;
-    }
-
-    public void setSkillType(SkillKind skillType) {
-        this.skillType = skillType;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public Vector2 getTarget() {
-        return target;
-    }
-
-    public void setTarget(Vector2 target) {
-        this.target = target;
-    }
-
-    public Long getLevel() {
-        return level;
-    }
-
-    public void setLevel(Long level) {
-        this.level = level;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Integer getDamage() {
-        return damage;
-    }
-
-    public void setDamage(Integer damage) {
-        this.damage = damage;
-    }
-
-    public Integer getHeal() {
-        return heal;
-    }
-
-    public void setHeal(Integer heal) {
-        this.heal = heal;
-    }
 
     public float getStateTimer() {
         return stateTimer;
@@ -316,14 +243,4 @@ public abstract class Skill extends Entity implements IUpdatable {
     public void setStateTimer(float stateTimer) {
         this.stateTimer = stateTimer;
     }
-
-    public DirectionState getDirectionState() {
-        return directionState;
-    }
-
-    public void setDirectionState(DirectionState directionState) {
-        this.directionState = directionState;
-    }
-
-
 }

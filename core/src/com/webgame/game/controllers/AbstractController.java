@@ -1,16 +1,15 @@
 package com.webgame.game.controllers;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.webgame.game.entities.player.Player;
+import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.ws.IWebSocket;
 
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractController extends Group {
     protected IWebSocket socketService;
-    protected final ConcurrentHashMap<String, Player> players = new ConcurrentHashMap<>();
-    protected  Player player;
+    protected final ConcurrentHashMap<String, ClientPlayer> players = new ConcurrentHashMap<>();
+    protected ClientPlayer clientPlayer;
 
     public AbstractController() {
 
@@ -24,16 +23,16 @@ public abstract class AbstractController extends Group {
         return socketService;
     }
 
-    public ConcurrentHashMap<String, Player> getPlayers() {
+    public ConcurrentHashMap<String, ClientPlayer> getPlayers() {
         return players;
     }
 
-    public Player getPlayer() {
-        return player;
+    public ClientPlayer getClientPlayer() {
+        return clientPlayer;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setClientPlayer(ClientPlayer clientPlayer) {
+        this.clientPlayer = clientPlayer;
     }
 
 }

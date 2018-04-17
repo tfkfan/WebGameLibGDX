@@ -1,7 +1,6 @@
 package com.webgame.game.events;
 
 import com.badlogic.gdx.scenes.scene2d.Event;
-import com.webgame.game.entities.player.Player;
 
 public class LoginEvent extends Event {
     String username;

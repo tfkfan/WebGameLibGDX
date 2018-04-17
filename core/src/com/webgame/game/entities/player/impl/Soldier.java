@@ -7,11 +7,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.utils.GameUtils;
-import com.webgame.game.entities.player.Player;
+import com.webgame.game.entities.player.ClientPlayer;
 import static com.webgame.game.Configs.PPM;
 
 @Deprecated
-public class Soldier extends Player {
+public class Soldier extends ClientPlayer {
 	public Soldier(SpriteBatch batch, String spritePath) {
 		super();
 

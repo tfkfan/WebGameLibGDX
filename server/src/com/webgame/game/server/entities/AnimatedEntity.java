@@ -1,10 +1,11 @@
-package com.webgame.game.entities;
+package com.webgame.game.server.entities;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.webgame.game.world.common.IFramed;
 
 public abstract class AnimatedEntity extends Entity implements IFramed {
-    public AnimatedEntity(){
+
+    public AnimatedEntity() {
 
     }
 
@@ -12,4 +13,5 @@ public abstract class AnimatedEntity extends Entity implements IFramed {
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(getFrame(), position.x - getXOffset(), position.y - getYOffset(), getWidth(), getHeight());
     }
+
 }

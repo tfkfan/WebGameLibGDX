@@ -1,22 +1,21 @@
 package com.webgame.game.events;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Event;
-import com.webgame.game.entities.player.Player;
+import com.webgame.game.entities.player.ClientPlayer;
 
 public class AttackEvent extends Event {
     Vector2 targetVector;
 
-    Player player;
+    ClientPlayer clientPlayer;
 
     public AttackEvent() {
 
     }
 
-    public AttackEvent(Vector2 target,  Player player) {
+    public AttackEvent(Vector2 target,  ClientPlayer clientPlayer) {
         setTarget(target);
-        setPlayer(player);
+        setClientPlayer(clientPlayer);
     }
 
     public Vector2 getTargetVector() {
@@ -27,11 +26,11 @@ public class AttackEvent extends Event {
         this.targetVector = target;
     }
 
-    public Player getPlayer() {
-        return player;
+    public ClientPlayer getClientPlayer() {
+        return clientPlayer;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setClientPlayer(ClientPlayer clientPlayer) {
+        this.clientPlayer = clientPlayer;
     }
 }

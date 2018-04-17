@@ -6,13 +6,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.webgame.game.Configs;
-import com.webgame.game.entities.player.Player;
-import com.webgame.game.entities.skill.Skill;
+import com.webgame.game.entities.player.ClientPlayer;
+import com.webgame.game.entities.skill.ClientSkill;
 
 import java.util.List;
 
 public class PlayerPanel extends Table {
-    protected Player player;
+    protected ClientPlayer clientPlayer;
 
     protected BitmapFont font = new BitmapFont();
     protected TextButton[] buttons;
@@ -22,8 +22,8 @@ public class PlayerPanel extends Table {
         init();
     }
 
-    public PlayerPanel(Player player) {
-        setPlayer(player);
+    public PlayerPanel(ClientPlayer clientPlayer) {
+        setClientPlayer(clientPlayer);
         init();
 
     }
@@ -33,17 +33,17 @@ public class PlayerPanel extends Table {
         //this.setPosition(this.getStage().getCamera().position.x - getWidth()/2, this.getStage().getCamera().position.y - getHeight()/2);
     }
 
-    public Player getPlayer() {
-        return player;
+    public ClientPlayer getClientPlayer() {
+        return clientPlayer;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setClientPlayer(ClientPlayer clientPlayer) {
+        this.clientPlayer = clientPlayer;
     }
 
     public void init() {
-        List<Skill> allSkills = player.getAllSkills();
-        buttons = new TextButton[allSkills.size()];
+        List<ClientSkill> allClientSkills = clientPlayer.getAllSkills();
+        buttons = new TextButton[allClientSkills.size()];
 
 
         setPosition(-Configs.VIEW_WIDTH/(2*Configs.PPM), -Configs.VIEW_HEIGHT/(2*Configs.PPM));
@@ -70,7 +70,7 @@ public class PlayerPanel extends Table {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("ok2 pressed");
-                // player.setCurrentSkillIndex(skill);
+                // clientPlayer.setCurrentSkillIndex(skill);
             }
         });
         add(btn2).size(btn2.getWidth()/ Configs.PPM, btn2.getHeight()/ Configs.PPM).expand();
@@ -79,15 +79,15 @@ public class PlayerPanel extends Table {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("ok pressed");
-                // player.setCurrentSkillIndex(skill);
+                // clientPlayer.setCurrentSkillIndex(skill);
             }
         });
 
         add(btn).center().size(btn.getWidth()/ Configs.PPM, btn.getHeight()/ Configs.PPM).expand();
         /*
         row();
-        for (int i = 0; i < allSkills.size(); i++) {
-            Skill skill = allSkills.get(i);
+        for (int i = 0; i < allClientSkills.size(); i++) {
+            ClientSkill skill = allClientSkills.get(i);
             TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
             textButtonStyle.font = new BitmapFont();
 
@@ -100,7 +100,7 @@ public class PlayerPanel extends Table {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    player.setCurrentSkillIndex(skill);
+                    clientPlayer.setCurrentSkillIndex(skill);
                 }
             });
 

@@ -3,14 +3,14 @@ package com.webgame.game.entities.skill;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.animation.GameAnimation;
-import com.webgame.game.entities.player.Player;
+import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.SkillAnimationState;
 
 import static com.webgame.game.Configs.PPM;
 
-public class FallingSkill extends AOESkill {
+public class FallingClientSkill extends AOEClientSkill {
     protected final static int numFrames = 50;
 
     protected float fallTimer;
@@ -20,36 +20,36 @@ public class FallingSkill extends AOESkill {
     protected final Vector2 fallOffsetVec = new Vector2(fallVelocity.x * 10, (-fallVelocity.y) * 10);
     protected final float tmp = 0.1f;
 
-    public FallingSkill(){
+    public FallingClientSkill(){
 
     }
 
-    public FallingSkill(Skill skill) {
-        super(skill);
+    public FallingClientSkill(ClientSkill clientSkill) {
+        super(clientSkill);
     }
 
-    public FallingSkill(Player player) {
-        super(player);
+    public FallingClientSkill(ClientPlayer clientPlayer) {
+        super(clientPlayer);
     }
 
-    public FallingSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation) {
-        super(player, standTexture, gameAnimation, numFrames, SkillAnimationState.FULL_ANIMATION, false,null, null);
+    public FallingClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation) {
+        super(clientPlayer, standTexture, gameAnimation, numFrames, SkillAnimationState.FULL_ANIMATION, false,null, null);
     }
 
-    public FallingSkill(Player player, TextureRegion standTexture, GameAnimation gameAnimation, float[] standSizes, float[] animSizes) {
-        super(player, standTexture, gameAnimation, numFrames, SkillAnimationState.FULL_ANIMATION, false, standSizes, animSizes);
+    public FallingClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, float[] standSizes, float[] animSizes) {
+        super(clientPlayer, standTexture, gameAnimation, numFrames, SkillAnimationState.FULL_ANIMATION, false, standSizes, animSizes);
     }
 
     @Override
-    protected void init(Player player) {
-        super.init(player);
+    protected void init(ClientPlayer clientPlayer) {
+        super.init(clientPlayer);
         index = 0;
         setVelocity(fallVelocity);
     }
 
     @Override
-    public Skill createCopy() {
-        return new FallingSkill(this);
+    public ClientSkill createCopy() {
+        return new FallingClientSkill(this);
     }
 
     @Override

@@ -4,25 +4,25 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.animation.GameAnimation;
-import com.webgame.game.entities.AnimatedEntity;
 import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.FrameSizes;
 import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.SkillAnimationState;
+import com.webgame.game.server.entities.Entity;
 
-public class SkillSprite extends AnimatedEntity {
-    protected float stateTimer;
+public class SkillSprite extends Entity {
+    protected transient float stateTimer;
 
-    transient protected TextureRegion standTexture;
-    transient  protected GameAnimation animation;
-    protected SkillAnimationState animationState;
-    protected MoveState moveState;
-    protected boolean looping;
+    protected transient TextureRegion standTexture;
+    protected transient GameAnimation animation;
+    protected transient SkillAnimationState animationState;
+    protected transient MoveState moveState;
+    protected transient boolean looping;
 
-    private Vector2 distance;
+    private transient  Vector2 distance;
 
-    private float[] standSizes = {FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH()};
-    private float[] animSizes = {FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH()};
+    private transient float[] standSizes = {FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH()};
+    private transient float[] animSizes = {FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH()};
 
     public SkillSprite(SkillSprite animation) {
         init();

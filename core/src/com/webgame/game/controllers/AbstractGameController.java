@@ -19,7 +19,7 @@ import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketCloseCode;
 import com.github.czyzby.websocket.serialization.impl.JsonSerializer;
 import com.webgame.game.Configs;
-import com.webgame.game.entities.player.Player;
+import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.enums.PlayerAttackState;
 import com.webgame.game.enums.PlayerMoveState;
@@ -32,15 +32,12 @@ import com.webgame.game.events.listeners.PlayerMoveListener;
 import com.webgame.game.events.listeners.ws.AttackWSListener;
 import com.webgame.game.events.listeners.ws.PlayersWSListener;
 import com.webgame.game.events.listeners.ws.SuccesLoginWSListener;
-import com.webgame.game.events.listeners.ws.PlayerWSListener;
 import com.webgame.game.events.ws.AttackWSEvent;
 import com.webgame.game.events.ws.LoginSuccessEvent;
-import com.webgame.game.events.ws.PlayerWSEvent;
 import com.webgame.game.events.ws.PlayersWSEvent;
-import com.webgame.game.server.serialization.dto.event.impl.AttackDTOEvent;
-import com.webgame.game.server.serialization.dto.player.AttackDTO;
-import com.webgame.game.server.serialization.dto.player.LoginDTO;
-import com.webgame.game.server.serialization.dto.player.PlayerDTO;
+import com.webgame.game.server.serialization.dto.Attack;
+import com.webgame.game.server.serialization.dto.Login;
+import com.webgame.game.server.entities.Player;
 import com.webgame.game.stages.GameStage;
 import com.webgame.game.utils.GameUtils;
 import com.webgame.game.world.WorldRenderer;
@@ -138,17 +135,17 @@ public abstract class AbstractGameController extends AbstractController implemen
         final JsonSerializer jsonSerializer = new JsonSerializer();
         final Object res = jsonSerializer.deserialize(packet);
 
-        if (res instanceof LoginDTO) {
-            LoginDTO loginDTO = (LoginDTO) res;
+        if (res instanceof Login) {
+            Login loginDTO = (Login) res;
             LoginSuccessEvent event = new LoginSuccessEvent(webSocket, loginDTO);
             fire(event);
         } else if (res instanceof Array) {
-            Array<PlayerDTO> serverPlayers = (Array<PlayerDTO>) res;
+            Array<Player> serverPlayers = (Array<Player>) res;
             PlayersWSEvent event = new PlayersWSEvent(webSocket, serverPlayers);
             fire(event);
             //Gdx.app.log("WS", "PLAYERS");
-        } else if (res instanceof AttackDTO) {
-            AttackDTO attackDTO = (AttackDTO) res;
+        } else if (res instanceof Attack) {
+            Attack attackDTO = (Attack) res;
             AttackWSEvent attackWSEvent = new AttackWSEvent(webSocket, attackDTO);
             fire(attackWSEvent);
         }
@@ -200,7 +197,7 @@ public abstract class AbstractGameController extends AbstractController implemen
 
     protected void handleInput() {
         float d = 5f;
-        DirectionState directionState = player.getOldDirectionState();
+        DirectionState directionState = clientPlayer.getOldDirectionState();
 
         if (Gdx.input.isKeyPressed(Input.Keys.Z))
             ((GameStage) this.getStage()).camera.zoom += 0.1;
@@ -234,9 +231,9 @@ public abstract class AbstractGameController extends AbstractController implemen
         else if (velocity.x < 0 && velocity.y < 0)
             directionState = DirectionState.LEFTDOWN;
 
-        if (velocity.x != 0 || velocity.y != 0 || player.getCurrAnimationState().equals(PlayerMoveState.WALK)
-                || player.getCurrentAttackState().equals(PlayerAttackState.BATTLE))
-            fire(new MoveEvent(velocity, directionState, player));
+        if (velocity.x != 0 || velocity.y != 0 || clientPlayer.getCurrAnimationState().equals(PlayerMoveState.WALK)
+                || clientPlayer.getCurrentAttackState().equals(PlayerAttackState.BATTLE))
+            fire(new MoveEvent(velocity, directionState, clientPlayer));
     }
 
     @Override
@@ -246,23 +243,23 @@ public abstract class AbstractGameController extends AbstractController implemen
                     getStage().getViewport().getScreenWidth(), getStage().getViewport().getScreenHeight());
 
             Vector2 target = new Vector2(trg.x, trg.y);
-            fire(new AttackEvent(target, player));
+            fire(new AttackEvent(target, clientPlayer));
             return true;
         }
         return false;
     }
 
 
-    public void drawPlayerHealthLine(Player player) {
-        shapeRenderer.rect(player.getPosition().x - player.getWidth() / 2, player.getPosition().y + player.getHeight() - 20 / Configs.PPM,
-                GameUtils.calcHealthLineWidth(player.getWidth(), player.getHealthPoints(), player.getMaxHealthPoints()), 5 / Configs.PPM);
+    public void drawPlayerHealthLine(ClientPlayer clientPlayer) {
+        shapeRenderer.rect(clientPlayer.getPosition().x - clientPlayer.getWidth() / 2, clientPlayer.getPosition().y + clientPlayer.getHeight() - 20 / Configs.PPM,
+                GameUtils.calcHealthLineWidth(clientPlayer.getWidth(), clientPlayer.getHealthPoints(), clientPlayer.getMaxHealthPoints()), 5 / Configs.PPM);
     }
 
     @Override
     public boolean keyDown(int keycode) {
         if (keycode >= 8 && keycode <= 16) {
             int skillIndex = keycode - 8;
-            player.setCurrentSkill(skillIndex);
+            clientPlayer.setCurrentSkill(skillIndex);
             Gdx.app.log("CurrentSkill", "" + skillIndex);
         }
 

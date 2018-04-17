@@ -25,7 +25,7 @@ public class GameStage extends Stage {
         setViewport(viewport);
 
         gc = new GameController(camera, viewport);
-        //wc = new WidgetsController(camera, viewport, gc.getPlayer());
+        //wc = new WidgetsController(camera, viewport, gc.getClientPlayer());
         this.addActor(gc);
         // this.addActor(wc);
 

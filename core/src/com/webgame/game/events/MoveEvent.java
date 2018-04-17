@@ -2,22 +2,22 @@ package com.webgame.game.events;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Event;
-import com.webgame.game.entities.player.Player;
+import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.enums.DirectionState;
 
 public class MoveEvent extends Event {
     private Vector2 vector;
     private DirectionState directionState;
-    private Player player;
+    private ClientPlayer clientPlayer;
 
     public MoveEvent(){
 
     }
 
-    public MoveEvent(Vector2 vector, DirectionState directionState, Player player){
+    public MoveEvent(Vector2 vector, DirectionState directionState, ClientPlayer clientPlayer){
         setVector(vector);
         setDirectionState(directionState);
-        setPlayer(player);
+        setClientPlayer(clientPlayer);
     }
 
     public Vector2 getVector() {
@@ -36,11 +36,11 @@ public class MoveEvent extends Event {
         this.directionState = directionState;
     }
 
-    public Player getPlayer() {
-        return player;
+    public ClientPlayer getClientPlayer() {
+        return clientPlayer;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setClientPlayer(ClientPlayer clientPlayer) {
+        this.clientPlayer = clientPlayer;
     }
 }

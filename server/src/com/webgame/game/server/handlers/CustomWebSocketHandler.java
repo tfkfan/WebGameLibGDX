@@ -5,9 +5,9 @@ import com.webgame.game.Configs;
 import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.SkillKind;
-import com.webgame.game.server.serialization.dto.player.LoginDTO;
-import com.webgame.game.server.serialization.dto.player.PlayerDTO;
-import com.webgame.game.server.serialization.dto.skill.SkillDTO;
+import com.webgame.game.server.serialization.dto.Login;
+import com.webgame.game.server.entities.Player;
+import com.webgame.game.server.entities.Skill;
 import io.vertx.core.TimeoutStream;
 import io.vertx.core.http.ServerWebSocket;
 import java.util.*;
@@ -21,7 +21,7 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
 
     private TimeoutStream timeoutStream;
     private final ConcurrentHashMap<String, ServerWebSocket> sessions;
-    private final ConcurrentHashMap<String, PlayerDTO> players;
+    private final ConcurrentHashMap<String, Player> players;
 
     public CustomWebSocketHandler() {
         sessions = new ConcurrentHashMap<>();
@@ -33,15 +33,15 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
                 return;
 
             //Skills calculatings
-            final Collection<PlayerDTO> plrs = getPlayers().values();
+            final Collection<Player> plrs = getPlayers().values();
             //Inactive skills to remove
             final Map<String, List<String>> skillsToRemove = new ConcurrentHashMap<>();
-            for (PlayerDTO currentDTO : plrs) {
-                final Map<String, SkillDTO> skills = currentDTO.getSkills();
+            for (Player currentDTO : plrs) {
+                final Map<String, Skill> skills = currentDTO.getSkills();
                 final List<String> skillIdsToRemove = Collections.synchronizedList(new ArrayList<>());
                 if (skills != null) {
-                    for (Iterator<SkillDTO> it = skills.values().iterator(); it.hasNext(); ) {
-                        final SkillDTO skillDTO = it.next();
+                    for (Iterator<Skill> it = skills.values().iterator(); it.hasNext(); ) {
+                        final Skill skillDTO = it.next();
                         final SkillKind skillType = skillDTO.getSkillType();
                         if (skillDTO.getMoveState().equals(MoveState.MOVING))
                             skillDTO.getPosition().add(skillDTO.getVelocity());
@@ -70,19 +70,19 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
         });
 
         addLoginDTOListener(event -> {
-            LoginDTO loginDTO = event.getLoginDTO();
-            LoginDTO succesLoginDTO = new LoginDTO(new PlayerDTO(newUUID(), loginDTO.getName(), new Vector2(2, 2)));
+            Login loginDTO = event.getLoginDTO();
+            Login succesLoginDTO = new Login(new Player(newUUID(), loginDTO.getName(), new Vector2(2, 2)));
 
             writeResponse(event.getWebSocket(), succesLoginDTO, getJsonSerializer());
         });
 
         addPlayerDTOListener(event -> {
-            final PlayerDTO playerDTO = event.getPlayerDTO();
+            final Player playerDTO = event.getPlayerDTO();
             final String id = playerDTO.getId();
 
             getSessions().put(id, event.getWebSocket());
 
-            PlayerDTO currentDTO = getPlayers().get(id);
+            Player currentDTO = getPlayers().get(id);
 
             if (currentDTO != null)
                 currentDTO.updateBy(playerDTO);
@@ -95,7 +95,7 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
 
         addAttackDTOListener(event -> {
             final String plrId = event.getDto().getId();
-            final PlayerDTO playerDTO = getPlayers().get(plrId);
+            final Player playerDTO = getPlayers().get(plrId);
 
             if (playerDTO == null)
                 return;
@@ -103,13 +103,13 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             final Vector2 target = event.getDto().getTarget();
             final Vector2 playerPos = playerDTO.getPosition();
 
-            Map<String, SkillDTO> skills = playerDTO.getSkills();
+            Map<String, Skill> skills = playerDTO.getSkills();
 
             Vector2 vel = new Vector2(target.x - playerPos.x, target.y - playerPos.y);
             vel.nor();
             vel.scl(absVel / Configs.PPM);
 
-            SkillDTO skillDTO = new SkillDTO(newUUID(),
+            Skill skillDTO = new Skill(newUUID(),
                     MoveState.MOVING, EntityState.ACTIVE, event.getDto().getSkillType(), target, playerPos, vel);
 
             skills.put(skillDTO.getId(), skillDTO);
@@ -122,7 +122,7 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
         return sessions;
     }
 
-    protected ConcurrentHashMap<String, PlayerDTO> getPlayers() {
+    protected ConcurrentHashMap<String, Player> getPlayers() {
         return players;
     }
 

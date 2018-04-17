@@ -1,29 +1,47 @@
-package com.webgame.game.entities;
+package com.webgame.game.server.entities;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.enums.EntityState;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 public abstract class Entity implements Serializable {
     protected String id;
+    protected String name;
+
+    protected Integer level;
 
     protected Vector2 position;
     protected Vector2 velocity;
-    protected transient float xOffset;
-    protected transient float yOffset;
+    protected float xOffset;
+    protected float yOffset;
 
-    protected transient float width;
-    protected transient float height;
+    protected float width;
+    protected float height;
 
     protected EntityState entityState;
 
-    public Entity() {
+    public Entity(){
         velocity = new Vector2(0, 0);
         position = new Vector2(0, 0);
         xOffset = yOffset = 0;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public EntityState getEntityState() {
@@ -94,14 +112,6 @@ public abstract class Entity implements Serializable {
 
     public void setYOffset(float yOffset) {
         this.yOffset = yOffset;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public abstract void draw(Batch batch, float parentAlpha);

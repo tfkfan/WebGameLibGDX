@@ -1,21 +1,21 @@
 package com.webgame.game.events.ws;
 
 import com.github.czyzby.websocket.WebSocket;
-import com.webgame.game.server.serialization.dto.player.PlayerDTO;
+import com.webgame.game.server.entities.Player;
 
 public class PlayerWSEvent extends AbstractWSEvent {
-    PlayerDTO playerDTO;
+    Player playerDTO;
 
-    public PlayerWSEvent(WebSocket webSocket, PlayerDTO playerDTO) {
+    public PlayerWSEvent(WebSocket webSocket, Player playerDTO) {
         super(webSocket);
         setPlayerDTO(playerDTO);
     }
 
-    public PlayerDTO getPlayerDTO() {
+    public Player getPlayerDTO() {
         return playerDTO;
     }
 
-    public void setPlayerDTO(PlayerDTO playerDTO) {
+    public void setPlayerDTO(Player playerDTO) {
         this.playerDTO = playerDTO;
     }
 }

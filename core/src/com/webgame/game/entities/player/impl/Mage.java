@@ -6,12 +6,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.webgame.game.Configs;
 import com.webgame.game.animation.impl.*;
+import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.entities.skill.*;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.enums.FrameSizes;
 import com.webgame.game.enums.SkillKind;
 import com.webgame.game.utils.GameUtils;
-import com.webgame.game.entities.player.Player;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Mage extends Player {
+public class Mage extends ClientPlayer {
 
     public Mage(){
 
@@ -31,32 +31,32 @@ public class Mage extends Player {
             float[] animSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
             float[] standSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
 
-            List<Skill> allSkills = Collections.synchronizedList(new ArrayList<Skill>());
+            List<ClientSkill> allClientSkills = Collections.synchronizedList(new ArrayList<ClientSkill>());
 
             Texture standSkillTexture = GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/fire_002.png");
             Texture animSkillTexture = GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s001.png");
             TextureRegion standTexture = new TextureRegion(standSkillTexture, 0, 0, standSkillTexture.getWidth(), standSkillTexture.getHeight());
-            Skill skill1 = new SingleSkill(this, standTexture, new FlameAnimation(animSkillTexture));
-            skill1.setDamage(150);
-            skill1.setSkillType(SkillKind.FIRE_BALL);
-            skill1.setCooldown(GameUtils.calcTime(3,0));
+            ClientSkill clientSkill1 = new SingleClientSkill(this, standTexture, new FlameAnimation(animSkillTexture));
+            clientSkill1.setDamage(150);
+            clientSkill1.setSkillType(SkillKind.FIRE_BALL);
+            clientSkill1.setCooldown(GameUtils.calcTime(3,0));
 
-            allSkills.add(skill1);
+            allClientSkills.add(clientSkill1);
 
             Texture skillsTexture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png");
             TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);
-            Skill skill2 = new FallingSkill(this, blizzardStandTexture, new BlizzardFragmentAnimation(skillsTexture), standSizes1, animSizes1);
-            skill2.setCooldown(GameUtils.calcTime(10,0));
-            skill2.setDamage(1);
-            skill2.setSkillType(SkillKind.BLIZZARD);
-            allSkills.add(skill2);
+            ClientSkill clientSkill2 = new FallingClientSkill(this, blizzardStandTexture, new BlizzardFragmentAnimation(skillsTexture), standSizes1, animSizes1);
+            clientSkill2.setCooldown(GameUtils.calcTime(10,0));
+            clientSkill2.setDamage(1);
+            clientSkill2.setSkillType(SkillKind.BLIZZARD);
+            allClientSkills.add(clientSkill2);
 
             Texture skill3Texture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");
-            Skill skill3 = new BuffSkill(this, null, new BuffAnimation(skill3Texture));
-            skill3.setSkillType(SkillKind.MAGIC_DEFENCE);
-            allSkills.add(skill3);
+            ClientSkill clientSkill3 = new BuffClientSkill(this, null, new BuffAnimation(skill3Texture));
+            clientSkill3.setSkillType(SkillKind.MAGIC_DEFENCE);
+            allClientSkills.add(clientSkill3);
 
-            setAllSkills(allSkills);
+           // setAllSkills(allClientSkills);
 
             /*
             Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/activeSkills.png");

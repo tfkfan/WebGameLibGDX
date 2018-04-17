@@ -10,18 +10,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.webgame.game.Configs;
-import com.webgame.game.entities.player.Player;
-import com.webgame.game.entities.skill.Skill;
+import com.webgame.game.entities.player.ClientPlayer;
+import com.webgame.game.entities.skill.ClientSkill;
 import com.webgame.game.enums.*;
 import com.webgame.game.events.AttackEvent;
 import com.webgame.game.events.MoveEvent;
 import com.webgame.game.events.PlayerDamagedEvent;
 import com.webgame.game.events.ws.LoginSuccessEvent;
 import com.webgame.game.events.ws.PlayersWSEvent;
-import com.webgame.game.server.serialization.dto.player.AttackDTO;
-import com.webgame.game.server.serialization.dto.player.LoginDTO;
-import com.webgame.game.server.serialization.dto.player.PlayerDTO;
-import com.webgame.game.server.serialization.dto.skill.SkillDTO;
+import com.webgame.game.server.serialization.dto.Attack;
+import com.webgame.game.server.serialization.dto.Login;
+import com.webgame.game.server.entities.Player;
+import com.webgame.game.server.entities.Skill;
 
 import java.util.*;
 
@@ -31,7 +31,7 @@ public class GameController extends AbstractGameController {
 
         addPlayerMoveListener(event -> {
             MoveEvent moveEvent = (MoveEvent) event;
-            Player plr = moveEvent.getPlayer();
+            ClientPlayer plr = moveEvent.getClientPlayer();
             Vector2 vec = moveEvent.getVector();
             plr.setOldDirectionState(plr.getDirectionState());
             plr.setDirectionState(moveEvent.getDirectionState());
@@ -42,20 +42,20 @@ public class GameController extends AbstractGameController {
 
         addAttackListener(event -> {
                     AttackEvent attackEvent = (AttackEvent) event;
-                    Player plr = attackEvent.getPlayer();
+                    ClientPlayer plr = attackEvent.getClientPlayer();
 
                     plr.clearTimers();
                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
                     Gdx.app.log("attack", "attack has been sent");
-                    getSocketService().send(new AttackDTO(plr.getId(), attackEvent.getTargetVector(), SkillKind.FALLING_AOE));
+                    getSocketService().send(new Attack(plr.getId(), attackEvent.getTargetVector(), SkillKind.FALLING_AOE));
                     return true;
                 }
         );
 
         addPlayerDamagedListener(event -> {
             PlayerDamagedEvent playerDamagedEvent = (PlayerDamagedEvent) event;
-            Player target = playerDamagedEvent.getPlayer();
+            ClientPlayer target = playerDamagedEvent.getClientPlayer();
             Integer damage = playerDamagedEvent.getDamage();
             if (target.getHealthPoints() > 0)
                 target.setHealthPoints(target.getHealthPoints() - damage);
@@ -67,22 +67,22 @@ public class GameController extends AbstractGameController {
 
         //WEBSOCKET EVENTS
         addSuccessLoginWSListener(event -> {
-            if (getPlayer() != null)
+            if (getClientPlayer() != null)
                 return true;
             Gdx.app.postRunnable(() -> {
                 LoginSuccessEvent loginSuccessEvent = (LoginSuccessEvent) event;
-                LoginDTO playerDTO = loginSuccessEvent.getLoginDTO();
+                Login playerDTO = loginSuccessEvent.getLoginDTO();
 
-                Gdx.app.log("websocket", "Player created " + playerDTO.getId());
+                Gdx.app.log("websocket", "ClientPlayer created " + playerDTO.getId());
 
-                Player player = Player.createPlayer(world);
+                ClientPlayer clientPlayer = ClientPlayer.createPlayer(world);
 
-                player.setName(playerDTO.getName());
-                player.setPosition(playerDTO.getPosition());
-                player.getB2body().setTransform(playerDTO.getPosition(), 0);
-                player.setId(playerDTO.getId());
-                setPlayer(player);
-                getPlayers().put(player.getId(), player);
+                clientPlayer.setName(playerDTO.getName());
+                clientPlayer.setPosition(playerDTO.getPosition());
+                clientPlayer.getB2body().setTransform(playerDTO.getPosition(), 0);
+                clientPlayer.setId(playerDTO.getId());
+                setClientPlayer(clientPlayer);
+                getPlayers().put(clientPlayer.getId(), clientPlayer);
 
             });
             return true;
@@ -90,59 +90,59 @@ public class GameController extends AbstractGameController {
 
 
         addPlayersWSListener(event -> {
-            Array<PlayerDTO> serverPlayers = ((PlayersWSEvent) event).getPlayers();
+            Array<Player> serverPlayers = ((PlayersWSEvent) event).getPlayers();
 
-            for (final PlayerDTO playerDTO : serverPlayers) {
-                final Player plr = getPlayers().get(playerDTO.getId());
+            for (final Player playerDTO : serverPlayers) {
+                final ClientPlayer plr = getPlayers().get(playerDTO.getId());
                 if (plr == null) {
                     Gdx.app.postRunnable(() -> {
                         Gdx.app.log("websocket", "Enemy created " + playerDTO.getId());
 
-                        Player player = Player.createPlayer(world);
+                        ClientPlayer clientPlayer = ClientPlayer.createPlayer(world);
 
-                        player.setName(playerDTO.getName());
-                        player.setPosition(playerDTO.getPosition());
-                        player.getB2body().setTransform(playerDTO.getPosition(), 0);
-                        player.setId(playerDTO.getId());
+                        clientPlayer.setName(playerDTO.getName());
+                        clientPlayer.setPosition(playerDTO.getPosition());
+                        clientPlayer.getB2body().setTransform(playerDTO.getPosition(), 0);
+                        clientPlayer.setId(playerDTO.getId());
 
-                        getPlayers().put(player.getId(), player);
+                        getPlayers().put(clientPlayer.getId(), clientPlayer);
 
                     });
                 } else {
                     plr.updateBy(playerDTO);
-                    final Map<String, SkillDTO> skills = playerDTO.getSkills();
+                    final Map<String, Skill> skills = playerDTO.getSkills();
 
                     //checking inactive skills
-                    for (Iterator<Map.Entry<String, Skill>> it = plr.getActiveSkills().entrySet().iterator(); it.hasNext(); ) {
-                        Map.Entry<String, Skill> skillEntry = it.next();
+                    for (Iterator<Map.Entry<String, ClientSkill>> it = plr.getActiveSkills().entrySet().iterator(); it.hasNext(); ) {
+                        Map.Entry<String, ClientSkill> skillEntry = it.next();
                         if (skillEntry.getValue().getEntityState().equals(EntityState.INACTIVE)) {
                             it.remove();
                         }
                     }
 
-                    final Map<String, Skill> plrSkills = plr.getActiveSkills();
+                    final Map<String, ClientSkill> plrSkills = plr.getActiveSkills();
 
                     if (skills != null && !skills.isEmpty()) {
-                        for (Iterator<Map.Entry<String, SkillDTO>> it = skills.entrySet().iterator(); it.hasNext(); ) {
-                            Map.Entry<String, SkillDTO> skillEntry = it.next();
+                        for (Iterator<Map.Entry<String, Skill>> it = skills.entrySet().iterator(); it.hasNext(); ) {
+                            Map.Entry<String, Skill> skillEntry = it.next();
                             try {
                                 final Object objId = skillEntry.getKey();
                                 final String id = (String) objId;
-                                final SkillDTO skillDTO = skillEntry.getValue();
+                                final Skill skillDTO = skillEntry.getValue();
                                 if (plrSkills.containsKey(id)) {
-                                    Skill skill = plrSkills.get(id);
-                                    skill.setPosition(skillDTO.getPosition());
-                                    skill.setEntityState(skillDTO.getEntityState());
-                                    skill.setMoveState(skillDTO.getMoveState());
+                                    ClientSkill clientSkill = plrSkills.get(id);
+                                    clientSkill.setPosition(skillDTO.getPosition());
+                                    clientSkill.setEntityState(skillDTO.getEntityState());
+                                    clientSkill.setMoveState(skillDTO.getMoveState());
                                 } else {
-                                    Gdx.app.log("WS", "Skill is initialized");
+                                    Gdx.app.log("WS", "ClientSkill is initialized");
 
                                     plr.clearTimers();
                                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
-                                    Skill skill = plr.castSkill(skillDTO.getTarget(), skillDTO.getId());
-                                    if (skill != null)
-                                        skill.setPosition(skillDTO.getPosition());
+                                    ClientSkill clientSkill = plr.castSkill(skillDTO.getTarget(), skillDTO.getId());
+                                    if (clientSkill != null)
+                                        clientSkill.setPosition(skillDTO.getPosition());
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -157,47 +157,47 @@ public class GameController extends AbstractGameController {
 
     public void playerLogin(String username, String password) {
         getSocketService().connect();
-        getSocketService().send(new LoginDTO(username));
+        getSocketService().send(new Login(username));
     }
 
     @Override
     public void act(float dt) {
         super.act(dt);
-        if (getPlayer() == null)
+        if (getClientPlayer() == null)
             return;
 
         handleInput();
 
-        getSocketService().send(new PlayerDTO(getPlayer()));
+        getSocketService().send(new Player(getClientPlayer()));
 
         shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
 
-        for (final Player currentPlayer : getPlayers().values()) {
-            currentPlayer.update(dt);
+        for (final ClientPlayer currentClientPlayer : getPlayers().values()) {
+            currentClientPlayer.update(dt);
 
-            final Collection<Skill> skills = currentPlayer.getActiveSkills().values();
-            for (Iterator<Skill> it1 = skills.iterator(); it1.hasNext(); ) {
-                final Skill skill = it1.next();
-                skill.update(dt);
+            final Collection<ClientSkill> clientSkills = currentClientPlayer.getActiveSkills().values();
+            for (Iterator<ClientSkill> it1 = clientSkills.iterator(); it1.hasNext(); ) {
+                final ClientSkill clientSkill = it1.next();
+                clientSkill.update(dt);
 
-                //if (!(skill instanceof AOESkill) && skill.isMarked())
+                //if (!(clientSkill instanceof AOEClientSkill) && clientSkill.isMarked())
                 //    continue;
 
-               /* for (Player anotherPlayer : getPlayers().values()) {
-                    if (anotherPlayer == currentPlayer)
+               /* for (ClientPlayer anotherPlayer : getPlayers().values()) {
+                    if (anotherPlayer == currentClientPlayer)
                         continue;
 
                     //handling collision
-                    if (skill instanceof AOESkill) {
-                        if (Intersector.overlaps(anotherPlayer.getShape(), ((AOESkill) skill).getArea())) {
-                            this.fire(new PlayerDamagedEvent(anotherPlayer, skill.getDamage()));
+                    if (clientSkill instanceof AOEClientSkill) {
+                        if (Intersector.overlaps(anotherPlayer.getShape(), ((AOEClientSkill) clientSkill).getArea())) {
+                            this.fire(new PlayerDamagedEvent(anotherPlayer, clientSkill.getDamage()));
                         }
                     } else {
-                        if (Intersector.overlaps(skill.getShape(), anotherPlayer.getShape())) {
-                            if (skill instanceof SingleSkill || skill instanceof StaticSkill) {
-                                if (skill.getStatic().equals(MoveState.STATIC)) {
-                                    this.fire(new PlayerDamagedEvent(anotherPlayer, skill.getDamage()));
-                                    skill.setMarked(true);
+                        if (Intersector.overlaps(clientSkill.getShape(), anotherPlayer.getShape())) {
+                            if (clientSkill instanceof SingleClientSkill || clientSkill instanceof StaticClientSkill) {
+                                if (clientSkill.getStatic().equals(MoveState.STATIC)) {
+                                    this.fire(new PlayerDamagedEvent(anotherPlayer, clientSkill.getDamage()));
+                                    clientSkill.setMarked(true);
                                 }
                             }
                         }
@@ -206,8 +206,8 @@ public class GameController extends AbstractGameController {
             }
         }
 
-        camera.position.x = player.getPosition().x;
-        camera.position.y = player.getPosition().y;
+        camera.position.x = clientPlayer.getPosition().x;
+        camera.position.y = clientPlayer.getPosition().y;
         camera.update();
 
         batch.setProjectionMatrix(camera.combined);
@@ -220,7 +220,7 @@ public class GameController extends AbstractGameController {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (player == null)
+        if (clientPlayer == null)
             return;
 
         worldRenderer.render();
@@ -229,11 +229,11 @@ public class GameController extends AbstractGameController {
         batch.end();
         batch.begin();
 
-        for (Player plr : getPlayers().values()) {
-            final Collection<Skill> skills = plr.getActiveSkills().values();
-            for (Iterator<Skill> it1 = skills.iterator(); it1.hasNext(); ) {
-                final Skill skill = it1.next();
-                skill.draw(batch, parentAlpha);
+        for (ClientPlayer plr : getPlayers().values()) {
+            final Collection<ClientSkill> clientSkills = plr.getActiveSkills().values();
+            for (Iterator<ClientSkill> it1 = clientSkills.iterator(); it1.hasNext(); ) {
+                final ClientSkill clientSkill = it1.next();
+                clientSkill.draw(batch, parentAlpha);
             }
 
             plr.draw(batch, parentAlpha);
@@ -248,12 +248,12 @@ public class GameController extends AbstractGameController {
         shapeRenderer.setColor(Color.GREEN);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        for (Player plr : getPlayers().values())
+        for (ClientPlayer plr : getPlayers().values())
             drawPlayerHealthLine(plr);
 
         shapeRenderer.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.circle(player.getPosition().x, player.getPosition().y, player.getRadius(), 50);
+        shapeRenderer.circle(clientPlayer.getPosition().x, clientPlayer.getPosition().y, clientPlayer.getRadius(), 50);
         shapeRenderer.end();
 
         batch.begin();

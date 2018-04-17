@@ -5,16 +5,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.webgame.game.Configs;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.utils.GameUtils;
-import com.webgame.game.entities.player.Player;
+import com.webgame.game.entities.player.ClientPlayer;
 
 import static com.webgame.game.Configs.PPM;
 
-import java.util.ArrayList;
-
-public class Knight extends Player {
+public class Knight extends ClientPlayer {
 
 	public Knight(SpriteBatch batch, String spritePath) {
 		super();

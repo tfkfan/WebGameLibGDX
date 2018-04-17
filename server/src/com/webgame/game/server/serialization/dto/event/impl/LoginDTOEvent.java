@@ -1,24 +1,22 @@
 package com.webgame.game.server.serialization.dto.event.impl;
 
-import com.webgame.game.server.serialization.dto.DTO;
 import com.webgame.game.server.serialization.dto.event.AbstractDTOEvent;
-import com.webgame.game.server.serialization.dto.event.DTOEvent;
-import com.webgame.game.server.serialization.dto.player.LoginDTO;
+import com.webgame.game.server.serialization.dto.Login;
 import io.vertx.core.http.ServerWebSocket;
 
 public class LoginDTOEvent extends AbstractDTOEvent {
-    private LoginDTO loginDTO;
+    private Login loginDTO;
 
-    public LoginDTOEvent(ServerWebSocket webSocket, LoginDTO loginDTO) {
+    public LoginDTOEvent(ServerWebSocket webSocket, Login loginDTO) {
         super(webSocket);
         setLoginDTO(loginDTO);
     }
 
-    public LoginDTO getLoginDTO() {
+    public Login getLoginDTO() {
         return loginDTO;
     }
 
-    public void setLoginDTO(LoginDTO loginDTO) {
+    public void setLoginDTO(Login loginDTO) {
         this.loginDTO = loginDTO;
     }
 

@@ -1,28 +1,27 @@
 package com.webgame.game.events;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Event;
-import com.webgame.game.entities.player.Player;
+import com.webgame.game.entities.player.ClientPlayer;
 
 public class PlayerDamagedEvent extends Event {
-    Player player;
+    ClientPlayer clientPlayer;
     Integer damage;
 
     public PlayerDamagedEvent() {
 
     }
 
-    public PlayerDamagedEvent(Player player, Integer damage) {
-        setPlayer(player);
+    public PlayerDamagedEvent(ClientPlayer clientPlayer, Integer damage) {
+        setClientPlayer(clientPlayer);
         setDamage(damage);
     }
 
-    public Player getPlayer() {
-        return player;
+    public ClientPlayer getClientPlayer() {
+        return clientPlayer;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setClientPlayer(ClientPlayer clientPlayer) {
+        this.clientPlayer = clientPlayer;
     }
 
     public Integer getDamage() {

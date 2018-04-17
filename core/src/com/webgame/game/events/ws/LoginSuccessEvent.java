@@ -1,24 +1,23 @@
 package com.webgame.game.events.ws;
 
-import com.badlogic.gdx.scenes.scene2d.Event;
 import com.github.czyzby.websocket.WebSocket;
-import com.webgame.game.server.serialization.dto.player.LoginDTO;
+import com.webgame.game.server.serialization.dto.Login;
 
 public class LoginSuccessEvent extends AbstractWSEvent {
-    LoginDTO loginDTO;
+    Login loginDTO;
 
 
-    public LoginSuccessEvent(WebSocket webSocket, LoginDTO loginDTO) {
+    public LoginSuccessEvent(WebSocket webSocket, Login loginDTO) {
         super(webSocket);
         setLoginDTO(loginDTO);
     }
 
 
-    public LoginDTO getLoginDTO() {
+    public Login getLoginDTO() {
         return loginDTO;
     }
 
-    public void setLoginDTO(LoginDTO loginDTO) {
+    public void setLoginDTO(Login loginDTO) {
         this.loginDTO = loginDTO;
     }
 }

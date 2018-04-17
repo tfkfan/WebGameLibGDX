@@ -1,10 +1,10 @@
 package com.webgame.game.entities.player.impl;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.webgame.game.entities.player.Player;
+import com.webgame.game.entities.player.ClientPlayer;
 
 @Deprecated
-public class Archer extends Player {
+public class Archer extends ClientPlayer {
 	public Archer(SpriteBatch batch, String spritePath) {
 		super();
 		/*

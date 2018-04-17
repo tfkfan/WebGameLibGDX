@@ -8,17 +8,15 @@ import com.webgame.game.server.serialization.dto.event.listeners.AttackDTOEventL
 import com.webgame.game.server.serialization.dto.event.listeners.DTOEventListener;
 import com.webgame.game.server.serialization.dto.event.listeners.LoginDTOEventListener;
 import com.webgame.game.server.serialization.dto.event.listeners.PlayerDTOEventListener;
-import com.webgame.game.server.serialization.dto.player.AttackDTO;
-import com.webgame.game.server.serialization.dto.player.LoginDTO;
-import com.webgame.game.server.serialization.dto.player.PlayerDTO;
+import com.webgame.game.server.serialization.dto.Attack;
+import com.webgame.game.server.serialization.dto.Login;
+import com.webgame.game.server.entities.Player;
 import io.vertx.core.Handler;
 import io.vertx.core.http.ServerWebSocket;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocket> {
     private final JsonSerializer jsonSerializer = new JsonSerializer();
@@ -37,18 +35,18 @@ public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocke
             if (obj == null)
                 return;
 
-            if (obj instanceof LoginDTO) {
-                LoginDTO loginDTO = (LoginDTO) obj;
+            if (obj instanceof Login) {
+                Login loginDTO = (Login) obj;
                 LoginDTOEvent loginEvent = new LoginDTOEvent(webSocket, loginDTO);
                 for (DTOEventListener listener : loginEventList)
                     listener.handle(loginEvent);
-            } else if (obj instanceof PlayerDTO) {
-                PlayerDTO playerDTO = (PlayerDTO) obj;
+            } else if (obj instanceof Player) {
+                Player playerDTO = (Player) obj;
                 PlayerDTOEvent playerDTOEvent = new PlayerDTOEvent(webSocket, playerDTO);
                 for (DTOEventListener listener : playerEventList)
                     listener.handle(playerDTOEvent);
-            } else if (obj instanceof AttackDTO) {
-                AttackDTO attackDTO = (AttackDTO) obj;
+            } else if (obj instanceof Attack) {
+                Attack attackDTO = (Attack) obj;
                 AttackDTOEvent attackDTOEvent = new AttackDTOEvent(webSocket, attackDTO);
                 for (DTOEventListener listener : attackEventList)
                     listener.handle(attackDTOEvent);
