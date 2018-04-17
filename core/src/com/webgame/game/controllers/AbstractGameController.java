@@ -132,22 +132,26 @@ public abstract class AbstractGameController extends AbstractController implemen
 
     @Override
     public boolean onMessage(WebSocket webSocket, final byte[] packet) {
-        final JsonSerializer jsonSerializer = new JsonSerializer();
-        final Object res = jsonSerializer.deserialize(packet);
+        try {
+            final JsonSerializer jsonSerializer = new JsonSerializer();
+            final Object res = jsonSerializer.deserialize(packet);
 
-        if (res instanceof Login) {
-            Login loginDTO = (Login) res;
-            LoginSuccessEvent event = new LoginSuccessEvent(webSocket, loginDTO);
-            fire(event);
-        } else if (res instanceof Array) {
-            Array<Player> serverPlayers = (Array<Player>) res;
-            PlayersWSEvent event = new PlayersWSEvent(webSocket, serverPlayers);
-            fire(event);
-            //Gdx.app.log("WS", "PLAYERS");
-        } else if (res instanceof Attack) {
-            Attack attackDTO = (Attack) res;
-            AttackWSEvent attackWSEvent = new AttackWSEvent(webSocket, attackDTO);
-            fire(attackWSEvent);
+            if (res instanceof Login) {
+                Login loginDTO = (Login) res;
+                LoginSuccessEvent event = new LoginSuccessEvent(webSocket, loginDTO);
+                fire(event);
+            } else if (res instanceof Array) {
+                Array<Player> serverPlayers = (Array<Player>) res;
+                PlayersWSEvent event = new PlayersWSEvent(webSocket, serverPlayers);
+                fire(event);
+                //Gdx.app.log("WS", "PLAYERS");
+            } else if (res instanceof Attack) {
+                Attack attackDTO = (Attack) res;
+                AttackWSEvent attackWSEvent = new AttackWSEvent(webSocket, attackDTO);
+                fire(attackWSEvent);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
         // Gdx.app.log("WS", "!" + res.getClass().getName());
         return true;

@@ -31,7 +31,7 @@ public class Mage extends ClientPlayer {
             float[] animSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
             float[] standSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
 
-            List<ClientSkill> allClientSkills = Collections.synchronizedList(new ArrayList<ClientSkill>());
+            List<ClientSkill> allClientSkills = new ArrayList<ClientSkill>();
 
             Texture standSkillTexture = GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/fire_002.png");
             Texture animSkillTexture = GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s001.png");
@@ -56,7 +56,7 @@ public class Mage extends ClientPlayer {
             clientSkill3.setSkillType(SkillKind.MAGIC_DEFENCE);
             allClientSkills.add(clientSkill3);
 
-            // setAllSkills(allClientSkills);
+            setAllSkills(allClientSkills);
 
             /*
             Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/activeSkills.png");

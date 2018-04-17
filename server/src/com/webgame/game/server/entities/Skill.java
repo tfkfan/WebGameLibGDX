@@ -8,7 +8,7 @@ import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.SkillKind;
 import com.webgame.game.server.entities.Entity;
 
-public abstract class Skill extends Entity {
+public class Skill extends Entity {
     private Vector2 target;
 
     private MoveState moveState;
@@ -26,13 +26,13 @@ public abstract class Skill extends Entity {
 
     }
 
-    public static Skill createSkill(String id, MoveState moveState, EntityState entityState, SkillKind skillType, Vector2 target, Vector2 position, Vector2 velocity){
-        return new Skill(id, moveState, entityState, skillType, target, position, velocity) {
-            @Override
-            public void draw(Batch batch, float parentAlpha) {
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
 
-            }
-        };
+    }
+
+    public static Skill createSkill(String id, MoveState moveState, EntityState entityState, SkillKind skillType, Vector2 target, Vector2 position, Vector2 velocity){
+        return new Skill(id, moveState, entityState, skillType, target, position, velocity);
     }
 
     public Skill(String id, MoveState moveState, EntityState entityState, SkillKind skillType, Vector2 target, Vector2 position, Vector2 velocity) {
