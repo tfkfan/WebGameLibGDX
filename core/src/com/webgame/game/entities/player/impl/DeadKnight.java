@@ -17,7 +17,7 @@ public class DeadKnight extends ClientPlayer {
 	}
 
 	@Override
-	public void initPlayer(String spritePath) {
+	public void initPlayer() {
 		int dirs = DirectionState.values().length;
 		Texture skillTexture = GameUtils.loadSprite("activeSkills.png");
 		try {

@@ -1,11 +1,15 @@
 package com.webgame.game.server.handlers;
 
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.Configs;
+import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.entities.player.impl.Mage;
 import com.webgame.game.enums.EntityState;
+import com.webgame.game.enums.MarkState;
 import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.SkillKind;
+import com.webgame.game.events.PlayerDamagedEvent;
 import com.webgame.game.server.dto.LoginDTO;
 import com.webgame.game.server.entities.Player;
 import com.webgame.game.server.entities.Skill;
@@ -39,28 +43,59 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             final Collection<Player> plrs = getPlayers().values();
             //Inactive skills to remove
             final Map<String, List<String>> skillsToRemove = new ConcurrentHashMap<>();
-            for (Player currentDTO : plrs) {
-                final Map<String, Skill> skills = currentDTO.getSkills();
+            for (Player currentPlayer : plrs) {
+                final Map<String, Skill> skills = currentPlayer.getSkills();
                 final List<String> skillIdsToRemove = Collections.synchronizedList(new ArrayList<>());
                 if (skills != null) {
                     for (Iterator<Skill> it = skills.values().iterator(); it.hasNext(); ) {
-                        final Skill skillDTO = it.next();
-                        final SkillKind skillType = skillDTO.getSkillType();
-                        if (skillDTO.getMoveState().equals(MoveState.MOVING))
-                            skillDTO.getPosition().add(skillDTO.getVelocity());
+                        final Skill currentSkill = it.next();
+                        final SkillKind skillType = currentSkill.getSkillType();
+                        if (currentSkill.getMoveState().equals(MoveState.MOVING))
+                            currentSkill.getPosition().add(currentSkill.getVelocity());
 
                         //boolean finalAction = !(skillType.equals(SkillKind.FALLING_AOE) ||
                         //skillType.equals(SkillKind.TIMED_AOE) || skillType.equals(SkillKind.TIMED_BUFF)
                         //|| skillType.equals(SkillKind.TIMED_SINGLE));
+                        //if (!(clientSkill instanceof AOEClientSkill) && clientSkill.isMarked())
+                        //    continue;
 
-                        if (skillDTO.getEntityState().equals(EntityState.ACTIVE) && isCollided(skillDTO.getPosition(), skillDTO.getTarget())) {
-                            skillDTO.setMoveState(MoveState.STATIC);
-                            skillIdsToRemove.add(skillDTO.getId());
+                        for (Player anotherPlayer : getPlayers().values()) {
+                            if (anotherPlayer == currentPlayer)
+                                continue;
+
+                            //handling collision
+                            if (skillType.isAoe()) {
+                                if (Intersector.overlaps(anotherPlayer.getShape(), currentSkill.getArea())) {
+                                    Integer damage = currentSkill.getDamage();
+                                    if (anotherPlayer.getHealthPoints() > 0)
+                                        anotherPlayer.setHealthPoints(anotherPlayer.getHealthPoints() - damage);
+                                    else
+                                        anotherPlayer.setHealthPoints(0);
+
+                                }
+                            } else {
+                                if (Intersector.overlaps(currentSkill.getShape(), anotherPlayer.getShape()) && currentSkill.getMarkState().equals(MarkState.UNMARKED)) {
+                                    Integer damage = currentSkill.getDamage();
+                                    if (anotherPlayer.getHealthPoints() > 0)
+                                        anotherPlayer.setHealthPoints(anotherPlayer.getHealthPoints() - damage);
+                                    else
+                                        anotherPlayer.setHealthPoints(0);
+
+                                    currentSkill.setMarkState(MarkState.MARKED);
+                                    currentSkill.setMoveState(MoveState.STATIC);
+                                    skillIdsToRemove.add(currentSkill.getId());
+                                }
+                            }
                         }
-                        currentDTO.getSkills().put(skillDTO.getId(), skillDTO);
+
+                        if (!skillType.isAoe() && currentSkill.getEntityState().equals(EntityState.ACTIVE) && isCollided(currentSkill.getPosition(), currentSkill.getTarget())) {
+                            currentSkill.setMoveState(MoveState.STATIC);
+                            skillIdsToRemove.add(currentSkill.getId());
+                        }
+                        currentPlayer.getSkills().put(currentSkill.getId(), currentSkill);
                     }
                 }
-                skillsToRemove.put(currentDTO.getId(), skillIdsToRemove);
+                skillsToRemove.put(currentPlayer.getId(), skillIdsToRemove);
             }
 
             writeResponseToAll(getSessions().values(), new ArrayList<>(plrs), getJsonSerializer());
@@ -79,6 +114,7 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             player.init();
             player.setId(newUUID());
             player.setName(loginDTO.getName());
+            player.setSpritePath(Configs.PLAYERSHEETS_FOLDER + "/mage.png");
             player.setPosition(new Vector2(2, 2));
 
             loginDTO.setPlayer(player);
@@ -121,6 +157,8 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
 
             Skill skillDTO = Skill.createSkill(newUUID(),
                     MoveState.MOVING, EntityState.ACTIVE, event.getDto().getSkillType(), target, playerPos, vel);
+
+            skillDTO.cast(event.getDto().getTarget());
 
             skills.put(skillDTO.getId(), skillDTO);
             playerDTO.setSkills(skills);

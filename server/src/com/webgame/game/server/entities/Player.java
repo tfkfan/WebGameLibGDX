@@ -36,7 +36,8 @@ public abstract class Player<T extends Skill>  extends AnimatedEntity {
     protected Map<String, T> skills;
 
     protected float radius = 20 / PPM;
-    protected Circle shape;
+
+    protected String spritePath;
 
     public Player() {
 
@@ -72,6 +73,9 @@ public abstract class Player<T extends Skill>  extends AnimatedEntity {
     }
 
     public void updateBy(Player playerDTO) {
+        setHealthPoints(playerDTO.getHealthPoints());
+        setMaxHealthPoints(playerDTO.getMaxHealthPoints());
+
         setPosition(playerDTO.getPosition());
         setVelocity(playerDTO.getVelocity());
         setPlayerAttackState(playerDTO.getPlayerAttackState());
@@ -86,12 +90,16 @@ public abstract class Player<T extends Skill>  extends AnimatedEntity {
         return null;
     }
 
-    public Circle getShape() {
-        return shape;
+    public String getSpritePath() {
+        return spritePath;
     }
 
-    public void setShape(Circle shape) {
-        this.shape = shape;
+    public void setSpritePath(String spritePath) {
+        this.spritePath = spritePath;
+    }
+
+    public Circle getShape() {
+        return new Circle(getPosition(), getRadius());
     }
 
     public float getRadius() {

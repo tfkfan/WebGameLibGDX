@@ -12,8 +12,6 @@ import com.webgame.game.server.entities.Player;
 import static com.webgame.game.Configs.PPM;
 
 public abstract class AOEClientSkill extends ClientSkill {
-    protected Rectangle area;
-
     public AOEClientSkill(){
 
     }
@@ -45,28 +43,4 @@ public abstract class AOEClientSkill extends ClientSkill {
                           Integer numFrames, SkillAnimationState animationState, Boolean looping, float[] standSizes, float[] animSizes) {
         super(clientPlayer, standTexture, gameAnimation, numFrames, SkillAnimationState.FULL_ANIMATION, false, standSizes, animSizes);
     }
-
-    @Override
-    public void init(Player clientPlayer) {
-        super.init(clientPlayer);
-        setArea(new Rectangle(0, 0, 100 / PPM, 100 / PPM));
-    }
-
-    @Override
-    public void cast(Vector2 targetPosition) {
-        super.cast(targetPosition);
-        Vector2 newPos = new Vector2();
-        newPos.x = targetPosition.x - getArea().getWidth() / 2;
-        newPos.y = targetPosition.y - getArea().getHeight() / 2;
-        getArea().setPosition(newPos);
-    }
-
-    public Rectangle getArea() {
-        return area;
-    }
-
-    public void setArea(Rectangle area) {
-        this.area = area;
-    }
-
 }

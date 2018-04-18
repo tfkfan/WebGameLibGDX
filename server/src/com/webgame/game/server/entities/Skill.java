@@ -1,6 +1,8 @@
 package com.webgame.game.server.entities;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.enums.EntityState;
@@ -9,8 +11,12 @@ import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.SkillKind;
 import com.webgame.game.server.entities.Entity;
 
+import static com.webgame.game.Configs.PPM;
+
 public class Skill extends Entity {
     protected Vector2 target;
+
+    protected Rectangle area;
 
     protected MoveState moveState;
     protected MarkState markState;
@@ -32,7 +38,7 @@ public class Skill extends Entity {
 
     }
 
-    public static Skill createSkill(String id, MoveState moveState, EntityState entityState, SkillKind skillType, Vector2 target, Vector2 position, Vector2 velocity){
+    public static Skill createSkill(String id, MoveState moveState, EntityState entityState, SkillKind skillType, Vector2 target, Vector2 position, Vector2 velocity) {
         return new Skill(id, moveState, entityState, skillType, target, position, velocity);
     }
 
@@ -44,6 +50,42 @@ public class Skill extends Entity {
         setTarget(target);
         setVelocity(velocity);
         setSkillType(skillType);
+        //TODO remove
+        setDamage(1);
+        setArea(new Rectangle(0, 0, 100 / PPM, 100 / PPM));
+    }
+
+    public void updateBy(Skill skill){
+        setPosition(skill.getPosition());
+        setEntityState(skill.getEntityState());
+        setMoveState(skill.getMoveState());
+        setMarkState(skill.getMarkState());
+    }
+
+    public void cast(Vector2 targetPosition){
+        setTarget(targetPosition);
+        setEntityState(EntityState.ACTIVE);
+        setMarkState(MarkState.UNMARKED);
+
+        if(getArea() == null)
+            return;
+
+        Vector2 newPos = new Vector2();
+        newPos.x = targetPosition.x - getArea().getWidth() / 2;
+        newPos.y = targetPosition.y - getArea().getHeight() / 2;
+        getArea().setPosition(newPos);
+    }
+
+    public Circle getShape(){
+        return new Circle(getPosition(), getWidth()> getHeight() ? getWidth()/2 : getHeight()/2);
+    }
+
+    public Rectangle getArea() {
+        return area;
+    }
+
+    public void setArea(Rectangle area) {
+        this.area = area;
     }
 
     public MarkState getMarkState() {

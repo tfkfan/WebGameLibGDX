@@ -25,7 +25,7 @@ public class Mage extends ClientPlayer {
     }
 
     @Override
-    public void initPlayer(String spritePath) {
+    public void initPlayer() {
         int dirs = DirectionState.values().length;
         try {
             float[] animSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};

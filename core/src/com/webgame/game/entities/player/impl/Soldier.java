@@ -17,7 +17,7 @@ public class Soldier extends ClientPlayer {
 	}
 
 	@Override
-	public void initPlayer(String spritePath) {
+	public void initPlayer() {
 		int dirs = DirectionState.values().length;
 		//this.setSkillOrig(new IceRain(batch, "activeSkills.png"));
 

@@ -92,10 +92,10 @@ public abstract class ClientSkill extends Skill implements IUpdatable {
         setMarkState(MarkState.UNMARKED);
     }
 
+    @Override
     public void cast(Vector2 targetPosition) {
+        super.cast(targetPosition);
         resetSkill();
-        setTarget(targetPosition);
-        setEntityState(EntityState.ACTIVE);
         setPosition(new Vector2(player.getPosition()));
     }
 

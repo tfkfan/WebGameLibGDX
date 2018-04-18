@@ -3,6 +3,7 @@ package com.webgame.game.entities.player;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
@@ -22,17 +23,17 @@ public abstract class ClientPlayer extends Player implements IUpdatable {
     protected transient Array<Animation<TextureRegion>> attackAnimations;
     protected transient TextureRegion[] standRegions;
 
-    transient protected World world;
-    transient protected Body b2body;
+    protected transient World world;
+    protected transient Body b2body;
 
     public ClientPlayer() {
         super();
         clearTimers();
     }
 
-    public abstract void initPlayer(String spritePath);
+    public abstract void initPlayer();
 
-    public Skill castSkill(Vector2 target, String id) {
+    public Skill castSkill(Vector2 target, String id, Rectangle area) {
         ClientSkill currSkill = (ClientSkill) getCurrentSkill();
         if (currSkill == null)
             return null;
@@ -46,9 +47,10 @@ public abstract class ClientPlayer extends Player implements IUpdatable {
         //  currSkill.setStart(System.currentTimeMillis());
 
         final ClientSkill skill = currSkill.createCopy();
+        skill.setArea(area);
         skill.cast(target);
         skills.put(id, skill);
-        return null;
+        return skill;
     }
 
     public Body getB2body() {
@@ -85,7 +87,6 @@ public abstract class ClientPlayer extends Player implements IUpdatable {
 
         shape.setRadius(getRadius());
 
-        setShape(new Circle(0, 0, getRadius()));
         fdef.shape = shape;
         b2body.createFixture(fdef);
     }

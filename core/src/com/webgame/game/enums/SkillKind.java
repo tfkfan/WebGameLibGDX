@@ -1,7 +1,7 @@
 package com.webgame.game.enums;
 
-public enum SkillKind{
-    BLIZZARD(SkillClass.AOE, "Blizzard", true, true),
+public enum SkillKind {
+    BLIZZARD(SkillClass.AOE, "Blizzard",true, true),
     FIRE_BALL(SkillClass.SINGLE, "Fire ball", false, false),
     ICE_BOLT(SkillClass.SINGLE, "Ice bolt", false, false),
     HEAL(SkillClass.BUFF, "Simple heal", true, false),
@@ -12,8 +12,7 @@ public enum SkillKind{
     private boolean isStatic;
     private boolean isFalling;
 
-
-    SkillKind(SkillClass skillClass, String name, boolean isStatic, boolean isFalling){
+    SkillKind(SkillClass skillClass, String name, boolean isStatic, boolean isFalling) {
         setSkillClass(skillClass);
         setName(name);
         setFalling(isFalling);
@@ -26,6 +25,10 @@ public enum SkillKind{
 
     public void setFalling(boolean falling) {
         isFalling = falling;
+    }
+
+    public boolean isAoe() {
+        return getSkillClass().equals(SkillClass.AOE);
     }
 
     public enum SkillClass {
@@ -48,7 +51,7 @@ public enum SkillKind{
         this.name = name;
     }
 
-    public boolean getStatic() {
+    public boolean isStatic() {
         return isStatic;
     }
 
