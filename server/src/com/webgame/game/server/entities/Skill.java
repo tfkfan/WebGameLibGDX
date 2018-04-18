@@ -2,6 +2,7 @@ package com.webgame.game.server.entities;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MarkState;
 import com.webgame.game.enums.MoveState;
@@ -9,11 +10,11 @@ import com.webgame.game.enums.SkillKind;
 import com.webgame.game.server.entities.Entity;
 
 public class Skill extends Entity {
-    private Vector2 target;
+    protected Vector2 target;
 
-    private MoveState moveState;
+    protected MoveState moveState;
     protected MarkState markState;
-    private SkillKind skillType;
+    protected SkillKind skillType;
 
     protected Integer damage;
     protected Integer heal;

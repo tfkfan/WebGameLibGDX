@@ -7,6 +7,7 @@ import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.SkillAnimationState;
+import com.webgame.game.server.entities.Player;
 
 public class SingleClientSkill extends ClientSkill {
     public SingleClientSkill() {
@@ -17,27 +18,27 @@ public class SingleClientSkill extends ClientSkill {
         super(clientSkill);
     }
 
-    public SingleClientSkill(ClientPlayer clientPlayer) {
+    public SingleClientSkill(Player clientPlayer) {
         super(clientPlayer);
     }
 
-    public SingleClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation) {
+    public SingleClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation) {
         super(clientPlayer, standTexture, gameAnimation);
     }
 
-    public SingleClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, Boolean looping) {
+    public SingleClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, Boolean looping) {
         super(clientPlayer, standTexture, gameAnimation, looping);
     }
 
-    public SingleClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState) {
+    public SingleClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState) {
         super(clientPlayer, standTexture, gameAnimation, animationState);
     }
 
-    public SingleClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState, Boolean looping) {
+    public SingleClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState, Boolean looping) {
         super(clientPlayer, standTexture, gameAnimation, animationState, looping);
     }
 
-    public SingleClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, Integer numFrames, SkillAnimationState animationState, Boolean looping) {
+    public SingleClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, Integer numFrames, SkillAnimationState animationState, Boolean looping) {
         super(clientPlayer, standTexture, gameAnimation, numFrames, animationState, looping, null, null);
     }
 

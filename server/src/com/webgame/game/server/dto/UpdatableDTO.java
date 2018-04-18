@@ -1,4 +1,4 @@
-package com.webgame.game.server.serialization.dto;
+package com.webgame.game.server.dto;
 
 public interface UpdatableDTO<T extends Object> extends DTO{
     void updateBy(T entity);

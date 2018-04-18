@@ -18,8 +18,8 @@ import com.webgame.game.events.MoveEvent;
 import com.webgame.game.events.PlayerDamagedEvent;
 import com.webgame.game.events.ws.LoginSuccessEvent;
 import com.webgame.game.events.ws.PlayersWSEvent;
-import com.webgame.game.server.serialization.dto.Attack;
-import com.webgame.game.server.serialization.dto.Login;
+import com.webgame.game.server.dto.AttackDTO;
+import com.webgame.game.server.dto.LoginDTO;
 import com.webgame.game.server.entities.Player;
 import com.webgame.game.server.entities.Skill;
 
@@ -47,8 +47,7 @@ public class GameController extends AbstractGameController {
                     plr.clearTimers();
                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
-                    Gdx.app.log("attack", "attack has been sent");
-                    getSocketService().send(new Attack(plr.getId(), attackEvent.getTargetVector(), SkillKind.FIRE_BALL));
+                    getSocketService().send(new AttackDTO(plr.getId(), attackEvent.getTargetVector(), plr.getCurrentSkill().getSkillType()));
                     return true;
                 }
         );
@@ -64,14 +63,13 @@ public class GameController extends AbstractGameController {
             return true;
         });
 
-
         //WEBSOCKET EVENTS
         addSuccessLoginWSListener(event -> {
             if (getClientPlayer() != null)
                 return true;
             Gdx.app.postRunnable(() -> {
                 LoginSuccessEvent loginSuccessEvent = (LoginSuccessEvent) event;
-                Login loginDTO = loginSuccessEvent.getLoginDTO();
+                LoginDTO loginDTO = loginSuccessEvent.getLoginDTO();
 
                 ClientPlayer clientPlayer = (ClientPlayer) loginDTO.getPlayer();
                 clientPlayer.initPlayer( Configs.PLAYERSHEETS_FOLDER + "/mage.png");
@@ -136,8 +134,11 @@ public class GameController extends AbstractGameController {
                                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
                                     Skill clientSkill = plr.castSkill(skillDTO.getTarget(), skillDTO.getId());
-                                    if (clientSkill != null)
+                                    if (clientSkill != null){
                                         clientSkill.setPosition(skillDTO.getPosition());
+                                        clientSkill.setEntityState(skillDTO.getEntityState());
+                                        clientSkill.setMoveState(skillDTO.getMoveState());
+                                    }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -152,7 +153,7 @@ public class GameController extends AbstractGameController {
 
     public void playerLogin(String username, String password) {
         getSocketService().connect();
-        getSocketService().send(new Login(username));
+        getSocketService().send(new LoginDTO(username));
     }
 
     @Override

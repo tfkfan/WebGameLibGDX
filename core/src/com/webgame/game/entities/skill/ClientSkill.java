@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.animation.GameAnimation;
 import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.enums.*;
+import com.webgame.game.server.entities.Player;
 import com.webgame.game.server.entities.Skill;
 import com.webgame.game.world.common.IUpdatable;
 
@@ -16,25 +17,25 @@ import java.util.List;
 public abstract class ClientSkill extends Skill implements IUpdatable {
     protected transient int animationsNum;
     protected transient float stateTimer;
-    protected transient ClientPlayer clientPlayer;
+    protected transient Player player;
     protected transient List<SkillSprite> animations;
 
     public ClientSkill() {
 
     }
 
-    public ClientSkill(ClientPlayer clientPlayer) {
+    public ClientSkill(Player clientPlayer) {
         super();
         init(clientPlayer);
     }
 
-    public ClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation) {
+    public ClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation) {
         super();
         init(clientPlayer);
         initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, false, null, null);
     }
 
-    public ClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, float standSizeX, float standSizeY, float animSizeX, float animSizeY) {
+    public ClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, float standSizeX, float standSizeY, float animSizeX, float animSizeY) {
         super();
         init(clientPlayer);
 
@@ -44,32 +45,32 @@ public abstract class ClientSkill extends Skill implements IUpdatable {
         initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, false, standSizes, animSizes);
     }
 
-    public ClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, float[] standSizes, float[] animSizes) {
+    public ClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, float[] standSizes, float[] animSizes) {
         super();
         init(clientPlayer);
 
         initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, false, standSizes, animSizes);
     }
 
-    public ClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, Boolean looping) {
+    public ClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, Boolean looping) {
         super();
         init(clientPlayer);
         initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, looping, null, null);
     }
 
-    public ClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState) {
+    public ClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState) {
         super();
         init(clientPlayer);
         initAnimations(standTexture, gameAnimation, 1, animationState, false, null, null);
     }
 
-    public ClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState, Boolean looping) {
+    public ClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState, Boolean looping) {
         super();
         init(clientPlayer);
         initAnimations(standTexture, gameAnimation, 1, animationState, looping, null, null);
     }
 
-    public ClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation,
+    public ClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation,
                        Integer numFrames, SkillAnimationState animationState, Boolean looping, float[] standSizes, float[] animSizes) {
         super();
         init(clientPlayer);
@@ -78,19 +79,14 @@ public abstract class ClientSkill extends Skill implements IUpdatable {
 
     public ClientSkill(ClientSkill clientSkill) {
         super();
-        init(clientSkill.getClientPlayer());
+        init(clientSkill.getPlayer());
         copy(clientSkill);
         copyAnimations(clientSkill.getAnimations());
     }
 
-    protected void init(ClientPlayer clientPlayer) {
-        setName("ClientSkill");
-        setDamage(0);
-        setHeal(0);
+    public void init(Player clientPlayer) {
         clearTimers();
-        setEntityState(EntityState.INACTIVE);
-        setMoveState(MoveState.MOVING);
-        setClientPlayer(clientPlayer);
+        setPlayer(clientPlayer);
         setStart(0L);
         setCooldown(0L);
         setMarkState(MarkState.UNMARKED);
@@ -100,11 +96,10 @@ public abstract class ClientSkill extends Skill implements IUpdatable {
         resetSkill();
         setTarget(targetPosition);
         setEntityState(EntityState.ACTIVE);
-        setPosition(new Vector2(clientPlayer.getPosition()));
+        setPosition(new Vector2(player.getPosition()));
     }
 
     public abstract ClientSkill createCopy();
-
 
     public abstract void updateAnimations(float dt);
 
@@ -226,13 +221,12 @@ public abstract class ClientSkill extends Skill implements IUpdatable {
         stateTimer = 0;
     }
 
-
-    public ClientPlayer getClientPlayer() {
-        return clientPlayer;
+    public Player getPlayer() {
+        return player;
     }
 
-    public void setClientPlayer(ClientPlayer clientPlayer) {
-        this.clientPlayer = clientPlayer;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
 

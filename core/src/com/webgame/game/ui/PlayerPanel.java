@@ -42,7 +42,7 @@ public class PlayerPanel extends Table {
     }
 
     public void init() {
-       /* List<ClientSkill> allClientSkills = clientPlayer.getAllSkills();
+       /* List<ClientSkill> allClientSkills = player.getAllSkills();
         buttons = new TextButton[allClientSkills.size()];
 
 
@@ -70,7 +70,7 @@ public class PlayerPanel extends Table {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("ok2 pressed");
-                // clientPlayer.setCurrentSkillIndex(skill);
+                // player.setCurrentSkillIndex(skill);
             }
         });
         add(btn2).size(btn2.getWidth()/ Configs.PPM, btn2.getHeight()/ Configs.PPM).expand();
@@ -79,7 +79,7 @@ public class PlayerPanel extends Table {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("ok pressed");
-                // clientPlayer.setCurrentSkillIndex(skill);
+                // player.setCurrentSkillIndex(skill);
             }
         });
 
@@ -100,7 +100,7 @@ public class PlayerPanel extends Table {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    clientPlayer.setCurrentSkillIndex(skill);
+                    player.setCurrentSkillIndex(skill);
                 }
             });
 

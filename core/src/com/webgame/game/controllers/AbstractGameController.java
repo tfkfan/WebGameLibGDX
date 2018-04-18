@@ -35,8 +35,8 @@ import com.webgame.game.events.listeners.ws.SuccesLoginWSListener;
 import com.webgame.game.events.ws.AttackWSEvent;
 import com.webgame.game.events.ws.LoginSuccessEvent;
 import com.webgame.game.events.ws.PlayersWSEvent;
-import com.webgame.game.server.serialization.dto.Attack;
-import com.webgame.game.server.serialization.dto.Login;
+import com.webgame.game.server.dto.AttackDTO;
+import com.webgame.game.server.dto.LoginDTO;
 import com.webgame.game.server.entities.Player;
 import com.webgame.game.stages.GameStage;
 import com.webgame.game.utils.GameUtils;
@@ -136,8 +136,8 @@ public abstract class AbstractGameController extends AbstractController implemen
             final JsonSerializer jsonSerializer = new JsonSerializer();
             final Object res = jsonSerializer.deserialize(packet);
 
-            if (res instanceof Login) {
-                Login loginDTO = (Login) res;
+            if (res instanceof LoginDTO) {
+                LoginDTO loginDTO = (LoginDTO) res;
                 LoginSuccessEvent event = new LoginSuccessEvent(webSocket, loginDTO);
                 fire(event);
             } else if (res instanceof Array) {
@@ -145,8 +145,8 @@ public abstract class AbstractGameController extends AbstractController implemen
                 PlayersWSEvent event = new PlayersWSEvent(webSocket, serverPlayers);
                 fire(event);
                 //Gdx.app.log("WS", "PLAYERS");
-            } else if (res instanceof Attack) {
-                Attack attackDTO = (Attack) res;
+            } else if (res instanceof AttackDTO) {
+                AttackDTO attackDTO = (AttackDTO) res;
                 AttackWSEvent attackWSEvent = new AttackWSEvent(webSocket, attackDTO);
                 fire(attackWSEvent);
             }

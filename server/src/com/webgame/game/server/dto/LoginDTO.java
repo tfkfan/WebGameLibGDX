@@ -1,22 +1,22 @@
-package com.webgame.game.server.serialization.dto;
+package com.webgame.game.server.dto;
 
 import com.webgame.game.server.entities.Player;
 
-public class Login implements DTO{
+public class LoginDTO implements DTO{
     String name;
     String id;
     String password;
     Player player;
 
-    public Login() {
+    public LoginDTO() {
 
     }
 
-    public Login(String name) {
+    public LoginDTO(String name) {
         setName(name);
     }
 
-    public Login(Player player) {
+    public LoginDTO(Player player) {
         setPlayer(player);
     }
 

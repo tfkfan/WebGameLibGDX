@@ -6,7 +6,7 @@ import com.webgame.game.entities.player.impl.Mage;
 import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.SkillKind;
-import com.webgame.game.server.serialization.dto.Login;
+import com.webgame.game.server.dto.LoginDTO;
 import com.webgame.game.server.entities.Player;
 import com.webgame.game.server.entities.Skill;
 import io.vertx.core.TimeoutStream;
@@ -20,7 +20,7 @@ import static com.webgame.game.server.utils.ServerUtils.*;
 public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
     protected static final int delay = 30;
     protected static final float absVel = 15;
-    protected static final float dl = 0.1f;
+    protected static final float dl = 0.15f;
 
     private TimeoutStream timeoutStream;
     private final ConcurrentHashMap<String, ServerWebSocket> sessions;
@@ -73,7 +73,7 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
         });
 
         addLoginDTOListener(event -> {
-            Login loginDTO = event.getLoginDTO();
+            LoginDTO loginDTO = event.getLoginDTO();
 
             final Player player = new Mage();
             player.init();

@@ -67,8 +67,8 @@ public abstract class Player<T extends Skill>  extends AnimatedEntity {
         setBounds(0, 0, 60 / PPM, 60 / PPM);
     }
 
-    public Player(ClientPlayer clientPlayer) {
-        updateBy(clientPlayer);
+    public Player(Player player) {
+        updateBy(player);
     }
 
     public void updateBy(Player playerDTO) {
@@ -78,17 +78,6 @@ public abstract class Player<T extends Skill>  extends AnimatedEntity {
         setPlayerMoveState(playerDTO.getPlayerMoveState());
         setDirectionState(playerDTO.getDirectionState());
         setCurrentSkillIndex(playerDTO.getCurrentSkillIndex());
-    }
-
-    public void updateBy(ClientPlayer entity) {
-        setId(entity.getId());
-        setPosition(entity.getPosition());
-        setVelocity(entity.getVelocity());
-        setName(entity.getName());
-        setPlayerMoveState(entity.getCurrAnimationState());
-        setDirectionState(entity.getDirectionState());
-        setPlayerAttackState(entity.getCurrentAttackState());
-        setCurrentSkillIndex(entity.getCurrentSkillIndex());
     }
 
     public T getCurrentSkill() {

@@ -1,6 +1,6 @@
-package com.webgame.game.server.serialization.dto.event.impl;
+package com.webgame.game.server.dto.event.impl;
 
-import com.webgame.game.server.serialization.dto.event.AbstractDTOEvent;
+import com.webgame.game.server.dto.event.AbstractDTOEvent;
 import com.webgame.game.server.entities.Player;
 import io.vertx.core.http.ServerWebSocket;
 

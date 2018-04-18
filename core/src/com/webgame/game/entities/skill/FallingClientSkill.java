@@ -7,6 +7,7 @@ import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.SkillAnimationState;
+import com.webgame.game.server.entities.Player;
 
 import static com.webgame.game.Configs.PPM;
 
@@ -28,20 +29,20 @@ public class FallingClientSkill extends AOEClientSkill {
         super(clientSkill);
     }
 
-    public FallingClientSkill(ClientPlayer clientPlayer) {
+    public FallingClientSkill(Player clientPlayer) {
         super(clientPlayer);
     }
 
-    public FallingClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation) {
+    public FallingClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation) {
         super(clientPlayer, standTexture, gameAnimation, numFrames, SkillAnimationState.FULL_ANIMATION, false,null, null);
     }
 
-    public FallingClientSkill(ClientPlayer clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, float[] standSizes, float[] animSizes) {
+    public FallingClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, float[] standSizes, float[] animSizes) {
         super(clientPlayer, standTexture, gameAnimation, numFrames, SkillAnimationState.FULL_ANIMATION, false, standSizes, animSizes);
     }
 
     @Override
-    protected void init(ClientPlayer clientPlayer) {
+    public void init(Player clientPlayer) {
         super.init(clientPlayer);
         index = 0;
         setVelocity(fallVelocity);

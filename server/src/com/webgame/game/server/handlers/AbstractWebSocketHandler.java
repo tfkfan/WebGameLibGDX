@@ -1,15 +1,15 @@
 package com.webgame.game.server.handlers;
 
 import com.github.czyzby.websocket.serialization.impl.JsonSerializer;
-import com.webgame.game.server.serialization.dto.event.impl.AttackDTOEvent;
-import com.webgame.game.server.serialization.dto.event.impl.LoginDTOEvent;
-import com.webgame.game.server.serialization.dto.event.impl.PlayerDTOEvent;
-import com.webgame.game.server.serialization.dto.event.listeners.AttackDTOEventListener;
-import com.webgame.game.server.serialization.dto.event.listeners.DTOEventListener;
-import com.webgame.game.server.serialization.dto.event.listeners.LoginDTOEventListener;
-import com.webgame.game.server.serialization.dto.event.listeners.PlayerDTOEventListener;
-import com.webgame.game.server.serialization.dto.Attack;
-import com.webgame.game.server.serialization.dto.Login;
+import com.webgame.game.server.dto.LoginDTO;
+import com.webgame.game.server.dto.event.impl.AttackDTOEvent;
+import com.webgame.game.server.dto.event.impl.LoginDTOEvent;
+import com.webgame.game.server.dto.event.impl.PlayerDTOEvent;
+import com.webgame.game.server.dto.event.listeners.AttackDTOEventListener;
+import com.webgame.game.server.dto.event.listeners.DTOEventListener;
+import com.webgame.game.server.dto.event.listeners.LoginDTOEventListener;
+import com.webgame.game.server.dto.event.listeners.PlayerDTOEventListener;
+import com.webgame.game.server.dto.AttackDTO;
 import com.webgame.game.server.entities.Player;
 import io.vertx.core.Handler;
 import io.vertx.core.http.ServerWebSocket;
@@ -35,8 +35,8 @@ public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocke
             if (obj == null)
                 return;
 
-            if (obj instanceof Login) {
-                Login loginDTO = (Login) obj;
+            if (obj instanceof LoginDTO) {
+                LoginDTO loginDTO = (LoginDTO) obj;
                 LoginDTOEvent loginEvent = new LoginDTOEvent(webSocket, loginDTO);
                 for (DTOEventListener listener : loginEventList)
                     listener.handle(loginEvent);
@@ -45,8 +45,8 @@ public abstract class AbstractWebSocketHandler implements Handler<ServerWebSocke
                 PlayerDTOEvent playerDTOEvent = new PlayerDTOEvent(webSocket, player);
                 for (DTOEventListener listener : playerEventList)
                     listener.handle(playerDTOEvent);
-            } else if (obj instanceof Attack) {
-                Attack attackDTO = (Attack) obj;
+            } else if (obj instanceof AttackDTO) {
+                AttackDTO attackDTO = (AttackDTO) obj;
                 AttackDTOEvent attackDTOEvent = new AttackDTOEvent(webSocket, attackDTO);
                 for (DTOEventListener listener : attackEventList)
                     listener.handle(attackDTOEvent);
