@@ -52,7 +52,7 @@ public class LoginScreen implements Screen {
 
         table.setDebug(true);
         table.setFillParent(true);
-        table.add(CustomLabel.createLabel("LoginDTO form")).colspan(2).center().pad(50);
+        table.add(CustomLabel.createLabel("Login form")).colspan(2).center().pad(50);
         table.row();
 
         final CustomTextField usernameField = CustomTextField.createField();

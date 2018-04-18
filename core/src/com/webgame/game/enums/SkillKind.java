@@ -31,10 +31,6 @@ public enum SkillKind {
         return getSkillClass().equals(SkillClass.AOE);
     }
 
-    public enum SkillClass {
-        AOE, SINGLE, BUFF
-    }
-
     public SkillClass getSkillClass() {
         return skillClass;
     }

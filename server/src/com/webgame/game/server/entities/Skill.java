@@ -51,7 +51,7 @@ public class Skill extends Entity {
         setVelocity(velocity);
         setSkillType(skillType);
         //TODO remove
-        setDamage(1);
+        setDamage(100);
         setArea(new Rectangle(0, 0, 100 / PPM, 100 / PPM));
     }
 

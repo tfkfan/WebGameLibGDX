@@ -5,10 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.entities.player.impl.Mage;
-import com.webgame.game.enums.EntityState;
-import com.webgame.game.enums.MarkState;
-import com.webgame.game.enums.MoveState;
-import com.webgame.game.enums.SkillKind;
+import com.webgame.game.enums.*;
 import com.webgame.game.events.PlayerDamagedEvent;
 import com.webgame.game.server.dto.LoginDTO;
 import com.webgame.game.server.entities.Player;
@@ -64,22 +61,13 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
                                 continue;
 
                             //handling collision
-                            if (skillType.isAoe()) {
+                            if (skillType.getSkillClass().equals(SkillClass.AOE)) {
                                 if (Intersector.overlaps(anotherPlayer.getShape(), currentSkill.getArea())) {
-                                    Integer damage = currentSkill.getDamage();
-                                    if (anotherPlayer.getHealthPoints() > 0)
-                                        anotherPlayer.setHealthPoints(anotherPlayer.getHealthPoints() - damage);
-                                    else
-                                        anotherPlayer.setHealthPoints(0);
-
+                                    getPlayerDamaged(anotherPlayer, currentSkill);
                                 }
-                            } else {
+                            } else if(skillType.getSkillClass().equals(SkillClass.SINGLE)) {
                                 if (Intersector.overlaps(currentSkill.getShape(), anotherPlayer.getShape()) && currentSkill.getMarkState().equals(MarkState.UNMARKED)) {
-                                    Integer damage = currentSkill.getDamage();
-                                    if (anotherPlayer.getHealthPoints() > 0)
-                                        anotherPlayer.setHealthPoints(anotherPlayer.getHealthPoints() - damage);
-                                    else
-                                        anotherPlayer.setHealthPoints(0);
+                                    getPlayerDamaged(anotherPlayer, currentSkill);
 
                                     currentSkill.setMarkState(MarkState.MARKED);
                                     currentSkill.setMoveState(MoveState.STATIC);
@@ -164,6 +152,14 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             playerDTO.setSkills(skills);
             getPlayers().put(plrId, playerDTO);
         });
+    }
+
+    public static void getPlayerDamaged(Player damagedPlayer, Skill skill){
+        Integer damage = skill.getDamage();
+        if (damagedPlayer.getHealthPoints() > 0)
+            damagedPlayer.setHealthPoints(damagedPlayer.getHealthPoints() - damage);
+        else
+            damagedPlayer.setHealthPoints(0);
     }
 
     protected ConcurrentHashMap<String, ServerWebSocket> getSessions() {
