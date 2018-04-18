@@ -1,10 +1,11 @@
-package com.webgame.game.entities.skill;
+package com.webgame.game.entities.skill.impl;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.Configs;
 import com.webgame.game.animation.GameAnimation;
-import com.webgame.game.entities.player.ClientPlayer;
+import com.webgame.game.entities.skill.ClientSkill;
+import com.webgame.game.entities.skill.SkillSprite;
 import com.webgame.game.enums.EntityState;
 import com.webgame.game.enums.SkillAnimationState;
 import com.webgame.game.server.entities.Player;

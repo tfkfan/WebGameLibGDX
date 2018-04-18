@@ -25,9 +25,7 @@ import com.webgame.game.enums.PlayerAttackState;
 import com.webgame.game.enums.PlayerMoveState;
 import com.webgame.game.events.AttackEvent;
 import com.webgame.game.events.MoveEvent;
-import com.webgame.game.events.PlayerDamagedEvent;
 import com.webgame.game.events.listeners.AttackListener;
-import com.webgame.game.events.listeners.PlayerDamagedListener;
 import com.webgame.game.events.listeners.PlayerMoveListener;
 import com.webgame.game.events.listeners.ws.AttackWSListener;
 import com.webgame.game.events.listeners.ws.PlayersWSListener;
@@ -64,7 +62,6 @@ public abstract class AbstractGameController extends AbstractController implemen
 
     protected final List<EventListener> playerMoveListeners = Collections.synchronizedList(new ArrayList<EventListener>());
     protected final List<EventListener> attackListeners = Collections.synchronizedList(new ArrayList<EventListener>());
-    protected final List<EventListener> playerDamagedListeners = Collections.synchronizedList(new ArrayList<EventListener>());
 
 
     public AbstractGameController(OrthographicCamera camera, Viewport viewport) {
@@ -97,9 +94,6 @@ public abstract class AbstractGameController extends AbstractController implemen
         } else if (event instanceof AttackEvent) {
             //cooldown
             for (EventListener listener : attackListeners)
-                listener.handle(event);
-        } else if (event instanceof PlayerDamagedEvent) {
-            for (EventListener listener : playerDamagedListeners)
                 listener.handle(event);
         } else if (event instanceof LoginSuccessEvent) {
             for (EventListener listener : loginWSEventList)
@@ -181,10 +175,6 @@ public abstract class AbstractGameController extends AbstractController implemen
 
     public void addAttackListener(AttackListener listener) {
         attackListeners.add(listener);
-    }
-
-    public void addPlayerDamagedListener(PlayerDamagedListener listener) {
-        playerDamagedListeners.add(listener);
     }
 
     public void addPlayerMoveListener(PlayerMoveListener listener) {

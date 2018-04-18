@@ -8,13 +8,16 @@ public class MainScreen implements Screen {
 	private String title = "WebGame";
 	private GameStage stage;
 
+	public MainScreen(){
+		stage = new GameStage();
+	}
+
 	@Override
 	public void show() {
 		Gdx.app.log(title, "Starting...");
 	}
 
 	public void login(String username, String password){
-		stage = new GameStage();
 		stage.login(username, password);
 	}
 

@@ -8,6 +8,9 @@ import com.webgame.game.Configs;
 import com.webgame.game.animation.impl.*;
 import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.entities.skill.*;
+import com.webgame.game.entities.skill.impl.BuffClientSkill;
+import com.webgame.game.entities.skill.impl.FallingClientSkill;
+import com.webgame.game.entities.skill.impl.SingleClientSkill;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.enums.FrameSizes;
 import com.webgame.game.enums.SkillKind;
@@ -16,7 +19,6 @@ import com.webgame.game.utils.GameUtils;
 import static com.webgame.game.Configs.PPM;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Mage extends ClientPlayer {
