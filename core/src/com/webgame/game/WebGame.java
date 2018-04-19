@@ -9,11 +9,10 @@ import com.webgame.game.screens.LoginScreen;
 import com.webgame.game.screens.MainScreen;
 
 public class WebGame extends Game {
-    private MainScreen mainScreen = new MainScreen();
-    private LoginScreen loginScreen = new LoginScreen();
-
     @Override
     public void create() {
+        MainScreen mainScreen = new MainScreen();
+        LoginScreen loginScreen = new LoginScreen();
         loginScreen.addLoginListener(event -> {
             try {
                 LoginEvent loginEvent = (LoginEvent) event;

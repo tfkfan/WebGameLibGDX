@@ -65,7 +65,7 @@ public abstract class AbstractGameController extends AbstractController implemen
 
 
     public AbstractGameController(OrthographicCamera camera, Viewport viewport) {
-        Gdx.input.setInputProcessor(this);
+
 
         this.camera = camera;
         this.viewport = viewport;
@@ -83,7 +83,7 @@ public abstract class AbstractGameController extends AbstractController implemen
         initSocketService();
 
         addListener(this);
-
+        Gdx.input.setInputProcessor(this);
     }
 
     @Override
