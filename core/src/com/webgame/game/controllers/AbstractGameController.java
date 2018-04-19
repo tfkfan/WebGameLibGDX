@@ -83,7 +83,6 @@ public abstract class AbstractGameController extends AbstractController implemen
         initSocketService();
 
         addListener(this);
-        Gdx.input.setInputProcessor(this);
     }
 
     @Override
@@ -232,6 +231,8 @@ public abstract class AbstractGameController extends AbstractController implemen
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(getClientPlayer() == null)
+            return false;
         if (button == Input.Buttons.LEFT) {
             Vector3 trg = this.getStage().getCamera().unproject(new Vector3(screenX, screenY, 0), getStage().getViewport().getScreenX(), getStage().getViewport().getScreenY(),
                     getStage().getViewport().getScreenWidth(), getStage().getViewport().getScreenHeight());
@@ -251,6 +252,8 @@ public abstract class AbstractGameController extends AbstractController implemen
 
     @Override
     public boolean keyDown(int keycode) {
+        if(getClientPlayer() == null)
+            return false;
         if (keycode >= 8 && keycode <= 16) {
             int skillIndex = keycode - 8;
             clientPlayer.setCurrentSkillIndex(skillIndex);

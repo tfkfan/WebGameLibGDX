@@ -142,6 +142,7 @@ public class GameController extends AbstractGameController {
     }
 
     public void playerLogin(String username, String password) {
+        Gdx.input.setInputProcessor(this);
         getSocketService().connect();
         getSocketService().send(new LoginDTO(username));
     }
