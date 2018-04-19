@@ -106,7 +106,6 @@ public abstract class Player<T extends Skill>  extends AnimatedEntity {
         skill.setArea(area);
         skill.setVelocity(velocity);
         skill.cast(target);
-        skills.put(id, skill);
         return skill;
     }
 

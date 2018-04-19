@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.entities.player.ClientPlayer;
+import com.webgame.game.entities.skill.ClientSkill;
 import com.webgame.game.enums.*;
 import com.webgame.game.server.entities.Entity;
 
@@ -32,21 +33,10 @@ public abstract class Skill extends Entity {
     protected float[] standSizes = {FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH()};
     protected float[] animSizes = {FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH()};
 
+    protected Boolean isCopy = false;
+
     public Skill() {
 
-    }
-
-    public Skill(String id, MoveState moveState, EntityState entityState, SkillKind skillType, Vector2 target, Vector2 position, Vector2 velocity) {
-        setId(id);
-        setMoveState(moveState);
-        setEntityState(entityState);
-        setPosition(position);
-        setTarget(target);
-        setVelocity(velocity);
-        setSkillType(skillType);
-        //TODO remove
-        setDamage(100);
-        setArea(new Rectangle(0, 0, 100 / PPM, 100 / PPM));
     }
 
     public void updateBy(Skill skill) {

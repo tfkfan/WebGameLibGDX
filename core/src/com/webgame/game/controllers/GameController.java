@@ -116,15 +116,15 @@ public class GameController extends AbstractGameController {
                                 if (plrSkills.containsKey(id)) {
                                     ClientSkill clientSkill = (ClientSkill) plrSkills.get(id);
                                     clientSkill.updateBy(skillDTO);
-                                    clientSkill.init(plr);
-                                    synchronized (skillInitiator){
-                                        skillInitiator.initSkill(clientSkill, clientSkill.getSkillType());
-                                    }
                                 } else {
                                     plr.clearTimers();
                                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
-                                    Skill clientSkill = plr.castSkill(skillDTO.getTarget(), skillDTO.getId(), skillDTO.getArea());
+                                    ClientSkill clientSkill = (ClientSkill) skillDTO;
+                                    clientSkill.init(plr);
+                                    synchronized (skillInitiator){
+                                        skillInitiator.initSkill(clientSkill, clientSkill.getSkillType());
+                                    }
                                     if (clientSkill != null) {
                                        clientSkill.updateBy(skillDTO);
                                     }

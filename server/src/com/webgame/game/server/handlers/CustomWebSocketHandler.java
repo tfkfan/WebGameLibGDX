@@ -1,6 +1,7 @@
 package com.webgame.game.server.handlers;
 
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.player.ClientPlayer;
@@ -19,6 +20,7 @@ import io.vertx.core.http.ServerWebSocket;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.webgame.game.Configs.PPM;
 import static com.webgame.game.server.utils.ServerUtils.*;
 
 public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
@@ -62,7 +64,7 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
                                 if (Intersector.overlaps(anotherPlayer.getShape(), currentSkill.getArea())) {
                                     getPlayerDamaged(anotherPlayer, currentSkill);
                                 }
-                            } else if(skillType.getSkillClass().equals(SkillClass.SINGLE)) {
+                            } else if (skillType.getSkillClass().equals(SkillClass.SINGLE)) {
                                 if (Intersector.overlaps(currentSkill.getShape(), anotherPlayer.getShape()) && currentSkill.getMarkState().equals(MarkState.UNMARKED)) {
                                     getPlayerDamaged(anotherPlayer, currentSkill);
 
@@ -112,7 +114,7 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             clientSkill1.setSkillType(SkillKind.FIRE_BALL);
             clientSkill1.setSpritePath(Configs.SKILLSHEETS_FOLDER + "/fire_002.png");
             clientSkill1.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/s001.png");
-            clientSkill1.setCooldown(calcTime(3,0));
+            clientSkill1.setCooldown(calcTime(3, 0));
             clientSkill1.setSizes(animSizes1, standSizes1);
 
             allClientSkills.add(clientSkill1);
@@ -171,14 +173,17 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             vel.scl(absVel / Configs.PPM);
 
             String skillId = newUUID();
-            Skill skillDTO = playerDTO.castSkill(target, vel, skillId, new )
+            Skill skillDTO = playerDTO.castSkill(target, vel, skillId,
+                    new Rectangle(0, 0, 100 / PPM, 100 / PPM));
+
+            skillDTO.setDamage(100);
             skills.put(skillDTO.getId(), skillDTO);
             playerDTO.setSkills(skills);
             getPlayers().put(plrId, playerDTO);
         });
     }
 
-    public static void getPlayerDamaged(Player damagedPlayer, Skill skill){
+    public static void getPlayerDamaged(Player damagedPlayer, Skill skill) {
         Integer damage = skill.getDamage();
         if (damagedPlayer.getHealthPoints() > 0)
             damagedPlayer.setHealthPoints(damagedPlayer.getHealthPoints() - damage);

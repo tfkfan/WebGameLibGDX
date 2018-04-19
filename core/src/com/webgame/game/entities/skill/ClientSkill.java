@@ -26,9 +26,7 @@ public abstract class ClientSkill extends Skill implements IUpdatable {
 
     public ClientSkill(ClientSkill clientSkill) {
         super();
-        init(clientSkill.getPlayer());
         copy(clientSkill);
-        copyAnimations(clientSkill.getAnimations());
     }
 
     public void init(Player clientPlayer) {
