@@ -19,30 +19,6 @@ public class SingleClientSkill extends ClientSkill {
         super(clientSkill);
     }
 
-    public SingleClientSkill(Player clientPlayer) {
-        super(clientPlayer);
-    }
-
-    public SingleClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation) {
-        super(clientPlayer, standTexture, gameAnimation);
-    }
-
-    public SingleClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, Boolean looping) {
-        super(clientPlayer, standTexture, gameAnimation, looping);
-    }
-
-    public SingleClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState) {
-        super(clientPlayer, standTexture, gameAnimation, animationState);
-    }
-
-    public SingleClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState, Boolean looping) {
-        super(clientPlayer, standTexture, gameAnimation, animationState, looping);
-    }
-
-    public SingleClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, Integer numFrames, SkillAnimationState animationState, Boolean looping) {
-        super(clientPlayer, standTexture, gameAnimation, numFrames, animationState, looping, null, null);
-    }
-
     @Override
     public void cast(Vector2 target) {
         super.cast(target);
@@ -54,7 +30,7 @@ public class SingleClientSkill extends ClientSkill {
     }
 
     @Override
-    public ClientSkill createCopy() {
+    public SingleClientSkill createCopy() {
         return new SingleClientSkill(this);
     }
 

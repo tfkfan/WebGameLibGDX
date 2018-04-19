@@ -33,26 +33,6 @@ public abstract class ClientPlayer extends Player implements IUpdatable {
 
     public abstract void initPlayer();
 
-    public Skill castSkill(Vector2 target, String id, Rectangle area) {
-        ClientSkill currSkill = (ClientSkill) getCurrentSkill();
-        if (currSkill == null)
-            return null;
-
-        // Long end = getCurrentSkill().getStart() + getCurrentSkill().getCooldown();
-        //Long currentTime = System.currentTimeMillis();
-
-        //if (currentTime < end)
-        //   return null;
-
-        //  currSkill.setStart(System.currentTimeMillis());
-
-        final ClientSkill skill = currSkill.createCopy();
-        skill.setArea(area);
-        skill.cast(target);
-        skills.put(id, skill);
-        return skill;
-    }
-
     public Body getB2body() {
         return b2body;
     }

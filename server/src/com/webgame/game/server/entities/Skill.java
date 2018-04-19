@@ -5,15 +5,12 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.entities.player.ClientPlayer;
-import com.webgame.game.enums.EntityState;
-import com.webgame.game.enums.MarkState;
-import com.webgame.game.enums.MoveState;
-import com.webgame.game.enums.SkillKind;
+import com.webgame.game.enums.*;
 import com.webgame.game.server.entities.Entity;
 
 import static com.webgame.game.Configs.PPM;
 
-public class Skill extends Entity {
+public abstract class Skill extends Entity {
     protected Vector2 target;
 
     protected Rectangle area;
@@ -29,17 +26,14 @@ public class Skill extends Entity {
     protected Long duration;
     protected Long start;
 
+    protected String spritePath;
+    protected String animSpritePath;
+
+    protected float[] standSizes = {FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH()};
+    protected float[] animSizes = {FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH()};
+
     public Skill() {
 
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-
-    }
-
-    public static Skill createSkill(String id, MoveState moveState, EntityState entityState, SkillKind skillType, Vector2 target, Vector2 position, Vector2 velocity) {
-        return new Skill(id, moveState, entityState, skillType, target, position, velocity);
     }
 
     public Skill(String id, MoveState moveState, EntityState entityState, SkillKind skillType, Vector2 target, Vector2 position, Vector2 velocity) {
@@ -55,19 +49,21 @@ public class Skill extends Entity {
         setArea(new Rectangle(0, 0, 100 / PPM, 100 / PPM));
     }
 
-    public void updateBy(Skill skill){
+    public void updateBy(Skill skill) {
         setPosition(skill.getPosition());
         setEntityState(skill.getEntityState());
         setMoveState(skill.getMoveState());
         setMarkState(skill.getMarkState());
     }
 
-    public void cast(Vector2 targetPosition){
+    public abstract <T extends Skill> T createCopy();
+
+    public void cast(Vector2 targetPosition) {
         setTarget(targetPosition);
         setEntityState(EntityState.ACTIVE);
         setMarkState(MarkState.UNMARKED);
 
-        if(getArea() == null)
+        if (getArea() == null)
             return;
 
         Vector2 newPos = new Vector2();
@@ -76,8 +72,41 @@ public class Skill extends Entity {
         getArea().setPosition(newPos);
     }
 
-    public Circle getShape(){
-        return new Circle(getPosition(), getWidth()> getHeight() ? getWidth()/2 : getHeight()/2);
+    public Circle getShape() {
+        return new Circle(getPosition(), getWidth() > getHeight() ? getWidth() / 2 : getHeight() / 2);
+    }
+
+    public void setSizes(float[] animSizes, float[] standSizes) {
+        setStandSizes(standSizes[0], standSizes[1]);
+        setAnimSizes(animSizes[0], animSizes[1]);
+    }
+
+    public void setStandSizes(float w, float h) {
+        this.setSize(w, h);
+        standSizes[0] = w;
+        standSizes[1] = h;
+    }
+
+    public void setAnimSizes(float w, float h) {
+        animSizes[0] = w;
+        animSizes[1] = h;
+    }
+
+    public String getAnimSpritePath() {
+        return animSpritePath;
+    }
+
+    public void setAnimSpritePath(String animSpritePath) {
+        this.animSpritePath = animSpritePath;
+    }
+
+
+    public String getSpritePath() {
+        return spritePath;
+    }
+
+    public void setSpritePath(String spritePath) {
+        this.spritePath = spritePath;
     }
 
     public Rectangle getArea() {

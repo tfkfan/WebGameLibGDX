@@ -1,13 +1,16 @@
 package com.webgame.game.server.entities;
 
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.entities.player.ClientPlayer;
+import com.webgame.game.entities.skill.ClientSkill;
 import com.webgame.game.enums.DirectionState;
 import com.webgame.game.enums.PlayerAttackState;
 import com.webgame.game.enums.PlayerMoveState;
 import com.webgame.game.enums.PlayerState;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -73,6 +76,8 @@ public abstract class Player<T extends Skill>  extends AnimatedEntity {
     }
 
     public void updateBy(Player playerDTO) {
+        setAllSkills(new ArrayList<>(playerDTO.getAllSkills()));
+
         setHealthPoints(playerDTO.getHealthPoints());
         setMaxHealthPoints(playerDTO.getMaxHealthPoints());
 
@@ -82,6 +87,27 @@ public abstract class Player<T extends Skill>  extends AnimatedEntity {
         setPlayerMoveState(playerDTO.getPlayerMoveState());
         setDirectionState(playerDTO.getDirectionState());
         setCurrentSkillIndex(playerDTO.getCurrentSkillIndex());
+    }
+
+    public Skill castSkill(Vector2 target, Vector2 velocity, String id, Rectangle area) {
+        ClientSkill currSkill = (ClientSkill) getCurrentSkill();
+        if (currSkill == null)
+            return null;
+
+       /* Long end = getCurrentSkill().getStart() + getCurrentSkill().getCooldown();
+        Long currentTime = System.currentTimeMillis();
+
+        if (currentTime < end)
+           return null;
+
+        currSkill.setStart(System.currentTimeMillis());*/
+
+        final T skill = currSkill.createCopy();
+        skill.setArea(area);
+        skill.setVelocity(velocity);
+        skill.cast(target);
+        skills.put(id, skill);
+        return skill;
     }
 
     public T getCurrentSkill() {

@@ -9,6 +9,9 @@ import java.util.Collection;
 import java.util.UUID;
 
 public class ServerUtils {
+    private static int second = 1000;
+    private static int minute = second*60;
+
     public static final Vertx vertx = Vertx.vertx();
 
     private ServerUtils() {
@@ -37,5 +40,9 @@ public class ServerUtils {
 
     public static String newUUID(){
         return UUID.randomUUID().toString();
+    }
+
+    public static long calcTime(int seconds, int minutes){
+        return (long)(seconds*second + minutes*minute);
     }
 }

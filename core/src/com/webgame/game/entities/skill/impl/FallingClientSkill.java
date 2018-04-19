@@ -3,7 +3,6 @@ package com.webgame.game.entities.skill.impl;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.animation.GameAnimation;
-import com.webgame.game.entities.skill.AOEClientSkill;
 import com.webgame.game.entities.skill.ClientSkill;
 import com.webgame.game.entities.skill.SkillSprite;
 import com.webgame.game.enums.EntityState;
@@ -13,7 +12,7 @@ import com.webgame.game.server.entities.Player;
 
 import static com.webgame.game.Configs.PPM;
 
-public class FallingClientSkill extends AOEClientSkill {
+public class FallingClientSkill extends ClientSkill {
     protected final static int numFrames = 50;
 
     protected float fallTimer;
@@ -24,23 +23,11 @@ public class FallingClientSkill extends AOEClientSkill {
     protected final float tmp = 0.1f;
 
     public FallingClientSkill(){
-
+        super();
     }
 
     public FallingClientSkill(ClientSkill clientSkill) {
         super(clientSkill);
-    }
-
-    public FallingClientSkill(Player clientPlayer) {
-        super(clientPlayer);
-    }
-
-    public FallingClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation) {
-        super(clientPlayer, standTexture, gameAnimation, numFrames, SkillAnimationState.FULL_ANIMATION, false,null, null);
-    }
-
-    public FallingClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, float[] standSizes, float[] animSizes) {
-        super(clientPlayer, standTexture, gameAnimation, numFrames, SkillAnimationState.FULL_ANIMATION, false, standSizes, animSizes);
     }
 
     @Override
@@ -51,7 +38,7 @@ public class FallingClientSkill extends AOEClientSkill {
     }
 
     @Override
-    public ClientSkill createCopy() {
+    public FallingClientSkill createCopy() {
         return new FallingClientSkill(this);
     }
 

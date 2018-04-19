@@ -20,10 +20,10 @@ public class SkillSprite extends AnimatedEntity {
     protected transient MoveState moveState;
     protected transient boolean looping;
 
-    private transient  Vector2 distance;
+    protected transient Vector2 distance;
 
-    private transient float[] standSizes = {FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH()};
-    private transient float[] animSizes = {FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH()};
+    protected transient float[] standSizes = {FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH()};
+    protected transient float[] animSizes = {FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH()};
 
     public SkillSprite(SkillSprite animation) {
         init();
@@ -67,10 +67,10 @@ public class SkillSprite extends AnimatedEntity {
         setLooping(false);
         stateTimer = 0;
         distance = new Vector2(0, 0);
-        //setSize(FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH());
     }
 
     @Override
+    //TODO add sizes logic to Skill, needs to save skill's sizes
     public TextureRegion getFrame() {
         TextureRegion region = null;
         if ((SkillAnimationState.ANIMATION_ONLY.equals(getAnimationState()) ||

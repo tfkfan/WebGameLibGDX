@@ -30,6 +30,7 @@ public class Mage extends ClientPlayer {
     public void initPlayer() {
         int dirs = DirectionState.values().length;
         try {
+          /*
             float[] animSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
             float[] standSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
 
@@ -58,7 +59,7 @@ public class Mage extends ClientPlayer {
             clientSkill3.setSkillType(SkillKind.MAGIC_DEFENCE);
             allClientSkills.add(clientSkill3);
 
-            setAllSkills(allClientSkills);
+            setAllSkills(allClientSkills);*/
 
             /*
             Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/activeSkills.png");
@@ -73,7 +74,7 @@ public class Mage extends ClientPlayer {
 
             ArrayList<SkillOrig<?>> skillOrigs = new ArrayList<SkillOrig<?>>();
 
-            ISkillFactory skillFactory = new SkillFactory();
+            ISkillInitiator skillFactory = new SkillInitiator();
 
             SkillOrig s1 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_005.png"));

@@ -12,8 +12,6 @@ import static com.webgame.game.Configs.VIEW_HEIGHT;
 import static com.webgame.game.Configs.PPM;
 
 public class GameStage extends Stage {
-
-
     public GameController gc;
     public OrthographicCamera camera;
     public Viewport viewport;

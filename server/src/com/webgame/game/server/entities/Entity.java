@@ -28,6 +28,14 @@ public abstract class Entity implements Serializable {
         xOffset = yOffset = 0;
     }
 
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
     public String getId() {
         return id;
     }

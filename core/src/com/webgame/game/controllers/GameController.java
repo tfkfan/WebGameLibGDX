@@ -18,6 +18,8 @@ import com.webgame.game.events.MoveEvent;
 import com.webgame.game.events.PlayerDamagedEvent;
 import com.webgame.game.events.ws.LoginSuccessEvent;
 import com.webgame.game.events.ws.PlayersWSEvent;
+import com.webgame.game.factory.ISkillInitiator;
+import com.webgame.game.factory.impl.SkillInitiator;
 import com.webgame.game.server.dto.AttackDTO;
 import com.webgame.game.server.dto.LoginDTO;
 import com.webgame.game.server.entities.Player;
@@ -26,6 +28,7 @@ import com.webgame.game.server.entities.Skill;
 import java.util.*;
 
 public class GameController extends AbstractGameController {
+    private final ISkillInitiator skillInitiator = new SkillInitiator();
     public GameController(OrthographicCamera camera, Viewport viewport) {
         super(camera, viewport);
 
@@ -113,6 +116,10 @@ public class GameController extends AbstractGameController {
                                 if (plrSkills.containsKey(id)) {
                                     ClientSkill clientSkill = (ClientSkill) plrSkills.get(id);
                                     clientSkill.updateBy(skillDTO);
+                                    clientSkill.init(plr);
+                                    synchronized (skillInitiator){
+                                        skillInitiator.initSkill(clientSkill, clientSkill.getSkillType());
+                                    }
                                 } else {
                                     plr.clearTimers();
                                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);

@@ -21,60 +21,7 @@ public abstract class ClientSkill extends Skill implements IUpdatable {
     protected transient List<SkillSprite> animations;
 
     public ClientSkill() {
-
-    }
-
-    public ClientSkill(Player clientPlayer) {
         super();
-        init(clientPlayer);
-    }
-
-    public ClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation) {
-        super();
-        init(clientPlayer);
-        initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, false, null, null);
-    }
-
-    public ClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, float standSizeX, float standSizeY, float animSizeX, float animSizeY) {
-        super();
-        init(clientPlayer);
-
-        float[] standSizes = {standSizeX, standSizeY};
-        float[] animSizes = {animSizeX, animSizeY};
-
-        initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, false, standSizes, animSizes);
-    }
-
-    public ClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, float[] standSizes, float[] animSizes) {
-        super();
-        init(clientPlayer);
-
-        initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, false, standSizes, animSizes);
-    }
-
-    public ClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, Boolean looping) {
-        super();
-        init(clientPlayer);
-        initAnimations(standTexture, gameAnimation, 1, SkillAnimationState.FULL_ANIMATION, looping, null, null);
-    }
-
-    public ClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState) {
-        super();
-        init(clientPlayer);
-        initAnimations(standTexture, gameAnimation, 1, animationState, false, null, null);
-    }
-
-    public ClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState, Boolean looping) {
-        super();
-        init(clientPlayer);
-        initAnimations(standTexture, gameAnimation, 1, animationState, looping, null, null);
-    }
-
-    public ClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation,
-                       Integer numFrames, SkillAnimationState animationState, Boolean looping, float[] standSizes, float[] animSizes) {
-        super();
-        init(clientPlayer);
-        initAnimations(standTexture, gameAnimation, numFrames, animationState, looping, standSizes, animSizes);
     }
 
     public ClientSkill(ClientSkill clientSkill) {
@@ -99,12 +46,10 @@ public abstract class ClientSkill extends Skill implements IUpdatable {
         setPosition(new Vector2(player.getPosition()));
     }
 
-    public abstract ClientSkill createCopy();
-
     public abstract void updateAnimations(float dt);
 
-    protected void initAnimations(TextureRegion standTexture, GameAnimation gameAnimation, Integer numFrames,
-                                  SkillAnimationState animationState, Boolean looping, float[] standSizes, float[] animSizes) {
+    public void initAnimations(TextureRegion standTexture, GameAnimation gameAnimation, Integer numFrames,
+                                  SkillAnimationState animationState, Boolean looping) {
         List<SkillSprite> animations = new ArrayList<SkillSprite>();
         this.animationsNum = numFrames;
         for (int i = 0; i < numFrames; i++) {

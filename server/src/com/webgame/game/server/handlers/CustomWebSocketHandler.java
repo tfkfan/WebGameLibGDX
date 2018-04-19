@@ -5,11 +5,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.entities.player.impl.Mage;
+import com.webgame.game.entities.skill.impl.FallingClientSkill;
+import com.webgame.game.entities.skill.impl.SingleClientSkill;
 import com.webgame.game.enums.*;
 import com.webgame.game.events.PlayerDamagedEvent;
 import com.webgame.game.server.dto.LoginDTO;
 import com.webgame.game.server.entities.Player;
 import com.webgame.game.server.entities.Skill;
+import com.webgame.game.utils.GameUtils;
 import io.vertx.core.TimeoutStream;
 import io.vertx.core.http.ServerWebSocket;
 
@@ -50,12 +53,6 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
                         if (currentSkill.getMoveState().equals(MoveState.MOVING))
                             currentSkill.getPosition().add(currentSkill.getVelocity());
 
-                        //boolean finalAction = !(skillType.equals(SkillKind.FALLING_AOE) ||
-                        //skillType.equals(SkillKind.TIMED_AOE) || skillType.equals(SkillKind.TIMED_BUFF)
-                        //|| skillType.equals(SkillKind.TIMED_SINGLE));
-                        //if (!(clientSkill instanceof AOEClientSkill) && clientSkill.isMarked())
-                        //    continue;
-
                         for (Player anotherPlayer : getPlayers().values()) {
                             if (anotherPlayer == currentPlayer)
                                 continue;
@@ -76,7 +73,7 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
                             }
                         }
 
-                        if (!skillType.isAoe() && currentSkill.getEntityState().equals(EntityState.ACTIVE) && isCollided(currentSkill.getPosition(), currentSkill.getTarget())) {
+                        if (!skillType.getSkillClass().equals(SkillClass.AOE) && currentSkill.getEntityState().equals(EntityState.ACTIVE) && isCollided(currentSkill.getPosition(), currentSkill.getTarget())) {
                             currentSkill.setMoveState(MoveState.STATIC);
                             skillIdsToRemove.add(currentSkill.getId());
                         }
@@ -104,6 +101,36 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             player.setName(loginDTO.getName());
             player.setSpritePath(Configs.PLAYERSHEETS_FOLDER + "/mage.png");
             player.setPosition(new Vector2(2, 2));
+
+            float[] animSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
+            float[] standSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
+
+            List<Skill> allClientSkills = new ArrayList<Skill>();
+
+            Skill clientSkill1 = new SingleClientSkill();
+            clientSkill1.setDamage(150);
+            clientSkill1.setSkillType(SkillKind.FIRE_BALL);
+            clientSkill1.setSpritePath(Configs.SKILLSHEETS_FOLDER + "/fire_002.png");
+            clientSkill1.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/s001.png");
+            clientSkill1.setCooldown(calcTime(3,0));
+            clientSkill1.setSizes(animSizes1, standSizes1);
+
+            allClientSkills.add(clientSkill1);
+
+
+           /* Skill clientSkill2 = new FallingClientSkill();
+            clientSkill2.setCooldown(GameUtils.calcTime(10,0));
+            clientSkill2.setDamage(1);
+            clientSkill2.setSkillType(SkillKind.BLIZZARD);
+            allClientSkills.add(clientSkill2);
+
+            Texture skill3Texture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");
+            ClientSkill clientSkill3 = new BuffClientSkill(this, null, new BuffAnimation(skill3Texture));
+            clientSkill3.setSkillType(SkillKind.MAGIC_DEFENCE);
+            allClientSkills.add(clientSkill3);*/
+
+            player.setAllSkills(allClientSkills);
+
 
             loginDTO.setPlayer(player);
 
@@ -143,11 +170,8 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             vel.nor();
             vel.scl(absVel / Configs.PPM);
 
-            Skill skillDTO = Skill.createSkill(newUUID(),
-                    MoveState.MOVING, EntityState.ACTIVE, event.getDto().getSkillType(), target, playerPos, vel);
-
-            skillDTO.cast(event.getDto().getTarget());
-
+            String skillId = newUUID();
+            Skill skillDTO = playerDTO.castSkill(target, vel, skillId, new )
             skills.put(skillDTO.getId(), skillDTO);
             playerDTO.setSkills(skills);
             getPlayers().put(plrId, playerDTO);

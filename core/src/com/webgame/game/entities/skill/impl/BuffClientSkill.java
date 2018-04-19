@@ -12,39 +12,16 @@ import com.webgame.game.server.entities.Player;
 public class BuffClientSkill extends StaticClientSkill {
 
     public BuffClientSkill(){
-
+        super();
     }
 
     public BuffClientSkill(ClientSkill clientSkill){
         super(clientSkill);
     }
 
-    public BuffClientSkill(Player clientPlayer) {
-        super(clientPlayer);
-    }
-
-    public BuffClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation) {
-        super(clientPlayer, standTexture, gameAnimation);
-    }
-
-    public BuffClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, Boolean looping) {
-        super(clientPlayer, standTexture, gameAnimation, looping);
-    }
-
-    public BuffClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState) {
-        super(clientPlayer, standTexture, gameAnimation, animationState);
-    }
-
-    public BuffClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, SkillAnimationState animationState, Boolean looping) {
-        super(clientPlayer, standTexture, gameAnimation, animationState, looping);
-    }
-
-    public BuffClientSkill(Player clientPlayer, TextureRegion standTexture, GameAnimation gameAnimation, Integer numFrames, SkillAnimationState animationState, Boolean looping) {
-        super(clientPlayer, standTexture, gameAnimation, numFrames, animationState, looping);
-    }
 
     @Override
-    public ClientSkill createCopy() {
+    public BuffClientSkill createCopy() {
         return new BuffClientSkill(this);
     }
 
