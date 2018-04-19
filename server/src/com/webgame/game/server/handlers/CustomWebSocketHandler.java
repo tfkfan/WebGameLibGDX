@@ -14,6 +14,7 @@ import com.webgame.game.server.dto.LoginDTO;
 import com.webgame.game.server.entities.Player;
 import com.webgame.game.server.entities.Skill;
 import com.webgame.game.utils.GameUtils;
+import io.vertx.core.Handler;
 import io.vertx.core.TimeoutStream;
 import io.vertx.core.http.ServerWebSocket;
 
@@ -24,8 +25,8 @@ import static com.webgame.game.Configs.PPM;
 import static com.webgame.game.server.utils.ServerUtils.*;
 
 public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
-    protected static final int delay = 30;
-    protected static final float absVel = 15;
+    protected static final int delay = 50;
+    protected static final float absVel = 10;
     protected static final float dl = 0.15f;
 
     private TimeoutStream timeoutStream;
@@ -88,9 +89,11 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             writeResponseToAll(getSessions().values(), new ArrayList<>(plrs), getJsonSerializer());
 
             skillsToRemove.entrySet().stream().forEach(entry -> {
+
                 entry.getValue().stream().forEach(skillId -> {
                     getPlayers().get(entry.getKey()).getSkills().remove(skillId);
                 });
+
             });
         });
 
@@ -104,8 +107,8 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             player.setSpritePath(Configs.PLAYERSHEETS_FOLDER + "/mage.png");
             player.setPosition(new Vector2(2, 2));
 
-            float[] animSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
-            float[] standSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
+            float[] animSizes1 = {FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH()};
+            float[] standSizes1 = {FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH()};
 
             List<Skill> allClientSkills = new ArrayList<Skill>();
 
@@ -166,8 +169,6 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             final Vector2 target = event.getDto().getTarget();
             final Vector2 playerPos = playerDTO.getPosition();
 
-            Map<String, Skill> skills = playerDTO.getSkills();
-
             Vector2 vel = new Vector2(target.x - playerPos.x, target.y - playerPos.y);
             vel.nor();
             vel.scl(absVel / Configs.PPM);
@@ -177,8 +178,6 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
                     new Rectangle(0, 0, 100 / PPM, 100 / PPM));
 
             skillDTO.setDamage(100);
-            skills.put(skillDTO.getId(), skillDTO);
-            playerDTO.setSkills(skills);
             getPlayers().put(plrId, playerDTO);
         });
     }

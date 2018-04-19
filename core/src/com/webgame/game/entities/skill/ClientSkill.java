@@ -26,7 +26,7 @@ public abstract class ClientSkill extends Skill implements IUpdatable {
 
     public ClientSkill(ClientSkill clientSkill) {
         super();
-        copy(clientSkill);
+        updateBy(clientSkill);
     }
 
     public void init(Player clientPlayer) {
@@ -39,9 +39,8 @@ public abstract class ClientSkill extends Skill implements IUpdatable {
 
     @Override
     public void cast(Vector2 targetPosition) {
-        super.cast(targetPosition);
         resetSkill();
-        setPosition(new Vector2(player.getPosition()));
+        super.cast(targetPosition);
     }
 
     public abstract void updateAnimations(float dt);
@@ -60,12 +59,6 @@ public abstract class ClientSkill extends Skill implements IUpdatable {
             animations.add(animation);
         }
         setAnimations(animations);
-    }
-
-    protected void copy(ClientSkill clientSkill) {
-        this.setDamage(clientSkill.getDamage());
-        this.setHeal(clientSkill.getHeal());
-        this.setSkillType(clientSkill.getSkillType());
     }
 
     protected void copyAnimations(List<SkillSprite> animations) {

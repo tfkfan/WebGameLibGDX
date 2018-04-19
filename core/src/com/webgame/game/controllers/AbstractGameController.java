@@ -189,7 +189,7 @@ public abstract class AbstractGameController extends AbstractController implemen
     }
 
     protected void handleInput() {
-        float d = 5f;
+        float d = 2f;
         DirectionState directionState = clientPlayer.getOldDirectionState();
 
         if (Gdx.input.isKeyPressed(Input.Keys.Z))

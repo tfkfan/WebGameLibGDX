@@ -2,6 +2,7 @@ package com.webgame.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.webgame.game.controllers.GameController;
 import com.webgame.game.stages.GameStage;
 
 public class MainScreen implements Screen {
@@ -27,6 +28,9 @@ public class MainScreen implements Screen {
 		stage.draw();
 	}
 
+	public GameController getGameController(){
+		return stage.getGc();
+	}
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height);

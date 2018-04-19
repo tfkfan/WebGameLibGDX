@@ -5,10 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.entities.skill.ClientSkill;
-import com.webgame.game.enums.DirectionState;
-import com.webgame.game.enums.PlayerAttackState;
-import com.webgame.game.enums.PlayerMoveState;
-import com.webgame.game.enums.PlayerState;
+import com.webgame.game.enums.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +74,6 @@ public abstract class Player<T extends Skill>  extends AnimatedEntity {
 
     public void updateBy(Player playerDTO) {
         setAllSkills(new ArrayList<>(playerDTO.getAllSkills()));
-
         setHealthPoints(playerDTO.getHealthPoints());
         setMaxHealthPoints(playerDTO.getMaxHealthPoints());
 
@@ -105,7 +101,19 @@ public abstract class Player<T extends Skill>  extends AnimatedEntity {
         final T skill = currSkill.createCopy();
         skill.setArea(area);
         skill.setVelocity(velocity);
-        skill.cast(target);
+        skill. setTarget(target);
+        skill.setMoveState(MoveState.MOVING);
+        skill.setEntityState(EntityState.ACTIVE);
+        skill.setMarkState(MarkState.UNMARKED);
+        skill.setId(id);
+        skill.setPosition(getPosition());
+
+        Vector2 newPos = new Vector2();
+        newPos.x = target.x - skill.getArea().getWidth() / 2;
+        newPos.y = target.y - skill.getArea().getHeight() / 2;
+        skill.getArea().setPosition(newPos);
+
+        skills.put(id, skill);
         return skill;
     }
 

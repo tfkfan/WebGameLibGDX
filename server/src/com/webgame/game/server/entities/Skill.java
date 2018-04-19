@@ -33,8 +33,6 @@ public abstract class Skill extends Entity {
     protected float[] standSizes = {FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH()};
     protected float[] animSizes = {FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH()};
 
-    protected Boolean isCopy = false;
-
     public Skill() {
 
     }
@@ -44,6 +42,15 @@ public abstract class Skill extends Entity {
         setEntityState(skill.getEntityState());
         setMoveState(skill.getMoveState());
         setMarkState(skill.getMarkState());
+        setSpritePath(skill.getSpritePath());
+        setAnimSpritePath(skill.getAnimSpritePath());
+        setSizes(skill.getAnimSizes(),skill.getStandSizes());
+        setArea(skill.getArea());
+        setMarkState(skill.getMarkState());
+        setSkillType(skill.getSkillType());
+        setDamage(skill.getDamage());
+        setHeal(skill.getHeal());
+        setSkillType(skill.getSkillType());
     }
 
     public abstract <T extends Skill> T createCopy();
@@ -52,14 +59,6 @@ public abstract class Skill extends Entity {
         setTarget(targetPosition);
         setEntityState(EntityState.ACTIVE);
         setMarkState(MarkState.UNMARKED);
-
-        if (getArea() == null)
-            return;
-
-        Vector2 newPos = new Vector2();
-        newPos.x = targetPosition.x - getArea().getWidth() / 2;
-        newPos.y = targetPosition.y - getArea().getHeight() / 2;
-        getArea().setPosition(newPos);
     }
 
     public Circle getShape() {
@@ -80,6 +79,22 @@ public abstract class Skill extends Entity {
     public void setAnimSizes(float w, float h) {
         animSizes[0] = w;
         animSizes[1] = h;
+    }
+
+    public float[] getStandSizes() {
+        return standSizes;
+    }
+
+    public void setStandSizes(float[] standSizes) {
+        this.standSizes = standSizes;
+    }
+
+    public float[] getAnimSizes() {
+        return animSizes;
+    }
+
+    public void setAnimSizes(float[] animSizes) {
+        this.animSizes = animSizes;
     }
 
     public String getAnimSpritePath() {

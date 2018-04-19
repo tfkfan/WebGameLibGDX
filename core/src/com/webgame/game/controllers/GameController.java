@@ -29,6 +29,7 @@ import java.util.*;
 
 public class GameController extends AbstractGameController {
     private final ISkillInitiator skillInitiator = new SkillInitiator();
+
     public GameController(OrthographicCamera camera, Viewport viewport) {
         super(camera, viewport);
 
@@ -121,12 +122,14 @@ public class GameController extends AbstractGameController {
                                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
                                     ClientSkill clientSkill = (ClientSkill) skillDTO;
-                                    clientSkill.init(plr);
-                                    synchronized (skillInitiator){
-                                        skillInitiator.initSkill(clientSkill, clientSkill.getSkillType());
-                                    }
-                                    if (clientSkill != null) {
-                                       clientSkill.updateBy(skillDTO);
+                                    synchronized (skillInitiator) {
+                                        Gdx.app.postRunnable(() -> {
+                                            clientSkill.init(plr);
+                                            clientSkill.updateBy(skillDTO);
+                                            skillInitiator.initSkill(clientSkill, clientSkill.getSkillType());
+                                            clientSkill.cast(clientSkill.getTarget());
+                                            plrSkills.put(clientSkill.getId(), clientSkill);
+                                        });
                                     }
                                     Gdx.app.log("WS", "ClientSkill is initialized");
                                 }
@@ -142,7 +145,6 @@ public class GameController extends AbstractGameController {
     }
 
     public void playerLogin(String username, String password) {
-        Gdx.input.setInputProcessor(this);
         getSocketService().connect();
         getSocketService().send(new LoginDTO(username));
     }
@@ -165,7 +167,7 @@ public class GameController extends AbstractGameController {
             final Collection<ClientSkill> clientSkills = currentClientPlayer.getSkills().values();
             for (Iterator<ClientSkill> it1 = clientSkills.iterator(); it1.hasNext(); ) {
                 final ClientSkill clientSkill = it1.next();
-                  clientSkill.update(dt);
+                clientSkill.update(dt);
             }
         }
 

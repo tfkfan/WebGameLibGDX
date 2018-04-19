@@ -29,6 +29,10 @@ public class GameStage extends Stage {
 
     }
 
+    public GameController getGc() {
+        return gc;
+    }
+
     public void login(String username, String password) {
         try {
             gc.playerLogin(username, password);

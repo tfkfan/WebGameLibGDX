@@ -1,6 +1,7 @@
 package com.webgame.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.webgame.game.events.LoginEvent;
@@ -17,6 +18,7 @@ public class WebGame extends Game {
             try {
                 LoginEvent loginEvent = (LoginEvent) event;
                 mainScreen.login(loginEvent.getUsername(), loginEvent.getPassword());
+                Gdx.input.setInputProcessor(mainScreen.getGameController());
                 WebGame.this.setScreen(mainScreen);
             } catch (Exception e) {
                 //loginScreen.setMessage(e.getMessage());

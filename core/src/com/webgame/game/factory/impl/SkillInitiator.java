@@ -1,5 +1,6 @@
 package com.webgame.game.factory.impl;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.Configs;
