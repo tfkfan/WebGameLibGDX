@@ -30,52 +30,8 @@ public class Mage extends ClientPlayer {
     public void initPlayer() {
         int dirs = DirectionState.values().length;
         try {
-          /*
-            float[] animSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
-            float[] standSizes1 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
-
-            List<ClientSkill> allClientSkills = new ArrayList<ClientSkill>();
-
-            Texture standSkillTexture = GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/fire_002.png");
-            Texture animSkillTexture = GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/s001.png");
-            TextureRegion standTexture = new TextureRegion(standSkillTexture, 0, 0, standSkillTexture.getWidth(), standSkillTexture.getHeight());
-            ClientSkill clientSkill1 = new SingleClientSkill(this, standTexture, new FlameAnimation(animSkillTexture));
-            clientSkill1.setDamage(150);
-            clientSkill1.setSkillType(SkillKind.FIRE_BALL);
-            clientSkill1.setCooldown(GameUtils.calcTime(3,0));
-
-            allClientSkills.add(clientSkill1);
-
-            Texture skillsTexture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/skills.png");
-            TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);
-            ClientSkill clientSkill2 = new FallingClientSkill(this, blizzardStandTexture, new BlizzardFragmentAnimation(skillsTexture), standSizes1, animSizes1);
-            clientSkill2.setCooldown(GameUtils.calcTime(10,0));
-            clientSkill2.setDamage(1);
-            clientSkill2.setSkillType(SkillKind.BLIZZARD);
-            allClientSkills.add(clientSkill2);
-
-            Texture skill3Texture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");
-            ClientSkill clientSkill3 = new BuffClientSkill(this, null, new BuffAnimation(skill3Texture));
-            clientSkill3.setSkillType(SkillKind.MAGIC_DEFENCE);
-            allClientSkills.add(clientSkill3);
-
-            setAllSkills(allClientSkills);*/
-
             /*
-            Texture skillsTexture =  SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/activeSkills.png");
-            TextureRegion blizzardStandTexture = new TextureRegion(skillsTexture, 5, 245, 30, 30);
-            SkillOrig s6 = skillFactory.createFallingAOESkill(BlizzardFragmentAnimation.class, batch,
-                    skillsTexture, blizzardStandTexture, 30);
-            s6.getSkillState().setTitle("Blizzard");
-
-            */
-            /////////////////////
-            /*
-
             ArrayList<SkillOrig<?>> skillOrigs = new ArrayList<SkillOrig<?>>();
-
-            ISkillInitiator skillFactory = new SkillInitiator();
-
             SkillOrig s1 = skillFactory.createBuffSkill(BuffAnimation.class, batch,
                     SpriteTextureLoader.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_005.png"));
             s1.getSkillState().setTitle("Buff1");

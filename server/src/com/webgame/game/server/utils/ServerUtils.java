@@ -1,6 +1,9 @@
 package com.webgame.game.server.utils;
 
+import com.badlogic.gdx.math.Vector2;
 import com.github.czyzby.websocket.serialization.impl.JsonSerializer;
+import com.webgame.game.server.entities.Player;
+import com.webgame.game.server.entities.Skill;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.ServerWebSocket;
@@ -10,7 +13,8 @@ import java.util.UUID;
 
 public class ServerUtils {
     private static int second = 1000;
-    private static int minute = second*60;
+    private static int minute = second * 60;
+    protected static final float dl = 0.15f;
 
     public static final Vertx vertx = Vertx.vertx();
 
@@ -38,11 +42,26 @@ public class ServerUtils {
         }
     }
 
-    public static String newUUID(){
+    public static void getPlayerDamaged(Player damagedPlayer, Skill skill) {
+        Integer damage = skill.getDamage();
+        if (damagedPlayer.getHealthPoints() > 0)
+            damagedPlayer.setHealthPoints(damagedPlayer.getHealthPoints() - damage);
+        else
+            damagedPlayer.setHealthPoints(0);
+    }
+
+    public static boolean isCollided(Vector2 skillPos, Vector2 target) {
+        if (skillPos.x >= target.x - dl && skillPos.x <= target.x + dl &&
+                skillPos.y >= target.y - dl && skillPos.y <= target.y + dl)
+            return true;
+        return false;
+    }
+
+    public static String newUUID() {
         return UUID.randomUUID().toString();
     }
 
-    public static long calcTime(int seconds, int minutes){
-        return (long)(seconds*second + minutes*minute);
+    public static long calcTime(int seconds, int minutes) {
+        return (long) (seconds * second + minutes * minute);
     }
 }

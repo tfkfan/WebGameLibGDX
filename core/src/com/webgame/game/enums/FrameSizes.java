@@ -5,7 +5,8 @@ import com.webgame.game.Configs;
 public enum FrameSizes {
     BLIZZARD(20 / Configs.PPM, 30 / Configs.PPM),
     LITTLE_SPHERE(10 / Configs.PPM, 10 / Configs.PPM),
-    ANIMATION(50 / Configs.PPM, 50 / Configs.PPM);
+    ANIMATION(50 / Configs.PPM, 50 / Configs.PPM),
+    BIG_ANIMATION(100/Configs.PPM, 100/Configs.PPM);
 
     private float w;
     private float h;

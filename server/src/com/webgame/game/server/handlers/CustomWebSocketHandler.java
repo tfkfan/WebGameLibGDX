@@ -1,23 +1,18 @@
 package com.webgame.game.server.handlers;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.Configs;
-import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.entities.player.impl.Mage;
 import com.webgame.game.entities.skill.impl.BuffClientSkill;
-import com.webgame.game.entities.skill.impl.FallingClientSkill;
 import com.webgame.game.entities.skill.impl.SingleClientSkill;
 import com.webgame.game.enums.*;
-import com.webgame.game.events.PlayerDamagedEvent;
 import com.webgame.game.server.dto.LoginDTO;
 import com.webgame.game.server.entities.Player;
 import com.webgame.game.server.entities.Skill;
-import com.webgame.game.utils.GameUtils;
-import io.vertx.core.Handler;
+import com.webgame.game.server.factory.ISkillFactory;
+import com.webgame.game.server.factory.impl.SkillFactory;
 import io.vertx.core.TimeoutStream;
 import io.vertx.core.http.ServerWebSocket;
 
@@ -29,17 +24,14 @@ import static com.webgame.game.server.utils.ServerUtils.*;
 
 public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
     protected static final int delay = 50;
-    protected static final float absVel = 10;
-    protected static final float dl = 0.15f;
+    protected static final float absVel = 13;
 
     private TimeoutStream timeoutStream;
-    private final ConcurrentHashMap<String, ServerWebSocket> sessions;
-    private final ConcurrentHashMap<String, Player> players;
+    private final ConcurrentHashMap<String, ServerWebSocket> sessions = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Player> players = new ConcurrentHashMap<>();
+    private final ISkillFactory skillFactory = new SkillFactory();
 
     public CustomWebSocketHandler() {
-        sessions = new ConcurrentHashMap<>();
-        players = new ConcurrentHashMap<>();
-
         timeoutStream = vertx.periodicStream(delay);
         timeoutStream.handler((Long event) -> {
             if (getSessions().isEmpty())
@@ -110,45 +102,13 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             player.setSpritePath(Configs.PLAYERSHEETS_FOLDER + "/mage.png");
             player.setPosition(new Vector2(2, 2));
 
-            float[] animSizes1 = {FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH()};
-            float[] standSizes1 = {FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH()};
-
-            float[] animSizes2 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
-            float[] standSizes2 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
-
             List<Skill> allClientSkills = new ArrayList<Skill>();
 
-            Skill clientSkill1 = new SingleClientSkill();
-            clientSkill1.setDamage(150);
-            clientSkill1.setSkillType(SkillKind.FIRE_BALL);
-            clientSkill1.setSpritePath(Configs.SKILLSHEETS_FOLDER + "/fire_002.png");
-            clientSkill1.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/s001.png");
-            clientSkill1.setCooldown(calcTime(3, 0));
-            clientSkill1.setSizes(animSizes1, standSizes1);
-
-            allClientSkills.add(clientSkill1);
-
-            Skill clientSkill2 = new FallingClientSkill();
-            clientSkill2.setSpritePath(Configs.SKILLSHEETS_FOLDER + "/skills.png");
-            clientSkill2.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/skills.png");
-            clientSkill2.setCooldown(calcTime(10,0));
-            clientSkill2.setDamage(1);
-            clientSkill2.setSkillType(SkillKind.BLIZZARD);
-            clientSkill2.setSizes(animSizes2, standSizes2);
-            allClientSkills.add(clientSkill2);
-
-            Skill clientSkill3 = new BuffClientSkill();
-            clientSkill3.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");
-            clientSkill3.setSkillType(SkillKind.MAGIC_DEFENCE);
-            allClientSkills.add(clientSkill3);
-
-            Skill clientSkill4 = new SingleClientSkill();
-            clientSkill4.setSpritePath(Configs.SKILLSHEETS_FOLDER + "/ice_003.png");
-            clientSkill4.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/s7.png");
-            clientSkill4.setSkillType(SkillKind.ICE_BOLT);
-            clientSkill4.setDamage(100);
-            clientSkill4.setSizes(animSizes1, standSizes1);
-            allClientSkills.add(clientSkill4);
+            allClientSkills.add(skillFactory.createSkill(SkillKind.FIRE_BALL));
+            allClientSkills.add(skillFactory.createSkill(SkillKind.BLIZZARD));
+            allClientSkills.add(skillFactory.createSkill(SkillKind.MAGIC_DEFENCE));
+            allClientSkills.add(skillFactory.createSkill(SkillKind.ICE_BOLT));
+            allClientSkills.add(skillFactory.createSkill(SkillKind.LIGHTNING));
 
             player.setAllSkills(allClientSkills);
 
@@ -184,26 +144,17 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             final Vector2 target = event.getDto().getTarget();
             final Vector2 playerPos = playerDTO.getPosition();
 
-            Vector2 vel = new Vector2(target.x - playerPos.x, target.y - playerPos.y);
+            final Vector2 vel = new Vector2(target.x - playerPos.x, target.y - playerPos.y);
             vel.nor();
             vel.scl(absVel / Configs.PPM);
 
-            String skillId = newUUID();
-            Skill skillDTO = playerDTO.castSkill(target, vel, skillId,
+            Skill skillDTO = playerDTO.castSkill(target, vel, newUUID(),
                     new Rectangle(0, 0, 100 / PPM, 100 / PPM));
 
             skillDTO.setDamage(100);
 
             getPlayers().put(plrId, playerDTO);
         });
-    }
-
-    public static void getPlayerDamaged(Player damagedPlayer, Skill skill) {
-        Integer damage = skill.getDamage();
-        if (damagedPlayer.getHealthPoints() > 0)
-            damagedPlayer.setHealthPoints(damagedPlayer.getHealthPoints() - damage);
-        else
-            damagedPlayer.setHealthPoints(0);
     }
 
     protected ConcurrentHashMap<String, ServerWebSocket> getSessions() {
@@ -216,12 +167,5 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
 
     public void closeDispatcher() {
         timeoutStream.cancel();
-    }
-
-    protected static boolean isCollided(Vector2 skillPos, Vector2 target) {
-        if (skillPos.x >= target.x - dl && skillPos.x <= target.x + dl &&
-                skillPos.y >= target.y - dl && skillPos.y <= target.y + dl)
-            return true;
-        return false;
     }
 }

@@ -1,15 +1,9 @@
 package com.webgame.game.server.entities;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.entities.player.ClientPlayer;
-import com.webgame.game.entities.skill.ClientSkill;
 import com.webgame.game.enums.*;
-import com.webgame.game.server.entities.Entity;
-
-import static com.webgame.game.Configs.PPM;
 
 public abstract class Skill extends Entity {
     protected Vector2 target;
@@ -48,10 +42,10 @@ public abstract class Skill extends Entity {
         setSizes(skill.getAnimSizes(),skill.getStandSizes());
         setArea(skill.getArea());
         setMarkState(skill.getMarkState());
-        setSkillType(skill.getSkillType());
+        setSkillKind(skill.getSkillType());
         setDamage(skill.getDamage());
         setHeal(skill.getHeal());
-        setSkillType(skill.getSkillType());
+        setSkillKind(skill.getSkillType());
     }
 
     public abstract <T extends Skill> T createCopy();
@@ -187,7 +181,7 @@ public abstract class Skill extends Entity {
         return skillType;
     }
 
-    public void setSkillType(SkillKind skillType) {
+    public void setSkillKind(SkillKind skillType) {
         this.skillType = skillType;
     }
 }

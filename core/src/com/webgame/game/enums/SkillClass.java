@@ -1,5 +1,5 @@
 package com.webgame.game.enums;
 
 public enum SkillClass {
-    AOE, SINGLE, BUFF
+    AOE, SINGLE, STATIC_SINGLE, BUFF
 }

@@ -8,8 +8,8 @@ import com.webgame.game.animation.GameAnimation;
 public class LightningAnimation extends GameAnimation {
 
 
-    public LightningAnimation(Texture spriteTexture, Float animationDuration) {
-        super(spriteTexture, animationDuration);
+    public LightningAnimation(Texture spriteTexture) {
+        super(spriteTexture, 0.05f);
     }
 
     @Override

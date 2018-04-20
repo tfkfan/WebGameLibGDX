@@ -54,9 +54,6 @@ public class StaticClientSkill extends ClientSkill {
             animation.update(dt);
             float x = animation.getPosition().x;
             float y = animation.getPosition().y;
-            if (x < -50 || y < -50 || x > 50 || y > 50) {
-                animation.setEntityState(EntityState.INACTIVE);
-            }
         }
     }
 }

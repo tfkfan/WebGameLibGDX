@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.Configs;
-import com.webgame.game.animation.impl.BlizzardFragmentAnimation;
-import com.webgame.game.animation.impl.BuffAnimation;
-import com.webgame.game.animation.impl.FlameAnimation;
-import com.webgame.game.animation.impl.IceBlastAnimation;
+import com.webgame.game.animation.impl.*;
 import com.webgame.game.entities.skill.ClientSkill;
 import com.webgame.game.enums.SkillAnimationState;
 import com.webgame.game.enums.SkillKind;
@@ -25,7 +22,7 @@ public class SkillInitiator implements ISkillInitiator {
     }
 
     @Override
-    public void initSkill(ClientSkill skill, SkillKind skillKind) {
+    public synchronized void initSkill(ClientSkill skill, SkillKind skillKind) {
         final String spritePath = skill.getSpritePath();
         final String animSpritePath = skill.getAnimSpritePath();
 
@@ -62,11 +59,17 @@ public class SkillInitiator implements ISkillInitiator {
                 skill.initAnimations(standTexture, new BlizzardFragmentAnimation(animSkillTexture), 30, SkillAnimationState.FULL_ANIMATION, false);
                 break;
             case MAGIC_DEFENCE:
-                skill.initAnimations(null, new BuffAnimation(animSkillTexture), 1,SkillAnimationState.ANIMATION_ONLY, false);
+                skill.initAnimations(null, new BuffAnimation(animSkillTexture), 1, SkillAnimationState.ANIMATION_ONLY, false);
                 break;
             case ICE_BOLT:
                 standTexture = new TextureRegion(standSkillTexture, 0, 0, standSkillTexture.getWidth(), standSkillTexture.getHeight());
-                skill.initAnimations(standTexture, new IceBlastAnimation(animSkillTexture),1,SkillAnimationState.FULL_ANIMATION, false);
+                skill.initAnimations(standTexture, new IceBlastAnimation(animSkillTexture), 1, SkillAnimationState.FULL_ANIMATION, false);
+                break;
+            case LIGHTNING:
+                skill.initAnimations(null, new LightningAnimation(animSkillTexture),1,SkillAnimationState.ANIMATION_ONLY, false);
+                break;
+            case TORNADO:
+                
                 break;
         }
     }
