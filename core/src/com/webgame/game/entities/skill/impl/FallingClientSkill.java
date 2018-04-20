@@ -12,7 +12,7 @@ import com.webgame.game.server.entities.Player;
 
 import static com.webgame.game.Configs.PPM;
 
-public class FallingClientSkill extends ClientSkill {
+public class FallingClientSkill extends AOEClientSkill {
     protected final static int numFrames = 50;
 
     protected float fallTimer;
@@ -26,11 +26,6 @@ public class FallingClientSkill extends ClientSkill {
         super();
     }
 
-    @Override
-    public void cast(Vector2 targetPosition) {
-
-    }
-
     public FallingClientSkill(ClientSkill clientSkill) {
         super(clientSkill);
     }
@@ -40,6 +35,11 @@ public class FallingClientSkill extends ClientSkill {
         super.init(clientPlayer);
         index = 0;
         setVelocity(fallVelocity);
+    }
+
+    @Override
+    public void cast(Vector2 targetPosition) {
+
     }
 
     @Override
@@ -65,6 +65,9 @@ public class FallingClientSkill extends ClientSkill {
 
     @Override
     public void updateAnimations(float dt) {
+        if(getAnimations() == null)
+            return;
+
         if (index != -1) {
             fallTimer += dt;
             if (fallTimer >= tmp) {

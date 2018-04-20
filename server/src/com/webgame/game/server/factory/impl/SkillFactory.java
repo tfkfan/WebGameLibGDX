@@ -1,10 +1,7 @@
 package com.webgame.game.server.factory.impl;
 
 import com.webgame.game.Configs;
-import com.webgame.game.entities.skill.impl.BuffClientSkill;
-import com.webgame.game.entities.skill.impl.FallingClientSkill;
-import com.webgame.game.entities.skill.impl.SingleClientSkill;
-import com.webgame.game.entities.skill.impl.StaticClientSkill;
+import com.webgame.game.entities.skill.impl.*;
 import com.webgame.game.enums.FrameSizes;
 import com.webgame.game.enums.SkillKind;
 import com.webgame.game.server.entities.Skill;
@@ -69,9 +66,16 @@ public class SkillFactory implements ISkillFactory {
                 break;
 
             case TORNADO:
-                skill = new StaticClientSkill();
+                skill = new AOEClientSkill();
                 skill.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/skills.png");
-                skill.setDamage(50);
+                skill.setDamage(1);
+                skill.setSizes(animSizes3, standSizes3);
+                break;
+
+            case FIRE_EXPLOSION:
+                skill = new AOEClientSkill();
+                skill.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/explosion2.png");
+                skill.setDamage(150);
                 skill.setSizes(animSizes3, standSizes3);
                 break;
         }

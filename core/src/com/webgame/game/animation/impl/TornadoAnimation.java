@@ -7,8 +7,8 @@ import com.webgame.game.animation.GameAnimation;
 
 public class TornadoAnimation extends GameAnimation {
 
-    public TornadoAnimation(Texture spriteTexture, Float animationDuration) {
-        super(spriteTexture, animationDuration);
+    public TornadoAnimation(Texture spriteTexture) {
+        super(spriteTexture, 0.1f);
     }
 
     @Override

@@ -66,10 +66,14 @@ public class SkillInitiator implements ISkillInitiator {
                 skill.initAnimations(standTexture, new IceBlastAnimation(animSkillTexture), 1, SkillAnimationState.FULL_ANIMATION, false);
                 break;
             case LIGHTNING:
-                skill.initAnimations(null, new LightningAnimation(animSkillTexture),1,SkillAnimationState.ANIMATION_ONLY, false);
+                skill.initAnimations(null, new LightningAnimation(animSkillTexture), 1, SkillAnimationState.ANIMATION_ONLY, false);
                 break;
             case TORNADO:
-                
+                skill.initAnimations(null, new TornadoAnimation(animSkillTexture), 1, SkillAnimationState.ANIMATION_ONLY, true);
+                break;
+
+            case FIRE_EXPLOSION:
+                skill.initAnimations(null, new FireBlastAnimation2(animSkillTexture), 1, SkillAnimationState.ANIMATION_ONLY, false);
                 break;
         }
     }

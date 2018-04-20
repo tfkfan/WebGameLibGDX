@@ -23,8 +23,8 @@ import static com.webgame.game.Configs.PPM;
 import static com.webgame.game.server.utils.ServerUtils.*;
 
 public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
-    protected static final int delay = 50;
-    protected static final float absVel = 13;
+    protected static final int delay = 30;
+    protected static final float absVel = 10;
 
     private TimeoutStream timeoutStream;
     private final ConcurrentHashMap<String, ServerWebSocket> sessions = new ConcurrentHashMap<>();
@@ -71,9 +71,11 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
                             }
                         }
 
-                        if (!skillType.getSkillClass().equals(SkillClass.AOE) && currentSkill.getEntityState().equals(EntityState.ACTIVE) && isCollided(currentSkill.getPosition(), currentSkill.getTarget())) {
-                            currentSkill.setMoveState(MoveState.STATIC);
-                            skillIdsToRemove.add(currentSkill.getId());
+                        if (!skillType.isFalling() && !skillType.isStatic() && currentSkill.getEntityState().equals(EntityState.ACTIVE)) {
+                            if(isCollided(currentSkill.getPosition(), currentSkill.getTarget())) {
+                                currentSkill.setMoveState(MoveState.STATIC);
+                                skillIdsToRemove.add(currentSkill.getId());
+                            }
                         }
                         currentPlayer.getSkills().put(currentSkill.getId(), currentSkill);
                     }
@@ -106,9 +108,11 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
 
             allClientSkills.add(skillFactory.createSkill(SkillKind.FIRE_BALL));
             allClientSkills.add(skillFactory.createSkill(SkillKind.BLIZZARD));
-            allClientSkills.add(skillFactory.createSkill(SkillKind.MAGIC_DEFENCE));
+            allClientSkills.add(skillFactory.createSkill(SkillKind.FIRE_EXPLOSION));
             allClientSkills.add(skillFactory.createSkill(SkillKind.ICE_BOLT));
             allClientSkills.add(skillFactory.createSkill(SkillKind.LIGHTNING));
+            allClientSkills.add(skillFactory.createSkill(SkillKind.TORNADO));
+            allClientSkills.add(skillFactory.createSkill(SkillKind.MAGIC_DEFENCE));
 
             player.setAllSkills(allClientSkills);
 

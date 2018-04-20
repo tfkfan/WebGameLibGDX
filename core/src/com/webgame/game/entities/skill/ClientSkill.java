@@ -41,6 +41,7 @@ public abstract class ClientSkill extends Skill implements IUpdatable {
 
     public void initAnimations(TextureRegion standTexture, GameAnimation gameAnimation, Integer numFrames,
                                   SkillAnimationState animationState, Boolean looping) {
+        this.looping = looping;
         List<SkillSprite> animations = new ArrayList<SkillSprite>();
         this.animationsNum = numFrames;
         for (int i = 0; i < numFrames; i++) {

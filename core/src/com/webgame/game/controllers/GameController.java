@@ -88,6 +88,8 @@ public class GameController extends AbstractGameController {
                     Gdx.app.postRunnable(() -> {
                         ClientPlayer clientPlayer = (ClientPlayer) playerDTO;
                         clientPlayer.initPlayer();
+                       // clientPlayer.setSkills(null);
+
                         clientPlayer.createObject(world);
 
                         Gdx.app.log("websocket", "Enemy created " + playerDTO.getId());
@@ -116,15 +118,15 @@ public class GameController extends AbstractGameController {
                             try {
                                 final Object objId = skillEntry.getKey();
                                 final String id = (String) objId;
-                                final Skill skillDTO = skillEntry.getValue();
-                                if (plrSkills.containsKey(id)) {
+                                final ClientSkill skillDTO = (ClientSkill)skillEntry.getValue();
+                                if (plrSkills.containsKey(id) && ((ClientSkill)plrSkills.get(id)).getAnimations() != null) {
                                     ClientSkill clientSkill = (ClientSkill) plrSkills.get(id);
                                     clientSkill.updateBy(skillDTO);
                                 } else {
                                     plr.clearTimers();
                                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
-                                    ClientSkill clientSkill = (ClientSkill) skillDTO;
+                                    ClientSkill clientSkill =  skillDTO;
                                     synchronized (skillInitiator) {
                                         Gdx.app.postRunnable(() -> {
                                             clientSkill.init(plr);

@@ -24,6 +24,8 @@ public abstract class Skill extends Entity {
     protected String spritePath;
     protected String animSpritePath;
 
+    protected boolean looping;
+
     protected float[] standSizes = {FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH()};
     protected float[] animSizes = {FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH()};
 
