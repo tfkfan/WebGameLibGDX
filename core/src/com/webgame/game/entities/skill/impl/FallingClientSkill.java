@@ -26,6 +26,11 @@ public class FallingClientSkill extends ClientSkill {
         super();
     }
 
+    @Override
+    public void cast(Vector2 targetPosition) {
+
+    }
+
     public FallingClientSkill(ClientSkill clientSkill) {
         super(clientSkill);
     }

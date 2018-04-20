@@ -48,6 +48,9 @@ public class GameController extends AbstractGameController {
             AttackEvent attackEvent = (AttackEvent) event;
             ClientPlayer plr = attackEvent.getClientPlayer();
 
+            if(plr.getCurrentSkill()==null)
+                return false;
+
             plr.clearTimers();
             plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 

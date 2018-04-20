@@ -7,8 +7,8 @@ import com.webgame.game.animation.GameAnimation;
 
 public class IceBlastAnimation extends GameAnimation {
 
-    public IceBlastAnimation(Texture spriteTexture, Float animationDuration){
-        super(spriteTexture,  animationDuration);
+    public IceBlastAnimation(Texture spriteTexture){
+        super(spriteTexture,  0.05f);
     }
 
     @Override

@@ -1,11 +1,14 @@
 package com.webgame.game.server.handlers;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.Configs;
 import com.webgame.game.entities.player.ClientPlayer;
 import com.webgame.game.entities.player.impl.Mage;
+import com.webgame.game.entities.skill.impl.BuffClientSkill;
 import com.webgame.game.entities.skill.impl.FallingClientSkill;
 import com.webgame.game.entities.skill.impl.SingleClientSkill;
 import com.webgame.game.enums.*;
@@ -110,6 +113,9 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
             float[] animSizes1 = {FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH()};
             float[] standSizes1 = {FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH()};
 
+            float[] animSizes2 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
+            float[] standSizes2 = {FrameSizes.BLIZZARD.getW(), FrameSizes.BLIZZARD.getH()};
+
             List<Skill> allClientSkills = new ArrayList<Skill>();
 
             Skill clientSkill1 = new SingleClientSkill();
@@ -122,20 +128,29 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
 
             allClientSkills.add(clientSkill1);
 
-
-           /* Skill clientSkill2 = new FallingClientSkill();
-            clientSkill2.setCooldown(GameUtils.calcTime(10,0));
+            Skill clientSkill2 = new FallingClientSkill();
+            clientSkill2.setSpritePath(Configs.SKILLSHEETS_FOLDER + "/skills.png");
+            clientSkill2.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/skills.png");
+            clientSkill2.setCooldown(calcTime(10,0));
             clientSkill2.setDamage(1);
             clientSkill2.setSkillType(SkillKind.BLIZZARD);
+            clientSkill2.setSizes(animSizes2, standSizes2);
             allClientSkills.add(clientSkill2);
 
-            Texture skill3Texture =  GameUtils.loadSprite(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");
-            ClientSkill clientSkill3 = new BuffClientSkill(this, null, new BuffAnimation(skill3Texture));
+            Skill clientSkill3 = new BuffClientSkill();
+            clientSkill3.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");
             clientSkill3.setSkillType(SkillKind.MAGIC_DEFENCE);
-            allClientSkills.add(clientSkill3);*/
+            allClientSkills.add(clientSkill3);
+
+            Skill clientSkill4 = new SingleClientSkill();
+            clientSkill4.setSpritePath(Configs.SKILLSHEETS_FOLDER + "/ice_003.png");
+            clientSkill4.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/s7.png");
+            clientSkill4.setSkillType(SkillKind.ICE_BOLT);
+            clientSkill4.setDamage(100);
+            clientSkill4.setSizes(animSizes1, standSizes1);
+            allClientSkills.add(clientSkill4);
 
             player.setAllSkills(allClientSkills);
-
 
             loginDTO.setPlayer(player);
 
@@ -178,6 +193,7 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
                     new Rectangle(0, 0, 100 / PPM, 100 / PPM));
 
             skillDTO.setDamage(100);
+
             getPlayers().put(plrId, playerDTO);
         });
     }

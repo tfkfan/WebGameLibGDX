@@ -233,7 +233,7 @@ public abstract class AbstractGameController extends AbstractController implemen
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if(getClientPlayer() == null)
             return false;
-        if (button == Input.Buttons.LEFT) {
+        if (button == Input.Buttons.LEFT ) {
             Vector3 trg = this.getStage().getCamera().unproject(new Vector3(screenX, screenY, 0), getStage().getViewport().getScreenX(), getStage().getViewport().getScreenY(),
                     getStage().getViewport().getScreenWidth(), getStage().getViewport().getScreenHeight());
 

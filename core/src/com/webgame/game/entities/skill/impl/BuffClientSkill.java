@@ -26,14 +26,6 @@ public class BuffClientSkill extends StaticClientSkill {
     }
 
     @Override
-    public void cast(Vector2 target) {
-        super.cast(target);
-        for (SkillSprite animation : getAnimations()) {
-            animation.setEntityState(EntityState.ACTIVE);
-        }
-    }
-
-    @Override
     public void updateAnimations(float dt) {
         setTarget(getPlayer().getPosition());
         super.updateAnimations(dt);

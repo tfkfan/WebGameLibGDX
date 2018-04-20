@@ -7,6 +7,7 @@ import com.webgame.game.animation.GameAnimation;
 import com.webgame.game.entities.skill.ClientSkill;
 import com.webgame.game.entities.skill.SkillSprite;
 import com.webgame.game.enums.EntityState;
+import com.webgame.game.enums.MoveState;
 import com.webgame.game.enums.SkillAnimationState;
 import com.webgame.game.server.entities.Player;
 import com.webgame.game.server.entities.Skill;
@@ -28,9 +29,9 @@ public class StaticClientSkill extends ClientSkill {
 
     @Override
     public void cast(Vector2 target) {
-        super.cast(target);
         for (SkillSprite animation : getAnimations()) {
             animation.setEntityState(EntityState.ACTIVE);
+            animation.setMoveState(MoveState.STATIC);
         }
     }
 

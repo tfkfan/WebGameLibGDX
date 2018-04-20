@@ -37,12 +37,6 @@ public abstract class ClientSkill extends Skill implements IUpdatable {
         setMarkState(MarkState.UNMARKED);
     }
 
-    @Override
-    public void cast(Vector2 targetPosition) {
-        resetSkill();
-        super.cast(targetPosition);
-    }
-
     public abstract void updateAnimations(float dt);
 
     public void initAnimations(TextureRegion standTexture, GameAnimation gameAnimation, Integer numFrames,

@@ -39,7 +39,6 @@ public class LoginScreen implements Screen {
         };
 
         Gdx.input.setInputProcessor(stage);
-
         stage.addActor(buildLoginPage());
 
     }

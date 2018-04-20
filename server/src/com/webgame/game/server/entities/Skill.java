@@ -39,6 +39,7 @@ public abstract class Skill extends Entity {
 
     public void updateBy(Skill skill) {
         setPosition(skill.getPosition());
+        setTarget(skill.getTarget());
         setEntityState(skill.getEntityState());
         setMoveState(skill.getMoveState());
         setMarkState(skill.getMarkState());
@@ -55,11 +56,7 @@ public abstract class Skill extends Entity {
 
     public abstract <T extends Skill> T createCopy();
 
-    public void cast(Vector2 targetPosition) {
-        setTarget(targetPosition);
-        setEntityState(EntityState.ACTIVE);
-        setMarkState(MarkState.UNMARKED);
-    }
+    public abstract void cast(Vector2 targetPosition);
 
     public Circle getShape() {
         return new Circle(getPosition(), getWidth() > getHeight() ? getWidth() / 2 : getHeight() / 2);
