@@ -126,12 +126,10 @@ public class GameController extends AbstractGameController {
                                     plr.clearTimers();
                                     plr.setCurrentAttackState(PlayerAttackState.BATTLE);
 
-                                    ClientSkill clientSkill =  skillDTO;
+                                    ClientSkill clientSkill = skillDTO;
                                     synchronized (skillInitiator) {
                                         Gdx.app.postRunnable(() -> {
-                                            clientSkill.init(plr);
-                                            clientSkill.updateBy(skillDTO);
-                                            skillInitiator.initSkill(clientSkill, clientSkill.getSkillType());
+                                            skillInitiator.initSkill(clientSkill, plr);
                                             clientSkill.cast(clientSkill.getTarget());
                                             plrSkills.put(clientSkill.getId(), clientSkill);
                                         });

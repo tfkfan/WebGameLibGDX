@@ -11,6 +11,8 @@ import com.webgame.game.enums.SkillAnimationState;
 import com.webgame.game.enums.SkillKind;
 import com.webgame.game.factory.ISkillInitiator;
 import com.webgame.game.server.dto.SpriteAttributesDTO;
+import com.webgame.game.server.entities.Player;
+import com.webgame.game.server.entities.Skill;
 import com.webgame.game.utils.GameUtils;
 
 import java.lang.reflect.InvocationTargetException;
@@ -25,7 +27,10 @@ public class SkillInitiator implements ISkillInitiator {
     }
 
     @Override
-    public synchronized void initSkill(ClientSkill skill, SkillKind skillKind) {
+    public synchronized void initSkill(ClientSkill skill, Player player) {
+        skill.init(player);
+      //  skill.updateBy(skillDTO);
+
         final String spritePath = skill.getSpritePath();
         final String animSpritePath = skill.getAnimSpritePath();
 
