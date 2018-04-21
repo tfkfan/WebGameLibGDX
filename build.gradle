@@ -69,6 +69,8 @@ project(":html") {
     apply plugin: "war"
 
     dependencies {
+        compile "com.github.czyzby:gdx-websocket-gwt:$libVersion.$gdxVersion"
+        compile "com.github.czyzby:gdx-websocket-gwt:$libVersion.$gdxVersion:sources"
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
@@ -88,6 +90,7 @@ project(":core") {
         compile "io.vertx:vertx-core:$vertxVersion"
         compile "com.github.czyzby:gdx-websocket-common:$libVersion.$gdxVersion"
         compile "com.github.czyzby:gdx-websocket:$libVersion.$gdxVersion"
+        compile "com.github.czyzby:gdx-websocket:$libVersion.$gdxVersion:sources"
         compile "com.github.czyzby:gdx-websocket-serialization:$libVersion.$gdxVersion"
 
         compile "org.apache.commons:commons-lang3:3.7"
