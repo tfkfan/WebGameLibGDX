@@ -6,7 +6,7 @@
 	<inherits name='com.badlogic.gdx.ai' />
 	<inherits name='Box2DLights' />
 
-    <inherits name='com.webgame.game.GdxDefinition' />
+    <inherits name='com.webgame.client.GdxDefinition' />
     
     <collapse-all-properties />
     

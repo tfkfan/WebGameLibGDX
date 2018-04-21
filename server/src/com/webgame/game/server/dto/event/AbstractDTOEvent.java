@@ -1,4 +1,4 @@
-package com.webgame.game.server.dto.event;
+package com.webgame.client.server.dto.event;
 
 import io.vertx.core.http.ServerWebSocket;
 

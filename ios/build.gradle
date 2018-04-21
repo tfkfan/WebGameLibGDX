@@ -4,7 +4,7 @@ sourceCompatibility = '1.7'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 ext {
-	mainClassName = "com.webgame.game.IOSLauncher"
+	mainClassName = "com.webgame.client.IOSLauncher"
 }
 
 launchIPhoneSimulator.dependsOn build

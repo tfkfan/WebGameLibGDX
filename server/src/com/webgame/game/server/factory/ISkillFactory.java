@@ -1,7 +1,7 @@
-package com.webgame.game.server.factory;
+package com.webgame.client.server.factory;
 
-import com.webgame.game.enums.SkillKind;
-import com.webgame.game.server.entities.Skill;
+import com.webgame.client.enums.SkillKind;
+import com.webgame.client.server.entities.Skill;
 
 public interface ISkillFactory {
     Skill createSkill(SkillKind skillKind);

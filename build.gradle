@@ -14,7 +14,6 @@ buildscript {
 allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
-    apply plugin: "java"
 
     version = '1.0'
     ext {
@@ -35,17 +34,13 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
-    dependencies {
-        compile project(":core")
-        compile project(":server")
-    }
 }
 
 project(":desktop") {
     apply plugin: "java"
 
-
     dependencies {
+        compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
@@ -58,8 +53,8 @@ project(":ios") {
     apply plugin: "java"
     apply plugin: "robovm"
 
-
     dependencies {
+        compile project(":core")
         compile "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
         compile "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
         compile "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
@@ -73,8 +68,8 @@ project(":html") {
     apply plugin: "gwt"
     apply plugin: "war"
 
-
     dependencies {
+        compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
         compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
@@ -86,26 +81,18 @@ project(":html") {
 }
 
 
-project(":server") {
-    apply plugin: "java"
-
-    dependencies {
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "io.vertx:vertx-core:$vertxVersion"
-        compile "com.github.czyzby:gdx-websocket-common:$libVersion.$gdxVersion"
-        compile "com.github.czyzby:gdx-websocket:$libVersion.$gdxVersion"
-        compile "com.github.czyzby:gdx-websocket-serialization:$libVersion"
-    }
-}
-
 project(":core") {
     apply plugin: "java"
 
-
     dependencies {
+        compile "io.vertx:vertx-core:$vertxVersion"
+        compile "com.github.czyzby:gdx-websocket-common:$libVersion.$gdxVersion"
+        compile "com.github.czyzby:gdx-websocket:$libVersion.$gdxVersion"
+        compile "com.github.czyzby:gdx-websocket-serialization:$libVersion.$gdxVersion"
+
         compile "org.apache.commons:commons-lang3:3.7"
-        compile "com.github.czyzby:gdx-kiwi:$libVersion:sources"
-        compile "com.github.czyzby:gdx-lml-vis:$libVersion"
+        compile "com.github.czyzby:gdx-kiwi:$libVersion.$gdxVersion"
+        compile "com.github.czyzby:gdx-lml-vis:$libVersion.$gdxVersion"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"

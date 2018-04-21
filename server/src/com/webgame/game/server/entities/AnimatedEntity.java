@@ -1,7 +1,7 @@
-package com.webgame.game.server.entities;
+package com.webgame.client.server.entities;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.webgame.game.world.common.IFramed;
+import com.webgame.client.world.common.IFramed;
 
 public abstract class AnimatedEntity extends Entity implements IFramed {
 

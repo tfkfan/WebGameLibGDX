@@ -4,8 +4,8 @@ apply plugin: 'application'
 sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = [ "src/" ]
 
-project.ext.mainClassName = 'com.webgame.game.server.ServerApp'
-mainClassName = 'com.webgame.game.server.ServerApp'
+project.ext.mainClassName = 'com.webgame.client.server.ServerApp'
+mainClassName = 'com.webgame.client.server.ServerApp'
 
 
 eclipse.project {

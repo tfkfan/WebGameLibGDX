@@ -1,9 +1,9 @@
-package com.webgame.game.server.utils;
+package com.webgame.client.server.utils;
 
 import com.badlogic.gdx.math.Vector2;
 import com.github.czyzby.websocket.serialization.impl.JsonSerializer;
-import com.webgame.game.server.entities.Player;
-import com.webgame.game.server.entities.Skill;
+import com.webgame.client.server.entities.Player;
+import com.webgame.client.server.entities.Skill;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.ServerWebSocket;

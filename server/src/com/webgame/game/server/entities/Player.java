@@ -1,18 +1,18 @@
-package com.webgame.game.server.entities;
+package com.webgame.client.server.entities;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.entities.player.ClientPlayer;
-import com.webgame.game.entities.skill.ClientSkill;
-import com.webgame.game.enums.*;
+import com.webgame.client.entities.player.ClientPlayer;
+import com.webgame.client.entities.skill.ClientSkill;
+import com.webgame.client.enums.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.webgame.game.Configs.PPM;
+import static com.webgame.client.Configs.PPM;
 
 public abstract class Player<T extends Skill>  extends AnimatedEntity {
     protected PlayerMoveState playerMoveState;

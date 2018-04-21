@@ -1,16 +1,16 @@
-package com.webgame.game.server.handlers;
+package com.webgame.client.server.handlers;
 
 import com.github.czyzby.websocket.serialization.impl.JsonSerializer;
-import com.webgame.game.server.dto.LoginDTO;
-import com.webgame.game.server.dto.event.impl.AttackDTOEvent;
-import com.webgame.game.server.dto.event.impl.LoginDTOEvent;
-import com.webgame.game.server.dto.event.impl.PlayerDTOEvent;
-import com.webgame.game.server.dto.event.listeners.AttackDTOEventListener;
-import com.webgame.game.server.dto.event.listeners.DTOEventListener;
-import com.webgame.game.server.dto.event.listeners.LoginDTOEventListener;
-import com.webgame.game.server.dto.event.listeners.PlayerDTOEventListener;
-import com.webgame.game.server.dto.AttackDTO;
-import com.webgame.game.server.entities.Player;
+import com.webgame.client.server.dto.LoginDTO;
+import com.webgame.client.server.dto.event.impl.AttackDTOEvent;
+import com.webgame.client.server.dto.event.impl.LoginDTOEvent;
+import com.webgame.client.server.dto.event.impl.PlayerDTOEvent;
+import com.webgame.client.server.dto.event.listeners.AttackDTOEventListener;
+import com.webgame.client.server.dto.event.listeners.DTOEventListener;
+import com.webgame.client.server.dto.event.listeners.LoginDTOEventListener;
+import com.webgame.client.server.dto.event.listeners.PlayerDTOEventListener;
+import com.webgame.client.server.dto.AttackDTO;
+import com.webgame.client.server.entities.Player;
 import io.vertx.core.Handler;
 import io.vertx.core.http.ServerWebSocket;
 

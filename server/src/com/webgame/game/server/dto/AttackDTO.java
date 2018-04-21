@@ -1,7 +1,7 @@
-package com.webgame.game.server.dto;
+package com.webgame.client.server.dto;
 
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.enums.SkillKind;
+import com.webgame.client.enums.SkillKind;
 
 public final class AttackDTO implements DTO {
     Vector2 target;

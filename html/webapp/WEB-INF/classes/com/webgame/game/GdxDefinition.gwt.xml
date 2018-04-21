@@ -7,7 +7,7 @@
 	<inherits name='Box2DLights' />
 
 	<inherits name='WebGame' />
-	<entry-point class='com.webgame.game.client.HtmlLauncher' />
+	<entry-point class='com.webgame.client.client.HtmlLauncher' />
 	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
 	<set-configuration-property name="gdx.assetpath" value="../core/assets" />
 </module>

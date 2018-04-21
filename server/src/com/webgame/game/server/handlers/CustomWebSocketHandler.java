@@ -1,26 +1,26 @@
-package com.webgame.game.server.handlers;
+package com.webgame.client.server.handlers;
 
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.game.Configs;
-import com.webgame.game.entities.player.impl.Mage;
-import com.webgame.game.entities.skill.impl.BuffClientSkill;
-import com.webgame.game.entities.skill.impl.SingleClientSkill;
-import com.webgame.game.enums.*;
-import com.webgame.game.server.dto.LoginDTO;
-import com.webgame.game.server.entities.Player;
-import com.webgame.game.server.entities.Skill;
-import com.webgame.game.server.factory.ISkillFactory;
-import com.webgame.game.server.factory.impl.SkillFactory;
+import com.webgame.client.Configs;
+import com.webgame.client.entities.player.impl.Mage;
+import com.webgame.client.entities.skill.impl.BuffClientSkill;
+import com.webgame.client.entities.skill.impl.SingleClientSkill;
+import com.webgame.client.enums.*;
+import com.webgame.client.server.dto.LoginDTO;
+import com.webgame.client.server.entities.Player;
+import com.webgame.client.server.entities.Skill;
+import com.webgame.client.server.factory.ISkillFactory;
+import com.webgame.client.server.factory.impl.SkillFactory;
 import io.vertx.core.TimeoutStream;
 import io.vertx.core.http.ServerWebSocket;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.webgame.game.Configs.PPM;
-import static com.webgame.game.server.utils.ServerUtils.*;
+import static com.webgame.client.Configs.PPM;
+import static com.webgame.client.server.utils.ServerUtils.*;
 
 public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
     protected static final int delay = 30;
