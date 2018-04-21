@@ -1,4 +1,4 @@
-package com.webgame.client.server.dto.event;
+package com.webgame.common.client.server.dto.event;
 
 public interface DTOEvent {
 }

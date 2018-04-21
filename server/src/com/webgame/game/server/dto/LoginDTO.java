@@ -1,6 +1,6 @@
-package com.webgame.client.server.dto;
+package com.webgame.common.client.server.dto;
 
-import com.webgame.client.server.entities.Player;
+import com.webgame.common.client.server.entities.Player;
 
 public class LoginDTO implements DTO{
     String name;

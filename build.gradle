@@ -88,6 +88,7 @@ project(":core") {
 
     dependencies {
         compile "io.vertx:vertx-core:$vertxVersion"
+        compile "io.vertx:vertx-core:$vertxVersion:sources"
         compile "com.github.czyzby:gdx-websocket-common:$libVersion.$gdxVersion"
         compile "com.github.czyzby:gdx-websocket:$libVersion.$gdxVersion"
         compile "com.github.czyzby:gdx-websocket:$libVersion.$gdxVersion:sources"

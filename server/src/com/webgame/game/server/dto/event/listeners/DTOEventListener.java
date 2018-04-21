@@ -1,6 +1,6 @@
-package com.webgame.client.server.dto.event.listeners;
+package com.webgame.common.client.server.dto.event.listeners;
 
-import com.webgame.client.server.dto.event.DTOEvent;
+import com.webgame.common.client.server.dto.event.DTOEvent;
 
 @FunctionalInterface
 public interface DTOEventListener<T extends DTOEvent> {

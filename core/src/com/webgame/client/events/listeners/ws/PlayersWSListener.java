@@ -1,6 +1,0 @@
-package com.webgame.client.events.listeners.ws;
-
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-
-public interface PlayersWSListener extends EventListener {
-}

@@ -1,7 +1,7 @@
-package com.webgame.client.server;
+package com.webgame.common.client.server;
 
-import com.webgame.client.server.handlers.CustomWebSocketHandler;
-import com.webgame.client.server.utils.ServerUtils;
+import com.webgame.common.client.server.handlers.CustomWebSocketHandler;
+import com.webgame.common.client.server.utils.ServerUtils;
 import io.vertx.core.*;
 import io.vertx.core.http.*;
 

@@ -1,7 +1,7 @@
-package com.webgame.client.server.dto;
+package com.webgame.common.client.server.dto;
 
-import com.webgame.client.animation.GameAnimation;
-import com.webgame.client.enums.SkillAnimationState;
+import com.webgame.common.client.animation.GameAnimation;
+import com.webgame.common.client.enums.SkillAnimationState;
 
 public class SpriteAttributesDTO implements DTO {
     private Integer standTextureRegionX;

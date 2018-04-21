@@ -1,16 +1,16 @@
-package com.webgame.client.server.factory.impl;
+package com.webgame.common.client.server.factory.impl;
 
-import com.webgame.client.Configs;
-import com.webgame.client.animation.impl.*;
-import com.webgame.client.entities.skill.impl.*;
-import com.webgame.client.enums.FrameSizes;
-import com.webgame.client.enums.SkillAnimationState;
-import com.webgame.client.enums.SkillKind;
-import com.webgame.client.server.dto.SpriteAttributesDTO;
-import com.webgame.client.server.entities.Skill;
-import com.webgame.client.server.factory.ISkillFactory;
+import com.webgame.common.client.Configs;
+import com.webgame.common.client.animation.impl.*;
+import com.webgame.common.client.entities.skill.impl.*;
+import com.webgame.common.client.enums.FrameSizes;
+import com.webgame.common.client.enums.SkillAnimationState;
+import com.webgame.common.client.enums.SkillKind;
+import com.webgame.common.client.server.dto.SpriteAttributesDTO;
+import com.webgame.common.client.server.entities.Skill;
+import com.webgame.common.client.server.factory.ISkillFactory;
 
-import static com.webgame.client.server.utils.ServerUtils.calcTime;
+import static com.webgame.common.client.server.utils.ServerUtils.calcTime;
 
 public class SkillFactory implements ISkillFactory {
     public SkillFactory() {

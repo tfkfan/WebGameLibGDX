@@ -1,7 +1,7 @@
-package com.webgame.client.server.dto.event.impl;
+package com.webgame.common.client.server.dto.event.impl;
 
-import com.webgame.client.server.dto.event.AbstractDTOEvent;
-import com.webgame.client.server.entities.Player;
+import com.webgame.common.client.server.dto.event.AbstractDTOEvent;
+import com.webgame.common.client.server.entities.Player;
 import io.vertx.core.http.ServerWebSocket;
 
 public class PlayerDTOEvent extends AbstractDTOEvent {

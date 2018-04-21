@@ -1,6 +1,6 @@
-package com.webgame.client.server.dto.event.listeners;
+package com.webgame.common.client.server.dto.event.listeners;
 
-import com.webgame.client.server.dto.event.impl.AttackDTOEvent;
+import com.webgame.common.client.server.dto.event.impl.AttackDTOEvent;
 
 public interface AttackDTOEventListener extends DTOEventListener<AttackDTOEvent> {
 }

@@ -1,10 +1,10 @@
-package com.webgame.client.server.entities;
+package com.webgame.common.client.server.entities;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.client.enums.*;
-import com.webgame.client.server.dto.SpriteAttributesDTO;
+import com.webgame.common.client.enums.*;
+import com.webgame.common.client.server.dto.SpriteAttributesDTO;
 
 public abstract class Skill extends Entity {
     protected Vector2 target;

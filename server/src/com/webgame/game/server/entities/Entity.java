@@ -1,8 +1,8 @@
-package com.webgame.client.server.entities;
+package com.webgame.common.client.server.entities;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.webgame.client.enums.EntityState;
+import com.webgame.common.client.enums.EntityState;
 
 import java.io.Serializable;
 
