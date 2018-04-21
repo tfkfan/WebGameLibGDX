@@ -151,7 +151,7 @@ public class GameController extends AbstractGameController {
 
     public void playerLogin(String username, String password) {
         getSocketService().connect();
-        getSocketService().send(new LoginDTO(username));
+        getSocketService().send(new LoginDTO(username, password));
     }
 
     @Override

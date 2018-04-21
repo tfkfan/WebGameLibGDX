@@ -12,8 +12,9 @@ public class LoginDTO implements DTO{
 
     }
 
-    public LoginDTO(String name) {
+    public LoginDTO(String name, String password) {
         setName(name);
+        setPassword(password);
     }
 
     public LoginDTO(Player player) {

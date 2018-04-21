@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.game.enums.*;
+import com.webgame.game.server.dto.SpriteAttributesDTO;
 
 public abstract class Skill extends Entity {
     protected Vector2 target;
@@ -24,10 +25,10 @@ public abstract class Skill extends Entity {
     protected String spritePath;
     protected String animSpritePath;
 
-    protected boolean looping;
-
     protected float[] standSizes = {FrameSizes.LITTLE_SPHERE.getW(), FrameSizes.LITTLE_SPHERE.getH()};
     protected float[] animSizes = {FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH()};
+
+    protected SpriteAttributesDTO spriteAttributes;
 
     public Skill() {
 
@@ -48,6 +49,7 @@ public abstract class Skill extends Entity {
         setDamage(skill.getDamage());
         setHeal(skill.getHeal());
         setSkillKind(skill.getSkillType());
+        setSpriteAttributes(skill.getSpriteAttributes());
     }
 
     public abstract <T extends Skill> T createCopy();
@@ -72,6 +74,14 @@ public abstract class Skill extends Entity {
     public void setAnimSizes(float w, float h) {
         animSizes[0] = w;
         animSizes[1] = h;
+    }
+
+    public SpriteAttributesDTO getSpriteAttributes() {
+        return spriteAttributes;
+    }
+
+    public void setSpriteAttributes(SpriteAttributesDTO spriteAttributes) {
+        this.spriteAttributes = spriteAttributes;
     }
 
     public float[] getStandSizes() {

@@ -4,13 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.game.Configs;
+import com.webgame.game.animation.GameAnimation;
 import com.webgame.game.animation.impl.*;
 import com.webgame.game.entities.skill.ClientSkill;
 import com.webgame.game.enums.SkillAnimationState;
 import com.webgame.game.enums.SkillKind;
 import com.webgame.game.factory.ISkillInitiator;
+import com.webgame.game.server.dto.SpriteAttributesDTO;
 import com.webgame.game.utils.GameUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +31,8 @@ public class SkillInitiator implements ISkillInitiator {
 
         Texture standSkillTexture = null;
         Texture animSkillTexture = null;
-        TextureRegion standTexture = null;
+        TextureRegion standRegion = null;
+        SpriteAttributesDTO attributes = skill.getSpriteAttributes();
 
         if (spritePath != null) {
             if (cachedTextures.containsKey(spritePath))
@@ -48,33 +52,27 @@ public class SkillInitiator implements ISkillInitiator {
             }
         }
 
-        switch (skillKind) {
-            case FIRE_BALL:
-                standTexture = new TextureRegion(standSkillTexture, 0, 0, standSkillTexture.getWidth(), standSkillTexture.getHeight());
-                skill.initAnimations(standTexture, new FlameAnimation(animSkillTexture), 1, SkillAnimationState.FULL_ANIMATION, false);
-                break;
-            case BLIZZARD:
-                animSkillTexture = standSkillTexture;
-                standTexture = new TextureRegion(standSkillTexture, 5, 245, 30, 30);
-                skill.initAnimations(standTexture, new BlizzardFragmentAnimation(animSkillTexture), 30, SkillAnimationState.FULL_ANIMATION, false);
-                break;
-            case MAGIC_DEFENCE:
-                skill.initAnimations(null, new BuffAnimation(animSkillTexture), 1, SkillAnimationState.ANIMATION_ONLY, false);
-                break;
-            case ICE_BOLT:
-                standTexture = new TextureRegion(standSkillTexture, 0, 0, standSkillTexture.getWidth(), standSkillTexture.getHeight());
-                skill.initAnimations(standTexture, new IceBlastAnimation(animSkillTexture), 1, SkillAnimationState.FULL_ANIMATION, false);
-                break;
-            case LIGHTNING:
-                skill.initAnimations(null, new LightningAnimation(animSkillTexture), 1, SkillAnimationState.ANIMATION_ONLY, false);
-                break;
-            case TORNADO:
-                skill.initAnimations(null, new TornadoAnimation(animSkillTexture), 1, SkillAnimationState.ANIMATION_ONLY, true);
-                break;
+        if(standSkillTexture != null) {
+            int x = attributes.getStandTextureRegionX() != null ? attributes.getStandTextureRegionX() : 0;
+            int y = attributes.getStandTextureRegionY() != null ? attributes.getStandTextureRegionY() : 0;
+            int w = attributes.getStandTextureRegionWidth() != null ? attributes.getStandTextureRegionWidth() : standSkillTexture.getWidth();
+            int h = attributes.getStandTextureRegionHeight() != null ? attributes.getStandTextureRegionHeight() : standSkillTexture.getHeight();
+            standRegion = new TextureRegion(standSkillTexture, x, y, w, h);
+        }
 
-            case FIRE_EXPLOSION:
-                skill.initAnimations(null, new FireBlastAnimation2(animSkillTexture), 1, SkillAnimationState.ANIMATION_ONLY, false);
-                break;
+        try {
+            GameAnimation animation = (GameAnimation) Class.forName(attributes.getAnimationClazz()).getDeclaredConstructor(Texture.class).newInstance(animSkillTexture);
+            skill.initAnimations(standRegion, animation, attributes.getNumFrames(), attributes.getAnimationState(), attributes.isLooping());
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

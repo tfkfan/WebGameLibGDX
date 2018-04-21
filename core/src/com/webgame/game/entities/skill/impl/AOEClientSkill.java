@@ -47,7 +47,7 @@ public class AOEClientSkill extends ClientSkill {
             animation.update(dt);
 
             if (animation.isAnimationFinished()) {
-                if (looping)
+                if (getSpriteAttributes().isLooping())
                     animation.clearTimers();
                 else
                     resetSkill();
