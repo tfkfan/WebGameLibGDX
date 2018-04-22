@@ -56,12 +56,12 @@ public abstract class AbstractGameController extends AbstractController implemen
     protected OrthographicCamera camera;
     protected Viewport viewport;
 
-    protected final List<EventListener> loginWSEventList = new ArrayList<EventListener>();
-    protected final List<EventListener> playersWSEventList = new ArrayList<EventListener>();
-    protected final List<EventListener> attackWSEventList = new ArrayList<EventListener>();
+    protected final List<EventListener> loginWSEventList = GameUtils.createList();
+    protected final List<EventListener> playersWSEventList = GameUtils.createList();
+    protected final List<EventListener> attackWSEventList = GameUtils.createList();
 
-    protected final List<EventListener> playerMoveListeners = new ArrayList<EventListener>();
-    protected final List<EventListener> attackListeners = new ArrayList<EventListener>();
+    protected final List<EventListener> playerMoveListeners = GameUtils.createList();
+    protected final List<EventListener> attackListeners = GameUtils.createList();
 
 
     public AbstractGameController(OrthographicCamera camera, Viewport viewport) {
@@ -143,7 +143,7 @@ public abstract class AbstractGameController extends AbstractController implemen
                 AttackWSEvent attackWSEvent = new AttackWSEvent(webSocket, attackDTO);
                 fire(attackWSEvent);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         // Gdx.app.log("WS", "!" + res.getClass().getName());
@@ -231,9 +231,9 @@ public abstract class AbstractGameController extends AbstractController implemen
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(getClientPlayer() == null)
+        if (getClientPlayer() == null)
             return false;
-        if (button == Input.Buttons.LEFT ) {
+        if (button == Input.Buttons.LEFT) {
             Vector3 trg = this.getStage().getCamera().unproject(new Vector3(screenX, screenY, 0), getStage().getViewport().getScreenX(), getStage().getViewport().getScreenY(),
                     getStage().getViewport().getScreenWidth(), getStage().getViewport().getScreenHeight());
 
@@ -252,7 +252,7 @@ public abstract class AbstractGameController extends AbstractController implemen
 
     @Override
     public boolean keyDown(int keycode) {
-        if(getClientPlayer() == null)
+        if (getClientPlayer() == null)
             return false;
         if (keycode >= 8 && keycode <= 16) {
             int skillIndex = keycode - 8;

@@ -2,14 +2,16 @@ package com.webgame.common.client.controllers;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.webgame.common.client.entities.player.ClientPlayer;
+import com.webgame.common.client.utils.GameUtils;
 import com.webgame.common.client.ws.IWebSocket;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractController extends Group {
     protected IWebSocket socketService;
-    protected final HashMap<String, ClientPlayer> players = new HashMap<>();
+    protected final Map<String, ClientPlayer> players = GameUtils.createMap();
     protected ClientPlayer clientPlayer;
 
     public AbstractController() {
@@ -24,7 +26,7 @@ public abstract class AbstractController extends Group {
         return socketService;
     }
 
-    public HashMap<String, ClientPlayer> getPlayers() {
+    public Map<String, ClientPlayer> getPlayers() {
         return players;
     }
 

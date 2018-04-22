@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.webgame.common.client.entities.skill.ClientSkill;
 import com.webgame.common.client.enums.*;
+import com.webgame.common.client.utils.GameUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -169,7 +170,7 @@ public abstract class Player<T extends Skill>  extends AnimatedEntity {
 
     public Map<String, T> getSkills() {
         if (skills == null)
-            skills = new HashMap<>();
+            skills = GameUtils.createMap();
         return skills;
     }
 
