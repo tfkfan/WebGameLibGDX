@@ -12,7 +12,7 @@ public abstract class AbstractWebSocketAdapter implements IWebSocket {
     @Override
     public void connect() {
         // Note: you can also use WebSockets.newSocket() and WebSocket.toWebSocketUrl() methods.
-        socket = ExtendedNet.getNet().newWebSocket(Configs.SERVER_HOST, Configs.SERVER_PORT);
+        socket = WebSockets.newSocket(WebSockets.toWebSocketUrl(Configs.SERVER_HOST,Configs.SERVER_PORT ));
         socket.addListener(createListener());
         socket.connect();
     }

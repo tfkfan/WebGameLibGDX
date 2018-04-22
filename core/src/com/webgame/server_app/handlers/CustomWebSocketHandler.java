@@ -95,6 +95,7 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
         addLoginDTOListener(event -> {
             LoginDTO loginDTO = event.getLoginDTO();
 
+            System.out.println("Player " + loginDTO.getName() + " is connecting" );
             final Player player = new Mage();
             player.init();
             player.setId(newUUID());

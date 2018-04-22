@@ -22,7 +22,7 @@ public abstract class AbstractController extends Group {
         this.socketService = socketService;
     }
 
-    public synchronized IWebSocket getSocketService() {
+    public IWebSocket getSocketService() {
         return socketService;
     }
 

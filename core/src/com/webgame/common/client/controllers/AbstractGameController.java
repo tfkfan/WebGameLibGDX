@@ -80,8 +80,9 @@ public abstract class AbstractGameController extends AbstractController implemen
         this.world = new World(new Vector2(0, 0), true);
         this.worldRenderer = new WorldRenderer(world, camera);
 
+        Gdx.app.log("APP","Initializing socket service..." );
         initSocketService();
-
+        Gdx.app.log("APP","Initialization finished..." );
         addListener(this);
     }
 
@@ -166,10 +167,6 @@ public abstract class AbstractGameController extends AbstractController implemen
                 return AbstractGameController.this;
             }
         });
-    }
-
-    public void addAttackWSListener(AttackWSListener listener) {
-        attackWSEventList.add(listener);
     }
 
     public void addAttackListener(AttackListener listener) {
