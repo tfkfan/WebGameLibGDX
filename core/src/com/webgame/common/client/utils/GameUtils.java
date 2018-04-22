@@ -3,11 +3,7 @@ package com.webgame.common.client.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 public class GameUtils {
 	private GameUtils() {
@@ -23,10 +19,10 @@ public class GameUtils {
 	}
 
 	public static Map createMap(){
-		return new ConcurrentHashMap();
+		return new HashMap();
 	}
 
 	public static List createList(){
-		return Collections.synchronizedList(new ArrayList());
+		return new ArrayList();
 	}
 }

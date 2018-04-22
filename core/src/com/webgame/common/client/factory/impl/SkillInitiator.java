@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.common.client.animation.GameAnimation;
 import com.webgame.common.client.animation.impl.FireBlastAnimation;
+import com.webgame.common.client.animation.impl.FlameAnimation;
 import com.webgame.common.client.entities.skill.ClientSkill;
 import com.webgame.common.client.factory.ISkillInitiator;
 import com.webgame.common.client.utils.GameUtils;
@@ -62,7 +63,7 @@ public class SkillInitiator implements ISkillInitiator {
 
         try {
             //TODO The method forName(String) is undefined for the type Class GWT!
-            GameAnimation animation = (GameAnimation) Class.forName(attributes.getAnimationClazz()).getDeclaredConstructor(Texture.class).newInstance(animSkillTexture);
+            GameAnimation animation = new FlameAnimation(animSkillTexture);
 
             skill.initAnimations(standRegion, animation, attributes.getNumFrames(), attributes.getAnimationState(), attributes.isLooping());
         } catch (Exception e) {
