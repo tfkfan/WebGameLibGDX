@@ -14,7 +14,6 @@ import static com.webgame.server_app.utils.ServerUtils.calcTime;
 
 public class SkillFactory implements ISkillFactory {
     public SkillFactory() {
-
     }
 
     @Override

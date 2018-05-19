@@ -1,34 +1,23 @@
-package com.webgame.common.client.factory.impl;
+package com.webgame.common.client.utils;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.webgame.common.client.Configs;
 import com.webgame.common.client.animation.GameAnimation;
-import com.webgame.common.client.animation.impl.*;
 import com.webgame.common.client.entities.skill.ClientSkill;
-import com.webgame.common.client.entities.skill.impl.*;
-import com.webgame.common.client.enums.SkillAnimationState;
-import com.webgame.common.client.enums.SkillKind;
-import com.webgame.common.client.factory.ISkillInitiator;
 import com.webgame.common.client.utils.GameUtils;
 import com.webgame.common.server.dto.SpriteAttributesDTO;
 import com.webgame.common.server.entities.Player;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.webgame.common.client.enums.SkillKind.*;
-import static com.webgame.server_app.utils.ServerUtils.calcTime;
-
-public class SkillInitiator implements ISkillInitiator {
+public class SkillInitiator {
     private Map<String, Texture> cachedTextures;
 
     public SkillInitiator() {
         cachedTextures = new HashMap<>();
     }
 
-    @Override
     public void initSkill(ClientSkill skill, Player player) {
         try {
             skill.init(player);
