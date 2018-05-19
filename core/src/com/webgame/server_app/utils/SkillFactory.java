@@ -1,22 +1,19 @@
-package com.webgame.server_app.factory.impl;
+package com.webgame.server_app.utils;
 
 import com.webgame.common.client.Configs;
-import com.webgame.common.client.animation.impl.*;
 import com.webgame.common.client.entities.skill.impl.*;
 import com.webgame.common.client.enums.FrameSizes;
 import com.webgame.common.client.enums.SkillAnimationState;
 import com.webgame.common.client.enums.SkillKind;
 import com.webgame.common.server.entities.Skill;
-import com.webgame.server_app.factory.ISkillFactory;
 import com.webgame.common.server.dto.SpriteAttributesDTO;
 
 import static com.webgame.server_app.utils.ServerUtils.calcTime;
 
-public class SkillFactory implements ISkillFactory {
+public class SkillFactory  {
     public SkillFactory() {
     }
 
-    @Override
     public synchronized Skill createSkill(SkillKind skillKind) {
         Skill skill = null;
         float[] animSizes1 = {FrameSizes.ANIMATION.getW(), FrameSizes.ANIMATION.getH()};
