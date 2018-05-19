@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.common.client.animation.GameAnimation;
 
 public class LightningAnimation extends GameAnimation {
-
+    public LightningAnimation(Texture spriteTexture) {
+        super(spriteTexture);
+    }
+/*
 
     public LightningAnimation(Texture spriteTexture) {
         super(spriteTexture, 0.05f);
@@ -26,5 +29,5 @@ public class LightningAnimation extends GameAnimation {
         }
         setAnimation(new Animation<TextureRegion>(getAnimationDuration(), frames));
 
-    }
+    }*/
 }

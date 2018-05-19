@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.common.client.animation.GameAnimation;
 
 public class MagicShieldAnimation extends GameAnimation {
-
+    public MagicShieldAnimation(Texture spriteTexture) {
+        super(spriteTexture);
+    }
+/*
     public MagicShieldAnimation(Texture spriteTexture) {
         super(spriteTexture, 0.03f);
     }
@@ -28,5 +31,5 @@ public class MagicShieldAnimation extends GameAnimation {
         }
         //  animationFrames[0] = new TextureRegion(spriteTexture, 0 , 0, w, h);
         setAnimation(new Animation<TextureRegion>(getAnimationDuration(), animationFrames));
-    }
+    }*/
 }

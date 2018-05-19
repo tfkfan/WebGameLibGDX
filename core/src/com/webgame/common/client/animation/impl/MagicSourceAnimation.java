@@ -6,8 +6,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.common.client.animation.GameAnimation;
 
 public class MagicSourceAnimation extends GameAnimation {
+    public MagicSourceAnimation(Texture spriteTexture) {
+        super(spriteTexture);
+    }
 
-    public MagicSourceAnimation(Texture spriteTexture, Float animationDuration) {
+    /*public MagicSourceAnimation(Texture spriteTexture, Float animationDuration) {
         super(spriteTexture, animationDuration);
     }
 
@@ -26,5 +29,5 @@ public class MagicSourceAnimation extends GameAnimation {
         }
         //  animationFrames[0] = new TextureRegion(spriteTexture, 0 , 0, w, h);
         setAnimation(new Animation<TextureRegion>(getAnimationDuration(), animationFrames));
-    }
+    }*/
 }

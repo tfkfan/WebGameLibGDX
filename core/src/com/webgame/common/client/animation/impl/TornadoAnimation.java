@@ -6,8 +6,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.common.client.animation.GameAnimation;
 
 public class TornadoAnimation extends GameAnimation {
-
     public TornadoAnimation(Texture spriteTexture) {
+        super(spriteTexture);
+    }
+
+   /* public TornadoAnimation(Texture spriteTexture) {
         super(spriteTexture, 0.1f);
     }
 
@@ -24,5 +27,5 @@ public class TornadoAnimation extends GameAnimation {
 
         setAnimation(new Animation<TextureRegion>(getAnimationDuration(), frames));
 
-    }
+    }*/
 }

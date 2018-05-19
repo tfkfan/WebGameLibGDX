@@ -13,11 +13,20 @@ public class SpriteAttributesDTO implements DTO {
     private SkillAnimationState animationState;
     private boolean isLooping;
 
+    private Float animationDuration;
+    private int width;
+    private int height;
+    private int xIterations;
+    private int yIterations;
+    private int xOffset;
+    private int yOffset;
+
     public SpriteAttributesDTO() {
 
     }
 
-    public SpriteAttributesDTO(Integer standX, Integer standY, Integer standW, Integer standH, Integer numFrames, SkillAnimationState animationState, boolean isLooping) {
+    public SpriteAttributesDTO(Integer standX, Integer standY, Integer standW, Integer standH, Integer numFrames, SkillAnimationState animationState,
+                               boolean isLooping, Float animationDuration, int width, int height, int xIterations, int yIterations, int xOffset, int yOffset) {
         setNumFrames(numFrames);
         setStandTextureRegionHeight(standH);
         setStandTextureRegionWidth(standW);
@@ -25,6 +34,13 @@ public class SpriteAttributesDTO implements DTO {
         setStandTextureRegionY(standY);
         setLooping(isLooping);
         setAnimationState(animationState);
+        setAnimationDuration(animationDuration);
+        setWidth(width);
+        setHeight(height);
+        setxIterations(xIterations);
+        setyIterations(yIterations);
+        setxOffset(xOffset);
+        setyOffset(yOffset);
     }
 
     public Integer getStandTextureRegionX() {
@@ -84,4 +100,59 @@ public class SpriteAttributesDTO implements DTO {
     }
 
 
+    public Float getAnimationDuration() {
+        return animationDuration;
+    }
+
+    public void setAnimationDuration(Float animationDuration) {
+        this.animationDuration = animationDuration;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getxIterations() {
+        return xIterations;
+    }
+
+    public void setxIterations(int xIterations) {
+        this.xIterations = xIterations;
+    }
+
+    public int getyIterations() {
+        return yIterations;
+    }
+
+    public void setyIterations(int yIterations) {
+        this.yIterations = yIterations;
+    }
+
+    public int getxOffset() {
+        return xOffset;
+    }
+
+    public void setxOffset(int xOffset) {
+        this.xOffset = xOffset;
+    }
+
+    public int getyOffset() {
+        return yOffset;
+    }
+
+    public void setyOffset(int yOffset) {
+        this.yOffset = yOffset;
+    }
 }
