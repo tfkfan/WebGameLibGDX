@@ -2,9 +2,13 @@ package com.webgame.common.client.factory.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.webgame.common.client.Configs;
 import com.webgame.common.client.animation.GameAnimation;
-import com.webgame.common.client.animation.impl.FireBlastAnimation;
+import com.webgame.common.client.animation.impl.*;
 import com.webgame.common.client.entities.skill.ClientSkill;
+import com.webgame.common.client.entities.skill.impl.*;
+import com.webgame.common.client.enums.SkillAnimationState;
+import com.webgame.common.client.enums.SkillKind;
 import com.webgame.common.client.factory.ISkillInitiator;
 import com.webgame.common.client.utils.GameUtils;
 import com.webgame.common.server.dto.SpriteAttributesDTO;
@@ -13,6 +17,9 @@ import com.webgame.common.server.entities.Player;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.webgame.common.client.enums.SkillKind.*;
+import static com.webgame.server_app.utils.ServerUtils.calcTime;
 
 public class SkillInitiator implements ISkillInitiator {
     private Map<String, Texture> cachedTextures;
@@ -24,7 +31,6 @@ public class SkillInitiator implements ISkillInitiator {
     @Override
     public void initSkill(ClientSkill skill, Player player) {
         skill.init(player);
-        //  skill.updateBy(skillDTO);
 
         final String spritePath = skill.getSpritePath();
         final String animSpritePath = skill.getAnimSpritePath();
@@ -62,7 +68,31 @@ public class SkillInitiator implements ISkillInitiator {
 
         try {
             //TODO The method forName(String) is undefined for the type Class GWT!
-            GameAnimation animation = (GameAnimation) Class.forName(attributes.getAnimationClazz()).getDeclaredConstructor(Texture.class).newInstance(animSkillTexture);
+            final SkillKind skillKind = skill.getSkillType();
+            GameAnimation animation = null;
+            switch (skillKind) {
+                case FIRE_BALL:
+                    animation = new FlameAnimation(animSkillTexture);
+                    break;
+                case BLIZZARD:
+                    animation = new BlizzardFragmentAnimation(animSkillTexture);
+                    break;
+                case MAGIC_DEFENCE:
+                    animation = new MagicShieldAnimation(animSkillTexture);
+                    break;
+                case ICE_BOLT:
+                    animation = new IceBlastAnimation(animSkillTexture);
+                    break;
+                case LIGHTNING:
+                    animation = new LightningAnimation(animSkillTexture);
+                    break;
+                case TORNADO:
+                    animation = new TornadoAnimation(animSkillTexture);
+                    break;
+                case FIRE_EXPLOSION:
+                    animation = new FireBlastAnimation2(animSkillTexture);
+                    break;
+            }
 
             skill.initAnimations(standRegion, animation, attributes.getNumFrames(), attributes.getAnimationState(), attributes.isLooping());
         } catch (Exception e) {

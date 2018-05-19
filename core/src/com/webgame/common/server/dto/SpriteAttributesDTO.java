@@ -9,8 +9,6 @@ public class SpriteAttributesDTO implements DTO {
     private Integer standTextureRegionWidth;
     private Integer standTextureRegionHeight;
 
-    private String animationClazz;
-
     private Integer numFrames;
     private SkillAnimationState animationState;
     private boolean isLooping;
@@ -19,8 +17,7 @@ public class SpriteAttributesDTO implements DTO {
 
     }
 
-    public SpriteAttributesDTO(Integer standX, Integer standY, Integer standW, Integer standH, String animationClazz, Integer numFrames, SkillAnimationState animationState, boolean isLooping) {
-        setAnimationClazz(animationClazz);
+    public SpriteAttributesDTO(Integer standX, Integer standY, Integer standW, Integer standH, Integer numFrames, SkillAnimationState animationState, boolean isLooping) {
         setNumFrames(numFrames);
         setStandTextureRegionHeight(standH);
         setStandTextureRegionWidth(standW);
@@ -60,14 +57,6 @@ public class SpriteAttributesDTO implements DTO {
 
     public void setStandTextureRegionHeight(Integer standTextureRegionHeight) {
         this.standTextureRegionHeight = standTextureRegionHeight;
-    }
-
-    public String getAnimationClazz() {
-        return animationClazz;
-    }
-
-    public void setAnimationClazz(String animationClazz) {
-        this.animationClazz = animationClazz;
     }
 
     public Integer getNumFrames() {

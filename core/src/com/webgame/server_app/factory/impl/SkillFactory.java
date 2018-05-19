@@ -38,7 +38,7 @@ public class SkillFactory implements ISkillFactory {
                 skill.setCooldown(calcTime(3, 0));
                 skill.setSizes(animSizes1, standSizes1);
                 skill.setSpriteAttributes(
-                        new SpriteAttributesDTO(0, 0, null, null, FlameAnimation.class.getName(), 1, SkillAnimationState.FULL_ANIMATION, false));
+                        new SpriteAttributesDTO(0, 0, null, null, 1, SkillAnimationState.FULL_ANIMATION, false));
                 break;
 
             case BLIZZARD:
@@ -48,12 +48,12 @@ public class SkillFactory implements ISkillFactory {
                 skill.setCooldown(calcTime(10, 0));
                 skill.setDamage(1);
                 skill.setSizes(animSizes2, standSizes2);
-                skill.setSpriteAttributes(new SpriteAttributesDTO(5, 245, 30, 30, BlizzardFragmentAnimation.class.getName(), 30, SkillAnimationState.FULL_ANIMATION, false));
+                skill.setSpriteAttributes(new SpriteAttributesDTO(5, 245, 30, 30, 30, SkillAnimationState.FULL_ANIMATION, false));
                 break;
 
             case MAGIC_DEFENCE:
                 skill = new BuffClientSkill();
-                skill.setSpriteAttributes(new SpriteAttributesDTO(null, null, null, null, BuffAnimation.class.getName(), 1, SkillAnimationState.ANIMATION_ONLY, false));
+                skill.setSpriteAttributes(new SpriteAttributesDTO(null, null, null, null, 1, SkillAnimationState.ANIMATION_ONLY, false));
                 skill.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/cast_001.png");
                 break;
 
@@ -62,7 +62,7 @@ public class SkillFactory implements ISkillFactory {
                 skill.setSpritePath(Configs.SKILLSHEETS_FOLDER + "/ice_003.png");
                 skill.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/s7.png");
                 skill.setDamage(100);
-                skill.setSpriteAttributes(new SpriteAttributesDTO(0, 0, null, null, IceBlastAnimation.class.getName(), 1, SkillAnimationState.FULL_ANIMATION, false));
+                skill.setSpriteAttributes(new SpriteAttributesDTO(0, 0, null, null, 1, SkillAnimationState.FULL_ANIMATION, false));
                 skill.setSizes(animSizes1, standSizes1);
                 break;
 
@@ -70,7 +70,7 @@ public class SkillFactory implements ISkillFactory {
                 skill = new StaticClientSkill();
                 skill.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/lightning.png");
                 skill.setDamage(50);
-                skill.setSpriteAttributes(new SpriteAttributesDTO(null, null, null, null, LightningAnimation.class.getName(), 1, SkillAnimationState.ANIMATION_ONLY, false));
+                skill.setSpriteAttributes(new SpriteAttributesDTO(null, null, null, null, 1, SkillAnimationState.ANIMATION_ONLY, false));
                 skill.setSizes(animSizes1, standSizes1);
                 break;
 
@@ -78,7 +78,7 @@ public class SkillFactory implements ISkillFactory {
                 skill = new AOEClientSkill();
                 skill.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/skills.png");
                 skill.setDamage(1);
-                skill.setSpriteAttributes(new SpriteAttributesDTO(null, null, null, null, TornadoAnimation.class.getName(), 1, SkillAnimationState.ANIMATION_ONLY, true));
+                skill.setSpriteAttributes(new SpriteAttributesDTO(null, null, null, null, 1, SkillAnimationState.ANIMATION_ONLY, true));
                 skill.setSizes(animSizes3, standSizes3);
                 break;
 
@@ -86,13 +86,12 @@ public class SkillFactory implements ISkillFactory {
                 skill = new AOEClientSkill();
                 skill.setAnimSpritePath(Configs.SKILLSHEETS_FOLDER + "/explosion2.png");
                 skill.setDamage(150);
-                skill.setSpriteAttributes(new SpriteAttributesDTO(null, null, null, null, FireBlastAnimation2.class.getName(), 1, SkillAnimationState.ANIMATION_ONLY, false));
+                skill.setSpriteAttributes(new SpriteAttributesDTO(null, null, null, null, 1, SkillAnimationState.ANIMATION_ONLY, false));
                 skill.setSizes(animSizes3, standSizes3);
                 break;
         }
 
-        if (skill != null)
-            skill.setSkillKind(skillKind);
+        skill.setSkillKind(skillKind);
         return skill;
     }
 }

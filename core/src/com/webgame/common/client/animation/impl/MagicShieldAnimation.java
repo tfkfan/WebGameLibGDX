@@ -7,8 +7,8 @@ import com.webgame.common.client.animation.GameAnimation;
 
 public class MagicShieldAnimation extends GameAnimation {
 
-    public MagicShieldAnimation(Texture spriteTexture, Float animationDuration) {
-        super(spriteTexture, animationDuration);
+    public MagicShieldAnimation(Texture spriteTexture) {
+        super(spriteTexture, 0.03f);
     }
 
     @Override
