@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.common.client.animation.GameAnimation;
 
 public class MeteorBlastAnimation extends GameAnimation {
-    public MeteorBlastAnimation(Texture spriteTexture, Float animationDuration) {
+    public MeteorBlastAnimation(Texture spriteTexture) {
+        super(spriteTexture);
+    }
+   /* public MeteorBlastAnimation(Texture spriteTexture, Float animationDuration) {
         super(spriteTexture, animationDuration);
     }
 
@@ -23,5 +26,5 @@ public class MeteorBlastAnimation extends GameAnimation {
 
         setAnimation(new Animation<TextureRegion>(getAnimationDuration(), frames));
 
-    }
+    }*/
 }

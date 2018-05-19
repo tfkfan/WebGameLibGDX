@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.common.client.animation.GameAnimation;
 
 public class StoneBlastAnimation extends GameAnimation {
-
+    public StoneBlastAnimation(Texture spriteTexture) {
+        super(spriteTexture);
+    }
+/*
     public StoneBlastAnimation(Texture spriteTexture, Float animationDuration) {
         super(spriteTexture, animationDuration);
     }
@@ -24,5 +27,5 @@ public class StoneBlastAnimation extends GameAnimation {
             animationFrames[i] = new TextureRegion(getSpriteTexture(), -5 + w * (i + 1), 80, w, h);
 
         setAnimation(new Animation<TextureRegion>(getAnimationDuration(), animationFrames));
-    }
+    }*/
 }

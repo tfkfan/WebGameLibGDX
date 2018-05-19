@@ -45,7 +45,7 @@ public abstract class Skill extends Entity {
         setMarkState(skill.getMarkState());
         setSpritePath(skill.getSpritePath());
         setAnimSpritePath(skill.getAnimSpritePath());
-        setSizes(skill.getAnimSizes(),skill.getStandSizes());
+        setSizes(skill.getAnimSizes(), skill.getStandSizes());
         setArea(skill.getArea());
         setMarkState(skill.getMarkState());
         setSkillKind(skill.getSkillType());

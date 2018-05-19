@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.common.client.animation.GameAnimation;
 
 public class MagicBuffAnimation extends GameAnimation {
-
+    public MagicBuffAnimation(Texture spriteTexture) {
+        super(spriteTexture);
+    }
+/*
     public MagicBuffAnimation(Texture spriteTexture, Float animationDuration) {
         super(spriteTexture, animationDuration);
     }
@@ -26,5 +29,5 @@ public class MagicBuffAnimation extends GameAnimation {
         }
         //  animationFrames[0] = new TextureRegion(spriteTexture, 0 , 0, w, h);
         setAnimation(new Animation<TextureRegion>(getAnimationDuration(), animationFrames));
-    }
+    }*/
 }

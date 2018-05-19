@@ -7,6 +7,9 @@ import com.webgame.common.client.animation.GameAnimation;
 
 public class BuffAnimation extends GameAnimation {
     public BuffAnimation(Texture spriteTexture) {
+        super(spriteTexture);
+    }
+  /*  public BuffAnimation(Texture spriteTexture) {
         super(spriteTexture, 0.05f);
     }
 
@@ -24,5 +27,5 @@ public class BuffAnimation extends GameAnimation {
         }
         //  animationFrames[0] = new TextureRegion(spriteTexture, 0 , 0, w, h);
         setAnimation(new Animation<TextureRegion>(getAnimationDuration(), animationFrames));
-    }
+    }*/
 }

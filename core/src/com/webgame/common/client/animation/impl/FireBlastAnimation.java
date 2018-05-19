@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.common.client.animation.GameAnimation;
 
 public class FireBlastAnimation extends GameAnimation {
-
+    public FireBlastAnimation(Texture spriteTexture) {
+        super(spriteTexture);
+    }
+/*
     public FireBlastAnimation(Texture spriteTexture) {
         super(spriteTexture, 0.1f);
     }
@@ -22,5 +25,5 @@ public class FireBlastAnimation extends GameAnimation {
             animationFrames[i] = new TextureRegion(getSpriteTexture(), 4 + w * i, 165, w, h);
 
         setAnimation(new Animation<TextureRegion>(getAnimationDuration(), animationFrames));
-    }
+    }*/
 }

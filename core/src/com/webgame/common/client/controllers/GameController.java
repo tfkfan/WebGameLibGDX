@@ -17,8 +17,7 @@ import com.webgame.common.client.events.AttackEvent;
 import com.webgame.common.client.events.MoveEvent;
 import com.webgame.common.client.events.ws.LoginSuccessEvent;
 import com.webgame.common.client.events.ws.PlayersWSEvent;
-import com.webgame.common.client.factory.ISkillInitiator;
-import com.webgame.common.client.factory.impl.SkillInitiator;
+import com.webgame.common.client.utils.SkillInitiator;
 import com.webgame.common.server.dto.AttackDTO;
 import com.webgame.common.server.dto.LoginDTO;
 import com.webgame.common.server.entities.Player;
@@ -27,7 +26,7 @@ import com.webgame.common.server.entities.Skill;
 import java.util.*;
 
 public class GameController extends AbstractGameController {
-    private final ISkillInitiator skillInitiator = new SkillInitiator();
+    private final SkillInitiator skillInitiator = new SkillInitiator();
 
     public GameController(OrthographicCamera camera, Viewport viewport) {
         super(camera, viewport);

@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.webgame.common.client.animation.GameAnimation;
 
 public class BlizzardFragmentAnimation extends GameAnimation {
-
+    public BlizzardFragmentAnimation(Texture spriteTexture) {
+        super(spriteTexture);
+    }
+/*
     public BlizzardFragmentAnimation(Texture spriteTexture){
         super(spriteTexture, 0.1f);
     }
@@ -24,5 +27,5 @@ public class BlizzardFragmentAnimation extends GameAnimation {
 
         setAnimation(new Animation<TextureRegion>(getAnimationDuration(), frames));
 
-    }
+    }*/
 }

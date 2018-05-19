@@ -11,8 +11,7 @@ import com.webgame.common.server.entities.Skill;
 import io.vertx.core.TimeoutStream;
 import io.vertx.core.http.ServerWebSocket;
 import com.webgame.common.server.entities.Player;
-import com.webgame.server_app.factory.ISkillFactory;
-import com.webgame.server_app.factory.impl.SkillFactory;
+import com.webgame.server_app.utils.SkillFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +26,7 @@ public final class CustomWebSocketHandler extends AbstractWebSocketHandler {
     private TimeoutStream timeoutStream;
     private final ConcurrentHashMap<String, ServerWebSocket> sessions = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Player> players = new ConcurrentHashMap<>();
-    private final ISkillFactory skillFactory = new SkillFactory();
+    private final SkillFactory skillFactory = new SkillFactory();
 
     public CustomWebSocketHandler() {
         timeoutStream = vertx.periodicStream(delay);
